@@ -37,6 +37,10 @@ export default defineConfig({
         'app/**/loading.tsx',
         'app/**/error.tsx',
         'app/**/not-found.tsx',
+        // WebGL / Three.js : non testable en jsdom (pas de WebGL context).
+        // Couvert par E2E Playwright (chromium réel) à partir de P2.
+        'components/sections/HeroCanvas.tsx',
+        'components/sections/HeroBackground.tsx',
       ],
       thresholds: {
         lines: 80,

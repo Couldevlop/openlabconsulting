@@ -47,4 +47,17 @@ describe('Hero (homepage §6.1)', () => {
     const primary = screen.getAllByRole('link', { name: /audit IA gratuit/i });
     expect(primary).toHaveLength(1);
   });
+
+  it('ne rend PAS le slot de fond sans prop background', () => {
+    render(<Hero />);
+    expect(screen.queryByTestId('hero-background-slot')).toBeNull();
+  });
+
+  it('rend le slot aria-hidden quand la prop background est fournie', () => {
+    render(<Hero background={<div data-testid="my-bg">CANVAS</div>} />);
+    const slot = screen.getByTestId('hero-background-slot');
+    expect(slot).toBeInTheDocument();
+    expect(slot.getAttribute('aria-hidden')).toBe('true');
+    expect(slot.querySelector('[data-testid="my-bg"]')).not.toBeNull();
+  });
 });
