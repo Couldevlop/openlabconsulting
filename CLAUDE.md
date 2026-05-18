@@ -19,11 +19,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Workflow Git Flow (depuis P2)
 
-- `main` = production. **Aucun commit direct.** Reçoit uniquement les merges depuis `develop` ou `hotfix/*`.
+- `main` = production. **JAMAIS de push direct, JAMAIS de merge local poussé.** Toute arrivée sur `main` passe **obligatoirement** par une PR `develop → main` mergée dans l'UI GitHub (règle utilisateur, 2026-05-18).
 - `develop` = intégration, base de toutes les nouvelles features.
-- `feat/<phase>-<slug>` = une feature = une branche = une PR (ex : `feat/p2-hero-layout`).
-- `fix/<slug>` = correctif sur `develop`. `hotfix/<slug>` = correctif urgent branché sur `main`, mergé dans `main` ET `develop`.
+- `feat/<phase>-<slug>` = une feature = une branche = une PR vers `develop` (ex : `feat/p2-hero-layout`).
+- `fix/<slug>` = correctif sur `develop`. `hotfix/<slug>` = correctif urgent : branché sur `main`, PR vers `main` + cherry-pick/PR vers `develop`.
 - `chore/<slug>` = outillage, CI, dépendances.
+- Hook client `.husky/pre-push` refuse tout push qui ciblerait `refs/heads/main`. À doubler par branch protection GitHub côté serveur.
 - Détails dans [`README.md`](./README.md#workflow-git-flow).
 
 **Une PR ne peut être mergée que si toutes les portes vertes (CI) sont au vert et qu'aucun test existant n'est cassé.**
