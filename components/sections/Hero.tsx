@@ -1,15 +1,26 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 
+interface HeroProps {
+  /**
+   * Couche de fond optionnelle rendue derrière le dégradé.
+   * Utilisée pour injecter HeroBackground (canvas WebGL lazy).
+   * Si absent, seul le dégradé signature reste visible.
+   */
+  background?: ReactNode;
+}
+
 /**
  * Hero — Section 1 de la homepage (CLAUDE.md §6).
  *
- * P2 — feat/p2-hero-layout : texte + dégradé signature + CTAs.
- * P2 — feat/p2-hero-canvas (à venir) : canvas WebGL léger en overlay.
+ * Z-order :
+ *   0 — `background` (canvas WebGL, optionnel)
+ *   1 — dégradé signature + halo orange
+ *   2 — contenu (eyebrow / h1 / sous-titre / CTAs)
  *
  * Règles respectées :
  * - Orange < 15 % de la surface (utilisé en accent uniquement)
@@ -18,20 +29,33 @@ import { Heading } from '@/components/atoms/Heading';
  * - Above-the-fold : eyebrow + headline + sub + CTA primaire + CTA secondaire
  * - Touch targets ≥ 44 px (Button size="lg" = min-h-12)
  */
-export function Hero(): ReactElement {
+export function Hero({ background }: HeroProps = {}): ReactElement {
   return (
     <section
       aria-labelledby="hero-title"
       data-testid="hero"
       className="relative isolate overflow-hidden bg-[var(--color-ol-night)] text-[var(--color-ol-ivory)]"
     >
-      {/* Dégradé signature §3.1 ol-gradient-hero */}
+      {/* Couche 0 — canvas WebGL si fourni */}
+      {background ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-20"
+          data-testid="hero-background-slot"
+        >
+          {background}
+        </div>
+      ) : null}
+
+      {/* Couche 1 — dégradé signature §3.1 ol-gradient-hero
+          Final stop opaque à 0.85 pour laisser passer les particules
+          du canvas en bas-droit (mais conserver de la lisibilité). */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            'linear-gradient(135deg, rgba(255,90,0,0.18) 0%, rgba(194,24,91,0.14) 35%, rgba(10,14,26,1) 70%)',
+            'linear-gradient(135deg, rgba(255,90,0,0.18) 0%, rgba(194,24,91,0.14) 35%, rgba(10,14,26,0.55) 70%, rgba(10,14,26,0.85) 100%)',
         }}
       />
       {/* Lueur orange ancrée bas-gauche pour ancrer l'identité */}
