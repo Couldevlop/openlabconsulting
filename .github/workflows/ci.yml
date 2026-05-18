@@ -90,7 +90,10 @@ jobs:
         with:
           context: .
           load: true
+          pull: true # force pull des base images (distroless, node:22-alpine) à chaque run
           tags: openlab-website:ci
+          # Cache GHA des LAYERS de l'app (deps, build) — invalidé naturellement
+          # quand le package-lock change. NE cache PAS les base images grâce à pull:true.
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
