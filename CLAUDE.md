@@ -1028,7 +1028,9 @@ contact@openlabconsulting.com
 
 ### 13.1 Stratégie multi-stage
 
-Image finale **distroless**, < 200 Mo, surface d'attaque minimale, no shell.
+Image finale **Chainguard Node** (`cgr.dev/chainguard/node:latest`), < 200 Mo, surface d'attaque minimale, no shell, **rebuilds quotidiens zéro-CVE**.
+
+> **Déviation de spec assumée (2026-05-18)** : la spec initiale prévoyait `gcr.io/distroless/nodejs22-debian12:nonroot`. On a observé un retard récurrent de plusieurs jours entre la disclosure d'une CVE Debian (libc/openssl) et sa propagation dans `:nonroot`, ce qui bloquait la CI Trivy malgré un fix amont disponible. Chainguard rebuild quotidiennement → l'image arrive clean au scan dans les heures qui suivent la publication d'un fix. Voir `docs/security-overrides.md` (palier 3). Réversible : si Chainguard pose problème, on revient à Distroless avec digest pin + Renovate.
 
 **`Dockerfile`** :
 

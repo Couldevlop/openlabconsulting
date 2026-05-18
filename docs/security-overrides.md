@@ -54,21 +54,20 @@ Toutes les CVE proviennent de la **couche Debian 12.13** du distroless `gcr.io/d
 
 ### Plan de remédiation — paliers
 
-**Palier 1 — Force pull base image** _(courant)_
+**Palier 1 — Force pull base image** _(testé, insuffisant)_
 
-- `pull: true` sur `docker/build-push-action`. Si distroless `:nonroot` a déjà été reconstruit avec Debian `u14` + OpenSSL `3.0.19-1~deb12u2`, la prochaine run absorbe le fix sans changement de code.
+- `pull: true` sur `docker/build-push-action`. Insuffisant : `:nonroot` n'a pas (encore) absorbé `glibc u14` ni `openssl 3.0.19-1~deb12u2` dans son rebuild rolling.
 
-**Palier 2 — Pin digest** _(si palier 1 inefficace)_
+**Palier 2 — Pin digest distroless** _(non retenu)_
 
-- Identifier le dernier digest distroless via `docker buildx imagetools inspect gcr.io/distroless/nodejs22-debian12:nonroot`.
-- Pinner dans `Dockerfile` : `FROM gcr.io/distroless/nodejs22-debian12@sha256:<digest>`.
-- Mettre à jour périodiquement via Renovate Bot ou Dependabot.
+- Demanderait un suivi manuel + tooling Renovate pour mettre à jour. Reporte le problème dans le temps sans le résoudre vraiment.
 
-**Palier 3 — Switch base image (déviation CLAUDE.md §13.1, nécessite validation utilisateur)**
+**Palier 3 — Switch base image vers Chainguard Node** _(ACTIF, décidé 2026-05-18)_
 
-- `cgr.dev/chainguard/node:latest` — Chainguard Node, rebuild quotidien, zero-CVE en pratique.
-- Avantages : ergonomie sécurité, distroless-equivalent, signatures Cosign.
-- Inconvénients : déviation de la spec § 13.1, dépendance à Chainguard (free pour public repos).
+- `cgr.dev/chainguard/node:latest` — Chainguard Node, rebuild **quotidien**, zero-CVE en pratique.
+- Déviation §13.1 du CLAUDE.md assumée et documentée.
+- Stages builder/deps restent sur `node:22-alpine` car ils sont jetés (pas dans Trivy image scan).
+- Réversible : si Chainguard pose problème (changement de licence, instabilité), retour à Distroless avec digest pin + Renovate.
 
 ### Si une CVE n'a pas (encore) de fix amont
 
