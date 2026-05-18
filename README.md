@@ -51,11 +51,17 @@ feat/*       ┄●━━●        ●━━●    ●━━●     ← chaque 
 
 **Règles**
 
-1. **1 feature = 1 branche = 1 PR**. Pas de commit direct sur `develop` ou `main`.
-2. La PR ne peut être mergée que si toutes les portes vertes (CI) sont au vert et qu'aucun test existant n'est cassé.
-3. Commits en **Conventional Commits** : `feat(p2-hero): add headline`, `fix(navbar): close menu on route change`, `chore(deps): bump next 15.5.18 → 15.5.20`.
-4. Nommage des branches en kebab-case, préfixées par leur type.
-5. Squash-merge recommandé pour garder un historique linéaire et lisible sur `develop` / `main`.
+1. **`main` n'est JAMAIS poussée directement.** Toute arrivée sur `main` se fait **uniquement** via une PR `develop → main` mergée dans l'UI GitHub. Pas de `git checkout main && git merge develop && git push` en local — c'est une violation de protocole.
+2. **1 feature = 1 branche = 1 PR vers `develop`**. Pas de commit direct sur `develop` ou `main`.
+3. La PR ne peut être mergée que si toutes les portes vertes (CI) sont au vert et qu'aucun test existant n'est cassé.
+4. Commits en **Conventional Commits** : `feat(p2-hero): add headline`, `fix(navbar): close menu on route change`, `chore(deps): bump next 15.5.18 → 15.5.20`.
+5. Nommage des branches en kebab-case, préfixées par leur type.
+6. Squash-merge recommandé pour garder un historique linéaire et lisible sur `develop` / `main`.
+
+**Garde-fous mis en place**
+
+- **Hook Git client-side** (`.husky/pre-push`) : refuse tout `git push` qui ciblerait `refs/heads/main`. Première ligne de défense.
+- **Branch protection GitHub** _(à activer côté serveur)_ : sur `main`, exiger PR + reviews + status checks verts, interdire force-push et bypass. Settings → Branches → Add rule pour `main`. C'est l'enforcement non contournable.
 
 ## Stack
 
