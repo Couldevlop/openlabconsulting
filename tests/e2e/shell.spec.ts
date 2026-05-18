@@ -1,14 +1,15 @@
 import { test, expect, devices } from '@playwright/test';
 
 test.describe('Shell applicatif (P1)', () => {
-  test('homepage rend titre + skip-link', async ({ page }) => {
+  test('homepage rend le Hero + skip-link', async ({ page }) => {
     await page.goto('/');
     await expect(
       page.getByRole('heading', {
         level: 1,
-        name: /shell applicatif posé/i,
+        name: /L’IA, au service/i,
       }),
     ).toBeVisible();
+    await expect(page.getByTestId('hero')).toBeVisible();
     await page.keyboard.press('Tab');
     await expect(page.getByText(/Aller au contenu principal/i)).toBeFocused();
   });
