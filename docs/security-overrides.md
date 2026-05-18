@@ -25,3 +25,51 @@ Ce document recense **toutes les entrées de `pnpm.overrides` dans `package.json
 3. `pnpm install` → vérifier `pnpm why <package>` → la version résolue est la nouvelle officielle.
 4. `pnpm audit --prod` → 0 finding sur ce package.
 5. PR vers `develop`.
+
+---
+
+## 2. Politique Trivy en CI
+
+### Configuration actuelle (`.github/workflows/ci.yml`)
+
+Deux passes sur l'image `openlab-website:ci` :
+
+1. **Scan SARIF (informatif)** — `severity: CRITICAL,HIGH`, `exit-code: 0`. Sortie envoyée à GitHub Code Scanning pour audit.
+2. **Scan bloquant (table format)** — mêmes seuils, `exit-code: 1`. La table CVE apparaît explicitement dans les logs CI.
+
+`pull: true` sur la `docker/build-push-action` pour invalider le cache des base images à chaque run.
+
+### Findings courants (à jour 2026-05-18)
+
+Toutes les CVE proviennent de la **couche Debian 12.13** du distroless `gcr.io/distroless/nodejs22-debian12:nonroot`, **aucune n'est dans le code applicatif**.
+
+| Library             | Version installée | Fix Debian       | CVE                                                          | Sévérité                                     |
+| ------------------- | ----------------- | ---------------- | ------------------------------------------------------------ | -------------------------------------------- |
+| `libc6` (glibc)     | 2.36-9+deb12u13   | 2.36-9+deb12u14  | [CVE-2026-0861](https://avd.aquasec.com/nvd/cve-2026-0861)   | HIGH (heap corruption via memalign overflow) |
+| `libssl3` (OpenSSL) | 3.0.18-1~deb12u2  | 3.0.19-1~deb12u2 | [CVE-2026-31789](https://avd.aquasec.com/nvd/cve-2026-31789) | **CRITICAL** (heap overflow X.509 32-bit)    |
+| `libssl3`           | idem              | idem             | [CVE-2026-28387](https://avd.aquasec.com/nvd/cve-2026-28387) | HIGH (RCE via use-after-free DANE TLSA)      |
+| `libssl3`           | idem              | idem             | [CVE-2026-28388](https://avd.aquasec.com/nvd/cve-2026-28388) | HIGH (DoS NULL deref delta)                  |
+| `libssl3`           | idem              | idem             | [CVE-2026-28389](https://avd.aquasec.com/nvd/cve-2026-28389) | HIGH (DoS CMS processing)                    |
+| `libssl3`           | idem              | idem             | [CVE-2026-28390](https://avd.aquasec.com/nvd/cve-2026-28390) | HIGH (DoS NULL deref CMS)                    |
+
+### Plan de remédiation — paliers
+
+**Palier 1 — Force pull base image** _(courant)_
+
+- `pull: true` sur `docker/build-push-action`. Si distroless `:nonroot` a déjà été reconstruit avec Debian `u14` + OpenSSL `3.0.19-1~deb12u2`, la prochaine run absorbe le fix sans changement de code.
+
+**Palier 2 — Pin digest** _(si palier 1 inefficace)_
+
+- Identifier le dernier digest distroless via `docker buildx imagetools inspect gcr.io/distroless/nodejs22-debian12:nonroot`.
+- Pinner dans `Dockerfile` : `FROM gcr.io/distroless/nodejs22-debian12@sha256:<digest>`.
+- Mettre à jour périodiquement via Renovate Bot ou Dependabot.
+
+**Palier 3 — Switch base image (déviation CLAUDE.md §13.1, nécessite validation utilisateur)**
+
+- `cgr.dev/chainguard/node:latest` — Chainguard Node, rebuild quotidien, zero-CVE en pratique.
+- Avantages : ergonomie sécurité, distroless-equivalent, signatures Cosign.
+- Inconvénients : déviation de la spec § 13.1, dépendance à Chainguard (free pour public repos).
+
+### Si une CVE n'a pas (encore) de fix amont
+
+Trivy est lancé avec `ignore-unfixed: true` : les CVE sans fix disponible **ne bloquent pas**. Elles sont quand même visibles en Code Scanning. C'est la seule sortie tolérée : on n'ajoute pas de `.trivyignore` pour bypasser une CVE avec fix existant.
