@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
+import { fontVariables } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,15 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }): React.ReactElement {
   return (
-    <html lang="fr-CI">
-      <body>
+    <html lang="fr-CI" className={fontVariables}>
+      <body className="flex min-h-screen flex-col">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-[var(--color-ol-night)] focus:px-4 focus:py-2 focus:text-white"
         >
           Aller au contenu principal
         </a>
-        {children}
+        <Navbar />
+        <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );

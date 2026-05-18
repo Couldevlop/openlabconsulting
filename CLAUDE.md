@@ -13,9 +13,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### État du repo
 
-- **Phase courante : P0 terminée.** Scaffold Next.js 15 + Tailwind v4 + TS strict en place. Toutes les portes vertes locales sont passées (format · lint · typecheck · 3 tests Vitest · build 103 kB first-load).
-- **Prochaine étape** : **P1 — Design system & shell applicatif** (tokens design définitifs, navbar, footer, middleware headers de sécurité, premiers composants atomiques).
-- Mettre à jour cette ligne dès qu'on franchit une nouvelle phase (P1, P2, …).
+- **Phase courante : P1 terminée.** Design system & shell applicatif posés : polices self-hostées (Bricolage, Geist, JetBrains Mono, Fraunces), 5 atomes (Container, Heading, Eyebrow, Button, Logo), Navbar responsive avec menu mobile, Footer 4 colonnes, middleware sécurité (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP/CORP, HSTS prod). **51 tests verts** · coverage 93.68 % · First Load JS 103 kB.
+- **Prochaine étape** : **P2 — Homepage 11 sections** (cf. §6) avec hero WebGL léger, bandeau réassurance, expertises, laboratoire signature, cas client, showcase produits, manifeste, encart livre, insights, audit IA, footer premium.
+- Mettre à jour cette ligne dès qu'on franchit une nouvelle phase.
 
 ### Stack (résumé — détails en §2)
 

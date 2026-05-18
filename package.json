@@ -25,9 +25,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "geist": "^1.7.0",
+    "lucide-react": "^1.16.0",
     "next": "^15.1.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.0",

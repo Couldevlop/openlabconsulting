@@ -2,6 +2,7 @@
 
 /* Design tokens — voir CLAUDE.md §3. */
 @theme {
+  /* --- Couleurs (§3.1) -------------------------------------------------- */
   --color-ol-orange: #ff5a00;
   --color-ol-orange-light: #ff7a33;
   --color-ol-orange-dark: #cc4800;
@@ -17,11 +18,23 @@
   --color-ol-success: #22c55e;
   --color-ol-danger: #dc2626;
   --color-ol-info: #2563eb;
+
+  /* --- Typographie (§3.3) ----------------------------------------------- */
+  /* Les --font-*-src sont injectés par next/font (app/fonts.ts). */
+  --font-display:
+    var(--font-display-src), 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: var(--font-geist-sans), 'Geist', system-ui, sans-serif;
+  --font-mono: var(--font-mono-src), 'JetBrains Mono', ui-monospace, monospace;
+  --font-editorial: var(--font-editorial-src), 'Fraunces', Georgia, serif;
+
+  /* --- Animations (§4.6) ------------------------------------------------ */
+  --ease-ol: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
+  font-family: var(--font-body);
 }
 
 body {
@@ -35,6 +48,7 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-ol-orange);
   outline-offset: 2px;
+  border-radius: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
