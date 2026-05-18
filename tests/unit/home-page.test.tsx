@@ -2,29 +2,21 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import HomePage from '@/app/page';
 
-describe('HomePage (placeholder P1)', () => {
-  it('rend le titre principal du shell', () => {
+describe('HomePage (P2 — homepage §6)', () => {
+  it('rend le Hero comme première section', () => {
     render(<HomePage />);
-    expect(
-      screen.getByRole('heading', {
-        level: 1,
-        name: /shell applicatif posé/i,
-      }),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('hero')).toBeInTheDocument();
   });
 
-  it('annonce la phase courante en eyebrow', () => {
+  it('expose un seul h1 (le titre du Hero)', () => {
     render(<HomePage />);
-    expect(screen.getByText(/P1 — Design system/i)).toBeInTheDocument();
+    const h1s = screen.getAllByRole('heading', { level: 1 });
+    expect(h1s).toHaveLength(1);
+    expect(h1s[0]?.textContent).toMatch(/L’IA, au service/);
   });
 
-  it('expose les deux CTA primaire/secondaire', () => {
+  it('le main porte l’ancre #main pour le skip-link', () => {
     render(<HomePage />);
-    expect(
-      screen.getByRole('link', { name: /Demander un audit IA/i }),
-    ).toHaveAttribute('href', '/audit-ia');
-    expect(
-      screen.getByRole('link', { name: /Voir l’écosystème produits/i }),
-    ).toHaveAttribute('href', '/solutions');
+    expect(screen.getByRole('main').id).toBe('main');
   });
 });
