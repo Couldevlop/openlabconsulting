@@ -1,4 +1,8 @@
-# Overrides de sécurité — pnpm
+# Politique de sécurité — overrides pnpm & scans Trivy
+
+Deux sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI.
+
+## 1. Overrides pnpm — packages forcés
 
 Ce document recense **toutes les entrées de `pnpm.overrides` dans `package.json`**, avec leur justification CVE et leur condition de retrait. Tout ajout/retrait doit passer en revue ici.
 

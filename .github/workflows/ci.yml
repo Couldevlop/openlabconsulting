@@ -112,7 +112,15 @@ jobs:
           sarif_file: trivy-fs.sarif
           category: trivy-fs
 
-      - name: Trivy image scan (fail on HIGH/CRITICAL)
+      # ----------------------------------------------------------------
+      # Politique image scan — sécurité maximale.
+      #
+      # SARIF d'abord (exit 0) pour TOUJOURS uploader vers Code Scanning,
+      # puis re-scan en mode tableau bloquant HIGH+CRITICAL.
+      # Toute CVE patchable doit être patchée (dep bump ou pnpm override).
+      # Voir docs/security-overrides.md.
+      # ----------------------------------------------------------------
+      - name: Trivy image scan (SARIF pour Code Scanning)
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: openlab-website:ci
@@ -120,7 +128,7 @@ jobs:
           output: trivy-image.sarif
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          exit-code: '1'
+          exit-code: '0'
 
       - name: Upload Trivy image SARIF
         if: always() && hashFiles('trivy-image.sarif') != ''
@@ -128,3 +136,12 @@ jobs:
         with:
           sarif_file: trivy-image.sarif
           category: trivy-image
+
+      - name: Trivy image scan (BLOQUANT — HIGH+CRITICAL avec fix)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: openlab-website:ci
+          format: table
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '1'
