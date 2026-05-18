@@ -1,0 +1,68 @@
+# Stack dev local — voir CLAUDE.md §13.3.
+# Le service "app" n'est pas inclus à P0 (pas encore de pnpm-lock.yaml dans l'image).
+# Activer dès P6 quand Payload aura besoin de Postgres en continu.
+
+name: openlab-website
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: openlab-postgres
+    environment:
+      POSTGRES_USER: openlab
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: openlab
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U openlab -d openlab']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: openlab-redis
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: openlab-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    container_name: openlab-meilisearch
+    environment:
+      MEILI_MASTER_KEY: devmasterkey
+      MEILI_ENV: development
+    ports:
+      - '7700:7700'
+    volumes:
+      - meili_data:/meili_data
+
+volumes:
+  postgres_data:
+  minio_data:
+  meili_data:

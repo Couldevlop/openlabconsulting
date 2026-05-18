@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+
+/* Design tokens — voir CLAUDE.md §3. */
+@theme {
+  --color-ol-orange: #ff5a00;
+  --color-ol-orange-light: #ff7a33;
+  --color-ol-orange-dark: #cc4800;
+
+  --color-ol-night: #0a0e1a;
+  --color-ol-navy: #0b1b3d;
+  --color-ol-navy-soft: #142654;
+
+  --color-ol-ivory: #faf8f5;
+  --color-ol-graphite: #1a1d24;
+  --color-ol-mist: #e8eaf0;
+
+  --color-ol-success: #22c55e;
+  --color-ol-danger: #dc2626;
+  --color-ol-info: #2563eb;
+}
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ol-ivory);
+  color: var(--color-ol-graphite);
+  font-feature-settings:
+    'rlig' 1,
+    'calt' 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ol-orange);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

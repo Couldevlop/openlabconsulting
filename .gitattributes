@@ -1,0 +1,30 @@
+# Ligne par défaut : auto-détection, normalisation LF en repo.
+* text=auto eol=lf
+
+# Fichiers Linux-only : forcer LF (Dockerfile, scripts shell, husky hooks).
+Dockerfile        text eol=lf
+*.sh              text eol=lf
+.husky/*          text eol=lf
+
+# Fichiers Windows-only : CRLF.
+*.bat             text eol=crlf
+*.cmd             text eol=crlf
+*.ps1             text eol=crlf
+
+# Binaires explicites.
+*.png             binary
+*.jpg             binary
+*.jpeg            binary
+*.gif             binary
+*.webp            binary
+*.avif            binary
+*.ico             binary
+*.pdf             binary
+*.woff            binary
+*.woff2           binary
+*.ttf             binary
+*.otf             binary
+
+# Verrouillages : pas de fusion automatique.
+pnpm-lock.yaml    -diff merge=binary
+package-lock.json -diff merge=binary
