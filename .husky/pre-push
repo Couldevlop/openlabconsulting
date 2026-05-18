@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+# Garde-fou : interdit le push direct sur main.
+# Tout passage sur main DOIT venir d'une PR develop -> main mergée via GitHub.
+# Voir README.md (Workflow Git Flow) et docs/security-overrides.md.
+
+protected_branch="main"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/$protected_branch" ]; then
+    echo ""
+    echo "ERREUR Push direct sur '$protected_branch' interdit (regle Git Flow)."
+    echo "       Procedure : feat/* ou fix/* ou chore/* -> PR develop"
+    echo "                   puis PR develop -> $protected_branch via UI GitHub."
+    echo ""
+    echo "Si tu dois vraiment forcer (hotfix critique apres revue), passe par"
+    echo "le service GitHub (impossible a contourner cote client de toute facon)."
+    echo ""
+    exit 1
+  fi
+done
+
+exit 0
