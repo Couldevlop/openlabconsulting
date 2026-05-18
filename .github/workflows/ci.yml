@@ -2,9 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
+      - 'feat/**'
+      - 'fix/**'
+      - 'chore/**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - develop
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -98,6 +105,13 @@ jobs:
           ignore-unfixed: true
           exit-code: '0'
 
+      - name: Upload Trivy fs SARIF
+        if: hashFiles('trivy-fs.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-fs.sarif
+          category: trivy-fs
+
       - name: Trivy image scan (fail on HIGH/CRITICAL)
         uses: aquasecurity/trivy-action@master
         with:
@@ -108,8 +122,9 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
 
-      - name: Upload SARIF
-        if: always()
+      - name: Upload Trivy image SARIF
+        if: always() && hashFiles('trivy-image.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: .
+          sarif_file: trivy-image.sarif
+          category: trivy-image

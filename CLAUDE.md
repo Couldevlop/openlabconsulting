@@ -13,9 +13,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### État du repo
 
-- **Phase courante : P1 terminée.** Design system & shell applicatif posés : polices self-hostées (Bricolage, Geist, JetBrains Mono, Fraunces), 5 atomes (Container, Heading, Eyebrow, Button, Logo), Navbar responsive avec menu mobile, Footer 4 colonnes, middleware sécurité (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP/CORP, HSTS prod). **51 tests verts** · coverage 93.68 % · First Load JS 103 kB.
-- **Prochaine étape** : **P2 — Homepage 11 sections** (cf. §6) avec hero WebGL léger, bandeau réassurance, expertises, laboratoire signature, cas client, showcase produits, manifeste, encart livre, insights, audit IA, footer premium.
-- Mettre à jour cette ligne dès qu'on franchit une nouvelle phase.
+- **Phase courante : P2 en cours.** P0 (scaffold) et P1 (design system + shell + middleware sécurité) terminées et fusionnées. P2 démarre avec la décomposition Homepage §6 en features Git Flow (`feat/p2-hero-layout`, `feat/p2-hero-canvas`, `feat/p2-reassurance`, `feat/p2-expertises-cards`, `feat/p2-laboratoire`, `feat/p2-cas-client`, `feat/p2-products-showcase`, `feat/p2-manifesto`, `feat/p2-livre`, `feat/p2-insights`, `feat/p2-audit-ia-cta`).
+- **Repère de qualité acquis en P1** : 51 tests verts · coverage 93.68 % · First Load JS 103 kB · headers de sécurité au middleware.
+- Mettre à jour cette ligne dès qu'on franchit une nouvelle phase ou une feature majeure.
+
+### Workflow Git Flow (depuis P2)
+
+- `main` = production. **Aucun commit direct.** Reçoit uniquement les merges depuis `develop` ou `hotfix/*`.
+- `develop` = intégration, base de toutes les nouvelles features.
+- `feat/<phase>-<slug>` = une feature = une branche = une PR (ex : `feat/p2-hero-layout`).
+- `fix/<slug>` = correctif sur `develop`. `hotfix/<slug>` = correctif urgent branché sur `main`, mergé dans `main` ET `develop`.
+- `chore/<slug>` = outillage, CI, dépendances.
+- Détails dans [`README.md`](./README.md#workflow-git-flow).
+
+**Une PR ne peut être mergée que si toutes les portes vertes (CI) sont au vert et qu'aucun test existant n'est cassé.**
 
 ### Stack (résumé — détails en §2)
 
