@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { CasClient } from '@/components/sections/CasClient';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
@@ -28,7 +29,8 @@ export default function HomePage(): React.ReactElement {
       <Manifesto />
       <Livre />
       <Insights />
-      {/* §6 section 10 (Audit IA lead magnet) arrive dans feat/p2-audit-ia-cta. */}
+      <AuditIaCta />
+      {/* §6.11 Footer premium est déjà rendu globalement via app/layout.tsx (P1). */}
     </main>
   );
 }
