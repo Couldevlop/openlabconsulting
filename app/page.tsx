@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
+import { CasClient } from '@/components/sections/CasClient';
+import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
+import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Reassurance } from '@/components/sections/Reassurance';
+import { Solutions } from '@/components/sections/Solutions';
 
 export const metadata: Metadata = {
   title: 'OpenLab Consulting — IA, R&D et conseil pour l’Afrique francophone',
@@ -14,7 +18,11 @@ export default function HomePage(): React.ReactElement {
     <main id="main">
       <Hero background={<HeroBackground />} />
       <Reassurance />
-      {/* §6 sections 3-10 arrivent dans les features feat/p2-* successives. */}
+      <Expertises />
+      <Laboratoire />
+      <CasClient />
+      <Solutions />
+      {/* §6 sections 7-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }

@@ -13,14 +13,42 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('reassurance')).toBeInTheDocument();
   });
 
-  it('Hero précède Reassurance dans le DOM', () => {
+  it('rend Expertises après Reassurance', () => {
     render(<HomePage />);
-    const hero = screen.getByTestId('hero');
-    const reassurance = screen.getByTestId('reassurance');
-    expect(
-      hero.compareDocumentPosition(reassurance) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    expect(screen.getByTestId('expertises')).toBeInTheDocument();
+  });
+
+  it('rend Laboratoire après Expertises', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('laboratoire')).toBeInTheDocument();
+  });
+
+  it('rend CasClient après Laboratoire', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('cas-client')).toBeInTheDocument();
+  });
+
+  it('rend Solutions après CasClient', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('solutions')).toBeInTheDocument();
+  });
+
+  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire -> CasClient -> Solutions', () => {
+    render(<HomePage />);
+    const sections = [
+      screen.getByTestId('hero'),
+      screen.getByTestId('reassurance'),
+      screen.getByTestId('expertises'),
+      screen.getByTestId('laboratoire'),
+      screen.getByTestId('cas-client'),
+      screen.getByTestId('solutions'),
+    ];
+    for (let i = 0; i < sections.length - 1; i++) {
+      expect(
+        sections[i]!.compareDocumentPosition(sections[i + 1]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    }
   });
 
   it('expose un seul h1 (le titre du Hero)', () => {

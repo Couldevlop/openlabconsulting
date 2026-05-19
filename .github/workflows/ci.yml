@@ -110,8 +110,16 @@ jobs:
           ignore-unfixed: true
           exit-code: '0'
 
+      # Tolérant aux race conditions : si la branche source est supprimée
+      # (merge + delete) pendant que la run tourne encore, l'API GitHub
+      # renvoie "ref not found". On laisse l'upload échouer en silence
+      # plutôt que de marquer la run rouge — la prochaine run sur main/
+      # develop ré-uploadera le SARIF.
+      # CodeQL Action v3 sera déprécié en décembre 2026 — migrer vers v4
+      # quand la version sera publiquement disponible.
       - name: Upload Trivy fs SARIF
         if: hashFiles('trivy-fs.sarif') != ''
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-fs.sarif
@@ -137,6 +145,7 @@ jobs:
 
       - name: Upload Trivy image SARIF
         if: always() && hashFiles('trivy-image.sarif') != ''
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-image.sarif
