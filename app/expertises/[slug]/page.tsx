@@ -8,7 +8,9 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { EXPERTISES, getExpertiseBySlug } from '@/lib/data/expertises';
+import { breadcrumbSchema, serviceSchema } from '@/lib/seo/schema';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -46,6 +48,16 @@ export default async function ExpertiseDetailPage({
 
   return (
     <main id="main">
+      <JsonLd
+        data={[
+          serviceSchema(expertise),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Expertises', url: '/expertises' },
+            { name: expertise.title, url: `/expertises/${expertise.slug}` },
+          ]),
+        ]}
+      />
       {/* Hero — fond ivory pour rester cohérent avec /expertises hub */}
       <section
         aria-labelledby="expertise-title"
