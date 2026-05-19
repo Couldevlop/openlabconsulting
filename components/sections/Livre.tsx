@@ -7,48 +7,15 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { BOOK } from '@/lib/data/book';
 
-interface Book {
-  title: string;
-  subtitle: string;
-  edition: string;
-  pitch: string[];
-  audiences: readonly string[];
-  cover: { src: string | null; alt: string };
-  purchaseHref: string;
-  extractHref: string;
-  conferenceHref: string;
-}
-
-/**
- * Livre principal — CLAUDE.md §1.4 + §8. Distinct du livre blanc
- * (collection séparée en Payload P6, voir memory
- * project_openlabconsulting_white_paper_souveraine).
- *
- * Édité par OpenLab Consulting seul — pas de co-édition externe.
- */
-const BOOK: Book = {
-  title: 'Intelligence Artificielle',
-  subtitle: 'Du Machine Learning aux Agents Autonomes',
-  edition: 'Édition OpenLab Consulting · Abidjan',
-  pitch: [
-    'Un parcours rigoureux du ML supervisé aux agents multi-acteurs, en passant par les séries temporelles, le RAG souverain, MLOps et la sécurité IA.',
-    "Un capstone terrain ivoirien — AgroSense CI — qui montre comment l'IA se déploie réellement sur des coopératives cacao, anacarde, coton.",
-  ],
-  audiences: [
-    'Étudiants ingénieurs',
-    'Data scientists',
-    'Dirigeants',
-    'Enseignants',
-  ],
-  cover: {
-    src: null,
-    alt: 'Couverture du livre Intelligence Artificielle — du Machine Learning aux Agents Autonomes',
-  },
-  purchaseHref: '/livre/acheter',
-  extractHref: '/livre/extraits',
-  conferenceHref: '/contact?sujet=conference-livre',
-};
+const PURCHASE_HREF = '/livre/acheter';
+const EXTRACT_HREF = '/livre/extraits';
+const CONFERENCE_HREF = '/contact?sujet=conference-livre';
+// Pour la section homepage, on ne retient que les 2 premiers paragraphes
+// du pitch long, et on liste les labels d'audience uniquement.
+const PITCH_HOMEPAGE = BOOK.longPitch.slice(0, 2);
+const AUDIENCE_LABELS = BOOK.audiences.map((a) => a.label);
 
 /**
  * Livre — Section 8 de la homepage (CLAUDE.md §6, §8).
@@ -113,7 +80,7 @@ export function Livre(): ReactElement {
             </p>
 
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
-              {BOOK.pitch.map((p, i) => (
+              {PITCH_HOMEPAGE.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </div>
@@ -122,26 +89,21 @@ export function Livre(): ReactElement {
               aria-label="Publics cibles du livre"
               className="mt-8 flex flex-wrap gap-2"
             >
-              {BOOK.audiences.map((audience) => (
-                <li key={audience}>
-                  <Badge tone="neutral">{audience}</Badge>
+              {AUDIENCE_LABELS.map((label) => (
+                <li key={label}>
+                  <Badge tone="neutral">{label}</Badge>
                 </li>
               ))}
             </ul>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <Button
-                as="a"
-                href={BOOK.purchaseHref}
-                variant="primary"
-                size="lg"
-              >
+              <Button as="a" href={PURCHASE_HREF} variant="primary" size="lg">
                 <BookOpen width={20} height={20} aria-hidden />
                 Acheter le livre
               </Button>
               <Button
                 as="a"
-                href={BOOK.extractHref}
+                href={EXTRACT_HREF}
                 variant="ghost"
                 size="lg"
                 className="border border-[var(--color-ol-ivory)]/20 text-[var(--color-ol-ivory)] hover:bg-[var(--color-ol-ivory)]/10 hover:text-[var(--color-ol-ivory)]"
@@ -150,7 +112,7 @@ export function Livre(): ReactElement {
                 Lire un extrait gratuit
               </Button>
               <Link
-                href={BOOK.conferenceHref}
+                href={CONFERENCE_HREF}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] sm:ml-2"
               >
                 Réserver une conférence
