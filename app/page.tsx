@@ -5,6 +5,7 @@ import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
 import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Reassurance } from '@/components/sections/Reassurance';
+import { Solutions } from '@/components/sections/Solutions';
 
 export const metadata: Metadata = {
   title: 'OpenLab Consulting — IA, R&D et conseil pour l’Afrique francophone',
@@ -20,7 +21,8 @@ export default function HomePage(): React.ReactElement {
       <Expertises />
       <Laboratoire />
       <CasClient />
-      {/* §6 sections 6-10 arrivent dans les features feat/p2-* successives. */}
+      <Solutions />
+      {/* §6 sections 7-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }
