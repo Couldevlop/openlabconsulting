@@ -13,12 +13,22 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('reassurance')).toBeInTheDocument();
   });
 
-  it('Hero précède Reassurance dans le DOM', () => {
+  it('rend Expertises après Reassurance', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('expertises')).toBeInTheDocument();
+  });
+
+  it('respecte l’ordre Hero -> Reassurance -> Expertises dans le DOM', () => {
     render(<HomePage />);
     const hero = screen.getByTestId('hero');
     const reassurance = screen.getByTestId('reassurance');
+    const expertises = screen.getByTestId('expertises');
     expect(
       hero.compareDocumentPosition(reassurance) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      reassurance.compareDocumentPosition(expertises) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
