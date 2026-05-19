@@ -23,24 +23,26 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('laboratoire')).toBeInTheDocument();
   });
 
-  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire', () => {
+  it('rend CasClient après Laboratoire', () => {
     render(<HomePage />);
-    const hero = screen.getByTestId('hero');
-    const reassurance = screen.getByTestId('reassurance');
-    const expertises = screen.getByTestId('expertises');
-    const laboratoire = screen.getByTestId('laboratoire');
-    expect(
-      hero.compareDocumentPosition(reassurance) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
-    expect(
-      reassurance.compareDocumentPosition(expertises) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
-    expect(
-      expertises.compareDocumentPosition(laboratoire) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    expect(screen.getByTestId('cas-client')).toBeInTheDocument();
+  });
+
+  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire -> CasClient', () => {
+    render(<HomePage />);
+    const sections = [
+      screen.getByTestId('hero'),
+      screen.getByTestId('reassurance'),
+      screen.getByTestId('expertises'),
+      screen.getByTestId('laboratoire'),
+      screen.getByTestId('cas-client'),
+    ];
+    for (let i = 0; i < sections.length - 1; i++) {
+      expect(
+        sections[i]!.compareDocumentPosition(sections[i + 1]!) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    }
   });
 
   it('expose un seul h1 (le titre du Hero)', () => {
