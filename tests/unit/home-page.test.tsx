@@ -8,6 +8,21 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('hero')).toBeInTheDocument();
   });
 
+  it('rend Reassurance juste après le Hero', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('reassurance')).toBeInTheDocument();
+  });
+
+  it('Hero précède Reassurance dans le DOM', () => {
+    render(<HomePage />);
+    const hero = screen.getByTestId('hero');
+    const reassurance = screen.getByTestId('reassurance');
+    expect(
+      hero.compareDocumentPosition(reassurance) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
   it('expose un seul h1 (le titre du Hero)', () => {
     render(<HomePage />);
     const h1s = screen.getAllByRole('heading', { level: 1 });
