@@ -1,64 +1,11 @@
-import type { ReactElement, ComponentType, SVGProps } from 'react';
+import type { ReactElement } from 'react';
 import Link from 'next/link';
-import {
-  ArrowUpRight,
-  Bot,
-  Compass,
-  Database,
-  ShieldCheck,
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-
-type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
-
-interface Expertise {
-  slug:
-    | 'conseil-strategie'
-    | 'agents-automatisation'
-    | 'data-gouvernance'
-    | 'cybersecurite-ia';
-  title: string;
-  punchline: string;
-  Icon: LucideIcon;
-}
-
-/**
- * Wording en deux temps + antithèse — voir CLAUDE.md §18 ("phrases de marque").
- * Pas de phrases creuses, pas de "solutions sur mesure".
- */
-const EXPERTISES: readonly Expertise[] = [
-  {
-    slug: 'conseil-strategie',
-    title: 'Conseil & stratégie IA',
-    punchline:
-      "Cartographier l'IA réellement utile. Écarter ce qui ne le sera jamais.",
-    Icon: Compass,
-  },
-  {
-    slug: 'agents-automatisation',
-    title: 'Agents & automatisation',
-    punchline:
-      'Vos workflows, automatisés. Vos équipes, augmentées — pas remplacées.',
-    Icon: Bot,
-  },
-  {
-    slug: 'data-gouvernance',
-    title: 'Data & gouvernance',
-    punchline:
-      'La data est votre pétrole. La gouvernance est votre raffinerie.',
-    Icon: Database,
-  },
-  {
-    slug: 'cybersecurite-ia',
-    title: 'Cybersécurité augmentée',
-    punchline:
-      "Détecter ce qui devient invisible. Anticiper ce qui n'a pas frappé.",
-    Icon: ShieldCheck,
-  },
-] as const;
+import { EXPERTISES } from '@/lib/data/expertises';
 
 /**
  * Expertises — Section 3 de la homepage (CLAUDE.md §6).
