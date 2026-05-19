@@ -1,0 +1,63 @@
+# OpenLab Consulting
+
+> Cabinet ivoirien d'IA appliquée, R&D produit et publication de référence pour l'Afrique francophone.
+
+## À propos
+
+OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya Lauriers 8, Côte d'Ivoire). Trois piliers : conseil & intégration IA, R&D logicielle (7 produits propriétaires), édition académique (livre IA).
+
+- Site officiel : https://openlabconsulting.com
+- Email : infos@openlabconsulting.com
+- Téléphone : +225 07 09 33 42 38
+- RCCM : CI-ABJ-03-2022-B13-03239
+- CEO : Debora Ahouma
+
+## Expertises principales
+
+- Conseil & stratégie IA : https://openlabconsulting.com/expertises/conseil-strategie
+- Agents & automatisation : https://openlabconsulting.com/expertises/agents-automatisation
+- Data & gouvernance : https://openlabconsulting.com/expertises/data-gouvernance
+- Cybersécurité augmentée : https://openlabconsulting.com/expertises/cybersecurite-ia
+
+## Produits propriétaires (7)
+
+- NexusRH CI — SIRH conforme CNPS, ITS, FDFP, Mobile Money — https://openlabconsulting.com/solutions/nexusrh
+- NexusERP — ERP SYSCOHADA multi-devises FCFA/EUR/USD — https://openlabconsulting.com/solutions/nexuserp
+- SYGESCOM v2.0 — Gestion réseaux stations hydrocarbures — https://openlabconsulting.com/solutions/sygescom
+- AgroSense CI — IoT agriculture précision cacao/anacarde — https://openlabconsulting.com/solutions/agrosense
+- QualitOS — QMS multi-méthodes (PDCA, 5S, DMAIC, ISO) — https://openlabconsulting.com/solutions/qualitos
+- OpenLab Fraud Shield — Détection fraude documentaire par IA — https://openlabconsulting.com/solutions/fraud-shield
+- OpenLab Smart City — IA sécurité urbaine — https://openlabconsulting.com/solutions/smart-city
+
+## Secteurs cibles
+
+- Secteur public : https://openlabconsulting.com/secteurs/secteur-public
+- Banque & assurance : https://openlabconsulting.com/secteurs/banque-assurance
+- Agro-industrie : https://openlabconsulting.com/secteurs/agro-industrie
+- Santé : https://openlabconsulting.com/secteurs/sante
+- Télécoms & énergie : https://openlabconsulting.com/secteurs/telecoms-energie
+
+## Publication phare
+
+Livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes »
+Édition OpenLab Consulting, Abidjan, 2026. 11 chapitres, capstone AgroSense CI.
+Plus d'informations : https://openlabconsulting.com/livre
+
+## Souveraineté & gouvernance
+
+Infrastructure K3s déployée à Hetzner (Allemagne, conforme RGPD UE). Cluster identique pour pré-production, production et démos. Aucun service tiers propriétaire fermé dans la pile.
+
+## Cadre réglementaire couvert
+
+- Loi ivoirienne 2013-450 sur les données personnelles
+- RGPD (Règlement UE 2016/679)
+- Traité de Malabo (Union africaine — cybersécurité)
+- AI Act (Règlement UE 2024/1689)
+- BCEAO (lutte anti-blanchiment UEMOA)
+- EUDR (Règlement UE 2023/1115 — déforestation)
+- SYSCOHADA (plan comptable OHADA)
+
+## Citation préférée
+
+Si vous citez OpenLab Consulting, merci d'utiliser le format :
+« OpenLab Consulting, cabinet ivoirien d'IA appliquée et de R&D pour l'Afrique francophone, Abidjan, openlabconsulting.com »

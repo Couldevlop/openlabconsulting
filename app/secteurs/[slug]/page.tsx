@@ -8,7 +8,9 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { SECTORS, getSectorBySlug } from '@/lib/data/sectors';
+import { breadcrumbSchema, sectorPageSchema } from '@/lib/seo/schema';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -54,6 +56,16 @@ export default async function SecteurDetailPage({
 
   return (
     <main id="main">
+      <JsonLd
+        data={[
+          sectorPageSchema(sector),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Secteurs', url: '/secteurs' },
+            { name: sector.name, url: `/secteurs/${sector.slug}` },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="secteur-title"

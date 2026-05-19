@@ -10,7 +10,9 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
+import { breadcrumbSchema, softwareApplicationSchema } from '@/lib/seo/schema';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -61,6 +63,16 @@ export default async function SolutionDetailPage({
 
   return (
     <main id="main">
+      <JsonLd
+        data={[
+          softwareApplicationSchema(product),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Solutions', url: '/solutions' },
+            { name: product.name, url: `/solutions/${product.slug}` },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="solution-title"

@@ -9,7 +9,9 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { BOOK, CHAPTERS } from '@/lib/data/book';
+import { bookSchema, breadcrumbSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: `${BOOK.title} — ${BOOK.subtitle}`,
@@ -43,6 +45,15 @@ const HIGHLIGHTS = [
 export default function LivreLandingPage(): React.ReactElement {
   return (
     <main id="main">
+      <JsonLd
+        data={[
+          bookSchema(),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Livre', url: '/livre' },
+          ]),
+        ]}
+      />
       {/* Hero — fond night signature pour la gravité éditoriale */}
       <section
         aria-labelledby="livre-landing-title"
