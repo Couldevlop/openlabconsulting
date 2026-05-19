@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
+import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Reassurance } from '@/components/sections/Reassurance';
 
 export const metadata: Metadata = {
@@ -16,7 +17,8 @@ export default function HomePage(): React.ReactElement {
       <Hero background={<HeroBackground />} />
       <Reassurance />
       <Expertises />
-      {/* §6 sections 4-10 arrivent dans les features feat/p2-* successives. */}
+      <Laboratoire />
+      {/* §6 sections 5-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }

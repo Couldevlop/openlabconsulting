@@ -18,17 +18,27 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('expertises')).toBeInTheDocument();
   });
 
-  it('respecte l’ordre Hero -> Reassurance -> Expertises dans le DOM', () => {
+  it('rend Laboratoire après Expertises', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('laboratoire')).toBeInTheDocument();
+  });
+
+  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire', () => {
     render(<HomePage />);
     const hero = screen.getByTestId('hero');
     const reassurance = screen.getByTestId('reassurance');
     const expertises = screen.getByTestId('expertises');
+    const laboratoire = screen.getByTestId('laboratoire');
     expect(
       hero.compareDocumentPosition(reassurance) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(
       reassurance.compareDocumentPosition(expertises) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      expertises.compareDocumentPosition(laboratoire) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
