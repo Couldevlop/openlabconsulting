@@ -12,7 +12,7 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
     expect(section.className).toMatch(/bg-\[var\(--color-ol-night\)\]/);
   });
 
-  it('affiche le titre + sous-titre + co-édition', () => {
+  it('affiche le titre + sous-titre + édition', () => {
     render(<Livre />);
     const heading = screen.getByRole('heading', { level: 2 });
     expect(heading.id).toBe('livre-title');
@@ -21,7 +21,7 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
       screen.getByText(/Du Machine Learning aux Agents Autonomes/i),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/EXPERTISE-IA.*Grasse.*OpenLab.*Abidjan/i),
+      screen.getByText(/Édition OpenLab Consulting.*Abidjan/i),
     ).toBeInTheDocument();
   });
 

@@ -11,7 +11,7 @@ import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 interface Book {
   title: string;
   subtitle: string;
-  coEdition: string;
+  edition: string;
   pitch: string[];
   audiences: readonly string[];
   cover: { src: string | null; alt: string };
@@ -24,11 +24,13 @@ interface Book {
  * Livre principal — CLAUDE.md §1.4 + §8. Distinct du livre blanc
  * (collection séparée en Payload P6, voir memory
  * project_openlabconsulting_white_paper_souveraine).
+ *
+ * Édité par OpenLab Consulting seul — pas de co-édition externe.
  */
 const BOOK: Book = {
   title: 'Intelligence Artificielle',
   subtitle: 'Du Machine Learning aux Agents Autonomes',
-  coEdition: 'Co-édition EXPERTISE-IA (Grasse) · OpenLab Consulting (Abidjan)',
+  edition: 'Édition OpenLab Consulting · Abidjan',
   pitch: [
     'Un parcours rigoureux du ML supervisé aux agents multi-acteurs, en passant par les séries temporelles, le RAG souverain, MLOps et la sécurité IA.',
     "Un capstone terrain ivoirien — AgroSense CI — qui montre comment l'IA se déploie réellement sur des coopératives cacao, anacarde, coton.",
@@ -107,7 +109,7 @@ export function Livre(): ReactElement {
             </p>
 
             <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
-              {BOOK.coEdition}
+              {BOOK.edition}
             </p>
 
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
