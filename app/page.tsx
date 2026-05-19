@@ -4,6 +4,8 @@ import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
 import { Laboratoire } from '@/components/sections/Laboratoire';
+import { Livre } from '@/components/sections/Livre';
+import { Manifesto } from '@/components/sections/Manifesto';
 import { Reassurance } from '@/components/sections/Reassurance';
 import { Solutions } from '@/components/sections/Solutions';
 
@@ -22,7 +24,9 @@ export default function HomePage(): React.ReactElement {
       <Laboratoire />
       <CasClient />
       <Solutions />
-      {/* §6 sections 7-10 arrivent dans les features feat/p2-* successives. */}
+      <Manifesto />
+      <Livre />
+      {/* §6 sections 9-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }
