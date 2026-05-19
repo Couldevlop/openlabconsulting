@@ -31,8 +31,8 @@ const AXES: readonly Axis[] = [
   {
     Icon: BookOpen,
     label: 'Édition académique',
-    headline: 'Un livre de référence co-édité avec EXPERTISE-IA.',
-    body: '« Intelligence Artificielle : du Machine Learning aux Agents Autonomes » — Grasse · Abidjan. Un capstone terrain (AgroSense CI), des chapitres pour étudiants, dirigeants et professeurs.',
+    headline: 'Un livre de référence publié à Abidjan.',
+    body: '« Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Un capstone terrain (AgroSense CI), des chapitres pour étudiants, dirigeants et professeurs.',
     href: '/livre',
     ctaLabel: 'Explorer le livre',
   },

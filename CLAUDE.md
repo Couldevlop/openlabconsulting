@@ -141,7 +141,6 @@ Tout est servi par **un seul `Deployment` K8s** (cf. §14.3), derrière Traefik.
 - **CEO** : Debora Ahouma
 - **Contacts** : +225 07 09 33 42 38 · +33 06 19 24 53 29 · waopron@openlabconsulting.com · infos@openlabconsulting.com
 - **Domaine** : openlabconsulting.com
-- **Partenaire technique** : EXPERTISE-IA (Grasse, France) — co-éditeur du livre IA
 
 ### 1.2 Positionnement
 
@@ -169,7 +168,7 @@ Trois piliers :
 
 **Livre** : _Intelligence Artificielle : du Machine Learning aux Agents Autonomes_
 
-- **Co-édition** : EXPERTISE-IA (Grasse) + Openlab Consulting (Abidjan)
+- **Édition** : OpenLab Consulting (Abidjan) — édition propre, pas de co-éditeur externe
 - **Public** : étudiants ingénieurs, data scientists, dirigeants, professeurs
 - **Couverture** : ML supervisé/non supervisé, séries temporelles, RAG, multi-agents, MLOps, sécurité IA, industrialisation Kubernetes
 - **Capstone du livre** : AgroSense CI (étude de cas terrain ivoirienne)
