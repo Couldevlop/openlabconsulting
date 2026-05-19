@@ -1,111 +1,13 @@
-import type { ReactElement, ComponentType, SVGProps } from 'react';
+import type { ReactElement } from 'react';
 import Link from 'next/link';
-import {
-  ArrowUpRight,
-  BadgeCheck,
-  Building2,
-  Fuel,
-  Radar,
-  ScanSearch,
-  Sprout,
-  Users,
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-
-type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
-type Status = 'production' | 'pilot' | 'mvp' | 'dev';
-
-interface Product {
-  slug:
-    | 'nexusrh'
-    | 'nexuserp'
-    | 'sygescom'
-    | 'agrosense'
-    | 'qualitos'
-    | 'fraud-shield'
-    | 'smart-city';
-  name: string;
-  Icon: LucideIcon;
-  /** Tagline §18 — phrase courte, antithèse ou deux temps. */
-  tagline: string;
-  /** Cible marché concrète (CLAUDE.md §1.3). */
-  target: string;
-  status: Status;
-  statusLabel: string;
-}
-
-const PRODUCTS: readonly Product[] = [
-  {
-    slug: 'nexusrh',
-    name: 'NexusRH CI',
-    Icon: Users,
-    tagline: 'La paie ivoirienne sans friction. CNPS, ITS, FDFP, Mobile Money.',
-    target: 'PME & grandes entreprises · Côte d’Ivoire',
-    status: 'production',
-    statusLabel: 'En production',
-  },
-  {
-    slug: 'nexuserp',
-    name: 'NexusERP',
-    Icon: Building2,
-    tagline:
-      'ERP SYSCOHADA nouvelle génération. Multi-devises, multi-pays, natif.',
-    target: 'PME multi-secteurs · France · UEMOA',
-    status: 'production',
-    statusLabel: 'En production',
-  },
-  {
-    slug: 'sygescom',
-    name: 'SYGESCOM v2.0',
-    Icon: Fuel,
-    tagline: 'Vos stations. Vos volumes. Sous contrôle, en temps réel.',
-    target: 'Réseaux d’hydrocarbures · Afrique de l’Ouest',
-    status: 'production',
-    statusLabel: 'En production',
-  },
-  {
-    slug: 'agrosense',
-    name: 'AgroSense CI',
-    Icon: Sprout,
-    tagline: 'Le cacao se voit, la météo se prévoit. La parcelle décide.',
-    target: 'Coopératives & exploitants · cacao, anacarde, coton',
-    status: 'mvp',
-    statusLabel: 'MVP avancé',
-  },
-  {
-    slug: 'qualitos',
-    name: 'QualitOS',
-    Icon: BadgeCheck,
-    tagline:
-      'PDCA, 5S, DMAIC, ISO. Une seule plateforme. Aucune méthode laissée de côté.',
-    target: 'Industrie · santé · agro · services',
-    status: 'dev',
-    statusLabel: 'En développement',
-  },
-  {
-    slug: 'fraud-shield',
-    name: 'OpenLab Fraud Shield',
-    Icon: ScanSearch,
-    tagline: 'La fraude se cache. L’IA la rend visible.',
-    target: 'Banques · assurances · administration',
-    status: 'production',
-    statusLabel: 'En production',
-  },
-  {
-    slug: 'smart-city',
-    name: 'OpenLab Smart City',
-    Icon: Radar,
-    tagline: 'Anticiper la ville. Pas seulement la surveiller.',
-    target: 'Collectivités · ministères',
-    status: 'pilot',
-    statusLabel: 'En pilote',
-  },
-] as const;
+import { PRODUCTS } from '@/lib/data/products';
 
 /**
  * Solutions — Section 6 de la homepage (CLAUDE.md §6, §7).
