@@ -1,5 +1,19 @@
 # syntax=docker/dockerfile:1.7-labs
-# Image distroless < 200 Mo, no shell — voir CLAUDE.md §13.1.
+#
+# Image runtime : cgr.dev/chainguard/node (zero-CVE, rebuild quotidien).
+# Déviation §13.1 — voir docs/security-overrides.md (palier 3).
+#
+# Pourquoi Chainguard et plus distroless :
+#  - Distroless `:nonroot` peut accuser un retard de plusieurs jours
+#    avant d'intégrer les patches Debian (libc, openssl, etc.). On a
+#    constaté 6 CVE (1 CRITICAL, 5 HIGH) au 2026-05-18 avec fix amont
+#    déjà publié mais pas encore reflété dans `:nonroot`.
+#  - Chainguard publie un rebuild quotidien, l'image arrive
+#    typiquement clean au scan Trivy même quelques heures après une
+#    disclosure CVE.
+#
+# Pour les stages builder, on reste sur node:22-alpine (jeté à la
+# fin, n'apparaît pas dans Trivy image scan).
 
 # -----------------------------------------------------------------------------
 # Stage 1 : deps
@@ -25,15 +39,16 @@ RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 RUN pnpm build
 
 # -----------------------------------------------------------------------------
-# Stage 3 : runner (distroless, non-root)
+# Stage 3 : runner (Chainguard Node, non-root par défaut)
 # -----------------------------------------------------------------------------
-FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runner
+FROM cgr.dev/chainguard/node:latest AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+# Chainguard Node tourne en UID 65532 (`nonroot`) par défaut.
 COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
 COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
 COPY --from=builder --chown=nonroot:nonroot /app/public ./public
@@ -41,4 +56,5 @@ COPY --from=builder --chown=nonroot:nonroot /app/public ./public
 USER nonroot
 EXPOSE 3000
 
+# Chainguard Node a `node` comme entrypoint → CMD passe le script directement.
 CMD ["server.js"]
