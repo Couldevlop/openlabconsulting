@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { CasClient } from '@/components/sections/CasClient';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
@@ -18,7 +19,8 @@ export default function HomePage(): React.ReactElement {
       <Reassurance />
       <Expertises />
       <Laboratoire />
-      {/* §6 sections 5-10 arrivent dans les features feat/p2-* successives. */}
+      <CasClient />
+      {/* §6 sections 6-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }
