@@ -28,7 +28,12 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('cas-client')).toBeInTheDocument();
   });
 
-  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire -> CasClient', () => {
+  it('rend Solutions après CasClient', () => {
+    render(<HomePage />);
+    expect(screen.getByTestId('solutions')).toBeInTheDocument();
+  });
+
+  it('respecte l’ordre Hero -> Reassurance -> Expertises -> Laboratoire -> CasClient -> Solutions', () => {
     render(<HomePage />);
     const sections = [
       screen.getByTestId('hero'),
@@ -36,6 +41,7 @@ describe('HomePage (P2 — homepage §6)', () => {
       screen.getByTestId('expertises'),
       screen.getByTestId('laboratoire'),
       screen.getByTestId('cas-client'),
+      screen.getByTestId('solutions'),
     ];
     for (let i = 0; i < sections.length - 1; i++) {
       expect(
