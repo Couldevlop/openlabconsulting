@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
 import { Reassurance } from '@/components/sections/Reassurance';
@@ -14,7 +15,8 @@ export default function HomePage(): React.ReactElement {
     <main id="main">
       <Hero background={<HeroBackground />} />
       <Reassurance />
-      {/* §6 sections 3-10 arrivent dans les features feat/p2-* successives. */}
+      <Expertises />
+      {/* §6 sections 4-10 arrivent dans les features feat/p2-* successives. */}
     </main>
   );
 }
