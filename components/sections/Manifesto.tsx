@@ -21,7 +21,7 @@ const STANCES: readonly Stance[] = [
   {
     index: '02',
     excuse: '« On n’a pas la recherche. »',
-    fact: 'Un livre IA co-édité Grasse · Abidjan, capstone terrain ivoirien, lu par étudiants et dirigeants.',
+    fact: 'Un livre IA publié à Abidjan, capstone terrain ivoirien, lu par étudiants et dirigeants.',
   },
   {
     index: '03',
