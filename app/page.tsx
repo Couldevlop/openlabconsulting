@@ -3,6 +3,7 @@ import { CasClient } from '@/components/sections/CasClient';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
+import { Insights } from '@/components/sections/Insights';
 import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
@@ -26,7 +27,8 @@ export default function HomePage(): React.ReactElement {
       <Solutions />
       <Manifesto />
       <Livre />
-      {/* §6 sections 9-10 arrivent dans les features feat/p2-* successives. */}
+      <Insights />
+      {/* §6 section 10 (Audit IA lead magnet) arrive dans feat/p2-audit-ia-cta. */}
     </main>
   );
 }
