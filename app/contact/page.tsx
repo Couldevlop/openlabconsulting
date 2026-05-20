@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { ContactForm } from '@/components/forms/ContactForm';
 import { SITE } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
@@ -139,114 +139,9 @@ export default function ContactPage(): React.ReactElement {
               </ul>
             </div>
 
-            {/* Formulaire */}
+            {/* Formulaire — AJAX, Zod, Turnstile, rate limit Redis (P10). */}
             <div>
-              <form
-                method="post"
-                action="/api/contact"
-                aria-label="Formulaire de contact"
-                className="rounded-lg border border-[var(--color-ol-mist)] bg-white p-8 shadow-sm"
-              >
-                <Heading level={2} visualLevel={3}>
-                  Écrire à l’équipe.
-                </Heading>
-                <p className="mt-2 text-sm text-[var(--color-ol-graphite)]/65">
-                  La pipeline d’envoi (validation Zod + Resend + rate limit
-                  Redis) est branchée en P8 / P10. Pour l’instant, écris-nous
-                  directement à{' '}
-                  <a
-                    href={`mailto:${SITE.contact.email}`}
-                    className="font-medium text-[var(--color-ol-orange)] underline-offset-2 hover:underline"
-                  >
-                    {SITE.contact.email}
-                  </a>
-                  .
-                </p>
-
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <label className="flex flex-col gap-1.5 text-sm">
-                    <span className="font-medium text-[var(--color-ol-night)]">
-                      Nom complet
-                    </span>
-                    <input
-                      name="name"
-                      type="text"
-                      required
-                      autoComplete="name"
-                      className="min-h-11 rounded-md border border-[var(--color-ol-mist)] bg-white px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm">
-                    <span className="font-medium text-[var(--color-ol-night)]">
-                      Email pro
-                    </span>
-                    <input
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className="min-h-11 rounded-md border border-[var(--color-ol-mist)] bg-white px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm sm:col-span-2">
-                    <span className="font-medium text-[var(--color-ol-night)]">
-                      Organisation
-                    </span>
-                    <input
-                      name="organization"
-                      type="text"
-                      autoComplete="organization"
-                      className="min-h-11 rounded-md border border-[var(--color-ol-mist)] bg-white px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm sm:col-span-2">
-                    <span className="font-medium text-[var(--color-ol-night)]">
-                      Sujet
-                    </span>
-                    <select
-                      name="subject"
-                      defaultValue=""
-                      required
-                      className="min-h-11 rounded-md border border-[var(--color-ol-mist)] bg-white px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                    >
-                      <option value="" disabled>
-                        Choisir un sujet…
-                      </option>
-                      <option value="audit-ia">Audit IA gratuit</option>
-                      <option value="demo-produit">Démo produit</option>
-                      <option value="conference">
-                        Conférence / intervention
-                      </option>
-                      <option value="partenariat">
-                        Partenariat universitaire
-                      </option>
-                      <option value="presse">Presse</option>
-                      <option value="autre">Autre</option>
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm sm:col-span-2">
-                    <span className="font-medium text-[var(--color-ol-night)]">
-                      Message
-                    </span>
-                    <textarea
-                      name="message"
-                      required
-                      rows={5}
-                      className="resize-y rounded-md border border-[var(--color-ol-mist)] bg-white px-4 py-3 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                    />
-                  </label>
-                </div>
-
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-[var(--color-ol-graphite)]/55">
-                    Vos données restent en interne chez OpenLab. RGPD UE + loi
-                    ivoirienne 2013-450.
-                  </p>
-                  <Button type="submit" variant="primary" size="md">
-                    Envoyer le message
-                  </Button>
-                </div>
-              </form>
+              <ContactForm />
             </div>
           </div>
         </Container>

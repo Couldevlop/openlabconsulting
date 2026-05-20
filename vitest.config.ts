@@ -112,6 +112,15 @@ export default defineConfig({
         // logique est dans les helpers server-only (testés). Le markup
         // est couvert par les tests de page hub existants.
         'app/insights/page.tsx',
+        // Pages purement markup (à-propos, laboratoire) : couvertes par
+        // Playwright en P9, pas pertinent en unit.
+        'app/a-propos/page.tsx',
+        'app/laboratoire/page.tsx',
+        // Widgets client qui dépendent du DOM Cloudflare (Turnstile) ou
+        // de fetch (ContactForm) : couverts par E2E Playwright + tests
+        // d'intégration API (routes déjà testées).
+        'components/atoms/Turnstile.tsx',
+        'components/forms/ContactForm.tsx',
       ],
       thresholds: {
         lines: 80,

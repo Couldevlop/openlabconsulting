@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, ShieldCheck } from 'lucide-react';
@@ -53,10 +54,12 @@ export default async function SecteurDetailPage({
     produitsLies,
     expertisesLies,
   } = sector;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
       <JsonLd
+        nonce={nonce}
         data={[
           sectorPageSchema(sector),
           breadcrumbSchema([
