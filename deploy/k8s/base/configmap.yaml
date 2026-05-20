@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openlab-website-config
+  namespace: openlab
+  labels:
+    app.kubernetes.io/name: openlab-website
+    app.kubernetes.io/component: web
+data:
+  # CLAUDE.md §14.8 — variables NON sensibles.
+  # Les secrets (DATABASE_URL, PAYLOAD_SECRET, etc.) vivent dans
+  # secret.sealedsecret.yaml.
+  NODE_ENV: 'production'
+  NEXT_PUBLIC_SITE_URL: 'https://openlabconsulting.com'
+  NEXT_PUBLIC_PLAUSIBLE_DOMAIN: 'openlabconsulting.com'
+  PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
+
+  REDIS_URL: 'redis://redis.openlab.svc.cluster.local:6379'
+  MINIO_ENDPOINT: 'minio.openlab.svc.cluster.local:9000'
+  MINIO_BUCKET: 'openlab-media'
+  MINIO_USE_SSL: 'false'
+  MEILISEARCH_URL: 'http://meilisearch.openlab.svc.cluster.local:7700'
+
+  # Better-Auth — URL canonique de l'app pour redirections OAuth.
+  BETTER_AUTH_URL: 'https://openlabconsulting.com'
+
+  # Observabilité — scope du métriqueur (cf. §15).
+  OPENLAB_TIER: 'production'

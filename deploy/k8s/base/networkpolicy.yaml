@@ -1,0 +1,88 @@
+# NetworkPolicy — CLAUDE.md §10 OWASP A10 (SSRF mitigation).
+# Cluster K3s avec Calico ou Cilium pour faire respecter ces règles.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: openlab-website
+  namespace: openlab
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: openlab-website
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Trafic entrant : seulement depuis Traefik (ingress controller).
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 3000
+    # Prometheus scraping métriques.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # DNS (kube-dns)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Services internes du namespace (postgres, redis, minio, meilisearch).
+    - to:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 5432
+        - protocol: TCP
+          port: 6379
+        - protocol: TCP
+          port: 9000
+        - protocol: TCP
+          port: 7700
+    # Sorties HTTPS autorisées : Anthropic, Cloudflare Turnstile, Resend,
+    # Let's Encrypt (cert-manager utilise son propre namespace).
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
+---
+# Postgres : interdit l'accès depuis l'extérieur du namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-restrict
+  namespace: openlab
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: openlab-website
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: openlab-postgres-backup
+      ports:
+        - protocol: TCP
+          port: 5432

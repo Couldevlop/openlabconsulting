@@ -1,0 +1,52 @@
+# Staging — replicas 1, ressources réduites, host staging.
+replicaCount: 1
+
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 2
+
+ingress:
+  hosts:
+    - host: staging.openlabconsulting.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: openlab-tls-staging
+      hosts:
+        - staging.openlabconsulting.com
+
+config:
+  NEXT_PUBLIC_SITE_URL: 'https://staging.openlabconsulting.com'
+  PAYLOAD_PUBLIC_SERVER_URL: 'https://staging.openlabconsulting.com'
+  BETTER_AUTH_URL: 'https://staging.openlabconsulting.com'
+  OPENLAB_TIER: 'staging'
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 192Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+postgresql:
+  primary:
+    persistence:
+      size: 10Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+redis:
+  master:
+    persistence:
+      size: 1Gi
+
+minio:
+  persistence:
+    size: 10Gi

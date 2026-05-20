@@ -13,3 +13,8 @@ yarn.lock
 *.min.js
 *.min.css
 public
+
+# Helm templates contiennent des directives {{ }} qui ne sont pas du
+# YAML valide pour prettier — on les exclut.
+deploy/helm/**/templates/
+deploy/helm/**/charts/
