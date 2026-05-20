@@ -8,6 +8,26 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./', import.meta.url)),
+      // 'server-only' n'a aucun export concret (juste un throw côté
+      // client en build). En tests Vitest jsdom on remplace par un
+      // module vide pour permettre l'import sans erreur runtime.
+      'server-only': fileURLToPath(
+        new URL('./tests/stubs/server-only.ts', import.meta.url),
+      ),
+      // @payload-config est un alias Next/Payload (importmap). Stub
+      // en tests : on s'assure juste que l'import dynamique ne casse
+      // pas la résolution Vite. Le runtime Payload n'est pas exécuté
+      // en tests (couvert par les tests d'intégration).
+      '@payload-config': fileURLToPath(
+        new URL('./tests/stubs/payload-config.ts', import.meta.url),
+      ),
+      // `payload` lui-même est lourd à charger (Postgres adapter,
+      // sharp, etc.). En tests on stub aussi pour éviter le boot
+      // complet (10-15 s sous Windows). Le helper attrape ce throw
+      // et retombe sur FALLBACK_CASE_STUDIES — comportement attendu.
+      payload: fileURLToPath(
+        new URL('./tests/stubs/payload.ts', import.meta.url),
+      ),
     },
   },
   test: {

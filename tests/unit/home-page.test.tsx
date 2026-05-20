@@ -1,5 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// CasesCarouselServer est un async Server Component qui interroge Payload.
+// Pour le test unitaire de HomePage, on le remplace par un mock sync qui
+// délègue au client CasesCarousel (qui utilise déjà FALLBACK_CASE_STUDIES
+// par défaut). Le binding réel Payload est couvert par case-studies.test.ts.
+vi.mock('@/components/sections/CasesCarouselServer', async () => {
+  const { CasesCarousel } = await import('@/components/sections/CasesCarousel');
+  return { CasesCarouselServer: () => <CasesCarousel /> };
+});
+
 import HomePage from '@/app/page';
 
 describe('HomePage (P2 — homepage §6)', () => {

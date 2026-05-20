@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
-import { CasesCarousel } from '@/components/sections/CasesCarousel';
+import { CasesCarouselServer } from '@/components/sections/CasesCarouselServer';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
@@ -24,7 +24,7 @@ export default function HomePage(): React.ReactElement {
       <Reassurance />
       <Expertises />
       <Laboratoire />
-      <CasesCarousel />
+      <CasesCarouselServer />
       <Solutions />
       <Manifesto />
       <Livre />

@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { Articles } from './collections/Articles';
+import { CaseStudies } from './collections/CaseStudies';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
@@ -19,6 +20,7 @@ const dirname = path.dirname(filename);
  *
  * Collections actives :
  *   - articles    : insights longs format (homepage §6.9)
+ *   - caseStudies : cas clients du carrousel homepage (§6.5)
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
  *   - users       : auth + 6 rôles RBAC (§11.3)
@@ -50,7 +52,7 @@ export default buildConfig({
       titleSuffix: ' · Admin OpenLab',
     },
   },
-  collections: [Articles, Whitepapers, Media, Users],
+  collections: [Articles, CaseStudies, Whitepapers, Media, Users],
   editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: {
