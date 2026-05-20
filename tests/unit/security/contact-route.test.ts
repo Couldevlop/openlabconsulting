@@ -12,7 +12,8 @@ describe('POST /api/contact', () => {
     __resetMemoryStore();
     delete process.env.REDIS_URL;
     delete process.env.TURNSTILE_SECRET_KEY;
-    process.env.NODE_ENV = 'test';
+    // NODE_ENV est readonly en TS strict mais writable via Object.assign.
+    Object.assign(process.env, { NODE_ENV: 'test' });
   });
 
   afterEach(() => {
@@ -88,7 +89,8 @@ describe('POST /api/audit-ia', () => {
     __resetMemoryStore();
     delete process.env.REDIS_URL;
     delete process.env.TURNSTILE_SECRET_KEY;
-    process.env.NODE_ENV = 'test';
+    // NODE_ENV est readonly en TS strict mais writable via Object.assign.
+    Object.assign(process.env, { NODE_ENV: 'test' });
   });
 
   const validAudit = {

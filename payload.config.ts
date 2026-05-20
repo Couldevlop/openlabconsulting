@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { Articles } from './collections/Articles';
+import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
@@ -23,7 +24,8 @@ const dirname = path.dirname(filename);
  *   - caseStudies : cas clients du carrousel homepage (§6.5)
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
- *   - users       : auth + 6 rôles RBAC (§11.3)
+ *   - users       : auth + 6 rôles RBAC + 2FA TOTP (§11)
+ *   - auditLog    : journal immuable actions sensibles (§11.2)
  *
  * Pipeline d'upload :
  *   1. Éditeur uploade via admin Payload (/admin)
@@ -52,7 +54,7 @@ export default buildConfig({
       titleSuffix: ' · Admin OpenLab',
     },
   },
-  collections: [Articles, CaseStudies, Whitepapers, Media, Users],
+  collections: [Articles, CaseStudies, Whitepapers, Media, Users, AuditLog],
   editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: {

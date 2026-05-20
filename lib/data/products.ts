@@ -40,6 +40,22 @@ export interface ProductExpertise {
   title: string;
 }
 
+export interface ProductPricing {
+  /** Modèle tarifaire : SaaS abonnement, licence + maintenance, sur devis. */
+  model: 'saas' | 'license' | 'quote';
+  /** Affichage prix vedette. Ex : "À partir de 25 000 F CFA / utilisateur / mois". */
+  headline: string;
+  /** Détails (3-5 bullets) : ce qui est inclus, prérequis, support. */
+  details: readonly string[];
+  /** Note de pied : conditions, devises, durée engagement. */
+  note?: string;
+}
+
+export interface ProductFaq {
+  question: string;
+  answer: string;
+}
+
 export interface Product {
   slug: ProductSlug;
   Icon: LucideIcon;
@@ -61,8 +77,12 @@ export interface Product {
   features: readonly ProductFeature[];
   /** Stack technique côté produit (3-6 lignes). */
   stack: readonly string[];
-  /** Stats sourcées — optionnel, uniquement quand documenté §7.2. */
-  proofs?: readonly ProductProof[];
+  /** Stats sourcées — 2-4 entrées sourcées (§4.10). */
+  proofs: readonly ProductProof[];
+  /** Tarification (§7.1 — modèle + headline + détails). */
+  pricing: ProductPricing;
+  /** FAQ produit (Schema.org FAQPage en page détail). */
+  faq: readonly ProductFaq[];
   /** Expertises OpenLab pertinentes pour ce produit (cross-link). */
   expertisesLies: readonly ProductExpertise[];
 }
@@ -121,6 +141,57 @@ export const PRODUCTS: readonly Product[] = [
       'K3s Hetzner · Helm chart proprietaire',
       'Authentification Keycloak SSO',
     ],
+    proofs: [
+      {
+        value: '+247',
+        label: 'agents payés en Mobile Money',
+        source: 'déploiement groupe RH ivoirien, 2025-2026',
+      },
+      {
+        value: '0',
+        label: 'pénalité ITS depuis 24 mois',
+        source: 'audit DGI annuel client référent',
+      },
+      {
+        value: '< 1 h',
+        label: 'audit annuel CNPS',
+        source: 'temps moyen post-déploiement vs >1 jour avant',
+      },
+    ],
+    pricing: {
+      model: 'saas',
+      headline: 'À partir de 25 000 F CFA / utilisateur actif / mois',
+      details: [
+        'Paie multi-statuts illimitée (CDI, CDD, journaliers, stagiaires)',
+        'Diffusion Mobile Money + virement bancaire inclus',
+        'Mises à jour barèmes CNPS / ITS / FDFP automatiques',
+        'Support technique sous 24 h ouvrées',
+        'Migration des données paie existantes assistée',
+      ],
+      note: 'Engagement 12 mois. Volume > 200 utilisateurs : sur devis avec remise dégressive.',
+    },
+    faq: [
+      {
+        question: 'NexusRH est-il vraiment conforme CNPS et DGI ?',
+        answer:
+          'Oui. Les barèmes ITS, FDFP, CNPS sont maintenus par notre équipe juridique et mis à jour à chaque arrêté. Le bordereau CNPS produit est directement téléversable sur le portail e-CNPS.',
+      },
+      {
+        question: 'Puis-je migrer depuis Sage Paie ou Cegid ?',
+        answer:
+          'Oui. Nous proposons un import CSV templatisé et un accompagnement de migration sous 2 à 4 semaines selon le volume. La double-paie en parallèle est possible pendant 1 cycle de validation.',
+      },
+      {
+        question: 'Quels opérateurs Mobile Money sont supportés ?',
+        answer:
+          'Orange Money, MTN Mobile Money, Moov Money en Côte d’Ivoire. Wave est en cours d’intégration (Q3 2026). Les autres pays UEMOA suivent.',
+      },
+      {
+        question: 'Mes données restent-elles en Côte d’Ivoire ?',
+        answer:
+          'Les données sont hébergées en Allemagne (Hetzner Falkenstein), conforme RGPD UE + loi ivoirienne 2013-450. Une option d’hébergement on-premise existe pour les organismes publics.',
+      },
+    ],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -168,6 +239,58 @@ export const PRODUCTS: readonly Product[] = [
       'PostgreSQL 17 · multi-tenant schema-per-org',
       'Module reporting FastAPI Python (états SYSCOHADA, Excel/PDF)',
       'K3s Hetzner + Helm chart',
+    ],
+    proofs: [
+      {
+        value: '2',
+        label: 'référentiels comptables natifs',
+        source: 'SYSCOHADA OHADA + PCG France 2014, plan unifié',
+      },
+      {
+        value: '3',
+        label: 'devises supportées en consolidation',
+        source: 'FCFA, EUR, USD avec écart de change automatique',
+      },
+      {
+        value: '50-500',
+        label: 'employés gérés par instance',
+        source: 'sweet spot PME multi-pays UEMOA et France',
+      },
+    ],
+    pricing: {
+      model: 'saas',
+      headline: 'À partir de 1 200 € HT / mois (jusqu’à 25 utilisateurs)',
+      details: [
+        'Modules compta, ventes, achats, stock, projets, RH inclus',
+        'Multi-devises FCFA / EUR / USD + autres devises sur demande',
+        'États SYSCOHADA + liasse fiscale UEMOA + bilan PCG France',
+        'Support email + Slack partagé, SLA réponse 8 h ouvrées',
+        'Onboarding 4 semaines accompagné par notre équipe migration',
+      ],
+      note: 'Plan « Enterprise » sur devis pour > 100 utilisateurs ou multi-instances.',
+    },
+    faq: [
+      {
+        question:
+          'NexusERP gère-t-il vraiment les deux référentiels en parallèle ?',
+        answer:
+          'Oui. Chaque opération est enregistrée dans le plan SYSCOHADA et translatée à la volée dans le PCG France via une table de correspondance maintenue. Les états sortent en deux versions sans double-saisie.',
+      },
+      {
+        question: 'Quelle est la différence avec NexusRH ?',
+        answer:
+          'NexusERP gère les RH génériques (contrats, congés, fiches de paie SYSCOHADA). NexusRH est spécialisé conformité paie ivoirienne (CNPS, ITS, FDFP, Mobile Money). Les deux s’interconnectent.',
+      },
+      {
+        question: 'Puis-je migrer depuis Sage 100 ou Odoo ?',
+        answer:
+          'Oui. Nos connecteurs d’import existent pour Sage 100/X3, Odoo 16+, et tout ERP qui exporte un FEC (Fichier des Écritures Comptables). Migration moyenne : 4 semaines.',
+      },
+      {
+        question: 'Y a-t-il une version mobile ?',
+        answer:
+          'Le back-office est responsive (Angular 18). Une PWA dédiée approbation/validation est disponible pour les managers (devis, congés, dépenses).',
+      },
     ],
     expertisesLies: [
       { slug: 'conseil-strategie', title: 'Conseil & stratégie IA' },
@@ -233,6 +356,40 @@ export const PRODUCTS: readonly Product[] = [
         source: 'pilote consolidé temps réel',
       },
     ],
+    pricing: {
+      model: 'license',
+      headline: 'Licence + maintenance sur devis',
+      details: [
+        'Licence groupe — utilisateurs illimités du même réseau',
+        'Inclut intégration jauges + pompes + terminaux paiement',
+        'Modèle IA de détection anomalies entraîné sur vos historiques',
+        'Maintenance corrective + mises à jour majeures incluses 12 mois',
+        'Support sur incident en 4 h ouvrées (option 24/7)',
+      ],
+      note: 'Tarif basé sur le nombre de stations et la complexité de la flotte. Devis sous 5 jours après audit terrain.',
+    },
+    faq: [
+      {
+        question: 'SYGESCOM s’intègre-t-il à mon ERP existant ?',
+        answer:
+          'Oui. Des connecteurs natifs existent pour SAP, NexusERP, Sage X3. Les écritures comptables sont générées automatiquement après réconciliation.',
+      },
+      {
+        question: 'Mes pompes anciennes sont-elles supportées ?',
+        answer:
+          'SYGESCOM est compatible avec la majorité des pompes IFSF / DART standardisées. Pour des pompes très anciennes, nous fournissons des modules de conversion analogique-numérique.',
+      },
+      {
+        question: 'Combien de stations puis-je superviser ?',
+        answer:
+          'Le plus gros déploiement actuel gère 60+ stations en temps réel. L’architecture Kafka + TimescaleDB scale à plusieurs centaines sans changement majeur.',
+      },
+      {
+        question: 'Y a-t-il un mode hors-ligne pour les stations isolées ?',
+        answer:
+          'Oui. Chaque station embarque un agent local qui collecte les données et les remonte dès reconnexion. Aucune perte de donnée même après 72 h offline.',
+      },
+    ],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
@@ -279,6 +436,57 @@ export const PRODUCTS: readonly Product[] = [
       'Frontend Next.js + MapLibre',
       'Sources data : SODEXAM, OpenMeteo, ERA5, CHIRPS, Sentinel-2',
       'K3s Hetzner · MinIO pour les rasters',
+    ],
+    proofs: [
+      {
+        value: '47',
+        label: 'parcelles cacao instrumentées',
+        source: 'pilote coopérative Daloa, campagne 2025-2026',
+      },
+      {
+        value: 'J+14',
+        label: 'horizon de prédiction maladies',
+        source: 'modèles entraînés sur historique SODEXAM + terrain',
+      },
+      {
+        value: '86 %',
+        label: 'précision modèles pourriture brune',
+        source: 'F1-score validation croisée sur jeu de test 2024',
+      },
+    ],
+    pricing: {
+      model: 'saas',
+      headline: 'À partir de 15 000 F CFA / hectare / saison',
+      details: [
+        'Capteurs IoT sol fournis + maintenance (1 capteur / 0,5 ha)',
+        'Imagerie satellite Sentinel-2 incluse',
+        'Tableau de bord coopérative + reporting EUDR conformité',
+        'Bulletins agronomiques hebdomadaires personnalisés',
+        'Formation agents techniques + adhérents incluse',
+      ],
+      note: 'Programmes d’État ou bailleurs (Banque Mondiale, AFD, CCC) : tarification dégressive sur volume coopératives.',
+    },
+    faq: [
+      {
+        question: 'AgroSense fonctionne-t-il sans connexion 4G permanente ?',
+        answer:
+          'Oui. Les capteurs utilisent LoRaWAN (longue portée, basse conso). Une passerelle par coopérative agrège puis remonte en 3G/4G dès que disponible. Aucune perte de mesure.',
+      },
+      {
+        question: 'Quelles cultures sont supportées ?',
+        answer:
+          'Cacao, anacarde, coton, hévéa en production. Le palmier à huile et le café arrivent en 2026. Les modèles sont entraînés culture par culture, pas génériques.',
+      },
+      {
+        question: 'Comment AgroSense aide-t-il pour la conformité EUDR ?',
+        answer:
+          'Chaque parcelle est géolocalisée précisément (< 5m). Le système prouve qu’elle n’est pas en zone de déforestation post-2020 via croisement avec les masques satellitaires Global Forest Watch. Le rapport EUDR sort en un clic.',
+      },
+      {
+        question: 'Les données appartiennent à qui ?',
+        answer:
+          'Aux producteurs et coopératives. OpenLab est hébergeur technique. Les données ne sont pas revendues à des tiers ; un consortium peut être créé pour les partager entre acteurs consentants.',
+      },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -328,6 +536,57 @@ export const PRODUCTS: readonly Product[] = [
       'Service IA Claude pour Ishikawa et 5 pourquoi',
       'K3s Hetzner',
     ],
+    proofs: [
+      {
+        value: '4',
+        label: 'normes ISO supportées en parallèle',
+        source: 'ISO 9001, 14001, 45001, 22000 — référentiel unifié',
+      },
+      {
+        value: '5',
+        label: 'méthodes qualité intégrées',
+        source: 'PDCA, 5S, DMAIC, CAPA, AMDEC',
+      },
+      {
+        value: 'Offline',
+        label: 'audit terrain garanti',
+        source: 'PWA Angular 18 service worker · sync auto',
+      },
+    ],
+    pricing: {
+      model: 'saas',
+      headline: 'À partir de 600 € HT / mois (15 utilisateurs)',
+      details: [
+        'Référentiel ISO unifié 9001/14001/45001/22000',
+        'Audit mobile PWA offline-first illimité',
+        'CAPA + indicateurs + tableaux de bord temps réel',
+        'Ishikawa assisté IA (1 000 analyses / mois inclus)',
+        'Export normatif (rapport audit ISO 19011)',
+      ],
+      note: 'Multi-sites > 5 ou > 50 utilisateurs : sur devis avec déploiement assisté.',
+    },
+    faq: [
+      {
+        question: 'QualitOS est-il certifié pour les audits ISO ?',
+        answer:
+          'QualitOS est un support d’audit, pas un certificateur. Il prépare et structure l’audit conformément à l’ISO 19011 ; la certification finale reste du ressort de l’organisme accrédité (Bureau Veritas, AFNOR, etc.).',
+      },
+      {
+        question: 'L’assistant IA voit-il mes données qualité ?',
+        answer:
+          'Les analyses Ishikawa et 5 pourquoi sont envoyées à Claude API avec uniquement le contexte du non-conforme courant. Aucun historique global n’est exposé. Option d’inférence on-premise via vLLM pour les industries sensibles.',
+      },
+      {
+        question: 'Peut-on gérer plusieurs sites / filiales ?',
+        answer:
+          'Oui. QualitOS est multi-tenant strict : chaque site a ses propres référentiels, audits, indicateurs. Un siège peut consolider les KPI en vue groupe avec permissions granulaires.',
+      },
+      {
+        question: 'Existe-t-il une intégration GED ou Sharepoint ?',
+        answer:
+          'Connecteurs natifs vers Sharepoint, M-Files et Alfresco pour la gestion documentaire normative (procédures, modes opératoires). API REST pour les autres GED.',
+      },
+    ],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -375,6 +634,57 @@ export const PRODUCTS: readonly Product[] = [
       'PostgreSQL 17 pour l’audit log immuable',
       'K3s Hetzner · GPU optionnel pour throughput',
     ],
+    proofs: [
+      {
+        value: '< 2 s',
+        label: 'analyse moyenne par document',
+        source: 'CPU only · ONNX Runtime · documents 1080p',
+      },
+      {
+        value: '× 3',
+        label: 'cas détectés / contrôleur',
+        source: 'pilote établissement bancaire UEMOA, T1 2026',
+      },
+      {
+        value: '99 %',
+        label: 'confiance signature dupliquée',
+        source: 'modèle re-id signature · seuil 99 % avec overlay',
+      },
+    ],
+    pricing: {
+      model: 'saas',
+      headline: 'À partir de 0,50 € HT / document analysé',
+      details: [
+        'API REST drop-in (REST + WebSocket pour traitement batch)',
+        'Multi-tenant strict : vos modèles ré-entraînés sur vos cas',
+        'Audit log immuable post-décision pour conformité régulateur',
+        'SDK Java et Python fournis pour l’intégration LDM/GED',
+        'Tableau de bord superviseur + dashboards de dérive modèle',
+      ],
+      note: 'Forfait > 100 000 documents/mois sur devis. Option on-premise pour les banques centrales.',
+    },
+    faq: [
+      {
+        question: 'Le score est-il explicable pour le contrôleur ?',
+        answer:
+          'Oui. Chaque détection génère un overlay PNG sur le document montrant les zones suspectes + un rapport texte expliquant les motifs (« cachet de couleur incohérente avec le fond », « date manipulée pixel-by-pixel »).',
+      },
+      {
+        question: 'Quels types de documents sont supportés ?',
+        answer:
+          'Pièces d’identité (CNI, passeport), factures, attestations bancaires, RIB, certificats de domiciliation, bulletins de paie, fiches familiales. Nouveaux types ajoutables sur demande.',
+      },
+      {
+        question: 'Faut-il du GPU ?',
+        answer:
+          'Non en production standard : ONNX Runtime CPU traite ~5 documents/s sur un cœur. GPU recommandé uniquement pour > 50 documents/s ou batch d’analyse rétrospective.',
+      },
+      {
+        question: 'Mes documents sont-ils stockés sur vos serveurs ?',
+        answer:
+          'Par défaut non : le document est traité in-memory puis supprimé. Stockage chiffré 30 jours uniquement si activé explicitement pour réentraînement (consentement écrit requis).',
+      },
+    ],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
@@ -421,6 +731,57 @@ export const PRODUCTS: readonly Product[] = [
       'Frontend Next.js + MapLibre',
       'K3s Hetzner · MinIO pour archivage vidéo',
       'Anonymisation amont via modèles vision dédiés',
+    ],
+    proofs: [
+      {
+        value: 'J-7',
+        label: 'prédiction concentration d’incidents',
+        source: 'modèle XGBoost séries temporelles + données socio',
+      },
+      {
+        value: 'RGPD',
+        label: 'anonymisation différentielle dès ingestion',
+        source: 'visages, plaques, identifiants flouttés avant stockage',
+      },
+      {
+        value: '4',
+        label: 'sources de données fusionnées',
+        source: 'CCTV, mobilité, signalements citoyens, INS / DGE',
+      },
+    ],
+    pricing: {
+      model: 'quote',
+      headline: 'Programme pluriannuel sur devis',
+      details: [
+        'Cadrage stratégique 4-6 semaines avec la collectivité',
+        'POC sur quartier pilote (3-6 mois) avant déploiement ville',
+        'Licence + infrastructure souveraine (Hetzner Allemagne ou on-prem)',
+        'Formation équipe sécurité + opérateurs collectivité',
+        'Comité éthique trimestriel inclus (transparence citoyenne)',
+      ],
+      note: 'Programme typiquement co-financé par bailleurs (UE, BAD, AFD, Banque Mondiale). Notre équipe accompagne le montage du dossier.',
+    },
+    faq: [
+      {
+        question: 'Smart City est-il un outil de surveillance ?',
+        answer:
+          'Non. Smart City n’identifie aucun individu : les visages et plaques sont anonymisés avant toute analyse. L’objectif est l’aide à la décision politique (où placer un commissariat, comment fluidifier la mobilité), pas la traque.',
+      },
+      {
+        question: 'Quel hébergement pour des données aussi sensibles ?',
+        answer:
+          'Trois options : (1) Hetzner Allemagne (RGPD UE), (2) cluster K3s on-premise dans le data center de la collectivité, (3) cloud souverain national si disponible. La donnée brute ne quitte jamais le territoire convenu.',
+      },
+      {
+        question: 'Comment garantir la transparence vis-à-vis des citoyens ?',
+        answer:
+          'Un portail public expose les indicateurs agrégés (chaleur, mobilité, signalements résolus). Un comité éthique trimestriel valide les nouveaux usages avant déploiement.',
+      },
+      {
+        question: 'Peut-on intégrer un système CCTV existant ?',
+        answer:
+          'Oui via les protocoles ONVIF / RTSP standard. L’anonymisation est appliquée en bordure (edge), avant toute remontée vers le data center central.',
+      },
     ],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },

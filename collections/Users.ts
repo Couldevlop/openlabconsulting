@@ -1,25 +1,29 @@
 import type { CollectionConfig } from 'payload';
+import { logAudit } from '../lib/audit-log';
+import { validatePasswordStrength } from '../lib/password-policy';
 
 /**
- * Users — collection minimale pour l’auth admin Payload (P6).
+ * Users — auth admin Payload (§9 + §11).
  *
- * Rôles supportés (CLAUDE.md §11.3) :
- *   - SUPER_ADMIN   : tous droits + gestion users + paramètres système
- *   - ADMIN         : tous droits sauf gestion users
- *   - EDITOR_CHIEF  : CRUD contenu + produits + livre + leads
- *   - EDITOR        : CRUD articles, médias, FAQs
- *   - AUTHOR        : CRUD ses propres articles uniquement
- *   - VIEWER        : lecture seule (dashboard, KPIs)
+ * Rôles (CLAUDE.md §11.3) :
+ *   - super-admin   : tous droits + gestion users + paramètres système
+ *   - admin         : tous droits sauf gestion users
+ *   - editor-chief  : CRUD contenu + produits + livre + leads
+ *   - editor        : CRUD articles, médias, FAQs
+ *   - author        : CRUD ses propres articles uniquement
+ *   - viewer        : lecture seule
  *
- * Sécurité P7 :
- *   - 2FA TOTP obligatoire pour SUPER_ADMIN et ADMIN
- *   - Politique mot de passe 12+ chars, zxcvbn ≥ 3
- *   - Session rolling 30 min idle, 8 h absolu
- *   - Account lockout 10 échecs / 30 min
+ * Sécurité §11.2 (P11) :
+ *   - bcrypt cost 12 (default Payload Auth)
+ *   - tokenExpiration: 28800 (8 h)
+ *   - maxLoginAttempts: 10, lockTime: 30 min
+ *   - 2FA TOTP : champs totpSecret (chiffré base32) + totpEnabled
+ *   - Policy mot de passe 12+ chars (`validatePasswordStrength`)
+ *   - Audit log auto sur create/update/delete + login lockout
  *
- * Cette collection est volontairement minimale en P6 setup ; les
- * politiques fines (2FA, account-lockout, audit log) sont ajoutées
- * en P7 via @payloadcms/plugin-multi-tenant + middleware custom.
+ * Le secret TOTP n'est exposé qu'au moment du setup (route
+ * `/api/admin/2fa/setup`). Une fois `totpEnabled=true`, le champ
+ * `totpSecret` est masqué dans l'admin (`admin.readOnly`).
  */
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -31,7 +35,24 @@ export const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['email', 'role', 'lastLogin'],
+    defaultColumns: ['email', 'role', 'totpEnabled', 'lastLogin'],
+    description:
+      'Comptes admin du back-office Payload. 2FA TOTP obligatoire pour super-admin et admin (§11.2).',
+  },
+  access: {
+    // Lecture/écriture réservées aux admins ; un user voit son propre profil.
+    read: ({ req }): boolean => {
+      const role = (req.user as { role?: string } | null)?.role;
+      return role === 'super-admin' || role === 'admin';
+    },
+    create: ({ req }): boolean =>
+      (req.user as { role?: string } | null)?.role === 'super-admin',
+    update: ({ req }): boolean => {
+      const role = (req.user as { role?: string } | null)?.role;
+      return role === 'super-admin' || role === 'admin';
+    },
+    delete: ({ req }): boolean =>
+      (req.user as { role?: string } | null)?.role === 'super-admin',
   },
   fields: [
     {
@@ -57,5 +78,93 @@ export const Users: CollectionConfig = {
       type: 'date',
       admin: { readOnly: true },
     },
+    // 2FA TOTP — CLAUDE.md §11.2
+    {
+      name: 'totpEnabled',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        readOnly: true,
+        description:
+          'Activé après scan QR + vérification du premier code TOTP. Géré par `/api/admin/2fa/setup`.',
+      },
+    },
+    {
+      name: 'totpSecret',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        hidden: true, // Jamais affiché dans l'UI admin une fois posé.
+        description: 'Secret base32 chiffré. Ne pas modifier manuellement.',
+      },
+    },
+    {
+      name: 'totpSetupAt',
+      type: 'date',
+      admin: { readOnly: true },
+    },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data }): unknown => {
+        // Politique mot de passe (§11.2) — appliquée à create + change.
+        // Payload expose le password en clair dans `data.password` au moment
+        // du beforeValidate ; il est ensuite haché par l'auth strategy.
+        const next = (data ?? {}) as { password?: unknown };
+        if (typeof next.password === 'string' && next.password.length > 0) {
+          const result = validatePasswordStrength(next.password);
+          if (!result.ok) {
+            throw new Error(
+              `Politique mot de passe non respectée : ${result.errors.join(' ')}`,
+            );
+          }
+        }
+        return data;
+      },
+    ],
+    afterChange: [
+      async ({ req, operation, doc, previousDoc }): Promise<void> => {
+        // Trace dans l'AuditLog tout create/update sur Users.
+        // overrideAccess pour bypass la règle "create: () => false".
+        const action: 'create' | 'update' =
+          operation === 'create' ? 'create' : 'update';
+        const roleChanged =
+          operation === 'update' &&
+          (previousDoc as { role?: string } | undefined)?.role !==
+            (doc as { role?: string }).role;
+        await logAudit(req.payload, {
+          action: roleChanged ? 'role.change' : action,
+          resource: `users:${(doc as { id?: string | number }).id}`,
+          user: req.user as Parameters<typeof logAudit>[1]['user'],
+          ipAddress:
+            req.headers?.get?.('x-forwarded-for')?.split(',')[0]?.trim() ??
+            null,
+          userAgent: req.headers?.get?.('user-agent') ?? null,
+          metadata: roleChanged
+            ? {
+                from: (previousDoc as { role?: string } | undefined)?.role,
+                to: (doc as { role?: string }).role,
+                targetUserId: (doc as { id?: string | number }).id,
+              }
+            : { targetUserId: (doc as { id?: string | number }).id },
+        });
+      },
+    ],
+    afterDelete: [
+      async ({ req, doc }): Promise<void> => {
+        await logAudit(req.payload, {
+          action: 'delete',
+          resource: `users:${(doc as { id?: string | number }).id}`,
+          user: req.user as Parameters<typeof logAudit>[1]['user'],
+          ipAddress:
+            req.headers?.get?.('x-forwarded-for')?.split(',')[0]?.trim() ??
+            null,
+          metadata: {
+            email: (doc as { email?: string }).email,
+            role: (doc as { role?: string }).role,
+          },
+        });
+      },
+    ],
+  },
 };

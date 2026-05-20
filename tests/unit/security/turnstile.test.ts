@@ -15,14 +15,14 @@ describe('lib/turnstile — verifyTurnstile', () => {
 
   it('bypass en dev quand TURNSTILE_SECRET_KEY est absente', async () => {
     delete process.env.TURNSTILE_SECRET_KEY;
-    process.env.NODE_ENV = 'development';
+    Object.assign(process.env, { NODE_ENV: 'development' });
     const r = await verifyTurnstile('any-token');
     expect(r).toEqual({ ok: true, mode: 'bypass' });
   });
 
   it('échoue en prod quand TURNSTILE_SECRET_KEY est absente', async () => {
     delete process.env.TURNSTILE_SECRET_KEY;
-    process.env.NODE_ENV = 'production';
+    Object.assign(process.env, { NODE_ENV: 'production' });
     const r = await verifyTurnstile('any-token');
     expect(r).toEqual({ ok: false, mode: 'misconfigured' });
   });

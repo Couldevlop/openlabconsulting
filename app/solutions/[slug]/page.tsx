@@ -13,7 +13,11 @@ import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
-import { breadcrumbSchema, softwareApplicationSchema } from '@/lib/seo/schema';
+import {
+  breadcrumbSchema,
+  faqPageSchema,
+  softwareApplicationSchema,
+} from '@/lib/seo/schema';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -59,6 +63,8 @@ export default async function SolutionDetailPage({
     features,
     stack,
     proofs,
+    pricing,
+    faq,
     expertisesLies,
   } = product;
   const nonce = (await headers()).get('x-nonce') ?? undefined;
@@ -74,6 +80,7 @@ export default async function SolutionDetailPage({
             { name: 'Solutions', url: '/solutions' },
             { name: product.name, url: `/solutions/${product.slug}` },
           ]),
+          faqPageSchema(faq),
         ]}
       />
       {/* Hero */}
@@ -258,6 +265,141 @@ export default async function SolutionDetailPage({
               ))}
             </ul>
           </div>
+        </Container>
+      </section>
+
+      {/* Tarification — §7.1 */}
+      <section
+        aria-labelledby="pricing-title"
+        data-testid="solution-pricing"
+        className="bg-white py-20 sm:py-28"
+      >
+        <Container width="wide">
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow tone="orange">Tarification</Eyebrow>
+            <Heading id="pricing-title" level={2} className="mt-4">
+              Transparent, sans surprise.
+            </Heading>
+          </div>
+
+          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 shadow-sm sm:p-10">
+            <Badge tone="orange">
+              {pricing.model === 'saas'
+                ? 'SaaS · abonnement mensuel'
+                : pricing.model === 'license'
+                  ? 'Licence + maintenance'
+                  : 'Sur devis'}
+            </Badge>
+
+            <p
+              data-testid="pricing-headline"
+              className="mt-5 font-[family-name:var(--font-display)] text-2xl leading-tight font-semibold text-[var(--color-ol-night)] sm:text-3xl"
+            >
+              {pricing.headline}
+            </p>
+
+            <ul className="mt-8 space-y-3 text-[var(--color-ol-graphite)]/85">
+              {pricing.details.map((detail) => (
+                <li key={detail} className="flex items-start gap-3">
+                  <span
+                    aria-hidden
+                    className="mt-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M2 6.5 5 9.5l5-7"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+
+            {pricing.note ? (
+              <p className="mt-8 border-t border-[var(--color-ol-mist)] pt-6 text-sm text-[var(--color-ol-graphite)]/60">
+                {pricing.note}
+              </p>
+            ) : null}
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button as="a" href="/contact" variant="primary" size="md">
+                Demander un devis
+              </Button>
+              <Button
+                as="a"
+                href={`/contact?sujet=demo-${product.slug}`}
+                variant="ghost"
+                size="md"
+              >
+                Réserver une démo
+                <ArrowUpRight width={16} height={16} aria-hidden />
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* FAQ — Schema.org FAQPage */}
+      <section
+        aria-labelledby="faq-title"
+        data-testid="solution-faq"
+        className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+      >
+        <Container width="narrow">
+          <div className="max-w-2xl">
+            <Eyebrow tone="orange">FAQ</Eyebrow>
+            <Heading id="faq-title" level={2} className="mt-4">
+              Les questions qui reviennent.
+            </Heading>
+            <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/75">
+              Pas dans la liste ? Écrivez-nous, on répond personnellement.
+            </p>
+          </div>
+
+          <ul className="mt-12 space-y-3">
+            {faq.map((item) => (
+              <li key={item.question}>
+                <details className="group rounded-lg border border-[var(--color-ol-mist)] bg-white p-6 transition-colors hover:border-[var(--color-ol-orange)]/40">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 font-medium text-[var(--color-ol-night)]">
+                    <span>{item.question}</span>
+                    <span
+                      aria-hidden
+                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] transition-transform group-open:rotate-45"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        aria-hidden
+                      >
+                        <path
+                          d="M7 2.5v9M2.5 7h9"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p className="mt-4 text-[var(--color-ol-graphite)]/80">
+                    {item.answer}
+                  </p>
+                </details>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
 
