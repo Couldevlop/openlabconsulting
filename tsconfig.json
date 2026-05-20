@@ -23,7 +23,8 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@payload-config": ["./payload.config.ts"]
     },
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"]
   },

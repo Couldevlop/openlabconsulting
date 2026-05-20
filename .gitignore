@@ -64,3 +64,9 @@ logs
 .claude/settings.local.json
 .claude/cache/
 .claude/projects/
+
+# Payload CMS (générés au runtime — pas dans le repo)
+payload-types.ts
+schema.graphql
+.payload/
+media/
