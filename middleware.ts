@@ -59,7 +59,13 @@ export function middleware(_req: NextRequest): NextResponse {
 
 export const config = {
   matcher: [
-    // Tous les paths sauf assets statiques Next et fichiers connus.
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webmanifest|woff|woff2|ttf|otf)).*)',
+    // Tous les paths sauf :
+    //   - assets statiques Next (_next/static, _next/image)
+    //   - sitemap, robots, favicon
+    //   - images / fonts publiques
+    //   - admin Payload (/admin/**) qui gère ses propres headers
+    //   - API Payload (/api/**) qui sert REST + GraphQL
+    //   - sondes API (/api/health) déjà publique
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|admin|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webmanifest|woff|woff2|ttf|otf)).*)',
   ],
 };

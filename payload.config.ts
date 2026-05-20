@@ -1,6 +1,8 @@
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { s3Storage } from '@payloadcms/storage-s3';
+import sharp from 'sharp';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,30 +17,35 @@ const dirname = path.dirname(filename);
 /**
  * Payload CMS v3 — configuration centrale (CLAUDE.md §9 + §16.2 S6).
  *
- * Trois collections de départ :
+ * Collections actives :
  *   - articles    : insights longs format (homepage §6.9)
  *   - whitepapers : livres blancs lead magnet (§6.10)
- *   - media       : bibliothèque assets centralisée
+ *   - media       : bibliothèque assets centralisée (MinIO)
+ *   - users       : auth + 6 rôles RBAC (§11.3)
  *
- * Collections à ajouter en P6 raffinement :
- *   - users (auth) avec rôles SUPER_ADMIN / ADMIN / EDITOR_CHIEF / EDITOR / AUTHOR
- *   - pages, caseStudies, testimonials, faqs, leads, audits-ia
- *   - book (single doc) avec chapters embarqués
+ * Pipeline d'upload :
+ *   1. Éditeur uploade via admin Payload (/admin)
+ *   2. sharp génère les variantes thumbnail/card/cover
+ *   3. storage-s3 envoie sur MinIO bucket `openlab-media`
+ *   4. Le Server Component récupère l'URL via Payload local API
  *
- * Branchement MinIO via @payloadcms/storage-s3 à ajouter quand le
- * bucket est instancié sur le cluster K3s. Pour l'instant, fallback
- * file system local (utile en dev sans MinIO).
+ * Si MinIO n'est pas configuré (dev sans bucket), fallback file system
+ * local. Détecté via présence de MINIO_ENDPOINT.
  *
- * NOTE BUILD : Payload tente une connexion DB au démarrage du runtime,
- * pas au build. Le build Next.js se termine sans nécessiter Postgres.
- * Pour l'admin runtime : DATABASE_URI + PAYLOAD_SECRET requis (.env.example).
+ * NOTE BUILD : Payload tente la connexion DB uniquement au runtime
+ * (admin / API). Le build Next.js réussit sans Postgres. La pipeline
+ * d'admin nécessite `pnpm db:migrate` + `pnpm cms:seed` une fois la
+ * DB démarrée (docker compose up postgres).
  */
+const useMinio =
+  typeof process.env.MINIO_ENDPOINT === 'string' &&
+  process.env.MINIO_ENDPOINT.length > 0;
+
 export default buildConfig({
-  // Le secret doit être renseigné dans .env.production (SealedSecret K8s en prod).
   secret: process.env.PAYLOAD_SECRET ?? 'dev-secret-replace-in-prod',
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
   admin: {
-    user: 'users', // collection users à ajouter en P6 auth
+    user: 'users',
     meta: {
       titleSuffix: ' · Admin OpenLab',
     },
@@ -51,7 +58,29 @@ export default buildConfig({
         process.env.DATABASE_URL ??
         'postgresql://openlab:devpass@localhost:5432/openlab',
     },
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
+  // sharp pour la conversion AVIF/WebP automatique des médias uploadés.
+  sharp,
+  plugins: useMinio
+    ? [
+        s3Storage({
+          collections: { media: true },
+          bucket: process.env.MINIO_BUCKET ?? 'openlab-media',
+          config: {
+            endpoint: process.env.MINIO_ENDPOINT?.startsWith('http')
+              ? process.env.MINIO_ENDPOINT
+              : `http://${process.env.MINIO_ENDPOINT ?? 'localhost:9000'}`,
+            credentials: {
+              accessKeyId: process.env.MINIO_ACCESS_KEY ?? 'minioadmin',
+              secretAccessKey: process.env.MINIO_SECRET_KEY ?? 'minioadmin',
+            },
+            region: 'us-east-1',
+            forcePathStyle: true, // MinIO requiert path-style
+          },
+        }),
+      ]
+    : [],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

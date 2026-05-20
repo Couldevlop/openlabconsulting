@@ -1,0 +1,21 @@
+/* eslint-disable */
+// @ts-nocheck
+import config from '@payload-config';
+import { generatePageMetadata, NotFoundPage } from '@payloadcms/next/views';
+import { importMap } from '../importMap.js';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+type Args = {
+  params: Promise<{ segments: string[] }>;
+  searchParams: Promise<{ [key: string]: string | string[] }>;
+};
+
+export const generateMetadata = ({ params, searchParams }: Args) =>
+  generatePageMetadata({ config, params, searchParams });
+
+const NotFound = ({ params, searchParams }: Args) =>
+  NotFoundPage({ config, params, searchParams, importMap });
+
+export default NotFound;
