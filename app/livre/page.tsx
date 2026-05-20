@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Download, FileText, Users } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -42,10 +43,12 @@ const HIGHLIGHTS = [
   },
 ];
 
-export default function LivreLandingPage(): React.ReactElement {
+export default async function LivreLandingPage(): Promise<React.ReactElement> {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   return (
     <main id="main">
       <JsonLd
+        nonce={nonce}
         data={[
           bookSchema(),
           breadcrumbSchema([

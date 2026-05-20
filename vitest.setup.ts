@@ -39,6 +39,15 @@ if (typeof globalThis.matchMedia === 'undefined') {
   });
 }
 
+// Mock `next/headers` pour permettre aux pages Server Component qui
+// font `await headers()` (récupération nonce CSP §10.3) de tester sans
+// Next runtime. Renvoie un Headers vide ; les pages tombent sur leur
+// fallback `?? undefined`.
+vi.mock('next/headers', () => ({
+  headers: async () => new Headers(),
+  cookies: async () => new Map(),
+}));
+
 afterEach(() => {
   cleanup();
 });

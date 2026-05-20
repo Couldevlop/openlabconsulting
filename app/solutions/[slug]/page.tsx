@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
@@ -60,10 +61,12 @@ export default async function SolutionDetailPage({
     proofs,
     expertisesLies,
   } = product;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
       <JsonLd
+        nonce={nonce}
         data={[
           softwareApplicationSchema(product),
           breadcrumbSchema([

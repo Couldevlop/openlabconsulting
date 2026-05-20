@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
@@ -45,10 +46,12 @@ export default async function ExpertiseDetailPage({
   }
   const { Icon, title, punchline, intro, competences, approche, produitsLies } =
     expertise;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
       <JsonLd
+        nonce={nonce}
         data={[
           serviceSchema(expertise),
           breadcrumbSchema([
