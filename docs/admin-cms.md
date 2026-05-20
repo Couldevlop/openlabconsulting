@@ -72,12 +72,28 @@ Le middleware (`middleware.ts`) **exclut** `/admin` et `/api/*` du matcher → P
 
 ## Collections en place
 
-| Collection    | Slug          | Versions        | Auth | Notes                                                                  |
-| ------------- | ------------- | --------------- | ---- | ---------------------------------------------------------------------- |
-| Utilisateurs  | `users`       | non             | oui  | 6 rôles (CLAUDE.md §11.3), session 8 h, lockout 30 min après 10 échecs |
-| Articles      | `articles`    | drafts (10 max) | —    | 7 catégories alignées homepage Insights §6.9                           |
-| Livres blancs | `whitepapers` | drafts (5 max)  | —    | Compteur downloads readOnly, gatingRequired par défaut                 |
-| Médias        | `media`       | non             | —    | 3 variantes auto (thumbnail/card/cover), MinIO S3                      |
+| Collection    | Slug          | Versions        | Auth | Notes                                                                                                       |
+| ------------- | ------------- | --------------- | ---- | ----------------------------------------------------------------------------------------------------------- |
+| Utilisateurs  | `users`       | non             | oui  | 6 rôles (CLAUDE.md §11.3), session 8 h, lockout 30 min après 10 échecs                                      |
+| Articles      | `articles`    | drafts (10 max) | —    | 7 catégories alignées homepage Insights §6.9                                                                |
+| Cas clients   | `caseStudies` | drafts (10 max) | —    | Carrousel homepage §6.5. Image MinIO + fallback mockup SVG. Trie par `order` croissant, filtre `published`. |
+| Livres blancs | `whitepapers` | drafts (5 max)  | —    | Compteur downloads readOnly, gatingRequired par défaut                                                      |
+| Médias        | `media`       | non             | —    | 3 variantes auto (thumbnail/card/cover), MinIO S3                                                           |
+
+### Workflow Cas clients
+
+Le carrousel `<CasesCarousel>` de la homepage (§6.5) est piloté par la collection `caseStudies`.
+
+1. **Si la collection est vide** ou inaccessible (DB down) → fallback automatique sur 4 cas hard-codés (`lib/case-studies.ts`).
+2. **Pour ajouter / modifier un cas** :
+   - Se connecter à `/admin` (rôle `editor` ou supérieur).
+   - Aller dans **Cas clients → Nouveau**.
+   - Remplir `headline`, `punchline`, `body`, `sector`, `client`, choisir le `productSlug` (lie automatiquement à `/solutions/<slug>`).
+   - Renseigner exactement **3 résultats chiffrés** (CLAUDE.md §4.10 — aucun chiffre rond non sourcé).
+   - **Image** (optionnelle) : capture produit / mockup / photo. Si absente, le slide retombe sur le mockup SVG associé au produit.
+   - `order` : petit = en premier (10, 20, 30, 40…).
+   - Passer `status` à **Publié** quand le cas est prêt.
+3. Le carrousel récupère les 8 premiers `published` à chaque rendu (revalidate côté Next selon ISR du parent).
 
 ## Sécurité (à durcir en P7 + P10)
 

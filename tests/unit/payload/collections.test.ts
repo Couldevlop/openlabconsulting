@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Articles } from '@/collections/Articles';
+import { CaseStudies } from '@/collections/CaseStudies';
 import { Media } from '@/collections/Media';
 import { Users } from '@/collections/Users';
 import { Whitepapers } from '@/collections/Whitepapers';
@@ -103,6 +104,64 @@ describe('Payload collections', () => {
       expect(names).toEqual(
         expect.arrayContaining(['thumbnail', 'card', 'cover']),
       );
+    });
+  });
+
+  describe('CaseStudies', () => {
+    it('a le slug "caseStudies"', () => {
+      expect(CaseStudies.slug).toBe('caseStudies');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(CaseStudies.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('a les champs critiques (headline, punchline, body, productSlug, results, image, order, status)', () => {
+      const fieldNames = (CaseStudies.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'headline',
+        'punchline',
+        'body',
+        'sector',
+        'client',
+        'productSlug',
+        'results',
+        'image',
+        'order',
+        'status',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('productSlug expose les 7 produits OpenLab', () => {
+      const field = (CaseStudies.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'productSlug',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [
+          'nexusrh',
+          'nexuserp',
+          'sygescom',
+          'agrosense',
+          'qualitos',
+          'fraud-shield',
+          'smart-city',
+        ].sort(),
+      );
+    });
+
+    it('results contraint à exactement 3 entrées (CLAUDE.md §4.10)', () => {
+      const field = (CaseStudies.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'results',
+      );
+      expect((field as { minRows?: number }).minRows).toBe(3);
+      expect((field as { maxRows?: number }).maxRows).toBe(3);
     });
   });
 

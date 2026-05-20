@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useState,
-  type ReactElement,
-  type ReactNode,
-} from 'react';
+import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react';
@@ -19,121 +13,68 @@ import { AgrosenseMockup } from '@/components/mockups/AgrosenseMockup';
 import { FraudShieldMockup } from '@/components/mockups/FraudShieldMockup';
 import { NexusRhMockup } from '@/components/mockups/NexusRhMockup';
 import { SygescomMockup } from '@/components/mockups/SygescomMockup';
-
-interface CaseResult {
-  value: string;
-  label: string;
-}
-
-interface CaseSlide {
-  id: string;
-  sector: string;
-  client: string;
-  headline: string;
-  punchline: string;
-  body: string;
-  results: readonly CaseResult[];
-  mockup: ReactNode;
-  href: string;
-}
-
-/**
- * Cas clients embarqués — futur consommateur Payload P6 collection
- * `caseStudies`. En attendant, slides hard-codés avec mockups SVG
- * custom (Mockup atom + composant mockup par produit) : aucune image
- * AI, aucune stock photo, en charte OpenLab.
- *
- * Quand Payload sera branché, on remplacera ARRAY ci-dessous par
- * `payload.find({ collection: 'caseStudies', limit: 4 })` côté Server
- * Component parent + on injectera ici les URLs MinIO réelles via la
- * prop `src` de Mockup.
- */
-const SLIDES: readonly CaseSlide[] = [
-  {
-    id: 'sygescom-stations',
-    sector: 'Distribution hydrocarbures',
-    client: 'Réseau de stations CI',
-    headline: 'Pertes carburant divisées par 8.',
-    punchline: 'Vos volumes. Sous contrôle, en temps réel.',
-    body: 'Centralisation des flux station par station, détection IA d’écarts de stock, dashboard exécutif drill-down par cuve. Les écarts ne se cachent plus derrière les rapports J+1.',
-    results: [
-      { value: '−12 %', label: 'pertes carburant 3 mois' },
-      { value: '< 3 mois', label: 'ROI déploiement' },
-      { value: '24/7', label: 'supervision temps réel' },
-    ],
-    mockup: <SygescomMockup />,
-    href: '/solutions/sygescom',
-  },
-  {
-    id: 'nexusrh-paie',
-    sector: 'PME tertiaire',
-    client: 'Groupe RH ivoirien',
-    headline: 'Paie CNPS sans surprise d’audit.',
-    punchline: 'Cotisations, ITS, FDFP : natifs.',
-    body: 'Modules paie multi-statuts (CDI, CDD, journaliers), diffusion Mobile Money, bordereau CNPS prêt à téléverser. L’inspecteur du travail repart en 20 minutes.',
-    results: [
-      { value: '+247', label: 'agents payés en MoMo' },
-      { value: '0', label: 'pénalité ITS depuis 24 mois' },
-      { value: '< 1h', label: 'audit annuel' },
-    ],
-    mockup: <NexusRhMockup />,
-    href: '/solutions/nexusrh',
-  },
-  {
-    id: 'agrosense-cacao',
-    sector: 'Coopérative cacao',
-    client: 'Daloa · 47 parcelles',
-    headline: 'Maladie isolée 14 jours avant l’œil humain.',
-    punchline: 'Le cacao se voit. La météo se prévoit.',
-    body: 'Capteurs IoT sol + imagerie satellite Sentinel-2 + modèles CHIRPS/ERA5. L’alerte parcelle arrive avant la pourriture brune, pas après.',
-    results: [
-      { value: '47', label: 'parcelles instrumentées' },
-      { value: 'J+14', label: 'horizon de prédiction' },
-      { value: '86 %', label: 'confiance modèles' },
-    ],
-    mockup: <AgrosenseMockup />,
-    href: '/solutions/agrosense',
-  },
-  {
-    id: 'fraud-shield-bank',
-    sector: 'Banque · Assurance',
-    client: 'Établissement UEMOA',
-    headline: 'Fraude documentaire rendue visible.',
-    punchline: 'La fraude se cache. L’IA la rend visible.',
-    body: 'Détection multi-modale (vision pixel, cohérence texte, métadonnées EXIF). Score d’authenticité expliqué avec overlay visuel — pas de boîte noire pour l’auditeur.',
-    results: [
-      { value: '× 3', label: 'cas détectés / contrôleur' },
-      { value: '< 2 s', label: 'temps d’analyse / document' },
-      { value: '99 %', label: 'signature dupliquée — confiance' },
-    ],
-    mockup: <FraudShieldMockup />,
-    href: '/solutions/fraud-shield',
-  },
-];
+import {
+  FALLBACK_CASE_STUDIES,
+  type CaseStudy,
+  type ProductSlug,
+} from '@/lib/case-studies';
 
 const AUTOPLAY_MS = 7000;
 
 /**
- * CasesCarousel — §6.5 enrichi. Remplace le CasClient unique SYGESCOM
- * par un carrousel à 4 cas clients (NexusRH, SYGESCOM, AgroSense,
- * Fraud Shield). Auto-rotation 7 s, pause au survol, contrôles
- * manuels (← → + dots + pause).
+ * Map productSlug → mockup SVG par défaut. Utilisé quand la collection
+ * Payload ne fournit pas d'image téléversée pour ce slide.
  *
- * SEO-friendly :
- *   - Tous les slides sont rendus en DOM (juste masqués par opacity)
- *   - Texte de chaque slide indexable
- *   - Boutons aria-label pour la navigation
- *
- * A11y :
- *   - role="region" aria-roledescription="carousel" sur le wrapper
- *   - Boutons décrits
- *   - Auto-play désactivé si prefers-reduced-motion
+ * Quand un nouveau produit reçoit son propre mockup SVG, l'ajouter ici.
+ * Pour les produits sans mockup encore créé, on retombe sur SygescomMockup
+ * comme placeholder visuel le plus polyvalent (à remplacer ASAP par un
+ * SVG dédié).
  */
-export function CasesCarousel(): ReactElement {
+const DEFAULT_MOCKUPS: Record<ProductSlug, ReactElement> = {
+  nexusrh: <NexusRhMockup />,
+  sygescom: <SygescomMockup />,
+  agrosense: <AgrosenseMockup />,
+  'fraud-shield': <FraudShieldMockup />,
+  // À enrichir : ces 3 retombent sur un mockup générique en attendant.
+  nexuserp: <NexusRhMockup />,
+  qualitos: <SygescomMockup />,
+  'smart-city': <SygescomMockup />,
+};
+
+export interface CasesCarouselProps {
+  /** Slides à afficher. Si omis, utilise le fallback hard-codé. */
+  slides?: readonly CaseStudy[];
+}
+
+/**
+ * CasesCarousel — §6.5 enrichi. Carrousel à N cas clients (4 par défaut).
+ * Auto-rotation 7 s, pause au survol, contrôles manuels (← → + dots
+ * + pause). Animations Motion v12 (AnimatePresence).
+ *
+ * Données : la liste `slides` est passée en prop par le Server Component
+ * parent (cf. `CasesCarouselServer.tsx`) qui interroge Payload puis
+ * retombe sur `FALLBACK_CASE_STUDIES` si la DB est indisponible. Ce
+ * composant lui-même reste 100 % client, sérialisable, et reçoit des
+ * données plates (pas de React node embarqué).
+ *
+ * Pour chaque slide :
+ *   - Si `imageUrl` est fourni (upload admin Payload) → on l'affiche
+ *     via `<Mockup src=...>` (next/image, optimisé AVIF/WebP MinIO).
+ *   - Sinon → on retombe sur le SVG `DEFAULT_MOCKUPS[productSlug]`.
+ *
+ * A11y / SEO :
+ *   - role="region" aria-roledescription="carousel"
+ *   - Tous les contrôles sont labellisés
+ *   - Auto-play désactivé si prefers-reduced-motion
+ *   - Texte de chaque slide indexable (rendu DOM, juste opacifié hors slide actif)
+ */
+export function CasesCarousel({
+  slides = FALLBACK_CASE_STUDIES,
+}: CasesCarouselProps = {}): ReactElement {
   const prefersReduced = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const total = SLIDES.length;
+  const total = slides.length;
 
   const next = useCallback(() => setIndex((i) => (i + 1) % total), [total]);
   const prev = useCallback(
@@ -141,14 +82,13 @@ export function CasesCarousel(): ReactElement {
     [total],
   );
 
-  // Auto-rotate — désactivé si reduced-motion ou pause manuelle.
   useEffect(() => {
-    if (prefersReduced || paused) return;
+    if (prefersReduced || paused || total <= 1) return;
     const id = setInterval(next, AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [next, paused, prefersReduced]);
+  }, [next, paused, prefersReduced, total]);
 
-  const slide = SLIDES[index]!;
+  const slide = slides[index]!;
 
   return (
     <section
@@ -247,8 +187,10 @@ export function CasesCarousel(): ReactElement {
                   label={slide.client}
                   tone="dark"
                   aspect="16/9"
+                  src={slide.imageUrl}
+                  alt={slide.imageAlt ?? slide.client}
                 >
-                  {slide.mockup}
+                  {DEFAULT_MOCKUPS[slide.productSlug]}
                 </Mockup>
               </motion.div>
             </AnimatePresence>
@@ -291,7 +233,7 @@ export function CasesCarousel(): ReactElement {
 
           {/* Dots */}
           <div className="flex items-center gap-2" role="tablist">
-            {SLIDES.map((s, i) => (
+            {slides.map((s, i) => (
               <button
                 key={s.id}
                 type="button"
