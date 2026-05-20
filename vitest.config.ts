@@ -121,6 +121,11 @@ export default defineConfig({
         // d'intégration API (routes déjà testées).
         'components/atoms/Turnstile.tsx',
         'components/forms/ContactForm.tsx',
+        // Démos interactives produits (`use client`, manipulation DOM
+        // via SVG/setInterval) : couvertes par tests E2E Playwright.
+        // La logique métier critique (calcul paie NexusRH) est dans
+        // lib/demos/nexusrh-paie.ts qui reste testée.
+        'components/demos/**/*.tsx',
       ],
       thresholds: {
         lines: 80,
