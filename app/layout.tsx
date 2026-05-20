@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import {
@@ -71,7 +72,7 @@ export const metadata: Metadata = {
 };
 
 /** JSON-LD global Organization + LocalBusiness + WebSite. */
-function GlobalJsonLd(): React.ReactElement {
+function GlobalJsonLd({ nonce }: { nonce: string }): React.ReactElement {
   const payload = jsonLdString([
     organizationSchema(),
     localBusinessSchema(),
@@ -80,21 +81,29 @@ function GlobalJsonLd(): React.ReactElement {
   return (
     <script
       type="application/ld+json"
+      nonce={nonce}
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: payload }}
     />
   );
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}): React.ReactElement {
+}): Promise<React.ReactElement> {
+  // Nonce CSP injecté par `middleware.ts` (§10.3). Si absent (build
+  // statique, ex. génération sitemap), on retombe sur chaîne vide qui
+  // ne matche aucun CSP — acceptable car CSP `'unsafe-inline'` couvre
+  // ce cas en fallback pour les vieux navigateurs.
+  const headersList = await headers();
+  const nonce = headersList.get('x-nonce') ?? '';
+
   return (
     <html lang="fr-CI" className={fontVariables}>
       <head>
-        <GlobalJsonLd />
+        <GlobalJsonLd nonce={nonce} />
       </head>
       <body className="flex min-h-screen flex-col">
         <a

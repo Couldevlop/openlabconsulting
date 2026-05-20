@@ -8,17 +8,16 @@ import LivreCompanionPage from '@/app/livre/companion/page';
 import { CHAPTERS } from '@/lib/data/book';
 
 describe('Page /livre (landing)', () => {
-  it('rend un h1 avec le titre du livre', () => {
-    render(<LivreLandingPage />);
+  // P10 : la page est devenue async (récupère le nonce CSP via headers()).
+  // On `await LivreLandingPage()` avant `render`.
+  it('rend un h1 avec le titre du livre', async () => {
+    render(await LivreLandingPage());
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1.textContent).toBe('Intelligence Artificielle');
   });
 
-  it('liste les 4 audiences (cards dédiées)', () => {
-    render(<LivreLandingPage />);
-    // Les labels d'audiences apparaissent comme Badge dans les cards.
-    // Pour éviter les collisions avec les HIGHLIGHTS qui les listent en lowercase,
-    // on cible la section dédiée par son aria-labelledby.
+  it('liste les 4 audiences (cards dédiées)', async () => {
+    render(await LivreLandingPage());
     const audiencesSection = screen.getByRole('region', {
       name: /Quatre publics, une lecture différente/i,
     });
@@ -36,8 +35,8 @@ describe('Page /livre (landing)', () => {
     ).toBeInTheDocument();
   });
 
-  it('expose 4 portes d’entrée vers les sous-pages livre', () => {
-    render(<LivreLandingPage />);
+  it('expose 4 portes d’entrée vers les sous-pages livre', async () => {
+    render(await LivreLandingPage());
     const links = screen.getAllByRole('link');
     const livreLinks = links
       .map((l) => l.getAttribute('href'))
@@ -52,8 +51,8 @@ describe('Page /livre (landing)', () => {
     );
   });
 
-  it('intègre AuditIaCta en bas', () => {
-    render(<LivreLandingPage />);
+  it('intègre AuditIaCta en bas', async () => {
+    render(await LivreLandingPage());
     expect(screen.getByTestId('audit-ia-cta')).toBeInTheDocument();
   });
 });
