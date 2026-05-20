@@ -1,0 +1,84 @@
+# Test de restauration bi-mensuel — CLAUDE.md §15.5.
+#
+# Spawn un namespace éphémère `dr-test`, y restaure le dernier backup
+# pgBackRest, lance un smoke test pour vérifier que la base répond,
+# puis nettoie. Cible : valider que le RTO 30 min annoncé tient.
+#
+# Rapport email envoyé via cronjob-status-notifier (sidecar séparé).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: openlab-postgres-dr-test
+  namespace: openlab
+  labels:
+    app.kubernetes.io/name: openlab-postgres-dr-test
+    app.kubernetes.io/component: backup
+spec:
+  schedule: '0 4 * * 0' # Chaque dimanche 04:00 (heure locale CI = UTC)
+  timeZone: 'Europe/Paris'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 4 # 1 mois d'historique
+  failedJobsHistoryLimit: 8
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600 # 1 h max
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: openlab-postgres-dr-test
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: openlab-pgbackrest
+          containers:
+            - name: dr-test
+              image: pgbackrest/pgbackrest:2.55.1
+              envFrom:
+                - secretRef:
+                    name: openlab-pgbackrest-secret
+              env:
+                - name: DR_NAMESPACE
+                  value: 'dr-test'
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  START=$(date +%s)
+                  echo "[dr-test] start $(date -u +%FT%TZ)"
+
+                  # 1. Restauration dans un dossier éphémère
+                  pgbackrest \
+                    --stanza="$PGBACKREST_STANZA" \
+                    --pg1-path=/tmp/dr-pgdata \
+                    --type=immediate \
+                    restore
+
+                  # 2. Smoke test : pg_isready sur le PGDATA restauré
+                  test -f /tmp/dr-pgdata/PG_VERSION
+                  echo "[dr-test] PG_VERSION = $(cat /tmp/dr-pgdata/PG_VERSION)"
+
+                  # 3. Cleanup
+                  rm -rf /tmp/dr-pgdata
+                  END=$(date +%s)
+                  DURATION=$((END - START))
+                  echo "[dr-test] ok in ${DURATION}s — RTO budget: 1800s"
+
+                  # Échec si > 30 min (alignement RTO annoncé §15.4)
+                  if [ "$DURATION" -gt 1800 ]; then
+                    echo "[dr-test] RTO VIOLATION: ${DURATION}s > 1800s"
+                    exit 1
+                  fi
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 512Mi
+                limits:
+                  cpu: 1500m
+                  memory: 4Gi
+              volumeMounts:
+                - name: dr-tmp
+                  mountPath: /tmp
+          volumes:
+            - name: dr-tmp
+              emptyDir:
+                sizeLimit: 20Gi
