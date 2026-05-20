@@ -10,6 +10,7 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:full": "docker compose up -d postgres redis minio && pnpm db:migrate && pnpm cms:seed && pnpm dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -40,6 +41,7 @@
     "clsx": "^2.1.1",
     "geist": "^1.7.0",
     "lucide-react": "^1.16.0",
+    "motion": "^12.39.0",
     "next": "^15.5.18",
     "payload": "^3.84.1",
     "react": "^19.2.6",
