@@ -112,6 +112,16 @@ export default defineConfig({
         // logique est dans les helpers server-only (testés). Le markup
         // est couvert par les tests de page hub existants.
         'app/insights/page.tsx',
+        // Archives insights (catégorie / auteur) : markup statique +
+        // helper server testé. Couvert par Playwright en P9.
+        'app/insights/categorie/[cat]/page.tsx',
+        'app/insights/auteur/[author]/page.tsx',
+        // Sous-pages laboratoire (axes/publications/partenariats) :
+        // markup statique consommant des constantes typées (testées
+        // ailleurs). Couvert par Playwright en P9.
+        'app/laboratoire/axes/page.tsx',
+        'app/laboratoire/publications/page.tsx',
+        'app/laboratoire/partenariats/page.tsx',
         // Pages purement markup (à-propos, laboratoire) : couvertes par
         // Playwright en P9, pas pertinent en unit.
         'app/a-propos/page.tsx',
