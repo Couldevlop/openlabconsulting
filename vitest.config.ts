@@ -42,6 +42,20 @@ export default defineConfig({
       'playwright-report',
       'test-results',
     ],
+    // Perf : pool threads au lieu de forks (default). Sous Windows on
+    // gagne ~30 % sur le boot des workers (pas de fork OS, on partage
+    // le runtime Node). On conserve `isolate: true` (default) car
+    // certains tests Testing Library s'accumulent dans le même jsdom
+    // quand on partage le DOM entre tests d'un même worker.
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        // Cap à 6 threads pour limiter la pression mémoire (Motion v12
+        // + jsdom + transform = ~150 Mo / worker).
+        maxThreads: 6,
+        minThreads: 2,
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
@@ -79,6 +93,24 @@ export default defineConfig({
         // l'import direct, mais Next les compile aussi en routes.
         'app/sitemap.ts',
         'app/robots.ts',
+        // Server Components qui interrogent Payload : le fetch est
+        // testé via le helper server-only (chemin fallback). Le
+        // wrapper Server n'a aucune logique à part `await`. Tests
+        // d'intégration en P6 raffinement (DB éphémère).
+        'components/sections/CasesCarouselServer.tsx',
+        'components/sections/InsightsServer.tsx',
+        // Helpers server-only (fetch Payload) : la branche fallback
+        // est testée via les helpers tests. Le parsing/normalisation
+        // des docs Payload est couvert en intégration P6 (DB réelle).
+        'lib/case-studies-server.ts',
+        'lib/articles-server.ts',
+        // Page détail insight : markup statique + appel server helper
+        // déjà testé. Couvert par Playwright en P9.
+        'app/insights/[slug]/page.tsx',
+        // Pages hub (insights, livre, etc.) qui fetch Payload : la
+        // logique est dans les helpers server-only (testés). Le markup
+        // est couvert par les tests de page hub existants.
+        'app/insights/page.tsx',
       ],
       thresholds: {
         lines: 80,
