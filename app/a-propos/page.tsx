@@ -1,0 +1,254 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import {
+  ArrowUpRight,
+  Building2,
+  Globe2,
+  Mail,
+  MapPin,
+  Phone,
+} from 'lucide-react';
+import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { Container } from '@/components/atoms/Container';
+import { Eyebrow } from '@/components/atoms/Eyebrow';
+import { Heading } from '@/components/atoms/Heading';
+import { SITE } from '@/lib/seo/site';
+
+export const metadata: Metadata = {
+  title: 'À propos — OpenLab Consulting',
+  description:
+    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Trois piliers : conseil, produits, édition.',
+  alternates: { canonical: '/a-propos' },
+};
+
+const PILLARS = [
+  {
+    title: 'Conseil & Intégration IA',
+    body: 'Diagnostic, cadrage, déploiement et gouvernance IA pour PME, grandes entreprises, institutions publiques en Afrique de l’Ouest et France.',
+  },
+  {
+    title: 'R&D Produits',
+    body: 'Sept logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City.',
+  },
+  {
+    title: 'Édition académique',
+    body: 'Livre IA de référence, livres blancs trimestriels, conférences universitaires. La science qui se publie est la science qui se vérifie.',
+  },
+];
+
+export default function AProposPage(): React.ReactElement {
+  return (
+    <main id="main">
+      {/* Hero */}
+      <section
+        aria-labelledby="apropos-title"
+        className="bg-[var(--color-ol-ivory)] py-24 sm:py-32"
+      >
+        <Container width="wide">
+          <div className="max-w-3xl">
+            <Eyebrow tone="orange">À propos</Eyebrow>
+            <Heading id="apropos-title" level={1} className="mt-4">
+              Cabinet ivoirien d’IA appliquée.{' '}
+              <span className="text-[var(--color-ol-orange)]">
+                Pour l’Afrique francophone
+              </span>
+              .
+            </Heading>
+            <p className="mt-6 font-[family-name:var(--font-editorial)] text-xl leading-relaxed text-[var(--color-ol-graphite)]/85 italic sm:text-2xl">
+              OpenLab Consulting a été fondé pour résoudre une équation simple :
+              comment déployer de l’IA réellement utile dans un contexte
+              africain francophone, sans renoncer à la rigueur scientifique ni à
+              la souveraineté des données.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Trois piliers */}
+      <section
+        aria-labelledby="piliers-title"
+        className="bg-white py-20 sm:py-28"
+      >
+        <Container width="wide">
+          <div className="max-w-2xl">
+            <Eyebrow tone="orange">Trois piliers</Eyebrow>
+            <Heading id="piliers-title" level={2} className="mt-4">
+              Conseil, produits, édition. Aucun concurrent ne couvre les trois.
+            </Heading>
+          </div>
+
+          <ol className="mt-12 grid gap-x-12 gap-y-10 lg:grid-cols-3">
+            {PILLARS.map((p, i) => (
+              <li
+                key={p.title}
+                className="border-t-2 border-[var(--color-ol-orange)] pt-6"
+              >
+                <span
+                  aria-hidden
+                  className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                >
+                  {`0${i + 1}`}
+                </span>
+                <Heading level={3} visualLevel={4} className="mt-4">
+                  {p.title}
+                </Heading>
+                <p className="mt-3 text-[var(--color-ol-graphite)]/80">
+                  {p.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </section>
+
+      {/* Identité — coordonnées légales */}
+      <section
+        aria-labelledby="identite-title"
+        className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+      >
+        <Container width="wide">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+            <div>
+              <Eyebrow tone="orange">Identité</Eyebrow>
+              <Heading id="identite-title" level={2} className="mt-4">
+                {SITE.legalName}.
+              </Heading>
+              <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/75">
+                Raison sociale enregistrée à Abidjan, gouvernée par une équipe
+                ivoirienne. Données hébergées en Allemagne (Hetzner)
+                conformément au RGPD UE.
+              </p>
+            </div>
+
+            <dl className="grid gap-6 sm:grid-cols-2">
+              <div className="flex items-start gap-4">
+                <span
+                  aria-hidden
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                >
+                  <Building2 width={20} height={20} aria-hidden />
+                </span>
+                <div>
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    RCCM
+                  </dt>
+                  <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
+                    {SITE.rccm}
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <span
+                  aria-hidden
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                >
+                  <MapPin width={20} height={20} aria-hidden />
+                </span>
+                <div>
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    Siège
+                  </dt>
+                  <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
+                    {SITE.address.streetAddress}
+                    <br />
+                    {SITE.address.addressLocality}, {SITE.address.addressRegion}{' '}
+                    · {SITE.address.addressCountry}
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <span
+                  aria-hidden
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                >
+                  <Phone width={20} height={20} aria-hidden />
+                </span>
+                <div>
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    Téléphone
+                  </dt>
+                  <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
+                    <a
+                      href={`tel:${SITE.contact.primaryPhone.replace(/\s/g, '')}`}
+                      className="hover:text-[var(--color-ol-orange)]"
+                    >
+                      {SITE.contact.primaryPhone}
+                    </a>
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <span
+                  aria-hidden
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                >
+                  <Mail width={20} height={20} aria-hidden />
+                </span>
+                <div>
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    Email
+                  </dt>
+                  <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
+                    <a
+                      href={`mailto:${SITE.contact.email}`}
+                      className="hover:text-[var(--color-ol-orange)]"
+                    >
+                      {SITE.contact.email}
+                    </a>
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 sm:col-span-2">
+                <span
+                  aria-hidden
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                >
+                  <Globe2 width={20} height={20} aria-hidden />
+                </span>
+                <div>
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    LinkedIn
+                  </dt>
+                  <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
+                    <a
+                      href={SITE.social.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 hover:text-[var(--color-ol-orange)]"
+                    >
+                      Suivre OpenLab Consulting
+                      <ArrowUpRight width={14} height={14} aria-hidden />
+                    </a>
+                  </dd>
+                </div>
+              </div>
+            </dl>
+          </div>
+
+          <div className="mt-12 flex flex-wrap gap-4">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-1 rounded-md bg-[var(--color-ol-night)] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[var(--color-ol-navy)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            >
+              Nous contacter
+              <ArrowUpRight width={14} height={14} aria-hidden />
+            </Link>
+            <Link
+              href="/laboratoire"
+              className="inline-flex items-center gap-1 rounded-md border border-[var(--color-ol-mist)] bg-white px-5 py-3 text-sm font-medium text-[var(--color-ol-night)] transition-colors hover:border-[var(--color-ol-orange)]/40"
+            >
+              Visiter le laboratoire
+              <ArrowUpRight width={14} height={14} aria-hidden />
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <AuditIaCta />
+    </main>
+  );
+}

@@ -5,6 +5,11 @@ import config from '@payload-config';
 import { generatePageMetadata, RootPage } from '@payloadcms/next/views';
 import { importMap } from '../importMap.js';
 
+// Payload admin nécessite la DB au runtime — empêche Next.js de tenter
+// une pré-génération statique au build (qui hangerait sans Postgres).
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Args = {
   params: Promise<{ segments: string[] }>;
   searchParams: Promise<{ [key: string]: string | string[] }>;
