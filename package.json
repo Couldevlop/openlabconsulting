@@ -22,12 +22,20 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "prepare": "husky"
+    "prepare": "husky",
+    "cms:generate-types": "payload generate:types",
+    "cms:generate-importmap": "payload generate:importmap",
+    "cms:seed": "tsx scripts/cms-seed.ts",
+    "db:migrate": "payload migrate",
+    "db:migrate:create": "payload migrate:create",
+    "db:migrate:status": "payload migrate:status",
+    "payload": "payload"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
+    "@payloadcms/storage-s3": "^3.84.1",
     "@react-three/fiber": "^9.6.1",
     "clsx": "^2.1.1",
     "geist": "^1.7.0",
@@ -36,6 +44,7 @@
     "payload": "^3.84.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0"
   },
@@ -64,6 +73,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.3.0",
+    "tsx": "^4.22.3",
     "typescript": "^5.9.3",
     "vitest": "^2.1.9"
   },
