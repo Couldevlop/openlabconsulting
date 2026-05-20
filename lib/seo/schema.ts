@@ -203,6 +203,24 @@ export function bookSchema(): Thing {
   };
 }
 
+/** FAQPage schema — utilisé sur chaque page produit (§7.1 FAQ). */
+export function faqPageSchema(
+  faq: readonly { question: string; answer: string }[],
+): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
 /** Sérialise un objet Thing en chaîne JSON safe pour <script>. */
 export function jsonLdString(thing: Thing | Thing[]): string {
   return JSON.stringify(thing).replace(/</g, '\\u003c');
