@@ -11,6 +11,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { ProductDemo } from '@/components/demos/ProductDemo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
 import {
@@ -219,6 +220,29 @@ export default async function SolutionDetailPage({
                 ))}
               </ul>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Démo interactive — §7.2 */}
+      <section
+        aria-labelledby="demo-title"
+        data-testid="solution-demo"
+        className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+      >
+        <Container width="wide">
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow tone="orange">Démo interactive</Eyebrow>
+            <Heading id="demo-title" level={2} className="mt-4">
+              Touchez-y. Pas une vidéo.
+            </Heading>
+            <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/75">
+              Tournée en local dans votre navigateur. Aucune donnée envoyée sur
+              nos serveurs. C’est ce que vivent vos équipes au quotidien.
+            </p>
+          </div>
+          <div className="mt-12">
+            <ProductDemo slug={product.slug} />
           </div>
         </Container>
       </section>
