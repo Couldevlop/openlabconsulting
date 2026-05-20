@@ -36,8 +36,7 @@ describe('lib/validation — contactSchema', () => {
   it('rejette un subject non listé', () => {
     const r = contactSchema.safeParse({
       ...validPayload,
-      // @ts-expect-error invalid subject
-      subject: 'spam',
+      subject: 'spam' as 'autre',
     });
     expect(r.success).toBe(false);
   });
