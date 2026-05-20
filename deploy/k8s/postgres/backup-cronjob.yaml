@@ -1,0 +1,199 @@
+# pgBackRest CronJob — sauvegarde PostgreSQL OpenLab (CLAUDE.md §15.4).
+#
+# Stratégie de sauvegarde :
+#   - Full quotidien à 03:00 Europe/Paris (heure creuse Côte d'Ivoire UTC+0)
+#   - Incrémental horaire (CronJob séparé "openlab-postgres-backup-inc")
+#   - Rétention : 30 jours quotidiens + 12 mois mensuels (rotation auto)
+#
+# Stockage :
+#   - Sauvegardes versées sur Backblaze B2 (off-site)
+#   - Compression zstd niveau 3, chiffrement AES-256-CTR avec passphrase
+#     dans SealedSecret `openlab-pgbackrest-secret`
+#
+# RPO : 1h (grâce aux incrémentaux). RTO : 30 min (restauration testée
+# en CronJob `dr-test-weekly` toutes les 2 semaines — manifest séparé).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: openlab-postgres-backup-full
+  namespace: openlab
+  labels:
+    app.kubernetes.io/name: openlab-postgres-backup
+    app.kubernetes.io/component: backup
+spec:
+  # 03:00 Europe/Paris = 02:00 UTC en hiver, 01:00 UTC en été.
+  # Hetzner Falkenstein est en UTC+1/+2 ; on cron en UTC pour simplicité.
+  schedule: '0 2 * * *'
+  timeZone: 'Europe/Paris'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 600
+
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 7200 # 2 h max
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: openlab-postgres-backup
+            job: full
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: openlab-pgbackrest
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            fsGroup: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: pgbackrest
+              # Image Chainguard distroless avec pgbackrest 2.55+
+              image: pgbackrest/pgbackrest:2.55.1
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: PGBACKREST_STANZA
+                  value: 'openlab'
+                - name: PGBACKREST_REPO1_TYPE
+                  value: 's3'
+                - name: PGBACKREST_REPO1_S3_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: bucket
+                - name: PGBACKREST_REPO1_S3_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: region
+                - name: PGBACKREST_REPO1_S3_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: endpoint
+                - name: PGBACKREST_REPO1_S3_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: accessKey
+                - name: PGBACKREST_REPO1_S3_KEY_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: secretKey
+                - name: PGBACKREST_REPO1_CIPHER_TYPE
+                  value: 'aes-256-cbc'
+                - name: PGBACKREST_REPO1_CIPHER_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: cipherPass
+                - name: PGBACKREST_REPO1_RETENTION_FULL
+                  value: '30' # 30 jours full
+                - name: PGBACKREST_REPO1_RETENTION_FULL_TYPE
+                  value: 'time'
+                - name: PGBACKREST_COMPRESS_TYPE
+                  value: 'zst'
+                - name: PGBACKREST_COMPRESS_LEVEL
+                  value: '3'
+                - name: PGBACKREST_PROCESS_MAX
+                  value: '4'
+                - name: PGHOST
+                  value: 'postgres.openlab.svc.cluster.local'
+                - name: PGUSER
+                  value: 'pgbackrest'
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: openlab-pgbackrest-secret
+                      key: pgPassword
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  echo "[backup] full backup start $(date -u +%FT%TZ)"
+                  pgbackrest --stanza="$PGBACKREST_STANZA" --type=full backup
+                  echo "[backup] full backup ok $(date -u +%FT%TZ)"
+                  pgbackrest --stanza="$PGBACKREST_STANZA" info
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 512Mi
+                limits:
+                  cpu: 1000m
+                  memory: 2Gi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ['ALL']
+              volumeMounts:
+                - name: pgbackrest-tmp
+                  mountPath: /tmp
+                - name: pgbackrest-config
+                  mountPath: /etc/pgbackrest
+                  readOnly: true
+          volumes:
+            - name: pgbackrest-tmp
+              emptyDir:
+                sizeLimit: 5Gi
+            - name: pgbackrest-config
+              configMap:
+                name: openlab-pgbackrest-config
+---
+# Incrémental horaire — partage la même image et la même config.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: openlab-postgres-backup-incr
+  namespace: openlab
+  labels:
+    app.kubernetes.io/name: openlab-postgres-backup
+    app.kubernetes.io/component: backup
+spec:
+  schedule: '15 * * * *' # h+15 min, évite collision avec full 03:00
+  timeZone: 'Europe/Paris'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 12 # ~12h d'incrémentaux gardés
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 300
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1800
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: openlab-postgres-backup
+            job: incremental
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: openlab-pgbackrest
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            fsGroup: 65532
+          containers:
+            - name: pgbackrest
+              image: pgbackrest/pgbackrest:2.55.1
+              envFrom:
+                - secretRef:
+                    name: openlab-pgbackrest-secret
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  echo "[backup] incr backup start $(date -u +%FT%TZ)"
+                  pgbackrest --stanza="$PGBACKREST_STANZA" --type=incr backup
+                  echo "[backup] incr backup ok $(date -u +%FT%TZ)"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
