@@ -1,0 +1,58 @@
+import { describe, it, expect } from 'vitest';
+import sitemap from '@/app/sitemap';
+import { EXPERTISES } from '@/lib/data/expertises';
+import { PRODUCTS } from '@/lib/data/products';
+import { SECTORS } from '@/lib/data/sectors';
+
+describe('app/sitemap', () => {
+  const entries = sitemap();
+
+  it('inclut au moins 25 URLs (statiques + dynamiques)', () => {
+    expect(entries.length).toBeGreaterThanOrEqual(25);
+  });
+
+  it('chaque URL est absolue et utilise le domaine openlabconsulting', () => {
+    for (const e of entries) {
+      expect(e.url).toMatch(/^https?:\/\//);
+      expect(e.url).toContain('openlabconsulting.com');
+    }
+  });
+
+  it('inclut la home avec priorité 1.0', () => {
+    const home = entries.find((e) => e.url.endsWith('openlabconsulting.com/'));
+    expect(home).toBeDefined();
+    expect(home?.priority).toBe(1.0);
+  });
+
+  it('inclut les 4 pages détail /expertises/<slug>', () => {
+    for (const e of EXPERTISES) {
+      expect(
+        entries.find((entry) => entry.url.endsWith(`/expertises/${e.slug}`)),
+      ).toBeDefined();
+    }
+  });
+
+  it('inclut les 7 pages détail /solutions/<slug>', () => {
+    for (const p of PRODUCTS) {
+      expect(
+        entries.find((entry) => entry.url.endsWith(`/solutions/${p.slug}`)),
+      ).toBeDefined();
+    }
+  });
+
+  it('inclut les 5 pages détail /secteurs/<slug>', () => {
+    for (const s of SECTORS) {
+      expect(
+        entries.find((entry) => entry.url.endsWith(`/secteurs/${s.slug}`)),
+      ).toBeDefined();
+    }
+  });
+
+  it('inclut les 4 sous-pages /livre/*', () => {
+    for (const sub of ['chapitres', 'extraits', 'acheter', 'companion']) {
+      expect(
+        entries.find((entry) => entry.url.endsWith(`/livre/${sub}`)),
+      ).toBeDefined();
+    }
+  });
+});
