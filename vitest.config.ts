@@ -41,6 +41,24 @@ export default defineConfig({
         // Couvert par E2E Playwright (chromium réel) à partir de P2.
         'components/sections/HeroCanvas.tsx',
         'components/sections/HeroBackground.tsx',
+        // Routes Payload (groupe (payload)) : nécessitent Postgres au
+        // runtime, non testables en unit. Couvertes par tests d'intégration
+        // contre une DB éphémère en P6 raffinement.
+        'app/(payload)/**/*.{ts,tsx}',
+        // Pages "markup" légales / contact / audit landing : du JSX
+        // statique sans logique. Tests E2E Playwright à activer pour ces
+        // pages (P2+ progress). Pas pertinent en couverture unit.
+        'app/contact/page.tsx',
+        'app/mentions-legales/page.tsx',
+        'app/politique-confidentialite/page.tsx',
+        'app/audit-ia/page.tsx',
+        // Page racine de l'OG image (génère un PNG, pas de logique testable
+        // en jsdom — testée par Playwright qui hit l'URL réelle).
+        'app/opengraph-image.tsx',
+        // sitemap / robots déjà couverts par leurs tests dédiés via
+        // l'import direct, mais Next les compile aussi en routes.
+        'app/sitemap.ts',
+        'app/robots.ts',
       ],
       thresholds: {
         lines: 80,

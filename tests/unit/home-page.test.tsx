@@ -23,12 +23,12 @@ describe('HomePage (P2 — homepage §6)', () => {
     expect(screen.getByTestId('laboratoire')).toBeInTheDocument();
   });
 
-  it('rend CasClient après Laboratoire', () => {
+  it('rend CasesCarousel après Laboratoire', () => {
     render(<HomePage />);
-    expect(screen.getByTestId('cas-client')).toBeInTheDocument();
+    expect(screen.getByTestId('cases-carousel')).toBeInTheDocument();
   });
 
-  it('rend Solutions après CasClient', () => {
+  it('rend Solutions après CasesCarousel', () => {
     render(<HomePage />);
     expect(screen.getByTestId('solutions')).toBeInTheDocument();
   });
@@ -60,7 +60,7 @@ describe('HomePage (P2 — homepage §6)', () => {
       screen.getByTestId('reassurance'),
       screen.getByTestId('expertises'),
       screen.getByTestId('laboratoire'),
-      screen.getByTestId('cas-client'),
+      screen.getByTestId('cases-carousel'),
       screen.getByTestId('solutions'),
       screen.getByTestId('manifesto'),
       screen.getByTestId('livre'),

@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import Image from 'next/image';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
+import { Marquee } from '@/components/atoms/Marquee';
 
 interface ClientLogo {
   /** Slug (= nom de fichier sans extension dans /public/logos). */
@@ -25,11 +26,16 @@ const CLIENTS: readonly ClientLogo[] = [
  * Bande sobre juste après le Hero. Sert de preuve sociale immédiate
  * (« qui leur fait déjà confiance ? ») sans étourdir le visiteur.
  *
+ * Depuis P2 polish-v1 : marquee continu (Motion v12) au lieu d'un
+ * wrap statique. Plus dynamique, signature visuelle. La liste est
+ * dupliquée DOM pour SEO (les noms restent indexables, plus une
+ * fois pour la boucle infinie).
+ *
  * Règles respectées :
  * - Pas de stock photo : SVG vectoriels self-hosted dans /public/logos
  * - Orange < 15 % : aucun orange ici, contraste assuré par typo
- * - Mobile-first : wrap des logos, touch targets non interactifs OK
- * - A11y : <ul> + alt sur chaque logo, eyebrow sert d'intro
+ * - Mobile-first : marquee responsive
+ * - A11y : noms en alt, prefers-reduced-motion → marquee gelée
  */
 export function Reassurance(): ReactElement {
   return (
@@ -43,24 +49,33 @@ export function Reassurance(): ReactElement {
           Ils nous accompagnent depuis le terrain
         </Eyebrow>
 
-        <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:mt-10 sm:gap-x-16">
-          {CLIENTS.map((client) => (
-            <li
-              key={client.slug}
-              className="text-[var(--color-ol-graphite)]/55 transition-colors duration-300 hover:text-[var(--color-ol-graphite)]"
+        <div className="mt-10">
+          <Marquee speed={28} pauseOnHover>
+            {/* Liste indexable des logos clients (rendue dans une <ul>
+                à plat pour le SEO ; le Marquee la duplique pour la boucle). */}
+            <ul
+              data-testid="reassurance-logos"
+              className="flex items-center gap-x-12 sm:gap-x-16"
             >
-              <Image
-                src={`/logos/${client.slug}.svg`}
-                alt={client.name}
-                width={client.width}
-                height={40}
-                priority={false}
-                unoptimized
-                className="h-7 w-auto sm:h-9"
-              />
-            </li>
-          ))}
-        </ul>
+              {CLIENTS.map((client) => (
+                <li
+                  key={client.slug}
+                  className="text-[var(--color-ol-graphite)]/55 transition-colors duration-300 hover:text-[var(--color-ol-graphite)]"
+                >
+                  <Image
+                    src={`/logos/${client.slug}.svg`}
+                    alt={client.name}
+                    width={client.width}
+                    height={40}
+                    priority={false}
+                    unoptimized
+                    className="h-8 w-auto sm:h-10"
+                  />
+                </li>
+              ))}
+            </ul>
+          </Marquee>
+        </div>
       </Container>
     </section>
   );
