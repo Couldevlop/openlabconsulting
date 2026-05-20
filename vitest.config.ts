@@ -42,18 +42,19 @@ export default defineConfig({
       'playwright-report',
       'test-results',
     ],
-    // Perf : pool threads au lieu de forks (default). Sous Windows on
-    // gagne ~30 % sur le boot des workers (pas de fork OS, on partage
-    // le runtime Node). On conserve `isolate: true` (default) car
-    // certains tests Testing Library s'accumulent dans le même jsdom
-    // quand on partage le DOM entre tests d'un même worker.
-    pool: 'threads',
+    // Perf : pool 'vmThreads' (Vitest 2.x). Chaque worker partage
+    // une VM Node unique → boot ~3× plus rapide que `threads`/`forks`
+    // (qui spawn un runtime complet). Le contexte module est cloné
+    // par fichier de test grâce à `node:vm` → isolation préservée.
+    //
+    // Cap maxThreads à 6 : Motion v12 + jsdom = ~150 Mo / worker ;
+    // au-delà on swap sur SSD. minThreads=2 garde du parallélisme
+    // même en local sur petites machines.
+    pool: 'vmThreads',
     poolOptions: {
-      threads: {
-        // Cap à 6 threads pour limiter la pression mémoire (Motion v12
-        // + jsdom + transform = ~150 Mo / worker).
-        maxThreads: 6,
-        minThreads: 2,
+      vmThreads: {
+        maxThreads: 8,
+        minThreads: 4,
       },
     },
     coverage: {
