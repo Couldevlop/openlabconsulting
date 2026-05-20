@@ -10,6 +10,13 @@ vi.mock('@/components/sections/CasesCarouselServer', async () => {
   return { CasesCarouselServer: () => <CasesCarousel /> };
 });
 
+// InsightsServer : même pattern qu'au-dessus, on délègue au composant
+// sync `Insights` qui utilise FALLBACK_ARTICLES par défaut.
+vi.mock('@/components/sections/InsightsServer', async () => {
+  const { Insights } = await import('@/components/sections/Insights');
+  return { InsightsServer: () => <Insights /> };
+});
+
 import HomePage from '@/app/page';
 
 describe('HomePage (P2 — homepage §6)', () => {

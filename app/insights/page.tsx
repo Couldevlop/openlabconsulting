@@ -8,6 +8,8 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { CATEGORY_LABELS } from '@/lib/articles';
+import { getPublishedArticles } from '@/lib/articles-server';
 
 export const metadata: Metadata = {
   title: 'Insights — Articles, études et retours de terrain',
@@ -16,52 +18,11 @@ export const metadata: Metadata = {
   alternates: { canonical: '/insights' },
 };
 
-const CATEGORIES = [
-  'Souveraineté',
-  'Conformité RH',
-  'Cybersécurité',
-  'Data & gouvernance',
-  'Agents & IA',
-  'MLOps',
-  'Étude de cas',
-];
+const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
 
-// Articles placeholder — remplaces par Payload P6 collection 'articles'.
-const ARTICLES = [
-  {
-    slug: 'migration-ia-souveraine-k3s-hetzner',
-    title: 'Migration vers une IA souveraine en Afrique francophone',
-    excerpt:
-      'Pourquoi un cluster K3s Hetzner change la donne pour les institutions ouest-africaines.',
-    category: 'Souveraineté',
-    author: 'Debora Ahouma',
-    date: 'Mai 2026',
-    iso: '2026-05-01',
-  },
-  {
-    slug: 'cnps-its-fdfp-conformite-sirh-ivoirien',
-    title: 'CNPS, ITS, FDFP : ce que la conformité paie attend de votre SIRH',
-    excerpt:
-      'Le diable est dans le détail des cotisations sociales. Comment un SIRH bien conçu transforme l’audit annuel.',
-    category: 'Conformité RH',
-    author: 'Équipe NexusRH',
-    date: 'Avril 2026',
-    iso: '2026-04-15',
-  },
-  {
-    slug: 'fraude-documentaire-ia-banques-assurances',
-    title:
-      'Détection de fraude documentaire : ce que l’IA voit que vos contrôleurs manquent',
-    excerpt:
-      'Trois patterns invisibles à l’œil humain que Fraud Shield isole en moins de deux secondes.',
-    category: 'Cybersécurité',
-    author: 'Équipe Fraud Shield',
-    date: 'Mars 2026',
-    iso: '2026-03-20',
-  },
-];
+export default async function InsightsHubPage(): Promise<React.ReactElement> {
+  const articles = await getPublishedArticles(12);
 
-export default function InsightsHubPage(): React.ReactElement {
   return (
     <main id="main">
       {/* Hero */}
@@ -86,7 +47,7 @@ export default function InsightsHubPage(): React.ReactElement {
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-2">
-              {CATEGORIES.map((c) => (
+              {CATEGORY_LIST.map((c) => (
                 <li key={c}>
                   <Badge tone="neutral">{c}</Badge>
                 </li>
@@ -103,7 +64,7 @@ export default function InsightsHubPage(): React.ReactElement {
       >
         <Container width="wide">
           <ul className="grid gap-8 md:grid-cols-3">
-            {ARTICLES.map((a) => (
+            {articles.map((a) => (
               <li key={a.slug}>
                 <Link
                   href={`/insights/${a.slug}`}
@@ -115,15 +76,15 @@ export default function InsightsHubPage(): React.ReactElement {
                     className="flex h-full flex-col gap-5 p-0 sm:p-0"
                   >
                     <MediaPlaceholder
-                      src={null}
-                      alt={`Couverture : ${a.title}`}
+                      src={a.cover.src}
+                      alt={a.cover.alt}
                       tone="cold"
                       aspect="16/9"
                       placeholderLabel="Couverture article"
                       className="rounded-b-none border-0 border-b border-dashed border-[var(--color-ol-graphite)]/15"
                     />
                     <div className="flex flex-1 flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8">
-                      <Badge tone="orange">{a.category}</Badge>
+                      <Badge tone="orange">{a.categoryLabel}</Badge>
                       <Heading
                         level={2}
                         visualLevel={4}
@@ -138,7 +99,7 @@ export default function InsightsHubPage(): React.ReactElement {
                         <span className="font-medium text-[var(--color-ol-night)]">
                           {a.author}
                         </span>
-                        <time dateTime={a.iso}>{a.date}</time>
+                        <time dateTime={a.isoDate}>{a.publishedAt}</time>
                       </footer>
                     </div>
                   </Card>
@@ -152,9 +113,9 @@ export default function InsightsHubPage(): React.ReactElement {
               Plus d’articles arrivent.
             </Heading>
             <p className="mt-3 text-[var(--color-ol-graphite)]/75">
-              La pipeline éditoriale complète sera branchée sur Payload CMS en
-              P6. Reviens ici sous 1-2 semaines, ou abonne-toi au flux RSS via
-              la racine du site dès que la collection sera active.
+              Les nouveaux insights sont publiés directement depuis l’admin
+              Payload. Reviens régulièrement, ou abonne-toi au flux RSS via la
+              racine du site.
             </p>
             <Link
               href="/audit-ia"
