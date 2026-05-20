@@ -1,0 +1,42 @@
+apiVersion: v2
+name: openlab-website
+description: |
+  OpenLab Consulting — Site web + back-office Payload CMS sur K3s Hetzner.
+  CLAUDE.md §14. Déploiement complet en une commande :
+      helm upgrade --install openlab deploy/helm/openlab-website \
+          -n openlab --create-namespace \
+          -f deploy/helm/openlab-website/values-production.yaml \
+          --set image.tag=v1.4.2
+type: application
+version: 1.0.0
+appVersion: '1.0.0'
+keywords:
+  - openlab
+  - nextjs
+  - payload
+  - k3s
+home: https://openlabconsulting.com
+sources:
+  - https://github.com/Couldevlop/openlabconsulting
+maintainers:
+  - name: OpenLab Platform Team
+    email: tech@openlabconsulting.com
+icon: https://openlabconsulting.com/OPENLAB.png
+
+# Dépendances : Bitnami charts officiels pour postgres, redis, minio.
+# Pour la production souveraine, on peut désactiver les sub-charts et
+# pointer vers des services managés ou les manifests bruts (cf.
+# `deploy/k8s/`).
+dependencies:
+  - name: postgresql
+    version: '16.3.3'
+    repository: 'https://charts.bitnami.com/bitnami'
+    condition: postgresql.enabled
+  - name: redis
+    version: '20.6.3'
+    repository: 'https://charts.bitnami.com/bitnami'
+    condition: redis.enabled
+  - name: minio
+    version: '14.9.3'
+    repository: 'https://charts.bitnami.com/bitnami'
+    condition: minio.enabled

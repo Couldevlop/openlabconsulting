@@ -1,0 +1,32 @@
+# Production — domaine apex + replicas 2 + ressources standards.
+# Aligné sur les valeurs par défaut de values.yaml mais explicité ici
+# pour traçabilité et override clair.
+
+replicaCount: 2
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+
+ingress:
+  hosts:
+    - host: openlabconsulting.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.openlabconsulting.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: openlab-tls
+      hosts:
+        - openlabconsulting.com
+        - www.openlabconsulting.com
+
+config:
+  NEXT_PUBLIC_SITE_URL: 'https://openlabconsulting.com'
+  PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
+  BETTER_AUTH_URL: 'https://openlabconsulting.com'
+  OPENLAB_TIER: 'production'

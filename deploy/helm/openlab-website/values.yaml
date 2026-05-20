@@ -1,0 +1,184 @@
+# Valeurs par défaut — overridées par values-staging.yaml ou
+# values-production.yaml selon l'environnement.
+
+# ────────────────────────────────────────────────────────────
+# Application Next.js
+# ────────────────────────────────────────────────────────────
+image:
+  repository: ghcr.io/openlab-consulting/website
+  tag: 'latest'
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  port: 3000
+
+# ────────────────────────────────────────────────────────────
+# Ingress + TLS (Traefik + cert-manager)
+# ────────────────────────────────────────────────────────────
+ingress:
+  enabled: true
+  className: 'traefik'
+  hosts:
+    - host: openlabconsulting.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.openlabconsulting.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: openlab-tls
+      hosts:
+        - openlabconsulting.com
+        - www.openlabconsulting.com
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
+    traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+    traefik.ingress.kubernetes.io/router.tls: 'true'
+
+# ────────────────────────────────────────────────────────────
+# Configuration applicative (CLAUDE.md §14.8)
+# ────────────────────────────────────────────────────────────
+config:
+  NEXT_PUBLIC_SITE_URL: 'https://openlabconsulting.com'
+  NEXT_PUBLIC_PLAUSIBLE_DOMAIN: 'openlabconsulting.com'
+  PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
+  BETTER_AUTH_URL: 'https://openlabconsulting.com'
+  OPENLAB_TIER: 'production'
+
+# Le Helm chart attend que `openlab-website-secrets` (SealedSecret)
+# soit déjà appliqué dans le namespace. Voir deploy/k8s/base/secret.sealedsecret.yaml.
+secretRef:
+  name: 'openlab-website-secrets'
+
+# ────────────────────────────────────────────────────────────
+# Job de migration Payload
+# ────────────────────────────────────────────────────────────
+migrate:
+  enabled: true
+  # Image identique à l'app — réutilise les migrations embarquées.
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# ────────────────────────────────────────────────────────────
+# Métriques Prometheus
+# ────────────────────────────────────────────────────────────
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false # Activer si Prometheus Operator présent
+    interval: 30s
+    path: /api/metrics
+
+# ────────────────────────────────────────────────────────────
+# NetworkPolicy (égress restreint)
+# ────────────────────────────────────────────────────────────
+networkPolicy:
+  enabled: true
+
+# ────────────────────────────────────────────────────────────
+# Sub-charts Bitnami (postgres / redis / minio)
+# ────────────────────────────────────────────────────────────
+postgresql:
+  enabled: true
+  fullnameOverride: 'postgres'
+  auth:
+    username: 'openlab'
+    database: 'openlab'
+    existingSecret: 'openlab-website-secrets'
+    secretKeys:
+      adminPasswordKey: POSTGRES_PASSWORD
+      userPasswordKey: POSTGRES_PASSWORD
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: longhorn
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+redis:
+  enabled: true
+  fullnameOverride: 'redis'
+  architecture: 'standalone'
+  auth:
+    enabled: false # Réseau interne, NetworkPolicy filtre déjà.
+  master:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: longhorn
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 768Mi
+
+minio:
+  enabled: true
+  fullnameOverride: 'minio'
+  mode: 'standalone'
+  auth:
+    existingSecret: 'openlab-website-secrets'
+    rootUserSecretKey: MINIO_ACCESS_KEY
+    rootPasswordSecretKey: MINIO_SECRET_KEY
+  persistence:
+    enabled: true
+    size: 50Gi
+    storageClass: longhorn
+  defaultBuckets: 'openlab-media'
+
+# ────────────────────────────────────────────────────────────
+# Meilisearch (manifest dédié, pas de chart Bitnami officiel)
+# ────────────────────────────────────────────────────────────
+meilisearch:
+  enabled: true
+  image:
+    repository: getmeili/meilisearch
+    tag: 'v1.13'
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: longhorn
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
