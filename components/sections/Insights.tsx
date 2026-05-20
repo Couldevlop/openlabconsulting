@@ -8,82 +8,30 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { FALLBACK_ARTICLES, type Article } from '@/lib/articles';
 
-interface Article {
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  author: string;
-  /** Date affichée. ISO `datetime` séparé pour <time>. */
-  publishedAt: string;
-  isoDate: string;
-  cover: { src: string | null; alt: string };
+export interface InsightsProps {
+  /** Articles à afficher. Si omis, utilise le fallback (3 articles). */
+  articles?: readonly Article[];
 }
-
-/**
- * Placeholder articles tant que Payload (P6) n'est pas branché.
- * Le sujet de chaque article est ancré sur un produit ou une thématique
- * réelle (CLAUDE.md §1), pour éviter le contenu vide.
- */
-const ARTICLES: readonly Article[] = [
-  {
-    slug: 'migration-ia-souveraine-k3s-hetzner',
-    title: 'Migration vers une IA souveraine en Afrique francophone',
-    excerpt:
-      'Pourquoi un cluster K3s Hetzner change la donne pour les institutions ouest-africaines — leçons tirées du déploiement NexusRH.',
-    category: 'Souveraineté',
-    author: 'Debora Ahouma',
-    publishedAt: 'Mai 2026',
-    isoDate: '2026-05-01',
-    cover: {
-      src: null,
-      alt: 'Schéma d’architecture K3s Hetzner pour la souveraineté IA',
-    },
-  },
-  {
-    slug: 'cnps-its-fdfp-conformite-sirh-ivoirien',
-    title: 'CNPS, ITS, FDFP : ce que la conformité paie attend de votre SIRH',
-    excerpt:
-      'Le diable est dans le détail des cotisations sociales. Comment un SIRH bien conçu transforme l’audit annuel en formalité.',
-    category: 'Conformité RH',
-    author: 'Équipe NexusRH',
-    publishedAt: 'Avril 2026',
-    isoDate: '2026-04-15',
-    cover: {
-      src: null,
-      alt: 'Capture du module de paie NexusRH conforme CNPS',
-    },
-  },
-  {
-    slug: 'fraude-documentaire-ia-banques-assurances',
-    title:
-      'Détection de fraude documentaire : ce que l’IA voit que vos contrôleurs manquent',
-    excerpt:
-      'Trois patterns invisibles à l’œil humain que Fraud Shield isole en moins de deux secondes, et comment l’expliquer à un comité d’audit.',
-    category: 'Cybersécurité',
-    author: 'Équipe Fraud Shield',
-    publishedAt: 'Mars 2026',
-    isoDate: '2026-03-20',
-    cover: {
-      src: null,
-      alt: 'Visualisation Fraud Shield : marqueurs de fraude détectés sur un document',
-    },
-  },
-] as const;
 
 /**
  * Insights — Section 9 de la homepage (CLAUDE.md §6, §12.5).
  *
- * Grid 1/3 cols (saut direct, on évite 2 cols qui laisseraient une
- * orpheline en sm avec 3 cards). Chaque card est <Link> qui englobe
- * une <Card> interactive avec cover, badge catégorie, titre, extrait,
- * auteur, date.
+ * Données :
+ *   - Reçoit `articles` en prop, fourni par `InsightsServer` qui fetch
+ *     la collection Payload `articles` (`status === 'published'`,
+ *     `sort -publishedAt`, `limit 3`).
+ *   - Si la prop est omise, utilise le fallback hard-codé
+ *     (`FALLBACK_ARTICLES`).
  *
- * Branche Payload P6 : `payload.find({ collection: 'articles',
- * sort: '-publishedAt', limit: 3 })` côté server component.
+ * Grid 1/3 cols. Chaque card est <Link> qui englobe une <Card>
+ * interactive avec cover, badge catégorie, titre, extrait, auteur,
+ * date.
  */
-export function Insights(): ReactElement {
+export function Insights({
+  articles = FALLBACK_ARTICLES.slice(0, 3),
+}: InsightsProps = {}): ReactElement {
   return (
     <section
       aria-labelledby="insights-title"
@@ -119,7 +67,7 @@ export function Insights(): ReactElement {
         </div>
 
         <ul className="mt-14 grid gap-8 md:grid-cols-3">
-          {ARTICLES.map((article) => (
+          {articles.map((article) => (
             <li key={article.slug}>
               <Link
                 href={`/insights/${article.slug}`}
@@ -140,7 +88,7 @@ export function Insights(): ReactElement {
                   />
 
                   <div className="flex flex-1 flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8">
-                    <Badge tone="orange">{article.category}</Badge>
+                    <Badge tone="orange">{article.categoryLabel}</Badge>
 
                     <Heading level={3} visualLevel={4} className="leading-snug">
                       {article.title}

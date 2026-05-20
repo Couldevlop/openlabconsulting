@@ -4,7 +4,7 @@ import { CasesCarouselServer } from '@/components/sections/CasesCarouselServer';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
-import { Insights } from '@/components/sections/Insights';
+import { InsightsServer } from '@/components/sections/InsightsServer';
 import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
@@ -28,7 +28,7 @@ export default function HomePage(): React.ReactElement {
       <Solutions />
       <Manifesto />
       <Livre />
-      <Insights />
+      <InsightsServer />
       <AuditIaCta />
       {/* §6.11 Footer premium est déjà rendu globalement via app/layout.tsx (P1). */}
     </main>
