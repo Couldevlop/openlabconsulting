@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
@@ -43,6 +44,16 @@ export default async function InsightArticlePage({
 
   return (
     <main id="main">
+      <Breadcrumbs
+        items={[
+          { label: 'Insights', href: '/insights' },
+          {
+            label: article.categoryLabel,
+            href: `/insights/categorie/${article.category}`,
+          },
+          { label: article.title },
+        ]}
+      />
       {/* Hero article */}
       <section
         aria-labelledby="article-title"

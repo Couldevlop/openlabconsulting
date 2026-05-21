@@ -6,6 +6,9 @@
   --color-ol-orange: #ff5a00;
   --color-ol-orange-light: #ff7a33;
   --color-ol-orange-dark: #cc4800;
+  /* Orange amber — accent secondaire pour gradients & highlights chauds. */
+  --color-ol-amber: #f59e0b;
+  --color-ol-amber-soft: #fcd34d;
 
   --color-ol-night: #0a0e1a;
   --color-ol-navy: #0b1b3d;
@@ -15,8 +18,11 @@
   --color-ol-graphite: #1a1d24;
   --color-ol-mist: #e8eaf0;
 
+  /* --- Couleurs sémantiques -------------------------------------------- */
   --color-ol-success: #22c55e;
+  --color-ol-sage: #84a98c; /* sage green — succès doux, validation calme */
   --color-ol-danger: #dc2626;
+  --color-ol-warning: #f59e0b;
   --color-ol-info: #2563eb;
 
   /* --- Typographie (§3.3) ----------------------------------------------- */
@@ -29,12 +35,31 @@
 
   /* --- Animations (§4.6) ------------------------------------------------ */
   --ease-ol: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* --- Shadows multi-layer (§4.10 polish) ------------------------------- */
+  /* Trois niveaux progressifs : soft pour les cards au repos,
+   * elevated au hover, floating pour les overlays (modals, palette).
+   * Multi-layer (1px ambient + diffusion plus large) = profondeur
+   * Apple/Linear plutôt que shadow-lg Tailwind brut. */
+  --shadow-ol-soft:
+    0 1px 2px rgba(10, 14, 26, 0.04), 0 2px 8px rgba(10, 14, 26, 0.04);
+  --shadow-ol-elevated:
+    0 2px 4px rgba(10, 14, 26, 0.06), 0 8px 24px rgba(10, 14, 26, 0.08);
+  --shadow-ol-floating:
+    0 4px 8px rgba(10, 14, 26, 0.08), 0 16px 48px rgba(10, 14, 26, 0.12);
+  --shadow-ol-orange-glow:
+    0 0 0 1px rgba(255, 90, 0, 0.1), 0 8px 24px rgba(255, 90, 0, 0.18);
 }
 
 html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
   font-family: var(--font-body);
+  /* Smooth scroll natif pour les ancres internes (#section). */
+  scroll-behavior: smooth;
+  /* Compense la navbar sticky (hauteur ~64 px) sur les ancres pour ne
+   * pas masquer le début de section ciblée. */
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -43,6 +68,9 @@ body {
   font-feature-settings:
     'rlig' 1,
     'calt' 1;
+  /* Antialiasing pour rendu typo plus doux sur écrans haute densité. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :focus-visible {
@@ -51,7 +79,35 @@ body {
   border-radius: 2px;
 }
 
+/* Liens internes : focus visible plus marqué (accessibilité WCAG AAA). */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-ol-orange);
+  outline-offset: 3px;
+}
+
+/* Typographie display : letter-spacing négatif subtil = look éditorial. */
+h1,
+h2 {
+  letter-spacing: -0.02em;
+}
+
+/* Articles longs (Manifesto, Insights, Livre) : largeur de lecture
+ * confortable + line-height généreux. Variable utility via classe
+ * `.prose-ol` à appliquer sur les conteneurs de texte long. */
+.prose-ol {
+  max-width: 68ch;
+  line-height: 1.7;
+}
+
+.prose-ol p {
+  margin-block: 1.25em;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
   *,
   ::before,
   ::after {
