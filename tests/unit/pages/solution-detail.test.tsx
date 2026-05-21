@@ -123,4 +123,16 @@ describe('Page /solutions/[slug] (détail)', () => {
     expect(text).toContain('"FAQPage"');
     expect(text).toContain('"Question"');
   });
+
+  it('affiche un fil d’Ariane Accueil > Solutions > <Produit>', async () => {
+    const element = await SolutionDetailPage({
+      params: Promise.resolve({ slug: 'nexusrh' }),
+    });
+    render(element);
+    const nav = screen.getByTestId('breadcrumbs');
+    expect(nav).toBeInTheDocument();
+    expect(nav.textContent).toContain('Accueil');
+    expect(nav.textContent).toContain('Solutions');
+    expect(nav.textContent).toContain('NexusRH CI');
+  });
 });

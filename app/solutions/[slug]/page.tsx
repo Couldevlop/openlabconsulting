@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
@@ -82,6 +83,12 @@ export default async function SolutionDetailPage({
             { name: product.name, url: `/solutions/${product.slug}` },
           ]),
           faqPageSchema(faq),
+        ]}
+      />
+      <Breadcrumbs
+        items={[
+          { label: 'Solutions', href: '/solutions' },
+          { label: product.name },
         ]}
       />
       {/* Hero */}
