@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+// Imports sans extension : compatibles webpack Next + tsx CLI.
 import { logAudit } from '../lib/audit-log';
 import { validatePasswordStrength } from '../lib/password-policy';
 

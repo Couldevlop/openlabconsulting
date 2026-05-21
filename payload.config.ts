@@ -6,6 +6,9 @@ import sharp from 'sharp';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// Imports sans extension : compatibles webpack Next (build) ET tsx CLI
+// (scripts payload-migrate / cms-seed). Le binaire payload direct
+// nécessiterait `.js` mais on ne l'utilise plus — tout passe par tsx.
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';

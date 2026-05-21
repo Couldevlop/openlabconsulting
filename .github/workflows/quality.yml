@@ -20,6 +20,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # Opt-in Node 24 pour les actions JS (forcé par GitHub à partir du
+  # 2 juin 2026). Fait taire le warning de dépréciation Node 20.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   e2e:
     name: E2E Playwright + axe-core
