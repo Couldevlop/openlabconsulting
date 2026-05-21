@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
@@ -24,10 +24,28 @@ const NAV_ITEMS: readonly NavItem[] = [
 
 export function Navbar(): ReactElement {
   const [open, setOpen] = useState(false);
+  // Détecte le scroll pour intensifier le glassmorphism — la navbar
+  // devient plus translucide + une ombre douce apparaît dès que l'on
+  // commence à scroller. Sentiment de profondeur premium.
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function onScroll(): void {
+      setScrolled(window.scrollY > 8);
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <header
-      className="sticky top-0 z-40 border-b border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)]/95 backdrop-blur-md"
+      className={cn(
+        'sticky top-0 z-40 transition-all duration-300 ease-out',
+        scrolled
+          ? 'border-b border-[var(--color-ol-mist)]/60 bg-[var(--color-ol-ivory)]/80 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_4px_16px_rgba(0,0,0,0.06)] backdrop-blur-xl'
+          : 'border-b border-transparent bg-[var(--color-ol-ivory)]/95 backdrop-blur-md',
+      )}
       data-testid="navbar"
     >
       <Container
