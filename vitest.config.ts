@@ -42,17 +42,14 @@ export default defineConfig({
       'playwright-report',
       'test-results',
     ],
-    // Perf : pool 'vmThreads' (Vitest 2.x). Chaque worker partage
-    // une VM Node unique → boot ~3× plus rapide que `threads`/`forks`
-    // (qui spawn un runtime complet). Le contexte module est cloné
-    // par fichier de test grâce à `node:vm` → isolation préservée.
-    //
-    // Cap maxThreads à 6 : Motion v12 + jsdom = ~150 Mo / worker ;
-    // au-delà on swap sur SSD. minThreads=2 garde du parallélisme
-    // même en local sur petites machines.
-    pool: 'vmThreads',
+    // Pool 'threads' — stable sous Windows + Motion v12 + imports
+    // dynamiques (payload, @anthropic-ai/sdk). `vmThreads` testé en P11
+    // donne un gain perf ~50% mais crash segfault intermittent quand
+    // plusieurs imports dynamiques se chevauchent. On préfère la
+    // stabilité.
+    pool: 'threads',
     poolOptions: {
-      vmThreads: {
+      threads: {
         maxThreads: 8,
         minThreads: 4,
       },
