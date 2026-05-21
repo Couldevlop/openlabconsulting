@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { persistLead } from '@/lib/leads';
+import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
 import { getRequestIp } from '@/lib/request-ip';
 import { verifyTurnstile } from '@/lib/turnstile';
@@ -82,15 +84,20 @@ export async function POST(req: Request): Promise<NextResponse> {
     );
   }
 
-  // 4. TODO P7 : envoi Resend + scoring Claude + persistance Payload
-  // Pour P10 on log uniquement.
-  if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
-    console.info('[contact] lead reçu', {
-      email: parsed.data.email,
-      subject: parsed.data.subject,
-    });
-  }
+  // 4. Persistance lead + scoring Claude (best-effort, fail-soft)
+  await persistLead({
+    source: 'contact',
+    name: parsed.data.name,
+    email: parsed.data.email,
+    organization: parsed.data.organization || null,
+    subject: parsed.data.subject,
+    message: parsed.data.message,
+    ipAddress: ip,
+    userAgent: req.headers.get('user-agent'),
+  });
+
+  // 5. Métrique Prometheus
+  METRICS.contactSubmission('accepted');
 
   return NextResponse.json(
     { ok: true, message: 'Message reçu, réponse sous 24 h ouvrées.' },

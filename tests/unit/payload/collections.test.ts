@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Articles } from '@/collections/Articles';
 import { CaseStudies } from '@/collections/CaseStudies';
+import { Leads } from '@/collections/Leads';
 import { Media } from '@/collections/Media';
 import { Users } from '@/collections/Users';
 import { Whitepapers } from '@/collections/Whitepapers';
@@ -162,6 +163,46 @@ describe('Payload collections', () => {
       );
       expect((field as { minRows?: number }).minRows).toBe(3);
       expect((field as { maxRows?: number }).maxRows).toBe(3);
+    });
+  });
+
+  describe('Leads', () => {
+    it('a le slug "leads"', () => {
+      expect(Leads.slug).toBe('leads');
+    });
+
+    it('interdit la création API (POST direct) — bypassée seulement via overrideAccess', () => {
+      const create = Leads.access?.create as (() => boolean) | undefined;
+      expect(create?.()).toBe(false);
+    });
+
+    it('lecture réservée admin / super-admin / editor-chief', () => {
+      const read = Leads.access?.read as (args: {
+        req: { user: { role?: string } | null };
+      }) => boolean;
+      expect(read({ req: { user: { role: 'super-admin' } } })).toBe(true);
+      expect(read({ req: { user: { role: 'admin' } } })).toBe(true);
+      expect(read({ req: { user: { role: 'editor-chief' } } })).toBe(true);
+      expect(read({ req: { user: { role: 'editor' } } })).toBe(false);
+      expect(read({ req: { user: { role: 'viewer' } } })).toBe(false);
+    });
+
+    it('expose un pipeline Kanban à 6 stages', () => {
+      const stage = (Leads.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'stage',
+      );
+      const options = (stage as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        ['nouveau', 'qualifie', 'rdv', 'proposition', 'signe', 'perdu'].sort(),
+      );
+    });
+
+    it('borne aiScore entre 0 et 100', () => {
+      const f = (Leads.fields ?? []).find(
+        (x) => 'name' in x && x.name === 'aiScore',
+      );
+      expect((f as { min?: number }).min).toBe(0);
+      expect((f as { max?: number }).max).toBe(100);
     });
   });
 

@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
+import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
@@ -25,6 +26,7 @@ const dirname = path.dirname(filename);
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
  *   - users       : auth + 6 rôles RBAC + 2FA TOTP (§11)
+ *   - leads       : CRM Kanban + scoring IA Claude (§9.3)
  *   - auditLog    : journal immuable actions sensibles (§11.2)
  *
  * Pipeline d'upload :
@@ -54,7 +56,15 @@ export default buildConfig({
       titleSuffix: ' · Admin OpenLab',
     },
   },
-  collections: [Articles, CaseStudies, Whitepapers, Media, Users, AuditLog],
+  collections: [
+    Articles,
+    CaseStudies,
+    Whitepapers,
+    Media,
+    Users,
+    Leads,
+    AuditLog,
+  ],
   editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: {
