@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -12,6 +13,8 @@ import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { personSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
@@ -36,9 +39,36 @@ const PILLARS = [
   },
 ];
 
-export default function AProposPage(): React.ReactElement {
+export default async function AProposPage(): Promise<React.ReactElement> {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
+  // Person schema Debora Ahouma — boost E-E-A-T pour le ranking sur
+  // les sujets IA / Afrique francophone. À enrichir au fil du temps
+  // avec sameAs LinkedIn, Google Scholar, ORCID, etc.
+  const deboraPersonSchema = personSchema({
+    name: 'Debora Ahouma',
+    jobTitle: 'CEO & Fondatrice, OpenLab Consulting',
+    description:
+      'Fondatrice du cabinet OpenLab Consulting, auteure du livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Spécialiste de l’IA appliquée en Afrique francophone.',
+    knowsAbout: [
+      'Intelligence artificielle',
+      'Machine learning',
+      'Agents autonomes',
+      'IA souveraine',
+      'Cybersécurité IA',
+      'Data gouvernance',
+      'MLOps',
+      'IA appliquée Afrique',
+    ],
+    sameAs: [
+      'https://www.linkedin.com/company/openlab-consulting',
+      // À compléter : LinkedIn perso, Google Scholar, ORCID, Hugging Face
+    ],
+  });
+
   return (
     <main id="main">
+      <JsonLd nonce={nonce} data={deboraPersonSchema} />
       {/* Hero */}
       <section
         aria-labelledby="apropos-title"
