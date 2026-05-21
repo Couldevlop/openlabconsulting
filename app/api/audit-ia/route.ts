@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { persistLead } from '@/lib/leads';
+import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
 import { getRequestIp } from '@/lib/request-ip';
 import { verifyTurnstile } from '@/lib/turnstile';
@@ -78,14 +80,24 @@ export async function POST(req: Request): Promise<NextResponse> {
     );
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
-    console.info('[audit-ia] demande reçue', {
-      email: parsed.data.email,
-      organization: parsed.data.organization,
+  // Persistance lead enrichi + scoring Claude (best-effort)
+  await persistLead({
+    source: 'audit-ia',
+    name: parsed.data.name,
+    email: parsed.data.email,
+    organization: parsed.data.organization,
+    jobTitle: parsed.data.jobTitle,
+    message: parsed.data.goal,
+    metadata: {
       maturity: parsed.data.maturity,
-    });
-  }
+      headcount: parsed.data.headcount,
+    },
+    consentRgpd: parsed.data.consentRgpd,
+    ipAddress: ip,
+    userAgent: req.headers.get('user-agent'),
+  });
+
+  METRICS.auditIaSubmission('accepted');
 
   return NextResponse.json(
     {

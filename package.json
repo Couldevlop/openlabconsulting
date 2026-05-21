@@ -33,6 +33,7 @@
     "payload": "payload"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.97.1",
     "@payloadcms/db-postgres": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
