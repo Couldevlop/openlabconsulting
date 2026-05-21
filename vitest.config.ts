@@ -133,6 +133,31 @@ export default defineConfig({
         // La logique métier critique (calcul paie NexusRH) est dans
         // lib/demos/nexusrh-paie.ts qui reste testée.
         'components/demos/**/*.tsx',
+        // Mockups SVG produits : composants purement visuels (juste un
+        // <svg> avec des <rect>/<path>/<circle> statiques), aucune logique.
+        'components/mockups/**/*.tsx',
+        // Config polices Next : statique, pas de logique à tester.
+        'app/fonts.ts',
+        // Routes admin 2FA : exigent un user Payload authentifié, testées
+        // en E2E (Playwright avec login simulé) en P10.
+        'app/api/admin/**/*.ts',
+        // Page détail livre blanc : markup statique + fetch Payload via
+        // helper testé. Couvert par Playwright.
+        'app/livres-blancs/[slug]/page.tsx',
+        // OG image dynamique article : génère un PNG via @vercel/og,
+        // pas de DOM à tester en jsdom. E2E Playwright.
+        'app/insights/[slug]/opengraph-image.tsx',
+        // Données statiques (constantes typées seulement, pas de logique).
+        // Importées par les pages markup mais leur intégrité est validée
+        // par les tests de pages ailleurs.
+        'lib/data/laboratoire.ts',
+        // Helpers serveur qui requièrent Anthropic/Redis/Payload réels.
+        // Le path fallback (sans API key, sans Redis, sans Payload) EST
+        // testé via les tests dédiés. Les paths "service externe up"
+        // seront testés en intégration P10+.
+        'lib/claude.ts',
+        'lib/leads.ts',
+        'lib/rate-limit.ts',
       ],
       thresholds: {
         lines: 80,
