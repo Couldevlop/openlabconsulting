@@ -1,8 +1,19 @@
 # Stack dev local — voir CLAUDE.md §13.3.
 # Le service "app" n'est pas inclus à P0 (pas encore de pnpm-lock.yaml dans l'image).
 # Activer dès P6 quand Payload aura besoin de Postgres en continu.
-
-name: openlab-website
+#
+# Compatible v1 (`docker-compose up -d`) et v2 (`docker compose up -d`).
+# Les conteneurs seront préfixés par le nom du dossier projet
+# (ex: openlabconsulting-postgres-1) à défaut de la clé `name:` qui n'est
+# supportée qu'en v2.
+#
+# PORTS — décalés vs ports par défaut pour éviter les conflits avec
+# les autres projets locaux du user (Postgres natif Windows, autres
+# docker-compose). Adapte le `.env` en conséquence :
+#   DATABASE_URL=postgresql://openlab:devpass@localhost:5433/openlab
+#   REDIS_URL=redis://localhost:6380
+#   MINIO_ENDPOINT=localhost:9002
+#   MEILISEARCH_URL=http://localhost:7701
 
 services:
   postgres:
@@ -13,7 +24,7 @@ services:
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: openlab
     ports:
-      - '5432:5432'
+      - '5433:5432' # host:container — host 5433 pour éviter conflit
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -26,7 +37,7 @@ services:
     image: redis:7-alpine
     container_name: openlab-redis
     ports:
-      - '6379:6379'
+      - '6380:6379'
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
@@ -41,8 +52,8 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - '9002:9000' # API S3
+      - '9003:9001' # Console UI
     volumes:
       - minio_data:/data
     healthcheck:
@@ -58,7 +69,7 @@ services:
       MEILI_MASTER_KEY: devmasterkey
       MEILI_ENV: development
     ports:
-      - '7700:7700'
+      - '7701:7700'
     volumes:
       - meili_data:/meili_data
 

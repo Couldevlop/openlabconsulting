@@ -16,6 +16,8 @@
  * touche à rien (pas d'écrasement de password).
  */
 
+// .env est chargé via le flag `--env-file=.env` passé à tsx dans le
+// script package.json `cms:seed`. Pas besoin de loadEnv ici.
 import { getPayload } from 'payload';
 import config from '../payload.config';
 
