@@ -1,0 +1,73 @@
+{{- if .Values.migrate.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-migrate-{{ .Release.Revision }}
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migration
+  annotations:
+    # Hook Helm : pré-install + pré-upgrade. Le Job est nettoyé après
+    # succès, recréé à chaque release. Migrations Payload idempotentes.
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: '0'
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        {{- include "openlab-website.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migration
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "openlab-website.serviceAccountName" . }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+      initContainers:
+        - name: wait-postgres
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z postgres.{{ .Release.Namespace }}.svc.cluster.local 5432; do
+                sleep 2
+              done
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ['ALL']
+      containers:
+        - name: migrate
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['/bin/sh', '-c']
+          args:
+            - |
+              set -euo pipefail
+              node node_modules/payload/bin.js migrate
+          envFrom:
+            - configMapRef:
+                name: {{ include "openlab-website.fullname" . }}-config
+            - secretRef:
+                name: {{ .Values.secretRef.name }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ['ALL']
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+{{- end -}}

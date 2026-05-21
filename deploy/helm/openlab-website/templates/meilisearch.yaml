@@ -1,0 +1,93 @@
+{{- if .Values.meilisearch.enabled -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-meilisearch
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+    app.kubernetes.io/component: search
+spec:
+  serviceName: {{ include "openlab-website.fullname" . }}-meilisearch
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "openlab-website.name" . }}-meilisearch
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "openlab-website.name" . }}-meilisearch
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: search
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: meilisearch
+          image: '{{ .Values.meilisearch.image.repository }}:{{ .Values.meilisearch.image.tag }}'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7700
+          env:
+            - name: MEILI_ENV
+              value: 'production'
+            - name: MEILI_NO_ANALYTICS
+              value: 'true'
+            - name: MEILI_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretRef.name }}
+                  key: MEILISEARCH_MASTER_KEY
+            - name: MEILI_DB_PATH
+              value: /meili_data
+          resources:
+            {{- toYaml .Values.meilisearch.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+          volumeMounts:
+            - name: meili-data
+              mountPath: /meili_data
+  volumeClaimTemplates:
+    - metadata:
+        name: meili-data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        storageClassName: {{ .Values.meilisearch.persistence.storageClass }}
+        resources:
+          requests:
+            storage: {{ .Values.meilisearch.persistence.size }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-meilisearch
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: {{ include "openlab-website.name" . }}-meilisearch
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: http
+      port: 7700
+      targetPort: http
+{{- end -}}

@@ -1,14 +1,21 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
+import type { MetadataRoute } from 'next';
 import sitemap from '@/app/sitemap';
 import { EXPERTISES } from '@/lib/data/expertises';
 import { PRODUCTS } from '@/lib/data/products';
 import { SECTORS } from '@/lib/data/sectors';
 
 describe('app/sitemap', () => {
-  const entries = sitemap();
+  // Sitemap est async (fetch articles + catégories Payload) — on
+  // resolve une fois avant les assertions.
+  let entries: MetadataRoute.Sitemap = [];
 
-  it('inclut au moins 25 URLs (statiques + dynamiques)', () => {
-    expect(entries.length).toBeGreaterThanOrEqual(25);
+  beforeAll(async () => {
+    entries = await sitemap();
+  });
+
+  it('inclut au moins 30 URLs (statiques + dynamiques + articles)', () => {
+    expect(entries.length).toBeGreaterThanOrEqual(30);
   });
 
   it('chaque URL est absolue et utilise le domaine openlabconsulting', () => {
@@ -54,5 +61,41 @@ describe('app/sitemap', () => {
         entries.find((entry) => entry.url.endsWith(`/livre/${sub}`)),
       ).toBeDefined();
     }
+  });
+
+  it('inclut les 3 sous-pages /laboratoire/*', () => {
+    for (const sub of ['axes', 'publications', 'partenariats']) {
+      expect(
+        entries.find((entry) => entry.url.endsWith(`/laboratoire/${sub}`)),
+      ).toBeDefined();
+    }
+  });
+
+  it('inclut les 7 archives /insights/categorie/<cat>', () => {
+    for (const cat of [
+      'souverainete',
+      'conformite-rh',
+      'cybersecurite',
+      'data-gouvernance',
+      'agents-ia',
+      'mlops',
+      'etude-de-cas',
+    ]) {
+      expect(
+        entries.find((entry) =>
+          entry.url.endsWith(`/insights/categorie/${cat}`),
+        ),
+      ).toBeDefined();
+    }
+  });
+
+  it('inclut les articles publiés (au moins le fallback)', () => {
+    const articleEntries = entries.filter(
+      (e) =>
+        e.url.includes('/insights/') &&
+        !e.url.includes('/insights/categorie/') &&
+        !e.url.endsWith('/insights'),
+    );
+    expect(articleEntries.length).toBeGreaterThanOrEqual(3);
   });
 });

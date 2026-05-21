@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openlab
+  labels:
+    app.kubernetes.io/name: openlab
+    app.kubernetes.io/managed-by: helm
+    # PodSecurity v1.25+ — interdit privilèges, exige non-root, blocs réseau.
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    # CLAUDE.md §14 — namespace dédié au site OpenLab + ses dépendances
+    # (postgres, redis, minio, meilisearch). Voir overlays/ pour
+    # staging vs production.
+    openlab.consulting/owner: 'platform-team'

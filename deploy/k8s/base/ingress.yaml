@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openlab-website
+  namespace: openlab
+  labels:
+    app.kubernetes.io/name: openlab-website
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
+    # Forçage HTTPS + redirection www → apex.
+    traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+    traefik.ingress.kubernetes.io/router.tls: 'true'
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - openlabconsulting.com
+        - www.openlabconsulting.com
+      secretName: openlab-tls
+  rules:
+    - host: openlabconsulting.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: openlab-website
+                port:
+                  number: 3000
+    - host: www.openlabconsulting.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: openlab-website
+                port:
+                  number: 3000
