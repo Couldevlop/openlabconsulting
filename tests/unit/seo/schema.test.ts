@@ -2,9 +2,11 @@ import { describe, it, expect } from 'vitest';
 import {
   bookSchema,
   breadcrumbSchema,
+  faqPageSchema,
   jsonLdString,
   localBusinessSchema,
   organizationSchema,
+  personSchema,
   sectorPageSchema,
   serviceSchema,
   softwareApplicationSchema,
@@ -88,5 +90,37 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     const out = jsonLdString(malicious);
     expect(out).not.toContain('</script>');
     expect(out).toContain('\\u003c/script');
+  });
+
+  it('personSchema : type Person + worksFor Organization + nationality CI', () => {
+    const s = personSchema({
+      name: 'Debora Ahouma',
+      jobTitle: 'CEO',
+      knowsAbout: ['IA', 'MLOps'],
+    });
+    expect(s['@type']).toBe('Person');
+    expect(s.name).toBe('Debora Ahouma');
+    expect(s.jobTitle).toBe('CEO');
+    expect(s.knowsAbout).toEqual(['IA', 'MLOps']);
+    expect((s.nationality as { name: string } | undefined)?.name).toBe(
+      'Côte d’Ivoire',
+    );
+    expect(s.worksFor).toBeDefined();
+  });
+
+  it('faqPageSchema : type FAQPage + mainEntity Q&A', () => {
+    const s = faqPageSchema([
+      { question: 'Q1', answer: 'A1' },
+      { question: 'Q2', answer: 'A2' },
+    ]);
+    expect(s['@type']).toBe('FAQPage');
+    const main = s.mainEntity as Array<{
+      '@type': string;
+      name: string;
+      acceptedAnswer: { text: string };
+    }>;
+    expect(main).toHaveLength(2);
+    expect(main[0]?.['@type']).toBe('Question');
+    expect(main[0]?.acceptedAnswer.text).toBe('A1');
   });
 });

@@ -20,6 +20,10 @@ concurrency:
 env:
   NODE_VERSION: '22'
   PNPM_VERSION: '10.33.0'
+  # GitHub Actions force Node 24 pour les actions JS à partir du 2 juin 2026.
+  # On opt-in maintenant pour faire taire le warning de dépréciation Node 20.
+  # Sans impact sur NODE_VERSION (qui contrôle la version Node de NOS scripts).
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   quality:

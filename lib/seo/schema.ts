@@ -203,6 +203,38 @@ export function bookSchema(): Thing {
   };
 }
 
+/**
+ * Person schema — boost E-E-A-T Google (§12.4).
+ *
+ * Posé sur /a-propos pour identifier formellement Debora Ahouma comme
+ * CEO et auteure du livre IA. Google utilise ce signal pour
+ * l'autorité du domaine sur les sujets IA / Afrique francophone.
+ *
+ * Champs minimaux : name, jobTitle, worksFor, sameAs (LinkedIn,
+ * Google Scholar si disponible).
+ */
+export function personSchema(person: {
+  name: string;
+  jobTitle: string;
+  description?: string;
+  imageUrl?: string;
+  knowsAbout?: readonly string[];
+  sameAs?: readonly string[];
+}): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: person.name,
+    jobTitle: person.jobTitle,
+    ...(person.description ? { description: person.description } : {}),
+    ...(person.imageUrl ? { image: person.imageUrl } : {}),
+    ...(person.knowsAbout ? { knowsAbout: person.knowsAbout } : {}),
+    ...(person.sameAs ? { sameAs: person.sameAs } : {}),
+    worksFor: { '@id': absoluteUrl('/#organization') },
+    nationality: { '@type': 'Country', name: 'Côte d’Ivoire' },
+  };
+}
+
 /** FAQPage schema — utilisé sur chaque page produit (§7.1 FAQ). */
 export function faqPageSchema(
   faq: readonly { question: string; answer: string }[],

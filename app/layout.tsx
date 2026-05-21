@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/atoms/ScrollProgress';
 import {
   jsonLdString,
   localBusinessSchema,
@@ -112,6 +113,7 @@ export default async function RootLayout({
         >
           Aller au contenu principal
         </a>
+        <ScrollProgress />
         <Navbar />
         <div className="flex-1">{children}</div>
         <Footer />
