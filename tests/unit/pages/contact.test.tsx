@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import ContactPage from '@/app/contact/page';
+import ContactPage from '@/app/(site)/contact/page';
 
 describe('Page /contact', () => {
   it('rend un h1 unique mentionnant « projet IA »', () => {

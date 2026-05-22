@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import InsightsHubPage from '@/app/insights/page';
+import InsightsHubPage from '@/app/(site)/insights/page';
 
 describe('Page /insights (hub)', () => {
   it('rend un h1 mentionnant « terrain africain »', async () => {

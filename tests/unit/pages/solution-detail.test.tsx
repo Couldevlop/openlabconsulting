@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import SolutionDetailPage, {
   generateStaticParams,
-} from '@/app/solutions/[slug]/page';
+} from '@/app/(site)/solutions/[slug]/page';
 import { PRODUCTS } from '@/lib/data/products';
 
 describe('Page /solutions/[slug] (détail)', () => {

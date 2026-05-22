@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import LaboratoirePartenariatsPage from '@/app/laboratoire/partenariats/page';
+import LaboratoirePartenariatsPage from '@/app/(site)/laboratoire/partenariats/page';
 import { PARTENARIATS } from '@/lib/data/laboratoire';
 
 describe('Page /laboratoire/partenariats', () => {

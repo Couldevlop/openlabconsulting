@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import AuthorArchivePage from '@/app/insights/auteur/[author]/page';
+import AuthorArchivePage from '@/app/(site)/insights/auteur/[author]/page';
 
 describe('Page /insights/auteur/[author]', () => {
   it('rend un h1 mentionnant le nom de l’auteur (décodé du slug)', async () => {

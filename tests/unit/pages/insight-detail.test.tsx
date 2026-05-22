@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import InsightArticlePage from '@/app/insights/[slug]/page';
+import InsightArticlePage from '@/app/(site)/insights/[slug]/page';
 
 describe('Page /insights/[slug]', () => {
   it('rend l’article fallback « migration-ia-souveraine-k3s-hetzner »', async () => {

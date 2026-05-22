@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+﻿import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import SecteursHubPage from '@/app/secteurs/page';
+import SecteursHubPage from '@/app/(site)/secteurs/page';
 import { SECTORS } from '@/lib/data/sectors';
 
 describe('Page /secteurs (hub)', () => {

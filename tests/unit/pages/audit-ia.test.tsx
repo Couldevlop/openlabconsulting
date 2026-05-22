@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import AuditIaPage from '@/app/audit-ia/page';
+import AuditIaPage from '@/app/(site)/audit-ia/page';
 
 describe('Page /audit-ia', () => {
   it('rend un h1 mentionnant « gagner du temps »', () => {

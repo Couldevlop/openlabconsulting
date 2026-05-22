@@ -1,17 +1,22 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { ScrollProgress } from '@/components/atoms/ScrollProgress';
-import {
-  jsonLdString,
-  localBusinessSchema,
-  organizationSchema,
-  webSiteSchema,
-} from '@/lib/seo/schema';
 import { SITE } from '@/lib/seo/site';
-import { fontVariables } from './fonts';
-import './globals.css';
+
+/**
+ * Layout racine — **passthrough**.
+ *
+ * Next 15 requiert un fichier `app/layout.tsx` qui retourne du JSX. Mais
+ * Payload v3 admin (`app/(payload)/layout.tsx`) rend lui-même un `<html>`
+ * complet via `RootLayout` de `@payloadcms/next/layouts`. Si on rendait
+ * `<html>` ici aussi, on aurait deux `<html>` imbriqués → hydration error
+ * (`<html> cannot be a child of <div>`).
+ *
+ * Solution officielle Payload v3 + Next 15 : ce layout racine renvoie
+ * juste `{children}` et chaque route group (`(site)` et `(payload)`)
+ * rend son propre document HTML.
+ *
+ * Les `<meta>` globaux + métadonnées Open Graph sont définis ici (Next
+ * les remonte au document `<html>` rendu par le layout enfant).
+ */
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -72,52 +77,10 @@ export const metadata: Metadata = {
   },
 };
 
-/** JSON-LD global Organization + LocalBusiness + WebSite. */
-function GlobalJsonLd({ nonce }: { nonce: string }): React.ReactElement {
-  const payload = jsonLdString([
-    organizationSchema(),
-    localBusinessSchema(),
-    webSiteSchema(),
-  ]);
-  return (
-    <script
-      type="application/ld+json"
-      nonce={nonce}
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: payload }}
-    />
-  );
-}
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}): Promise<React.ReactElement> {
-  // Nonce CSP injecté par `middleware.ts` (§10.3). Si absent (build
-  // statique, ex. génération sitemap), on retombe sur chaîne vide qui
-  // ne matche aucun CSP — acceptable car CSP `'unsafe-inline'` couvre
-  // ce cas en fallback pour les vieux navigateurs.
-  const headersList = await headers();
-  const nonce = headersList.get('x-nonce') ?? '';
-
-  return (
-    <html lang="fr-CI" className={fontVariables}>
-      <head>
-        <GlobalJsonLd nonce={nonce} />
-      </head>
-      <body className="flex min-h-screen flex-col">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-[var(--color-ol-night)] focus:px-4 focus:py-2 focus:text-white"
-        >
-          Aller au contenu principal
-        </a>
-        <ScrollProgress />
-        <Navbar />
-        <div className="flex-1">{children}</div>
-        <Footer />
-      </body>
-    </html>
-  );
+}): React.ReactElement {
+  return <>{children}</>;
 }

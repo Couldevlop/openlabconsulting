@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import CategoryArchivePage from '@/app/insights/categorie/[cat]/page';
+import CategoryArchivePage from '@/app/(site)/insights/categorie/[cat]/page';
 
 describe('Page /insights/categorie/[cat]', () => {
   it('rend un h1 avec le libellé de la catégorie « souverainete » → « Souveraineté »', async () => {

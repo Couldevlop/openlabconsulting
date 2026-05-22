@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import AProposPage from '@/app/a-propos/page';
+import AProposPage from '@/app/(site)/a-propos/page';
 
 describe('Page /a-propos (async server)', () => {
   it('rend un h1 mentionnant « Cabinet ivoirien »', async () => {

@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import MentionsLegalesPage from '@/app/mentions-legales/page';
+import MentionsLegalesPage from '@/app/(site)/mentions-legales/page';
 
 describe('Page /mentions-legales', () => {
   it('rend un h1 « Informations légales »', () => {

@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+﻿import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import ExpertisesHubPage from '@/app/expertises/page';
+import ExpertisesHubPage from '@/app/(site)/expertises/page';
 
 describe('Page /expertises (hub)', () => {
   it('rend un h1 unique avec le titre du hub', () => {

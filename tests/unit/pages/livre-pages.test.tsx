@@ -1,10 +1,10 @@
-import { render, screen, within } from '@testing-library/react';
+﻿import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import LivreLandingPage from '@/app/livre/page';
-import LivreChapitresPage from '@/app/livre/chapitres/page';
-import LivreExtraitsPage from '@/app/livre/extraits/page';
-import LivreAcheterPage from '@/app/livre/acheter/page';
-import LivreCompanionPage from '@/app/livre/companion/page';
+import LivreLandingPage from '@/app/(site)/livre/page';
+import LivreChapitresPage from '@/app/(site)/livre/chapitres/page';
+import LivreExtraitsPage from '@/app/(site)/livre/extraits/page';
+import LivreAcheterPage from '@/app/(site)/livre/acheter/page';
+import LivreCompanionPage from '@/app/(site)/livre/companion/page';
 import { CHAPTERS } from '@/lib/data/book';
 
 describe('Page /livre (landing)', () => {
