@@ -73,6 +73,10 @@ export default defineConfig({
         // Routes Payload (groupe (payload)) : nécessitent Postgres au
         // runtime. Couvertes par tests d'intégration P6 (DB éphémère).
         'app/(payload)/**/*.{ts,tsx}',
+        // Composants admin custom Payload (Dashboard override) :
+        // utilisent l'API server `payload.find()/.count()` qui exige la
+        // DB. Testés en intégration (admin UI smoke) plutôt qu'en unit.
+        'components/admin/**/*.{ts,tsx}',
         // WebGL Three.js : exige chromium réel (E2E Playwright).
         'components/sections/HeroCanvas.tsx',
         'components/sections/HeroBackground.tsx',

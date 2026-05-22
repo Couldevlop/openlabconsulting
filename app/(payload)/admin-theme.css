@@ -1,0 +1,185 @@
+/**
+ * Theme OpenLab pour l'admin Payload v3 — phase 4 refonte.
+ *
+ * Override les variables CSS de Payload pour appliquer la charte OpenLab
+ * (CLAUDE.md §3) sur tout le shell admin (sidebar, top-bar, formulaires,
+ * tableaux, boutons). Le Dashboard custom (composant /components/admin/
+ * Dashboard.tsx) a son propre style inline ; cette feuille couvre TOUT
+ * le reste de l'UI Payload.
+ *
+ * Stratégie : ne pas redéfinir tous les tokens Payload (risque de
+ * casser des composants internes). On override uniquement :
+ *   - L'accent (primary) : orange OpenLab #FF5A00
+ *   - Le success / danger pour cohérence
+ *   - Le fond ambient : ivory #FAF8F5 (au lieu de blanc cassé)
+ *   - La police principale : Bricolage + Geist (CLAUDE.md §3.3,
+ *     polices interdites : Inter/Roboto/Open Sans/Poppins/Montserrat)
+ *
+ * NB : ce fichier est importé APRÈS `@payloadcms/next/css` dans le
+ * layout payload, donc les sélecteurs égaux gagnent par cascade. Pas
+ * besoin de `!important`.
+ */
+
+:root {
+  /* Tokens OpenLab — alignés sur app/globals.css */
+  --ol-orange: #ff5a00;
+  --ol-orange-dark: #cc4800;
+  --ol-night: #0a0e1a;
+  --ol-navy: #0b1b3d;
+  --ol-ivory: #faf8f5;
+  --ol-mist: #e8eaf0;
+  --ol-graphite: #1a1d24;
+}
+
+/* ============================================================
+   1. Accent primaire (Payload nomme ça --theme-success ou
+      --theme-primary selon le composant ; on cible plusieurs).
+   ============================================================ */
+[data-theme='light'],
+[data-theme='dark'] {
+  --theme-success-500: var(--ol-orange);
+  --theme-success-600: var(--ol-orange-dark);
+  --theme-success-400: #ff7a33;
+}
+
+/* Boutons primaires : orange OpenLab. Payload n'a pas un seul
+   sélecteur unique, on cible les classes connues v3. */
+.btn--style-primary,
+.btn--style-secondary.btn--style-primary,
+button.btn--style-primary {
+  background-color: var(--ol-orange);
+  border-color: var(--ol-orange);
+  color: #ffffff;
+}
+.btn--style-primary:hover {
+  background-color: var(--ol-orange-dark);
+  border-color: var(--ol-orange-dark);
+}
+
+/* Liens : accent orange au hover (au lieu du bleu Payload). */
+.nav__link:hover,
+a.nav__link:hover,
+.nav__link--active {
+  color: var(--ol-orange);
+}
+
+/* ============================================================
+   2. Typographie — polices OpenLab partout
+   ============================================================ */
+body,
+.payload-default-class,
+.nav,
+.collection-list,
+.dashboard {
+  font-family:
+    'Bricolage Grotesque',
+    'Geist',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.heading,
+.collection-list__heading {
+  font-family:
+    'Bricolage Grotesque',
+    'Geist',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  letter-spacing: -0.01em;
+}
+
+code,
+pre,
+.code-field {
+  font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+}
+
+/* ============================================================
+   3. Fond ambient — léger ivory au lieu de blanc pur
+   ============================================================ */
+[data-theme='light'] {
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: var(--ol-ivory);
+  --theme-bg: var(--ol-ivory);
+}
+
+[data-theme='light'] body,
+[data-theme='light'] .payload-default-class {
+  background-color: var(--ol-ivory);
+}
+
+/* ============================================================
+   4. Sidebar — touche signature OpenLab (orange en accent)
+   ============================================================ */
+.nav {
+  border-right: 1px solid var(--ol-mist);
+}
+
+.nav__link {
+  font-weight: 500;
+}
+
+.nav-group__label {
+  color: var(--ol-orange);
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Item sidebar actif : border-left orange (signature) */
+.nav__link--active {
+  position: relative;
+}
+.nav__link--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--ol-orange);
+}
+
+/* ============================================================
+   5. Top-bar — touche éditoriale
+   ============================================================ */
+.app-header,
+.app-header__bar {
+  border-bottom: 1px solid var(--ol-mist);
+}
+
+/* ============================================================
+   6. Tables — densité informationnelle (CLAUDE.md §4.5)
+   ============================================================ */
+.table-cell {
+  font-size: 0.875rem;
+}
+
+.collection-list__header h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   7. Mode sombre — version OpenLab night
+   ============================================================ */
+[data-theme='dark'] {
+  --theme-bg: var(--ol-night);
+  --theme-elevation-0: var(--ol-night);
+  --theme-elevation-50: #11151f;
+}
+
+/* ============================================================
+   8. Focus rings — accessibilité WCAG (CLAUDE.md §4.7)
+   ============================================================ */
+*:focus-visible {
+  outline: 2px solid var(--ol-orange);
+  outline-offset: 2px;
+}
