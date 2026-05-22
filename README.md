@@ -96,16 +96,22 @@ pnpm dev
 
 ### Où sont mes credentials ?
 
-- **Dev local** : dans `.env` (gitignored). Les variables
-  `SEED_ADMIN_EMAIL` et `SEED_ADMIN_PASSWORD` ont été utilisées par
-  `pnpm cms:seed` la première fois. Le password est désormais hashé
-  en base — si tu l’as oublié, supprime l’utilisateur via
-  `psql` (`DELETE FROM users WHERE email='...'`) et relance `pnpm cms:seed`
-  avec un nouveau password.
-- **Préprod / production** : les credentials sont stockés en
-  SealedSecrets dans le cluster K3s (CLAUDE.md §14.8). Pour les
-  réinitialiser, voir `deploy/scripts/rollback-admin.sh` (à venir P11)
-  ou `kubectl exec` dans le pod pour lancer un re-seed.
+- **Dev local** :
+  - `.env` (gitignored) contient `SEED_ADMIN_EMAIL` et `SEED_ADMIN_PASSWORD`
+    utilisés par `pnpm cms:seed`. Le password est hashé en base
+    après seed.
+  - `.dev-credentials.local.md` (gitignored, motif `*.local.md`) :
+    aide-mémoire qui agrège les credentials Postgres/MinIO/Meilisearch
+    - l’admin Payload. Pratique mais **strictement local** — vérifie
+      régulièrement que `git status` ne le voit pas (sinon `.gitignore`
+      est cassé, stop tout).
+  - Si tu as oublié le password : supprime l’utilisateur via
+    `psql` (`DELETE FROM users WHERE email='...'`) puis relance
+    `pnpm cms:seed` avec un nouveau password.
+- **Préprod / production** : SealedSecrets dans le cluster K3s
+  (CLAUDE.md §14.8). Pour réinitialiser, voir
+  `deploy/scripts/rollback-admin.sh` (à venir P11) ou `kubectl exec`
+  dans le pod pour lancer un re-seed.
 
 ### Rôles disponibles (RBAC §11.3)
 
