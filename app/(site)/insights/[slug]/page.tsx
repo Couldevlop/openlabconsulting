@@ -10,6 +10,11 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { getArticleBySlug } from '@/lib/articles-server';
+import {
+  articleSchema,
+  breadcrumbSchema,
+  jsonLdString,
+} from '@/lib/seo/schema';
 
 interface PageParams {
   params: Promise<{ slug: string }>;
@@ -42,8 +47,33 @@ export default async function InsightArticlePage({
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
+  const jsonLd = jsonLdString([
+    articleSchema({
+      slug: article.slug,
+      headline: article.title,
+      description: article.excerpt,
+      author: article.author,
+      isoDatePublished: article.isoDate,
+      imageUrl: article.cover.src ?? undefined,
+      category: article.categoryLabel,
+    }),
+    breadcrumbSchema([
+      { name: 'Accueil', url: '/' },
+      { name: 'Insights', url: '/insights' },
+      {
+        name: article.categoryLabel,
+        url: `/insights/categorie/${article.category}`,
+      },
+      { name: article.title, url: `/insights/${article.slug}` },
+    ]),
+  ]);
+
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <Breadcrumbs
         items={[
           { label: 'Insights', href: '/insights' },

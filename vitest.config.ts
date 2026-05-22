@@ -81,6 +81,9 @@ export default defineConfig({
         // NB : glob `app/**/opengraph-image.tsx` couvre le déplacement
         // dans le route group `(site)/` (cf. PR fix/payload-route-group).
         'app/**/opengraph-image.tsx',
+        // Template OG partagé — réutilisé par les opengraph-image.tsx.
+        // Idem ImageResponse PNG binaire, non testable en jsdom.
+        'lib/seo/og-image-template.tsx',
         // sitemap / robots : compilés par Next en routes spéciales
         // (testés en E2E via curl /sitemap.xml /robots.txt).
         // Les helpers sont testés via les tests dédiés.

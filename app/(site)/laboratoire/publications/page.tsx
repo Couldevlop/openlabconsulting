@@ -8,6 +8,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { PUBLICATIONS, type Publication } from '@/lib/data/laboratoire';
+import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Publications — Laboratoire OpenLab',
@@ -15,6 +16,14 @@ export const metadata: Metadata = {
     'Livre IA & Agents Autonomes, livres blancs souveraineté + paie, conférences. Toutes les sorties publiques de la R&D OpenLab.',
   alternates: { canonical: '/laboratoire/publications' },
 };
+
+const breadcrumbJsonLd = jsonLdString(
+  breadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Laboratoire', url: '/laboratoire' },
+    { name: 'Publications', url: '/laboratoire/publications' },
+  ]),
+);
 
 const TYPE_LABEL: Record<Publication['type'], string> = {
   livre: 'Livre',
@@ -36,6 +45,10 @@ export default function LaboratoirePublicationsPage(): React.ReactElement {
 
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       <section
         aria-labelledby="publications-title"
         className="bg-[var(--color-ol-ivory)] py-24 sm:py-32"

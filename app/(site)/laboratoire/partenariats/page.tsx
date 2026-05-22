@@ -8,6 +8,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { PARTENARIATS, type Partenariat } from '@/lib/data/laboratoire';
+import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Partenariats — Laboratoire OpenLab',
@@ -15,6 +16,14 @@ export const metadata: Metadata = {
     'Partenaires universitaires (Université Félix Houphouët-Boigny, ESATIC), publics (SODEXAM, Conseil Café-Cacao) et éditoriaux (Jeune Afrique Business+). Notre R&D ne marche jamais seule.',
   alternates: { canonical: '/laboratoire/partenariats' },
 };
+
+const breadcrumbJsonLd = jsonLdString(
+  breadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Laboratoire', url: '/laboratoire' },
+    { name: 'Partenariats', url: '/laboratoire/partenariats' },
+  ]),
+);
 
 const TYPE_LABEL: Record<Partenariat['type'], string> = {
   universitaire: 'Universitaire',
@@ -44,6 +53,10 @@ export default function LaboratoirePartenariatsPage(): React.ReactElement {
 
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       <section
         aria-labelledby="partenariats-title"
         className="bg-[var(--color-ol-ivory)] py-24 sm:py-32"

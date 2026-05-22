@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { SITE } from '@/lib/seo/site';
+import { SITE, hreflangMap } from '@/lib/seo/site';
 
 /**
  * Layout racine — **passthrough**.
@@ -74,6 +74,8 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    // Hreflang fr-CI / fr-FR / x-default — audit P2 §7 item #1.
+    languages: hreflangMap('/'),
   },
 };
 

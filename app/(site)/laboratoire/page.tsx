@@ -15,6 +15,7 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Laboratoire — R&D, publications, partenariats',
@@ -85,9 +86,20 @@ const PUBLICATIONS_PREVIEW = [
   },
 ];
 
+const breadcrumbJsonLd = jsonLdString(
+  breadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Laboratoire', url: '/laboratoire' },
+  ]),
+);
+
 export default function LaboratoirePage(): React.ReactElement {
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       {/* Hero — fond night signature */}
       <section
         aria-labelledby="laboratoire-page-title"

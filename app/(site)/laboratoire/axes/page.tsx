@@ -8,6 +8,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { RD_AXES } from '@/lib/data/laboratoire';
+import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Axes R&D — Laboratoire OpenLab',
@@ -16,9 +17,21 @@ export const metadata: Metadata = {
   alternates: { canonical: '/laboratoire/axes' },
 };
 
+const breadcrumbJsonLd = jsonLdString(
+  breadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Laboratoire', url: '/laboratoire' },
+    { name: 'Axes R&D', url: '/laboratoire/axes' },
+  ]),
+);
+
 export default function LaboratoireAxesPage(): React.ReactElement {
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       <section
         aria-labelledby="axes-title"
         className="bg-[var(--color-ol-night)] py-24 text-[var(--color-ol-ivory)] sm:py-32"

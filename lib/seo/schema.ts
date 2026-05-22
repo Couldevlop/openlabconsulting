@@ -235,6 +235,51 @@ export function personSchema(person: {
   };
 }
 
+/**
+ * Article schema enrichi pour /insights/[slug] — audit P2 §7 item #3.
+ *
+ * Champs requis Google : headline, image, datePublished, author.
+ * Champs recommandés ajoutés : description, dateModified, wordCount,
+ * articleSection, mainEntityOfPage, publisher, inLanguage.
+ *
+ * Le helper accepte un author en string (cas fallback hard-codé) OU
+ * en objet Person détaillé (cas Payload).
+ */
+export function articleSchema(article: {
+  slug: string;
+  headline: string;
+  description: string;
+  author: string;
+  isoDatePublished: string;
+  isoDateModified?: string;
+  imageUrl?: string;
+  wordCount?: number;
+  category?: string;
+}): Thing {
+  const url = absoluteUrl(`/insights/${article.slug}`);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.headline,
+    description: article.description,
+    image: article.imageUrl
+      ? [article.imageUrl]
+      : [absoluteUrl(`/insights/${article.slug}/opengraph-image`)],
+    datePublished: article.isoDatePublished,
+    dateModified: article.isoDateModified ?? article.isoDatePublished,
+    author: {
+      '@type': 'Person',
+      name: article.author,
+      affiliation: { '@id': absoluteUrl('/#organization') },
+    },
+    publisher: { '@id': absoluteUrl('/#organization') },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    inLanguage: SITE.language,
+    ...(article.wordCount ? { wordCount: article.wordCount } : {}),
+    ...(article.category ? { articleSection: article.category } : {}),
+  };
+}
+
 /** FAQPage schema — utilisé sur chaque page produit (§7.1 FAQ). */
 export function faqPageSchema(
   faq: readonly { question: string; answer: string }[],
