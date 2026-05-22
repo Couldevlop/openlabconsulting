@@ -10,6 +10,7 @@ import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { Reassurance } from '@/components/sections/Reassurance';
 import { Solutions } from '@/components/sections/Solutions';
+import { getHeroContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'OpenLab Consulting — IA, R&D et conseil pour l’Afrique francophone',
@@ -17,10 +18,11 @@ export const metadata: Metadata = {
     'Cabinet ivoirien d’IA appliquée, R&D produit (NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City) et publication de référence pour l’Afrique francophone.',
 };
 
-export default function HomePage(): React.ReactElement {
+export default async function HomePage(): Promise<React.ReactElement> {
+  const heroContent = await getHeroContent();
   return (
     <main id="main">
-      <Hero background={<HeroBackground />} />
+      <Hero background={<HeroBackground />} content={heroContent} />
       <Reassurance />
       <Expertises />
       <Laboratoire />

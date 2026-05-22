@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { HERO_FALLBACK, type HeroContent } from '@/lib/cms/site-settings';
 
 interface HeroProps {
   /**
@@ -12,6 +13,12 @@ interface HeroProps {
    * Si absent, seul le dégradé signature reste visible.
    */
   background?: ReactNode;
+  /**
+   * Contenu textuel injecté depuis le CMS via le wrapper
+   * `HeroFromCMS` (server component). Reste optionnel pour permettre
+   * les tests unitaires synchrones et garder le fallback statique.
+   */
+  content?: HeroContent;
 }
 
 /**
@@ -29,7 +36,10 @@ interface HeroProps {
  * - Above-the-fold : eyebrow + headline + sub + CTA primaire + CTA secondaire
  * - Touch targets ≥ 44 px (Button size="lg" = min-h-12)
  */
-export function Hero({ background }: HeroProps = {}): ReactElement {
+export function Hero({
+  background,
+  content = HERO_FALLBACK,
+}: HeroProps = {}): ReactElement {
   return (
     <section
       aria-labelledby="hero-title"
@@ -73,38 +83,41 @@ export function Hero({ background }: HeroProps = {}): ReactElement {
         width="wide"
         className="relative flex min-h-[90vh] flex-col justify-center py-24 sm:py-32"
       >
-        <Eyebrow tone="orange">L’écosystème OpenLab</Eyebrow>
+        <Eyebrow tone="orange">{content.eyebrow}</Eyebrow>
 
         <Heading
           id="hero-title"
           level={1}
           className="mt-6 max-w-4xl text-[var(--color-ol-ivory)]"
         >
-          L’IA, au service{' '}
+          {content.headlineLead}{' '}
           <span className="text-[var(--color-ol-orange)]">
-            des réalités africaines.
+            {content.headlineHighlight}
           </span>
         </Heading>
 
         <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[var(--color-ol-ivory)]/80 sm:text-xl">
-          Cabinet ivoirien d’IA appliquée, R&amp;D produit et publication de
-          référence pour l’Afrique francophone. Conseil, intégration, sept
-          logiciels propriétaires et un livre de référence — sous le même toit.
+          {content.subtitle}
         </p>
 
         <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-          <Button as="a" href="/audit-ia" variant="primary" size="lg">
-            Demander un audit IA gratuit
+          <Button
+            as="a"
+            href={content.primaryCta.href}
+            variant="primary"
+            size="lg"
+          >
+            {content.primaryCta.label}
             <ArrowRight aria-hidden size={20} />
           </Button>
           <Button
             as="a"
-            href="/solutions"
+            href={content.secondaryCta.href}
             variant="ghost"
             size="lg"
             className="border border-[var(--color-ol-ivory)]/20 text-[var(--color-ol-ivory)] hover:bg-[var(--color-ol-ivory)]/10 hover:text-[var(--color-ol-ivory)]"
           >
-            Découvrir l’écosystème produits
+            {content.secondaryCta.label}
           </Button>
         </div>
 
@@ -113,7 +126,7 @@ export function Hero({ background }: HeroProps = {}): ReactElement {
             aria-hidden
             className="block h-px w-12 bg-[var(--color-ol-ivory)]/30"
           />
-          Faites défiler pour explorer
+          {content.scrollCueLabel}
           <ArrowDown aria-hidden size={16} />
         </p>
       </Container>
