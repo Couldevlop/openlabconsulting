@@ -70,3 +70,8 @@ payload-types.ts
 schema.graphql
 .payload/
 media/
+
+# Credentials dev — JAMAIS commit (OWASP §10 A02 + A07).
+# Convention : tout fichier `.local.md` est ignoré par git.
+*.local.md
+.dev-credentials.md

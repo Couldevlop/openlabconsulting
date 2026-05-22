@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { Badge } from '@/components/atoms/Badge';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Container } from '@/components/atoms/Container';
@@ -146,7 +146,7 @@ export default async function InsightArticlePage({
         </Container>
       </section>
 
-      <AuditIaCta />
+      <AuditIaCtaServer />
     </main>
   );
 }

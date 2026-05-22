@@ -63,6 +63,84 @@ feat/*       ┄●━━●        ●━━●    ●━━●     ← chaque 
 - **Hook Git client-side** (`.husky/pre-push`) : refuse tout `git push` qui ciblerait `refs/heads/main`. Première ligne de défense.
 - **Branch protection GitHub** _(à activer côté serveur)_ : sur `main`, exiger PR + reviews + status checks verts, interdire force-push et bypass. Settings → Branches → Add rule pour `main`. C'est l'enforcement non contournable.
 
+## Accéder à l’administration Payload
+
+L’admin Payload est servi sur `/admin` du même domaine que le site
+public (CLAUDE.md §9). Aucun déploiement séparé. Charte OpenLab
+appliquée (refonte P2 phase 4), dashboard custom (phase 3).
+
+### Première mise en route (dev local)
+
+```bash
+# 1. Démarrer les dépendances
+docker compose up -d postgres redis minio meilisearch
+
+# 2. Configurer les variables d'env du seed dans .env (NE PAS COMMIT)
+#    cf. .env.example lignes SEED_ADMIN_*
+#    Le password doit faire 12+ caractères, zxcvbn ≥ 3 (CLAUDE.md §11.2).
+cp .env.example .env
+$EDITOR .env   # remplir SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD / SEED_ADMIN_NAME
+
+# 3. Migrations + seed initial (idempotent)
+pnpm db:migrate
+pnpm cms:generate-importmap   # rebuild l'importMap admin
+pnpm cms:seed                 # crée le super-admin via SEED_ADMIN_*
+
+# 4. Lancer le site
+pnpm dev
+
+# 5. Ouvrir http://localhost:3000/admin et se connecter avec
+#    l'email + password définis dans .env. 2FA TOTP est proposé
+#    à la première connexion (CLAUDE.md §11.2 — obligatoire).
+```
+
+### Où sont mes credentials ?
+
+- **Dev local** :
+  - `.env` (gitignored) contient `SEED_ADMIN_EMAIL` et `SEED_ADMIN_PASSWORD`
+    utilisés par `pnpm cms:seed`. Le password est hashé en base
+    après seed.
+  - `.dev-credentials.local.md` (gitignored, motif `*.local.md`) :
+    aide-mémoire qui agrège les credentials Postgres/MinIO/Meilisearch
+    - l’admin Payload. Pratique mais **strictement local** — vérifie
+      régulièrement que `git status` ne le voit pas (sinon `.gitignore`
+      est cassé, stop tout).
+  - Si tu as oublié le password : supprime l’utilisateur via
+    `psql` (`DELETE FROM users WHERE email='...'`) puis relance
+    `pnpm cms:seed` avec un nouveau password.
+- **Préprod / production** : SealedSecrets dans le cluster K3s
+  (CLAUDE.md §14.8). Pour réinitialiser, voir
+  `deploy/scripts/rollback-admin.sh` (à venir P11) ou `kubectl exec`
+  dans le pod pour lancer un re-seed.
+
+### Rôles disponibles (RBAC §11.3)
+
+| Rôle           | Permissions principales                                      |
+| -------------- | ------------------------------------------------------------ |
+| `SUPER_ADMIN`  | Tout + gestion users + paramètres système                    |
+| `ADMIN`        | Tout sauf gestion users                                      |
+| `EDITOR_CHIEF` | CRUD contenu (articles, produits, livre) + voit leads        |
+| `EDITOR`       | CRUD articles, médias, FAQs                                  |
+| `AUTHOR`       | CRUD ses propres articles uniquement (soumission validation) |
+| `VIEWER`       | Lecture seule (dashboard, KPIs)                              |
+
+Toujours créer un compte `SUPER_ADMIN` en premier (via `pnpm cms:seed`),
+puis créer les autres comptes depuis le back-office en attribuant
+le rôle approprié.
+
+### Sécurité — règles non négociables
+
+1. **JAMAIS de credentials dans le repo Git** (README, code source,
+   migrations, commentaires). Public ou privé. Les passwords doivent
+   vivre dans `.env` (gitignored) en dev et SealedSecrets en prod.
+2. **2FA TOTP obligatoire** pour tout compte `ADMIN` et au-dessus
+   (CLAUDE.md §11.2).
+3. **Rotation 6 mois** des passwords admin. Politique enforced via
+   le hook `beforeChange` sur la collection `users`.
+4. **Audit log** : toute action sensible apparaît dans
+   `/admin/collections/auditLog` (et dans la card « Activité récente »
+   du dashboard).
+
 ## Stack
 
 Next.js 15 · React 19 · TypeScript strict · Tailwind v4 · Vitest · Playwright · Docker distroless · K3s Hetzner.
