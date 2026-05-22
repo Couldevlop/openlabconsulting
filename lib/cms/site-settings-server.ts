@@ -103,9 +103,26 @@ export async function getHeroContent(): Promise<HeroContent> {
 
 export async function getManifestoContent(): Promise<ManifestoContent> {
   const raw = await readGlobal('manifesto-settings', MANIFESTO_FALLBACK);
+  // Normalisation des stances : Payload renvoie {id?, excuse, fact},
+  // on garde uniquement excuse + fact (strings non vides).
+  const stances = Array.isArray(raw.stances)
+    ? raw.stances
+        .filter(
+          (
+            s,
+          ): s is { excuse: string; fact: string } & Record<string, unknown> =>
+            typeof s === 'object' &&
+            s !== null &&
+            'excuse' in s &&
+            'fact' in s &&
+            typeof (s as { excuse: unknown }).excuse === 'string' &&
+            typeof (s as { fact: unknown }).fact === 'string',
+        )
+        .map((s) => ({ excuse: s.excuse, fact: s.fact }))
+    : [];
   return {
     ...raw,
-    stances: normalizeTextArray(raw.stances, MANIFESTO_FALLBACK.stances),
+    stances: stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances,
   };
 }
 

@@ -20,10 +20,13 @@ describe('lib/cms/site-settings — fallbacks', () => {
     expect(HERO_FALLBACK.secondaryCta.href).toBe('/solutions');
   });
 
-  it('MANIFESTO_FALLBACK : 3 stances + signature Debora', () => {
+  it('MANIFESTO_FALLBACK : 3 stances + signature Debora + headline highlight Afrique', () => {
     expect(MANIFESTO_FALLBACK.stances).toHaveLength(3);
     expect(MANIFESTO_FALLBACK.signature.name).toBe('Debora Ahouma');
-    expect(MANIFESTO_FALLBACK.headline).toMatch(/Afrique/i);
+    expect(MANIFESTO_FALLBACK.headlineHighlight).toMatch(/Afrique/i);
+    expect(MANIFESTO_FALLBACK.stances[0]?.excuse).toMatch(/outils/i);
+    expect(MANIFESTO_FALLBACK.stances[0]?.fact).toMatch(/Sept logiciels/i);
+    expect(MANIFESTO_FALLBACK.signature.locationDate).toContain('Abidjan');
   });
 
   it('AUDIT_IA_CTA_FALLBACK : CTA pointe vers /audit-ia + 3 bullets', () => {
@@ -33,11 +36,15 @@ describe('lib/cms/site-settings — fallbacks', () => {
     ).toBeGreaterThanOrEqual(3);
   });
 
-  it('FOOTER_FALLBACK : 3 colonnes (Cabinet, Écosystème, Publications)', () => {
+  it('FOOTER_FALLBACK : 4 colonnes (Expertises, Solutions, Ressources, OpenLab)', () => {
     const titles = FOOTER_FALLBACK.columns.map((c) => c.title);
-    expect(titles).toContain('Cabinet');
-    expect(titles).toContain('Écosystème');
-    expect(titles).toContain('Publications');
+    expect(titles).toEqual([
+      'Expertises',
+      'Solutions',
+      'Ressources',
+      'OpenLab',
+    ]);
+    expect(FOOTER_FALLBACK.copyright).toContain('RCCM');
   });
 
   it('FOOTER_FALLBACK : chaque lien a un href interne ou externe valide', () => {

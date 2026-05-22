@@ -17,19 +17,39 @@ export interface HeroContent {
   scrollCueLabel: string;
 }
 
+export interface ManifestoStance {
+  excuse: string;
+  fact: string;
+}
+
 export interface ManifestoContent {
   eyebrow: string;
   headline: string;
-  stances: readonly string[];
-  signature: { name: string; role: string };
+  headlineHighlight: string;
+  intro: string;
+  stances: readonly ManifestoStance[];
+  conclusion: string;
+  signature: { name: string; role: string; locationDate: string };
+}
+
+export interface AuditIaCtaWhitepaper {
+  badge: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+  footnote: string;
 }
 
 export interface AuditIaCtaContent {
   eyebrow: string;
-  headline: string;
+  headlineLead: string;
+  headlineHighlight: string;
   description: string;
   cta: { label: string; href: string };
   reassuranceBullets: readonly string[];
+  whitepaperCard: AuditIaCtaWhitepaper;
 }
 
 export interface FooterContent {
@@ -57,59 +77,105 @@ export const HERO_FALLBACK: HeroContent = {
 };
 
 export const MANIFESTO_FALLBACK: ManifestoContent = {
-  eyebrow: 'Notre manifeste',
-  headline: 'Cette fois, l’Afrique n’a plus d’excuse.',
+  eyebrow: 'Manifeste',
+  headline: 'Cette fois,',
+  headlineHighlight: 'l’Afrique n’a plus d’excuse.',
+  intro:
+    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec sept produits, un livre, et un cluster Kubernetes à Abidjan.',
   stances: [
-    'La data est notre pétrole. L’IA est notre raffinerie.',
-    'Vos coûts vous étouffent. L’IA peut les diviser.',
-    'La fraude est devenue invisible. L’IA la rend indétectable.',
+    {
+      excuse: '« On n’a pas les outils. »',
+      fact: 'Sept logiciels propriétaires produits à Abidjan. SYSCOHADA, CNPS, Mobile Money — natifs.',
+    },
+    {
+      excuse: '« On n’a pas la recherche. »',
+      fact: 'Un livre IA publié à Abidjan, capstone terrain ivoirien, lu par étudiants et dirigeants.',
+    },
+    {
+      excuse: '« On n’a pas la souveraineté. »',
+      fact: 'K3s Hetzner, audit total, RGPD intégral, données en Europe, gouvernance francophone.',
+    },
   ],
-  signature: { name: 'Debora Ahouma', role: 'CEO, OpenLab Consulting' },
+  conclusion:
+    'Ce n’est pas un manifeste pour 2035. C’est un état des lieux pour aujourd’hui.',
+  signature: {
+    name: 'Debora Ahouma',
+    role: 'Fondatrice & CEO · OpenLab Consulting',
+    locationDate: 'Abidjan · Mai 2026',
+  },
 };
 
 export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {
   eyebrow: 'Audit IA gratuit',
-  headline: '90 minutes pour cartographier votre IA.',
+  headlineLead: 'Trente minutes pour savoir si l’IA',
+  headlineHighlight: 'vous fera gagner du temps',
   description:
-    'Un appel structuré avec nos consultants pour identifier 3 leviers d’automatisation prioritaires dans votre organisation.',
-  cta: { label: 'Demander un audit IA gratuit', href: '/audit-ia' },
+    'Un cadrage gratuit, mené par un consultant senior. Vous repartez avec une cartographie de vos cas d’usage IA, une estimation ROI et trois prochaines étapes activables.',
+  cta: { label: 'Démarrer mon audit', href: '/audit-ia' },
   reassuranceBullets: [
-    '100% gratuit, sans engagement',
+    'Pas de spam, pas de revente',
     'Restitution sous 5 jours ouvrés',
     'Confidentialité contractuelle',
   ],
+  whitepaperCard: {
+    badge: 'Livre blanc · 2026',
+    title: 'L’IA souveraine en Côte d’Ivoire',
+    subtitle: 'Feuille de route pratique pour les dirigeants en 2026',
+    description:
+      'Quatre piliers, douze décisions clés, six pièges à éviter. Le guide qu’un comité de direction lit en deux heures et applique en six mois.',
+    ctaLabel: 'Télécharger le livre blanc',
+    ctaHref: '/livres-blancs/ia-souveraine-ci-2026',
+    footnote: 'Accès gratuit · PDF · ~25 pages · email pro requis.',
+  },
 };
 
 export const FOOTER_FALLBACK: FooterContent = {
   tagline:
-    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence.',
+    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone.',
   columns: [
     {
-      title: 'Cabinet',
+      title: 'Expertises',
+      links: [
+        {
+          label: 'Conseil & stratégie IA',
+          href: '/expertises/conseil-strategie',
+        },
+        {
+          label: 'Agents & automatisation',
+          href: '/expertises/agents-automatisation',
+        },
+        { label: 'Data & gouvernance', href: '/expertises/data-gouvernance' },
+        { label: 'Cybersécurité IA', href: '/expertises/cybersecurite-ia' },
+      ],
+    },
+    {
+      title: 'Solutions',
+      links: [
+        { label: 'NexusRH CI', href: '/solutions/nexusrh' },
+        { label: 'NexusERP', href: '/solutions/nexuserp' },
+        { label: 'SYGESCOM', href: '/solutions/sygescom' },
+        { label: 'AgroSense CI', href: '/solutions/agrosense' },
+        { label: 'QualitOS', href: '/solutions/qualitos' },
+        { label: 'Fraud Shield', href: '/solutions/fraud-shield' },
+        { label: 'Smart City', href: '/solutions/smart-city' },
+      ],
+    },
+    {
+      title: 'Ressources',
+      links: [
+        { label: 'Livre IA', href: '/livre' },
+        { label: 'Insights', href: '/insights' },
+        { label: 'Publications', href: '/laboratoire/publications' },
+        { label: 'Audit IA gratuit', href: '/audit-ia' },
+      ],
+    },
+    {
+      title: 'OpenLab',
       links: [
         { label: 'À propos', href: '/a-propos' },
         { label: 'Équipe', href: '/a-propos/equipe' },
+        { label: 'Carrières', href: '/a-propos/carrieres' },
         { label: 'Contact', href: '/contact' },
-      ],
-    },
-    {
-      title: 'Écosystème',
-      links: [
-        { label: 'Expertises', href: '/expertises' },
-        { label: 'Solutions', href: '/solutions' },
-        { label: 'Secteurs', href: '/secteurs' },
-        { label: 'Laboratoire', href: '/laboratoire' },
-      ],
-    },
-    {
-      title: 'Publications',
-      links: [
-        { label: 'Livre IA', href: '/livre' },
-        {
-          label: 'Livres blancs',
-          href: '/livres-blancs/ia-souveraine-ci-2026',
-        },
-        { label: 'Insights', href: '/insights' },
       ],
     },
   ],
@@ -119,5 +185,6 @@ export const FOOTER_FALLBACK: FooterContent = {
       url: 'https://www.linkedin.com/company/openlab-consulting',
     },
   ],
-  copyright: 'OpenLab Consulting · Tous droits réservés.',
+  copyright:
+    'OpenLab Consulting SARL — RCCM CI-ABJ-03-2022-B13-03239. Tous droits réservés.',
 };
