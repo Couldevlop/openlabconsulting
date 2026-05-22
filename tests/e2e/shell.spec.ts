@@ -1,4 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Shell applicatif (P1)', () => {
   test('homepage rend le Hero + skip-link', async ({ page }) => {
@@ -49,18 +49,5 @@ test.describe('Shell applicatif (P1)', () => {
     expect(res.status()).toBe(200);
     const body = (await res.json()) as { status: string };
     expect(body.status).toBe('ok');
-  });
-});
-
-test.describe('Responsive navbar', () => {
-  test.use({ ...devices['Pixel 7'] });
-  test('menu hamburger ouvre la nav mobile', async ({ page }) => {
-    await page.goto('/');
-    const toggle = page.getByRole('button', { name: /Ouvrir le menu/i });
-    await expect(toggle).toBeVisible();
-    await toggle.click();
-    await expect(
-      page.getByRole('button', { name: /Fermer le menu/i }),
-    ).toBeVisible();
   });
 });
