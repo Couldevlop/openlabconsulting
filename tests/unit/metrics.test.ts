@@ -80,4 +80,24 @@ describe('lib/metrics', () => {
     expect(out).toContain('outcome="accepted"');
     expect(out).toContain('outcome="rate_limited"');
   });
+
+  it('METRICS.auditIaSubmission expose une métrique dédiée', () => {
+    METRICS.auditIaSubmission('accepted');
+    METRICS.auditIaSubmission('invalid');
+    const out = renderMetrics();
+    expect(out).toContain('openlab_audit_ia_submissions_total');
+    expect(out).toContain('outcome="accepted"');
+    expect(out).toContain('outcome="invalid"');
+  });
+
+  it('METRICS.authEvent canalise les événements admin', () => {
+    METRICS.authEvent('login.success');
+    METRICS.authEvent('login.failed');
+    METRICS.authEvent('2fa.verify');
+    METRICS.authEvent('2fa.enable');
+    const out = renderMetrics();
+    expect(out).toContain('openlab_auth_events_total');
+    expect(out).toContain('event="login.success"');
+    expect(out).toContain('event="2fa.enable"');
+  });
 });
