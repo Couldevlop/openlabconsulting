@@ -41,3 +41,32 @@ export function absoluteUrl(path: string): string {
   const clean = path.startsWith('/') ? path : `/${path}`;
   return `${SITE.url}${clean}`;
 }
+
+/**
+ * Locales cibles pour hreflang — audit P2 §7 item #1.
+ *
+ * OpenLab vise simultanément le marché ivoirien (fr-CI), la diaspora
+ * + clients UEMOA/France (fr-FR), et `x-default` comme fallback Google
+ * pour tout autre fr-* ou requête sans préférence régionale.
+ *
+ * Le site n'a qu'une seule version linguistique — on déclare donc la
+ * MÊME URL pour les 3 codes, ce qui signale à Google que la page
+ * dessert ces 3 audiences. Pattern recommandé pour mono-locale
+ * multi-marchés (cf. Google Search Central, hreflang FAQ).
+ */
+export const HREFLANG_LOCALES = ['fr-CI', 'fr-FR', 'x-default'] as const;
+export type HreflangLocale = (typeof HREFLANG_LOCALES)[number];
+
+/**
+ * Construit la map `alternates.languages` pour Next 15 metadata.
+ * Utilisé par `app/layout.tsx` au niveau racine et par chaque route
+ * qui override `alternates.canonical`.
+ */
+export function hreflangMap(path: string): Record<HreflangLocale, string> {
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  return {
+    'fr-CI': clean,
+    'fr-FR': clean,
+    'x-default': clean,
+  };
+}
