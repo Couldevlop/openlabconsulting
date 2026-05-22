@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import PolitiqueConfidentialitePage from '@/app/politique-confidentialite/page';
+import PolitiqueConfidentialitePage from '@/app/(site)/politique-confidentialite/page';
 
 describe('Page /politique-confidentialite', () => {
   it('rend un h1 « Politique de confidentialité »', () => {

@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import NotFoundPage from '@/app/not-found';
+import NotFoundPage from '@/app/(site)/not-found';
 
 describe('Page 404 — not-found.tsx', () => {
   it('rend un h1 « Ici, c’est le bout du chemin »', () => {

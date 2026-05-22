@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import WhitepaperPage from '@/app/livres-blancs/[slug]/page';
+import WhitepaperPage from '@/app/(site)/livres-blancs/[slug]/page';
 
 describe('Page /livres-blancs/[slug]', () => {
   it('rend la fiche pour le slug connu « ia-souveraine-ci-2026 »', async () => {
@@ -32,7 +32,7 @@ describe('Page /livres-blancs/[slug]', () => {
   });
 
   it('generateStaticParams retourne au moins un slug', async () => {
-    const mod = await import('@/app/livres-blancs/[slug]/page');
+    const mod = await import('@/app/(site)/livres-blancs/[slug]/page');
     const params = mod.generateStaticParams();
     expect(params.length).toBeGreaterThan(0);
     expect(params[0]?.slug).toBe('ia-souveraine-ci-2026');

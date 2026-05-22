@@ -30,7 +30,6 @@ export function JsonLd({ data, nonce }: JsonLdProps): ReactElement {
     <script
       type="application/ld+json"
       nonce={nonce}
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
         __html: jsonLdString(data as Parameters<typeof jsonLdString>[0]),
       }}

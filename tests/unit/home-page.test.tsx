@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 // CasesCarouselServer est un async Server Component qui interroge Payload.
@@ -17,7 +17,7 @@ vi.mock('@/components/sections/InsightsServer', async () => {
   return { InsightsServer: () => <Insights /> };
 });
 
-import HomePage from '@/app/page';
+import HomePage from '@/app/(site)/page';
 
 describe('HomePage (P2 — homepage §6)', () => {
   it('rend le Hero comme première section', () => {

@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import LaboratoirePage from '@/app/laboratoire/page';
+import LaboratoirePage from '@/app/(site)/laboratoire/page';
 
 describe('Page /laboratoire', () => {
   it('rend un h1 mentionnant « qui publie »', () => {

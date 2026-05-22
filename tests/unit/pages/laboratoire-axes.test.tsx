@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import LaboratoireAxesPage from '@/app/laboratoire/axes/page';
+import LaboratoireAxesPage from '@/app/(site)/laboratoire/axes/page';
 import { RD_AXES } from '@/lib/data/laboratoire';
 
 describe('Page /laboratoire/axes', () => {
