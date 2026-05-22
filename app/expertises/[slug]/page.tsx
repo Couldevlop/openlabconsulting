@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
@@ -59,6 +60,12 @@ export default async function ExpertiseDetailPage({
             { name: 'Expertises', url: '/expertises' },
             { name: expertise.title, url: `/expertises/${expertise.slug}` },
           ]),
+        ]}
+      />
+      <Breadcrumbs
+        items={[
+          { label: 'Expertises', href: '/expertises' },
+          { label: expertise.title },
         ]}
       />
       {/* Hero — fond ivory pour rester cohérent avec /expertises hub */}

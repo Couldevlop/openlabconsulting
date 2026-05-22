@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
@@ -67,6 +68,12 @@ export default async function SecteurDetailPage({
             { name: 'Secteurs', url: '/secteurs' },
             { name: sector.name, url: `/secteurs/${sector.slug}` },
           ]),
+        ]}
+      />
+      <Breadcrumbs
+        items={[
+          { label: 'Secteurs', href: '/secteurs' },
+          { label: sector.name },
         ]}
       />
       {/* Hero */}

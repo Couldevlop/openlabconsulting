@@ -9,7 +9,8 @@
   },
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
     "dev:full": "docker-compose up -d postgres redis minio && pnpm db:migrate && pnpm cms:seed && pnpm dev",
     "build": "next build",
     "start": "next start",
@@ -25,7 +26,7 @@
     "test:e2e:ui": "playwright test --ui",
     "prepare": "husky",
     "cms:generate-types": "payload generate:types",
-    "cms:generate-importmap": "payload generate:importmap",
+    "cms:generate-importmap": "tsx --env-file=.env scripts/payload-importmap.ts",
     "cms:seed": "tsx --env-file=.env scripts/cms-seed.ts",
     "db:migrate": "tsx --env-file=.env scripts/payload-migrate.ts",
     "db:migrate:create": "payload migrate:create",

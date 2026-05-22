@@ -65,80 +65,39 @@ export default defineConfig({
       exclude: [
         '**/*.d.ts',
         '**/*.test.{ts,tsx}',
+        // Fichiers Next « shells » : layout, loading, error, not-found
+        // root sont des renderers — pas de logique métier à tester.
         'app/**/layout.tsx',
         'app/**/loading.tsx',
         'app/**/error.tsx',
-        'app/**/not-found.tsx',
-        // WebGL / Three.js : non testable en jsdom (pas de WebGL context).
-        // Couvert par E2E Playwright (chromium réel) à partir de P2.
+        // Routes Payload (groupe (payload)) : nécessitent Postgres au
+        // runtime. Couvertes par tests d'intégration P6 (DB éphémère).
+        'app/(payload)/**/*.{ts,tsx}',
+        // WebGL Three.js : exige chromium réel (E2E Playwright).
         'components/sections/HeroCanvas.tsx',
         'components/sections/HeroBackground.tsx',
-        // Routes Payload (groupe (payload)) : nécessitent Postgres au
-        // runtime, non testables en unit. Couvertes par tests d'intégration
-        // contre une DB éphémère en P6 raffinement.
-        'app/(payload)/**/*.{ts,tsx}',
-        // Pages "markup" légales / contact / audit landing : du JSX
-        // statique sans logique. Tests E2E Playwright à activer pour ces
-        // pages (P2+ progress). Pas pertinent en couverture unit.
-        'app/contact/page.tsx',
-        'app/mentions-legales/page.tsx',
-        'app/politique-confidentialite/page.tsx',
-        'app/audit-ia/page.tsx',
-        // Page racine de l'OG image (génère un PNG, pas de logique testable
-        // en jsdom — testée par Playwright qui hit l'URL réelle).
+        // OG images : ImageResponse (@vercel/og) exige edge runtime +
+        // génère PNG binaire. Testées en E2E (curl /opengraph-image).
         'app/opengraph-image.tsx',
-        // sitemap / robots déjà couverts par leurs tests dédiés via
-        // l'import direct, mais Next les compile aussi en routes.
+        'app/insights/[slug]/opengraph-image.tsx',
+        // sitemap / robots : compilés par Next en routes spéciales
+        // (testés en E2E via curl /sitemap.xml /robots.txt).
+        // Les helpers sont testés via les tests dédiés.
         'app/sitemap.ts',
         'app/robots.ts',
-        // Server Components qui interrogent Payload : le fetch est
-        // testé via le helper server-only (chemin fallback). Le
-        // wrapper Server n'a aucune logique à part `await`. Tests
-        // d'intégration en P6 raffinement (DB éphémère).
-        'components/sections/CasesCarouselServer.tsx',
-        'components/sections/InsightsServer.tsx',
-        // Helpers server-only (fetch Payload) : la branche fallback
-        // est testée via les helpers tests. Le parsing/normalisation
-        // des docs Payload est couvert en intégration P6 (DB réelle).
-        'lib/case-studies-server.ts',
-        'lib/articles-server.ts',
-        // Page détail insight : markup statique + appel server helper
-        // déjà testé. Couvert par Playwright en P9.
-        'app/insights/[slug]/page.tsx',
-        // Pages hub (insights, livre, etc.) qui fetch Payload : la
-        // logique est dans les helpers server-only (testés). Le markup
-        // est couvert par les tests de page hub existants.
-        'app/insights/page.tsx',
-        // Archives insights (catégorie / auteur) : markup statique +
-        // helper server testé. Couvert par Playwright en P9.
-        'app/insights/categorie/[cat]/page.tsx',
-        'app/insights/auteur/[author]/page.tsx',
-        // Sous-pages laboratoire (axes/publications/partenariats) :
-        // markup statique consommant des constantes typées (testées
-        // ailleurs). Couvert par Playwright en P9.
-        'app/laboratoire/axes/page.tsx',
-        'app/laboratoire/publications/page.tsx',
-        'app/laboratoire/partenariats/page.tsx',
-        // Pages purement markup (à-propos, laboratoire) : couvertes par
-        // Playwright en P9, pas pertinent en unit.
-        'app/a-propos/page.tsx',
-        'app/laboratoire/page.tsx',
-        // Widgets client qui dépendent du DOM Cloudflare (Turnstile) ou
-        // de fetch (ContactForm) : couverts par E2E Playwright + tests
-        // d'intégration API (routes déjà testées).
-        'components/atoms/Turnstile.tsx',
-        'components/forms/ContactForm.tsx',
-        // Démos interactives produits (`use client`, manipulation DOM
-        // via SVG/setInterval) : couvertes par tests E2E Playwright.
-        // La logique métier critique (calcul paie NexusRH) est dans
-        // lib/demos/nexusrh-paie.ts qui reste testée.
-        'components/demos/**/*.tsx',
+        // app/fonts.ts : import next/font, pas de logique testable.
+        'app/fonts.ts',
       ],
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 75,
-        statements: 80,
+        // Seuils relevés après PR feat/coverage-100 (570 tests, +157 vs base).
+        // Lignes/statements ≥ 95% atteignable car alias stubs Payload
+        // bloquent les paths "service externe up" (testés en intégration).
+        // Branches plus basses car beaucoup de helpers ont des fallback
+        // paths conditionnels (env absent, Payload down, etc.).
+        lines: 95,
+        functions: 85,
+        branches: 85,
+        statements: 95,
       },
     },
   },
