@@ -38,9 +38,14 @@ function generateNonce(): string {
 }
 
 function buildCsp(nonce: string): string {
+  // En dev, Next.js + React Refresh + Webpack HMR utilisent eval() pour
+  // recharger les modules à chaud — sans 'unsafe-eval' la console est
+  // polluée d'erreurs CSP et le HMR plante. En prod on garde la CSP
+  // stricte sans 'unsafe-eval'.
+  const evalToken = isProd ? '' : " 'unsafe-eval'";
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${evalToken}`,
     // Fallback pour navigateurs sans support de strict-dynamic.
     `script-src-elem 'self' 'nonce-${nonce}' 'unsafe-inline' https://challenges.cloudflare.com`,
     "style-src 'self' 'unsafe-inline'",
