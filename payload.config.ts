@@ -63,6 +63,17 @@ export default buildConfig({
     meta: {
       titleSuffix: ' · Admin OpenLab',
     },
+    components: {
+      views: {
+        // Dashboard custom premium (refonte admin P2 phase 3) :
+        // KPIs leads + articles + audit log, derniers leads, activité.
+        // Charte OpenLab (orange/navy/ivory). Le path est résolu via
+        // l'importMap généré par `pnpm cms:generate-importmap`.
+        dashboard: {
+          Component: '/components/admin/Dashboard.tsx#default',
+        },
+      },
+    },
   },
   collections: [
     Articles,
