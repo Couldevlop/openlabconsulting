@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { CasesCarouselServer } from '@/components/sections/CasesCarouselServer';
 import { Expertises } from '@/components/sections/Expertises';
 import { Hero } from '@/components/sections/Hero';
@@ -11,7 +11,6 @@ import { Manifesto } from '@/components/sections/Manifesto';
 import { Reassurance } from '@/components/sections/Reassurance';
 import { Solutions } from '@/components/sections/Solutions';
 import {
-  getAuditIaCtaContent,
   getHeroContent,
   getManifestoContent,
 } from '@/lib/cms/site-settings-server';
@@ -23,10 +22,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const [heroContent, manifestoContent, auditIaCtaContent] = await Promise.all([
+  const [heroContent, manifestoContent] = await Promise.all([
     getHeroContent(),
     getManifestoContent(),
-    getAuditIaCtaContent(),
   ]);
   return (
     <main id="main">
@@ -39,7 +37,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
       <Manifesto content={manifestoContent} />
       <Livre />
       <InsightsServer />
-      <AuditIaCta content={auditIaCtaContent} />
+      <AuditIaCtaServer />
       {/* §6.11 Footer premium est déjà rendu globalement via app/layout.tsx (P1). */}
     </main>
   );

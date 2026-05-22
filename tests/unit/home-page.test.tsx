@@ -17,6 +17,12 @@ vi.mock('@/components/sections/InsightsServer', async () => {
   return { InsightsServer: () => <Insights /> };
 });
 
+// AuditIaCtaServer : même pattern (async server component → mock sync).
+vi.mock('@/components/sections/AuditIaCtaServer', async () => {
+  const { AuditIaCta } = await import('@/components/sections/AuditIaCta');
+  return { AuditIaCtaServer: () => <AuditIaCta /> };
+});
+
 import HomePage from '@/app/(site)/page';
 
 describe('HomePage (P2 — homepage §6)', () => {

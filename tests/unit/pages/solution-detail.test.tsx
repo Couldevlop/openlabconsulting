@@ -1,5 +1,13 @@
 ﻿import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// AuditIaCtaServer est async server component (fetch Payload Global).
+// On le mock par le composant sync AuditIaCta (fallback statique).
+vi.mock('@/components/sections/AuditIaCtaServer', async () => {
+  const { AuditIaCta } = await import('@/components/sections/AuditIaCta');
+  return { AuditIaCtaServer: () => <AuditIaCta /> };
+});
+
 import SolutionDetailPage, {
   generateStaticParams,
 } from '@/app/(site)/solutions/[slug]/page';
