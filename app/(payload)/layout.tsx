@@ -16,6 +16,9 @@
  */
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts';
 import '@payloadcms/next/css';
+// Theme custom OpenLab — importé APRÈS les CSS Payload pour gagner
+// par cascade. Refonte admin P2 phase 4 (charte orange/navy/Bricolage).
+import './admin-theme.css';
 import config from '@payload-config';
 import { importMap } from './admin/importMap.js';
 
