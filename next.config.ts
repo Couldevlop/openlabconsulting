@@ -21,11 +21,20 @@ const nextConfig: NextConfig = {
   },
   // Payload pousse des deps lourdes côté server-only ; on les externalise
   // pour ne pas les ramener dans le bundle client.
-  serverExternalPackages: [
-    'payload',
-    '@payloadcms/db-postgres',
+  serverExternalPackages: ['payload', '@payloadcms/db-postgres', 'sharp'],
+
+  // Packages Payload qui importent du CSS (`./bundled.css`) : forcer
+  // Next à les passer dans son pipeline webpack (loaders CSS inclus)
+  // au lieu du loader Node natif (qui refuse les `.css`). Sans ça,
+  // l'admin Payload throw `ERR_UNKNOWN_FILE_EXTENSION` au chargement.
+  // NB : un package ne peut PAS être à la fois dans serverExternalPackages
+  // et transpilePackages. C'est pourquoi richtext-lexical et ui sont
+  // ici, pas dans serverExternalPackages au-dessus.
+  transpilePackages: [
     '@payloadcms/richtext-lexical',
-    'sharp',
+    '@payloadcms/ui',
+    '@payloadcms/next',
+    '@payloadcms/translations',
   ],
 };
 
