@@ -78,8 +78,9 @@ export default defineConfig({
         'components/sections/HeroBackground.tsx',
         // OG images : ImageResponse (@vercel/og) exige edge runtime +
         // génère PNG binaire. Testées en E2E (curl /opengraph-image).
-        'app/opengraph-image.tsx',
-        'app/insights/[slug]/opengraph-image.tsx',
+        // NB : glob `app/**/opengraph-image.tsx` couvre le déplacement
+        // dans le route group `(site)/` (cf. PR fix/payload-route-group).
+        'app/**/opengraph-image.tsx',
         // sitemap / robots : compilés par Next en routes spéciales
         // (testés en E2E via curl /sitemap.xml /robots.txt).
         // Les helpers sont testés via les tests dédiés.
