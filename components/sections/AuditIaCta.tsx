@@ -6,6 +6,14 @@ import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import {
+  AUDIT_IA_CTA_FALLBACK,
+  type AuditIaCtaContent,
+} from '@/lib/cms/site-settings';
+
+interface AuditIaCtaProps {
+  content?: AuditIaCtaContent;
+}
 
 /**
  * AuditIaCta — Section 10 de la homepage (CLAUDE.md §6, §10 audit IA
@@ -31,7 +39,10 @@ import { Heading } from '@/components/atoms/Heading';
  *   complète) en méthode GET — pas de soumission tant que la pipeline
  *   n'est pas en place. Cf CLAUDE.md §10.4 et §10.5.
  */
-export function AuditIaCta(): ReactElement {
+export function AuditIaCta({
+  content = AUDIT_IA_CTA_FALLBACK,
+}: AuditIaCtaProps = {}): ReactElement {
+  const { whitepaperCard } = content;
   return (
     <section
       aria-labelledby="audit-ia-title"
@@ -61,27 +72,25 @@ export function AuditIaCta(): ReactElement {
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-20">
           {/* Colonne audit IA — voie primaire */}
           <div>
-            <Eyebrow tone="orange">Audit IA gratuit</Eyebrow>
+            <Eyebrow tone="orange">{content.eyebrow}</Eyebrow>
             <Heading
               id="audit-ia-title"
               level={2}
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
-              Trente minutes pour savoir si l’IA{' '}
+              {content.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange)]">
-                vous fera gagner du temps
+                {content.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
-              Un cadrage gratuit, mené par un consultant senior. Vous repartez
-              avec une cartographie de vos cas d’usage IA, une estimation ROI et
-              trois prochaines étapes activables.
+              {content.description}
             </p>
 
             <form
               method="get"
-              action="/audit-ia"
+              action={content.cta.href}
               aria-label="Démarrer un audit IA"
               className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
             >
@@ -121,13 +130,12 @@ export function AuditIaCta(): ReactElement {
 
               <Button type="submit" variant="primary" size="lg">
                 <Sparkles width={20} height={20} aria-hidden />
-                Démarrer mon audit
+                {content.cta.label}
               </Button>
             </form>
 
             <p className="mt-4 text-xs text-[var(--color-ol-ivory)]/55">
-              Pas de spam, pas de revente. Vos coordonnées restent en interne
-              chez OpenLab — voir notre{' '}
+              {content.reassuranceBullets.join(' · ')}. Voir notre{' '}
               <Link
                 href="/politique-confidentialite"
                 className="underline underline-offset-2 hover:text-[var(--color-ol-orange)]"
@@ -144,38 +152,36 @@ export function AuditIaCta(): ReactElement {
             data-testid="whitepaper-card"
             className="rounded-lg border border-[var(--color-ol-ivory)]/10 bg-[var(--color-ol-ivory)]/5 p-8 backdrop-blur-sm"
           >
-            <Badge tone="orange">Livre blanc · 2026</Badge>
+            <Badge tone="orange">{whitepaperCard.badge}</Badge>
             <Heading
               id="whitepaper-title"
               level={3}
               visualLevel={3}
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
-              L’IA souveraine en Côte d’Ivoire
+              {whitepaperCard.title}
             </Heading>
             <p className="mt-2 font-[family-name:var(--font-editorial)] text-lg text-[var(--color-ol-orange)] italic">
-              Feuille de route pratique pour les dirigeants en 2026
+              {whitepaperCard.subtitle}
             </p>
             <p className="mt-5 text-[var(--color-ol-ivory)]/80">
-              Quatre piliers, douze décisions clés, six pièges à éviter. Le
-              guide qu’un comité de direction lit en deux heures et applique en
-              six mois.
+              {whitepaperCard.description}
             </p>
 
             <Button
               as="a"
-              href="/livres-blancs/ia-souveraine-ci-2026"
+              href={whitepaperCard.ctaHref}
               variant="ghost"
               size="md"
               className="mt-6 border border-[var(--color-ol-ivory)]/20 text-[var(--color-ol-ivory)] hover:bg-[var(--color-ol-ivory)]/10 hover:text-[var(--color-ol-ivory)]"
             >
               <Download width={18} height={18} aria-hidden />
-              Télécharger le livre blanc
+              {whitepaperCard.ctaLabel}
               <ArrowRight width={16} height={16} aria-hidden />
             </Button>
 
             <p className="mt-4 text-xs text-[var(--color-ol-ivory)]/55">
-              Accès gratuit · PDF · ~25 pages · email pro requis.
+              {whitepaperCard.footnote}
             </p>
           </aside>
         </div>

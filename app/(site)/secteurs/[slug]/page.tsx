@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, ShieldCheck } from 'lucide-react';
-import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { Badge } from '@/components/atoms/Badge';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Card } from '@/components/atoms/Card';
@@ -325,7 +325,7 @@ export default async function SecteurDetailPage({
         </Container>
       </section>
 
-      <AuditIaCta />
+      <AuditIaCtaServer />
     </main>
   );
 }

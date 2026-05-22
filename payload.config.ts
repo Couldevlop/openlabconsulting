@@ -16,6 +16,11 @@ import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
+import { HeroSettings } from './globals/HeroSettings';
+import { ManifestoSettings } from './globals/ManifestoSettings';
+import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
+import { FooterSettings } from './globals/FooterSettings';
+import { SeoDefaults } from './globals/SeoDefaults';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -58,6 +63,17 @@ export default buildConfig({
     meta: {
       titleSuffix: ' · Admin OpenLab',
     },
+    components: {
+      views: {
+        // Dashboard custom premium (refonte admin P2 phase 3) :
+        // KPIs leads + articles + audit log, derniers leads, activité.
+        // Charte OpenLab (orange/navy/ivory). Le path est résolu via
+        // l'importMap généré par `pnpm cms:generate-importmap`.
+        dashboard: {
+          Component: '/components/admin/Dashboard.tsx#default',
+        },
+      },
+    },
   },
   collections: [
     Articles,
@@ -67,6 +83,13 @@ export default buildConfig({
     Users,
     Leads,
     AuditLog,
+  ],
+  globals: [
+    HeroSettings,
+    ManifestoSettings,
+    AuditIaCtaSettings,
+    FooterSettings,
+    SeoDefaults,
   ],
   editor: lexicalEditor({}),
   db: postgresAdapter({

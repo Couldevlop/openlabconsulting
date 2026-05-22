@@ -1,5 +1,11 @@
 ﻿import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('@/components/sections/AuditIaCtaServer', async () => {
+  const { AuditIaCta } = await import('@/components/sections/AuditIaCta');
+  return { AuditIaCtaServer: () => <AuditIaCta /> };
+});
+
 import ExpertiseDetailPage, {
   generateStaticParams,
 } from '@/app/(site)/expertises/[slug]/page';
