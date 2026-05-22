@@ -16,6 +16,11 @@ import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
+import { HeroSettings } from './globals/HeroSettings';
+import { ManifestoSettings } from './globals/ManifestoSettings';
+import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
+import { FooterSettings } from './globals/FooterSettings';
+import { SeoDefaults } from './globals/SeoDefaults';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -67,6 +72,13 @@ export default buildConfig({
     Users,
     Leads,
     AuditLog,
+  ],
+  globals: [
+    HeroSettings,
+    ManifestoSettings,
+    AuditIaCtaSettings,
+    FooterSettings,
+    SeoDefaults,
   ],
   editor: lexicalEditor({}),
   db: postgresAdapter({

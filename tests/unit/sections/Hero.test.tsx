@@ -1,8 +1,32 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Hero } from '@/components/sections/Hero';
+import { HERO_FALLBACK, type HeroContent } from '@/lib/cms/site-settings';
 
 describe('Hero (homepage §6.1)', () => {
+  it('accepte un contenu CMS custom et le rend (audit P2 §A3)', () => {
+    const custom: HeroContent = {
+      ...HERO_FALLBACK,
+      eyebrow: 'Eyebrow custom test',
+      headlineLead: 'Titre custom',
+      headlineHighlight: 'highlight custom.',
+      subtitle: 'Sous-titre custom.',
+      primaryCta: { label: 'CTA primaire test', href: '/contact' },
+      secondaryCta: { label: 'CTA secondaire test', href: '/livre' },
+      scrollCueLabel: 'Scrollez test',
+    };
+    render(<Hero content={custom} />);
+    expect(screen.getByText('Eyebrow custom test')).toBeInTheDocument();
+    expect(screen.getByText(/Titre custom/)).toBeInTheDocument();
+    const primary = screen.getByRole('link', { name: /CTA primaire test/i });
+    expect(primary.getAttribute('href')).toBe('/contact');
+    const secondary = screen.getByRole('link', {
+      name: /CTA secondaire test/i,
+    });
+    expect(secondary.getAttribute('href')).toBe('/livre');
+    expect(screen.getByText(/Scrollez test/)).toBeInTheDocument();
+  });
+
   it('rend le titre principal en h1 avec aria-labelledby', () => {
     render(<Hero />);
     const section = screen.getByRole('region', { name: /L’IA, au service/i });
