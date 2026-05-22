@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/atoms/ScrollProgress';
+import { getFooterContent } from '@/lib/cms/site-settings-server';
 import {
   jsonLdString,
   localBusinessSchema,
@@ -41,7 +42,10 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }): Promise<React.ReactElement> {
-  const headersList = await headers();
+  const [headersList, footerContent] = await Promise.all([
+    headers(),
+    getFooterContent(),
+  ]);
   const nonce = headersList.get('x-nonce') ?? '';
 
   return (
@@ -59,7 +63,7 @@ export default async function SiteLayout({
         <ScrollProgress />
         <Navbar />
         <div className="flex-1">{children}</div>
-        <Footer />
+        <Footer content={footerContent} />
       </body>
     </html>
   );

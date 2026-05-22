@@ -10,7 +10,11 @@ import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { Reassurance } from '@/components/sections/Reassurance';
 import { Solutions } from '@/components/sections/Solutions';
-import { getHeroContent } from '@/lib/cms/site-settings-server';
+import {
+  getAuditIaCtaContent,
+  getHeroContent,
+  getManifestoContent,
+} from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'OpenLab Consulting — IA, R&D et conseil pour l’Afrique francophone',
@@ -19,7 +23,11 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const heroContent = await getHeroContent();
+  const [heroContent, manifestoContent, auditIaCtaContent] = await Promise.all([
+    getHeroContent(),
+    getManifestoContent(),
+    getAuditIaCtaContent(),
+  ]);
   return (
     <main id="main">
       <Hero background={<HeroBackground />} content={heroContent} />
@@ -28,10 +36,10 @@ export default async function HomePage(): Promise<React.ReactElement> {
       <Laboratoire />
       <CasesCarouselServer />
       <Solutions />
-      <Manifesto />
+      <Manifesto content={manifestoContent} />
       <Livre />
       <InsightsServer />
-      <AuditIaCta />
+      <AuditIaCta content={auditIaCtaContent} />
       {/* §6.11 Footer premium est déjà rendu globalement via app/layout.tsx (P1). */}
     </main>
   );
