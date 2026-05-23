@@ -1,0 +1,167 @@
+# Release workflow — build + push image GHCR + signature Cosign.
+#
+# Déclenché sur tag `v*` (ex. v1.0.0, v1.2.3-rc.1). Permet à
+# `deploy/scripts/deploy.sh production v1.0.0` de pull l'image depuis
+# GHCR. Cf. CLAUDE.md §14.7 et docs/migration-lws-hetzner.md §6.
+#
+# Reuse du pipeline de build CI (Chainguard distroless final, multi-arch
+# amd64 suffisant pour K3s Hetzner). Différences vs ci.yml :
+#   - `push: true` au lieu de `load: true`
+#   - Tags multiples (semver, sha) générés par docker/metadata-action
+#   - Signature Cosign keyless (OIDC GitHub → Sigstore Rekor public log)
+#
+# Permissions OIDC requises pour Cosign keyless : `id-token: write`.
+# Permission GHCR push : `packages: write`.
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  # Permet aussi un dispatch manuel sur la dernière commit develop pour
+  # publier une image de pré-release sans créer de tag (rare).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag à publier (ex: v1.0.0-rc.1). Si vide, prend l'image sha-<short>."
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  # `github.repository_owner` est `Couldevlop` en User account. Si on
+  # crée une org `openlab-consulting` plus tard, mettre à jour `deploy/
+  # scripts/deploy.sh` (IMAGE_REPO) ET ce nom d'image en conséquence.
+  # Lowercase imposé par OCI (ghcr.io rejette les majuscules dans le path).
+  IMAGE_NAME: ${{ github.repository_owner }}/website
+
+jobs:
+  publish:
+    name: Build + push GHCR + sign Cosign
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # OIDC pour Cosign keyless
+      security-events: write
+    env:
+      TRIVY_DISABLE_VEX_NOTICE: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lowercase image owner
+        id: img
+        run: echo "name=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Génère 3 types de tags :
+      #   - vX.Y.Z (tag sémantique tel quel)
+      #   - vX.Y et vX (alias glissants pour suivre les patchs/minors)
+      #   - sha-<short> (traçabilité commit, utile pour rollback rapide)
+      # Branche develop / main n'est PAS publiée ici (pas de trigger push).
+      - name: Extract image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.img.outputs.name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha,prefix=sha-,format=short
+            type=raw,value=${{ inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' && inputs.tag != '' }}
+          labels: |
+            org.opencontainers.image.title=OpenLab Consulting Website
+            org.opencontainers.image.description=Refonte 2026 — Next.js 15 + Payload v3 sur K3s Hetzner
+            org.opencontainers.image.vendor=OpenLab Consulting SARL
+            org.opencontainers.image.licenses=UNLICENSED
+
+      - name: Build & push image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          pull: true # force pull base images à chaque run (anti-CVE drift)
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+
+      # Re-scan l'image publiée (par digest, pas par tag — anti-TOCTOU).
+      # SARIF d'abord (exit 0) pour audit Code Scanning, puis bloquant.
+      - name: Trivy image scan (SARIF)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ steps.img.outputs.name }}@${{ steps.build.outputs.digest }}
+          format: sarif
+          output: trivy-release.sarif
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
+
+      - name: Upload Trivy SARIF
+        if: always() && hashFiles('trivy-release.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-release.sarif
+          category: trivy-release
+
+      - name: Trivy image scan (BLOQUANT — HIGH+CRITICAL avec fix)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ steps.img.outputs.name }}@${{ steps.build.outputs.digest }}
+          format: table
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '1'
+
+      # Signature Cosign keyless (OIDC GitHub → Sigstore Rekor public).
+      # Permet à `deploy.sh` ou ArgoCD de vérifier que l'image a bien été
+      # produite par CE workflow sur CE repo, sans clé privée à stocker.
+      # Vérification :
+      #   cosign verify ghcr.io/<owner>/website:vX.Y.Z \
+      #     --certificate-identity-regexp='https://github.com/${{ github.repository }}/.github/workflows/release.yml@.*' \
+      #     --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image (keyless)
+        run: |
+          cosign sign --yes \
+            ghcr.io/${{ steps.img.outputs.name }}@${{ steps.build.outputs.digest }}
+
+      - name: Output release summary
+        run: |
+          {
+            echo "## Image publiée"
+            echo ""
+            echo "- **Repository** : \`ghcr.io/${{ steps.img.outputs.name }}\`"
+            echo "- **Digest** : \`${{ steps.build.outputs.digest }}\`"
+            echo "- **Tags** :"
+            echo '${{ steps.meta.outputs.tags }}' | sed 's/^/  - `/' | sed 's/$/`/'
+            echo ""
+            echo "## Déploiement"
+            echo ""
+            echo '```bash'
+            echo "bash deploy/scripts/deploy.sh production <tag>"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
