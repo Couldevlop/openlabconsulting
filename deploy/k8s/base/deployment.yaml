@@ -39,7 +39,8 @@ spec:
         - name: app
           # Image multi-stage Chainguard Node (§13). Tag remplacé par
           # `kubectl set image` ou ArgoCD lors du déploiement.
-          image: ghcr.io/openlab-consulting/website:latest
+          # Owner GHCR : voir deploy/helm/openlab-website/values.yaml.
+          image: ghcr.io/couldevlop/website:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

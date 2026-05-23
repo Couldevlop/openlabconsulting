@@ -5,7 +5,11 @@
 # Application Next.js
 # ────────────────────────────────────────────────────────────
 image:
-  repository: ghcr.io/openlab-consulting/website
+  # Owner GHCR : `couldevlop` (User account) tant qu'il n'y a pas
+  # d'organisation `openlab-consulting`. Le workflow .github/workflows/
+  # release.yml utilise `github.repository_owner` (auto-adapté), donc
+  # mettre à jour ici manuellement si on crée l'organisation plus tard.
+  repository: ghcr.io/couldevlop/website
   tag: 'latest'
   pullPolicy: IfNotPresent
 

@@ -14,12 +14,18 @@
 #   - kubeconfig pointant sur le cluster K3s Hetzner
 #   - SealedSecrets controller installé (sealed-secrets-system)
 #   - cert-manager + traefik installés
-#   - Image disponible : ghcr.io/openlab-consulting/website:<tag>
+#   - Image disponible : ghcr.io/<owner>/website:<tag>
+#
+# Owner GHCR : `couldevlop` (User account GitHub) tant qu'il n'existe
+# pas d'organisation `openlab-consulting`. Le workflow release.yml
+# utilise `github.repository_owner` (auto-adapté). Override possible
+# via la variable d'env IMAGE_REPO_OWNER avant l'appel du script.
 set -euo pipefail
 
 ENVIRONMENT="${1:-production}"
 IMAGE_TAG="${2:-latest}"
-IMAGE_REPO="ghcr.io/openlab-consulting/website"
+IMAGE_REPO_OWNER="${IMAGE_REPO_OWNER:-couldevlop}"
+IMAGE_REPO="ghcr.io/${IMAGE_REPO_OWNER}/website"
 CHART_DIR="$(cd "$(dirname "$0")/.." && pwd)/helm/openlab-website"
 
 # Mapping env → namespace / release / values.
