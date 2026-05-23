@@ -1,20 +1,32 @@
 name: CI
 
+# Stratégie déclencheurs (anti double-run) :
+#
+# - `push` LIMITÉ aux branches longue durée (main, develop). Sur ces
+#   branches, push = merge d'une PR → CI obligatoire pour acter l'état.
+# - `pull_request` couvre les branches éphémères feat/fix/chore via
+#   les PR qu'elles ouvrent. Inutile d'écouter aussi `push` sur ces
+#   préfixes : ça déclencherait 2 runs simultanées (push + pull_request)
+#   à chaque commit pendant qu'une PR est ouverte.
+# - `workflow_dispatch` reste pour un re-run manuel ad hoc.
+#
+# Cf. https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
 on:
   push:
     branches:
       - main
       - develop
-      - 'feat/**'
-      - 'fix/**'
-      - 'chore/**'
   pull_request:
     branches:
       - main
       - develop
+  workflow_dispatch:
 
+# `head_ref || ref` unifie la clé pour push branche et pull_request
+# de cette même branche. Si on garde un jour `on.push` sur feat/**,
+# ça empêche les 2 runs concurrents (la plus récente cancel l'autre).
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 env:

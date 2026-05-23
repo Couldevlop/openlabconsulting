@@ -17,6 +17,14 @@ on:
     branches: [develop]
   workflow_dispatch:
 
+# Évite 2 runs Playwright + Lighthouse simultanées sur la même branche
+# si plusieurs push s'enchaînent (Playwright = 30 min, Lighthouse = 5 min).
+# `head_ref || ref` unifie la clé entre push et pull_request d'une même
+# branche source.
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
