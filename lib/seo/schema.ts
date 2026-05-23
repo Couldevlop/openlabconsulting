@@ -2,6 +2,7 @@ import { SITE, absoluteUrl } from './site';
 import type { Expertise } from '@/lib/data/expertises';
 import type { Product } from '@/lib/data/products';
 import type { Sector } from '@/lib/data/sectors';
+import type { LocationContent } from '@/lib/data/locations';
 import { BOOK } from '@/lib/data/book';
 
 /**
@@ -90,6 +91,37 @@ export function localBusinessSchema(): Thing {
     },
     priceRange: 'Sur devis',
     areaServed: ['Côte d’Ivoire', 'France', 'UEMOA'],
+  };
+}
+
+/**
+ * LocalBusiness schema enrichi pour une page géo (`/abidjan`, `/cocody`,
+ * `/uemoa`). Réutilise l'adresse siège mais override l'`areaServed`
+ * avec la liste précise des localités couvertes (signal SEO local
+ * supplémentaire pour Google Knowledge Graph).
+ */
+export function localBusinessSchemaForLocation(
+  location: LocationContent,
+): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': absoluteUrl(`/${location.slug}#localbusiness`),
+    name: `${SITE.legalName} — ${location.label}`,
+    image: absoluteUrl('/OPENLAB.png'),
+    url: absoluteUrl(`/${location.slug}`),
+    telephone: SITE.contact.primaryPhone,
+    description: location.metaDescription,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: SITE.address.streetAddress,
+      addressLocality: SITE.address.addressLocality,
+      addressRegion: SITE.address.addressRegion,
+      addressCountry: SITE.address.addressCountry,
+    },
+    priceRange: 'Sur devis',
+    areaServed: [...location.areaServed],
+    parentOrganization: { '@id': absoluteUrl('/#organization') },
   };
 }
 
