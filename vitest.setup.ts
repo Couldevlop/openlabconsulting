@@ -48,6 +48,27 @@ vi.mock('next/headers', () => ({
   cookies: async () => new Map(),
 }));
 
+// Mock `next/navigation` — hors RSC, le router App n'est pas monté en
+// jsdom. Tout composant client qui appelle `useRouter()` au render
+// (CommandPalette, WhitepaperRequestForm, futurs forms avec redirect)
+// crashe sans mock avec « invariant expected app router to be mounted ».
+// `notFound` et `redirect` mockés en `vi.fn()` permettent aux tests
+// d'asserter qu'ils ont bien été appelés sans interrompre l'exécution.
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+  redirect: vi.fn(),
+  notFound: vi.fn(),
+}));
+
 afterEach(() => {
   cleanup();
 });
