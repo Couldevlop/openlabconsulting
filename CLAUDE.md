@@ -63,6 +63,10 @@ bash deploy/scripts/rollback.sh
 
 > **Astuce Windows** : si `%TEMP%` est sur un disque saturé, exporter `TMPDIR=/d/tmp TMP=D:/tmp TEMP=D:/tmp` avant `pnpm test`/`pnpm build` (Vitest/Next.js y écrivent des artefacts temporaires).
 
+### Audit & priorités de différenciation
+
+[`docs/audit-seo-ux-2026-05.md`](./docs/audit-seo-ux-2026-05.md) est la **source canonique** des 15 chantiers de différenciation vs Palantir / Anthropic / IBM / QuantumBlack. Le tableau d'avancement en tête du fichier reflète l'historique git réel et doit être mis à jour à la clôture de chaque PR audit. Index complet des docs : [`docs/README.md`](./docs/README.md).
+
 ### Où chercher quoi
 
 | Question                              | Section |

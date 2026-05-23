@@ -147,6 +147,17 @@ Next.js 15 · React 19 · TypeScript strict · Tailwind v4 · Vitest · Playwrig
 
 Détails complets dans `CLAUDE.md` §2.
 
+## Documentation & audits
+
+Index complet : [`docs/README.md`](./docs/README.md). Repères clés :
+
+- [`docs/audit-seo-ux-2026-05.md`](./docs/audit-seo-ux-2026-05.md) — **audit comparatif vs Palantir / Anthropic / IBM / QuantumBlack** (mai 2026). Source canonique des 15 chantiers de différenciation. Tableau d'état d'avancement maintenu en tête du fichier.
+- [`docs/captures-todo-2026-05.md`](./docs/captures-todo-2026-05.md) — 27 visuels à produire (priorité ROI conversion).
+- [`docs/qa-checklist.md`](./docs/qa-checklist.md) — checklist QA avant mise en ligne (CLAUDE.md §17).
+- [`docs/security-overrides.md`](./docs/security-overrides.md) — déviations de spec sécurité documentées (Chainguard vs Distroless, etc.).
+- [`docs/admin-cms.md`](./docs/admin-cms.md) — guide back-office Payload.
+- [`docs/migration-lws-hetzner.md`](./docs/migration-lws-hetzner.md) — runbook migration DNS / TLS.
+
 ## Licence
 
 Propriétaire — OpenLab Consulting SARL.
