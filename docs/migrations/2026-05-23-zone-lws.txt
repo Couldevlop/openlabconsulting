@@ -1,0 +1,19 @@
+@ 86400 IN NS ns5.lwsdns.com.
+@ 86400 IN NS ns6.lwsdns.com.
+@ 86400 IN NS ns7.lwsdns.com.
+@ 86400 IN NS ns8.lwsdns.com.
+@ 86400 IN MX 10 mail.openlabconsulting.com.
+@ 21600 IN A 83.229.19.73
+api.nexusrh 900 IN A 62.238.11.20
+diagnostix 900 IN A 62.238.11.20
+mail 21600 IN A 193.203.239.21
+nexusrh 900 IN A 62.238.11.20
+@ 3600 IN AAAA 2a00:7ee0:8:0:3:66:0:20f
+ftp 86400 IN CNAME @
+imap 86400 IN CNAME mail.openlabconsulting.com.
+pop 86400 IN CNAME mail.openlabconsulting.com.
+smtp 86400 IN CNAME mail.openlabconsulting.com.
+www 86400 IN CNAME @
+@ 86400 IN TXT v=spf1 mx:openlabconsulting.com a:mail.openlabconsulting.com a:mailphp.lws-hosting.com -all
+dkim._domainkey 86400 IN TXT v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8C8Xh049AFp+LuKVCUlwahtRFxO85rrJ0dE0idCfNAsI5Nlobf02gik8jesZ04clvZ0lxaM+L8IU50AKVHeFva83Y7LVJdeaXk14fO3gwQ1r/asNhzvg++88bfhSaLKD5M4Eid13mBrpsV3gP/MeGIzsty0AMUUNpDwe0otnv3wIDAQAB
+_dmarc 3600 IN TXT v=DMARC1; p=quarantine;

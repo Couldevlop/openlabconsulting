@@ -68,13 +68,37 @@ J+21   Tout stable depuis 1 semaine.
 
 ✅ **Cluster K3s Hetzner** opérationnel — `nexusrh.openlabconsulting.com` tourne déjà
 ✅ **Traefik + cert-manager** installés (sinon NexusRH ne pourrait pas répondre en HTTPS)
-✅ **IP publique Hetzner** identifiable via `dig nexusrh.openlabconsulting.com +short`
+✅ **IP publique Hetzner = `62.238.11.20`** (confirmée via la zone DNS LWS — voir [`migrations/2026-05-23-zone-lws.txt`](./migrations/2026-05-23-zone-lws.txt))
+✅ **IP WordPress LWS = `83.229.19.73`** (record A apex actuel)
+✅ **3 services déjà sur Hetzner** : `nexusrh`, `api.nexusrh`, `diagnostix`
 ✅ **Helm chart + manifests** du nouveau site prêts (`deploy/`)
 ✅ **608 tests verts** + Lighthouse CI passing
 ✅ **Workflow GHCR release.yml** créé (PR `chore/ci-ghcr-release` à merger)
+✅ **Zone DNS LWS exportée** au format BIND — voir [`migrations/2026-05-23-zone-lws.txt`](./migrations/2026-05-23-zone-lws.txt)
 ⚠️ **Tag v1.0.0** non encore créé (à faire après merge `develop → main`)
 ⚠️ **SealedSecret prod** = placeholder (à sceller pour de bon en Phase 3)
 ⚠️ **Renouvellement LWS** = on NE renouvelle PAS, transfert en cours
+
+### Records LWS actuels — synthèse
+
+Stack email LWS (à remplacer par Zoho en Phase 2) :
+
+- MX 10 `@` → `mail.openlabconsulting.com` (sous-domaine interne)
+- A `mail` → `193.203.239.21` (serveur mail LWS)
+- CNAME `imap` / `pop` / `smtp` → `mail.openlabconsulting.com`
+- SPF : `v=spf1 mx:openlabconsulting.com a:mail.openlabconsulting.com a:mailphp.lws-hosting.com -all`
+- DKIM `dkim._domainkey` : clé RSA présente
+- DMARC : `v=DMARC1; p=quarantine;`
+
+Sous-domaines à préserver à l'identique (déjà sur cluster Hetzner) :
+
+- A `nexusrh` → `62.238.11.20`
+- A `api.nexusrh` → `62.238.11.20`
+- A `diagnostix` → `62.238.11.20`
+
+Records obsolètes à NE PAS recopier dans Cloudflare :
+
+- CNAME `ftp` → `@` (WordPress LWS disparaît, FTP n'a plus de cible)
 
 ---
 
@@ -144,20 +168,32 @@ Avant tout, sécuriser la fenêtre de transfert via ticket support :
 22. Cloudflare Dashboard → **Websites** → **Add a site**
 23. Entrer `openlabconsulting.com` → choisir plan **Free**
 24. Cloudflare scan auto la zone LWS actuelle (~30 sec)
-25. **Vérifier MANUELLEMENT** que tous les records sont copiés. Comparer avec l'export sauvegardé à l'étape 13.
+25. **Vérifier MANUELLEMENT** que tous les records sont copiés. Comparer avec l'export [`migrations/2026-05-23-zone-lws.txt`](./migrations/2026-05-23-zone-lws.txt) :
 
-| Type      | Nom                    | Cible attendue                             | Vital ?                       |
-| --------- | ---------------------- | ------------------------------------------ | ----------------------------- |
-| A         | `@` (apex)             | IP WordPress LWS actuelle                  | ✅ site                       |
-| A / CNAME | `www`                  | apex ou IP LWS                             | ✅ site                       |
-| **MX**    | `@`                    | `mail.lws-mail.com.` (priorité 10)         | ✅ **CRITIQUE emails**        |
-| **TXT**   | `@`                    | `v=spf1 include:_spf.lws-hosting.com -all` | ✅ **CRITIQUE délivrabilité** |
-| **TXT**   | `_dmarc`               | `v=DMARC1; p=quarantine; ...` (si présent) | ✅ délivrabilité              |
-| **TXT**   | `_selector._domainkey` | `v=DKIM1; k=rsa; p=...` (si présent)       | ✅ délivrabilité              |
-| A         | `nexusrh`              | **IP Hetzner** (votre cluster K3s)         | ✅ NexusRH déjà en prod       |
-| A / CNAME | autres sous-domaines   | selon vos services                         | selon                         |
+| Type   | Nom               | Cible exacte                                                                                  | Vital ?                       |
+| ------ | ----------------- | --------------------------------------------------------------------------------------------- | ----------------------------- |
+| A      | `@` (apex)        | `83.229.19.73` (WordPress LWS — temporaire jusqu'au cutover Phase 3)                          | ✅ site                       |
+| AAAA   | `@`               | `2a00:7ee0:8:0:3:66:0:20f` (IPv6 LWS — temporaire)                                            | ⚠️ IPv6 visiteurs             |
+| CNAME  | `www`             | `openlabconsulting.com.`                                                                      | ✅ site                       |
+| A      | `nexusrh`         | `62.238.11.20` (IP Hetzner — déjà en prod)                                                    | ✅ NexusRH front              |
+| A      | `api.nexusrh`     | `62.238.11.20`                                                                                | ✅ NexusRH API                |
+| A      | `diagnostix`      | `62.238.11.20`                                                                                | ✅ diagnostix (3e service)    |
+| **MX** | `@` (priorité 10) | `mail.openlabconsulting.com.`                                                                 | ✅ **CRITIQUE emails**        |
+| A      | `mail`            | `193.203.239.21` (serveur mail LWS — temporaire jusqu'au cutover Phase 2)                     | ✅ pivot MX                   |
+| CNAME  | `imap`            | `mail.openlabconsulting.com.`                                                                 | ✅ clients mail               |
+| CNAME  | `pop`             | `mail.openlabconsulting.com.`                                                                 | ✅ clients mail               |
+| CNAME  | `smtp`            | `mail.openlabconsulting.com.`                                                                 | ✅ clients mail               |
+| TXT    | `@`               | `v=spf1 mx:openlabconsulting.com a:mail.openlabconsulting.com a:mailphp.lws-hosting.com -all` | ✅ **CRITIQUE délivrabilité** |
+| TXT    | `dkim._domainkey` | clé RSA (voir export BIND, ligne 18)                                                          | ✅ délivrabilité              |
+| TXT    | `_dmarc`          | `v=DMARC1; p=quarantine;`                                                                     | ✅ délivrabilité              |
 
-26. **Si un record manque** (les TXT SPF/DKIM/DMARC sont souvent oubliés par le scan auto) → l'**ajouter manuellement** depuis l'export DNS
+**À NE PAS recopier dans Cloudflare** :
+
+| Type  | Nom   | Pourquoi                                                                                                         |
+| ----- | ----- | ---------------------------------------------------------------------------------------------------------------- |
+| CNAME | `ftp` | Pointait sur WordPress LWS via `@`. WordPress disparaît en Phase 3 → record obsolète. Décision actée 2026-05-23. |
+
+26. **Si un record manque** (les TXT SPF/DKIM/DMARC sont souvent oubliés par le scan auto) → l'**ajouter manuellement** depuis [`migrations/2026-05-23-zone-lws.txt`](./migrations/2026-05-23-zone-lws.txt)
 27. **Désactiver le proxy Cloudflare** (nuage gris, pas orange) pour TOUS les records dans un premier temps. On activera le proxy plus tard, post-cutover, si on veut le CDN/anti-DDoS.
 28. **NE PAS basculer les nameservers** chez LWS encore. Attendre la fin du transfert ICANN.
 29. Cloudflare affiche 2 nameservers à utiliser à terme : `xxx.ns.cloudflare.com` et `yyy.ns.cloudflare.com` — les noter
@@ -398,13 +434,13 @@ Si tout est stable depuis 2 semaines :
 
 ### Si Phase 2 (emails) casse le flow
 
-- Cloudflare → DNS → MX : remettre `mail.lws-mail.com.` priorité 10 (sauvegarde DNS §3.3 étape 13)
-- Les emails retournent sur LWS dans 1-4h
+- Cloudflare → DNS → MX : remettre `mail.openlabconsulting.com.` priorité 10 + A `mail` → `193.203.239.21` (sauvegarde [`migrations/2026-05-23-zone-lws.txt`](./migrations/2026-05-23-zone-lws.txt))
+- Les emails retournent sur l'infra mail LWS dans 1-4h (tant que LWS n'a pas résilié le service mail)
 - Investiguer Zoho + recommencer plus tard
 
 ### Si Phase 3 (site) plante
 
-- Cloudflare → DNS → A `@` : remettre IP WordPress LWS (sauvegarde DNS)
+- Cloudflare → DNS → A `@` : remettre `83.229.19.73` (WordPress LWS, cf. snapshot)
 - WordPress LWS reprend la main en 2-10 min (TTL Cloudflare court)
 - Helm rollback si besoin : `bash deploy/scripts/rollback.sh production`
 
@@ -446,18 +482,28 @@ Zoho assigne une **zone géo** au compte selon votre pays (EU, US, IN). Les MX c
 
 ### 8.2 — Zone DNS Cloudflare finale (cible J+14)
 
-| Type  | Nom               | Contenu                       | Proxy       | TTL  | Notes                              |
-| ----- | ----------------- | ----------------------------- | ----------- | ---- | ---------------------------------- |
-| A     | `@`               | IP Hetzner                    | DNS only ⚪ | Auto | site Next.js refonte               |
-| CNAME | `www`             | `openlabconsulting.com.`      | DNS only ⚪ | Auto | redirige sur apex                  |
-| A     | `nexusrh`         | IP Hetzner                    | DNS only ⚪ | Auto | NexusRH existant (déjà en prod)    |
-| A     | `staging`         | IP Hetzner                    | DNS only ⚪ | Auto | optionnel, peut être supprimé J+30 |
-| MX    | `@`               | `mx.zoho.eu` (priorité 10)    | n/a         | Auto |                                    |
-| MX    | `@`               | `mx2.zoho.eu` (priorité 20)   | n/a         | Auto |                                    |
-| MX    | `@`               | `mx3.zoho.eu` (priorité 50)   | n/a         | Auto |                                    |
-| TXT   | `@`               | `v=spf1 include:zoho.eu -all` | n/a         | Auto | SPF                                |
-| TXT   | `zoho._domainkey` | `v=DKIM1; k=rsa; p=...`       | n/a         | Auto | DKIM Zoho                          |
-| TXT   | `_dmarc`          | `v=DMARC1; p=quarantine; ...` | n/a         | Auto | DMARC                              |
+| Type  | Nom               | Contenu                                                            | Proxy       | TTL  | Notes                                  |
+| ----- | ----------------- | ------------------------------------------------------------------ | ----------- | ---- | -------------------------------------- |
+| A     | `@`               | `62.238.11.20` (IP Hetzner)                                        | DNS only ⚪ | Auto | site Next.js refonte (cutover Phase 3) |
+| CNAME | `www`             | `openlabconsulting.com.`                                           | DNS only ⚪ | Auto | redirige sur apex                      |
+| A     | `nexusrh`         | `62.238.11.20`                                                     | DNS only ⚪ | Auto | NexusRH (déjà en prod, inchangé)       |
+| A     | `api.nexusrh`     | `62.238.11.20`                                                     | DNS only ⚪ | Auto | NexusRH API (inchangé)                 |
+| A     | `diagnostix`      | `62.238.11.20`                                                     | DNS only ⚪ | Auto | 3e service (inchangé)                  |
+| A     | `staging`         | `62.238.11.20`                                                     | DNS only ⚪ | Auto | optionnel, peut être supprimé J+30     |
+| MX    | `@`               | `mx.zoho.eu` (priorité 10)                                         | n/a         | Auto | bascule Phase 2                        |
+| MX    | `@`               | `mx2.zoho.eu` (priorité 20)                                        | n/a         | Auto |                                        |
+| MX    | `@`               | `mx3.zoho.eu` (priorité 50)                                        | n/a         | Auto |                                        |
+| TXT   | `@`               | `v=spf1 include:zoho.eu -all`                                      | n/a         | Auto | SPF Zoho (remplace SPF LWS)            |
+| TXT   | `zoho._domainkey` | `v=DKIM1; k=rsa; p=...`                                            | n/a         | Auto | DKIM Zoho (généré dans Zoho Admin)     |
+| TXT   | `_dmarc`          | `v=DMARC1; p=quarantine; rua=mailto:waopron@openlabconsulting.com` | n/a         | Auto | DMARC enrichi                          |
+
+**Records LWS retirés à cette étape** (présents au snapshot pré-migration mais plus utiles) :
+
+- `AAAA @` IPv6 LWS — Hetzner peut avoir une IPv6 dédiée, à ajouter séparément si besoin
+- `A mail` → `193.203.239.21` — serveur mail LWS, plus utilisé (Zoho prend le relais)
+- `CNAME imap` / `pop` / `smtp` → `mail.openlabconsulting.com` — remplacés par les serveurs Zoho (`imap.zoho.eu`, `smtp.zoho.eu`) que les clients mail utilisent directement
+- `TXT dkim._domainkey` LWS — remplacé par le DKIM Zoho avec un autre sélecteur
+- `CNAME ftp` → `@` — décision actée : pas recopié (WordPress disparaît)
 
 ### 8.3 — Notes Cloudflare proxy
 
