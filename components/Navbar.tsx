@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactElement } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
+import { CommandPalette } from '@/components/atoms/CommandPalette';
 import { Container } from '@/components/atoms/Container';
 import { Logo } from '@/components/atoms/Logo';
 import { cn } from '@/lib/cn';
@@ -72,7 +73,8 @@ export function Navbar(): ReactElement {
           </ul>
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <CommandPalette />
           <Button as="a" href="/audit-ia" variant="primary" size="md">
             Audit IA gratuit
           </Button>
