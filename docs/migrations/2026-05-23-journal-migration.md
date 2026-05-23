@@ -26,14 +26,24 @@
 | 13h00  | Vérification DNSSEC LWS = INACTIF (commande `Resolve-DnsName -Type DS` → aucun DS)         | ✅     | user        |
 | 13h10  | Bascule LWS : « Configuration DNS personnalisée » = Oui, 2 NS Cloudflare                   | ✅     | user        |
 | ~13h15 | Propagation NS : `Resolve-DnsName ... -Server 8.8.8.8` retourne déjà les 2 NS CF           | ✅     | propagation |
+| ~13h20 | Tests post-bascule NS : DNS + navigateur + emails — tous concluants                        | ✅     | user        |
+| ~13h40 | LWS transmet le code AUTH/EPP de transfert                                                 | ✅     | LWS         |
+| ~14h00 | Cloudflare → Domain Registration → Transfer → openlabconsulting.com éligible (10,46 $US)   | ✅     | user        |
+| ~14h08 | **Transfert initié + paiement confirmé** — statut « Transferts en cours » sur Cloudflare   | ✅     | user        |
 
 ### État au moment de cette entrée
 
-- **Registrar** : encore **LWS** (transfert pas encore initié)
-- **DNS authoritative** : **Cloudflare** ✅ (NS basculés)
+- **Registrar** : **LWS** (transfert en cours vers Cloudflare — ETA 5-7 jours, protection ICANN activée contre expiration 25/05)
+- **DNS authoritative** : **Cloudflare** ✅ (NS basculés + tests OK)
 - **Site web** : encore **WordPress LWS** (IP `83.229.19.73`)
 - **Emails** : encore **LWS** (MX → `mail.openlabconsulting.com` → `193.203.239.21`)
-- **Sous-domaines Hetzner** : `nexusrh`, `api.nexusrh`, `diagnostix` → `62.238.11.20`
+- **Sous-domaines Hetzner** : `nexusrh`, `api.nexusrh`, `diagnostix` → `62.238.11.20` (réponse OK testée)
+
+### Actions en attente (à faire dans les minutes/heures qui suivent)
+
+- [ ] Vérifier la boîte du contact admin WHOIS pour l'**email Cloudflare** « Confirm domain transfer » → cliquer le lien
+- [ ] Surveiller l'arrivée de l'**email LWS** « Demande de transfert sortant » → cliquer pour **CONFIRMER LA SORTIE**
+- [ ] Appeler **LWS au 0892 230 220** pour demander l'accélération du transfert sortant (vu l'urgence du 25/05)
 
 ---
 
