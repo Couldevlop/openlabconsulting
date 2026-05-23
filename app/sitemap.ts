@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
 import { EXPERTISES } from '@/lib/data/expertises';
+import { LOCATIONS } from '@/lib/data/locations';
 import { PRODUCTS } from '@/lib/data/products';
 import { SECTORS } from '@/lib/data/sectors';
 import { absoluteUrl } from '@/lib/seo/site';
@@ -135,6 +136,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // Pages géo SEO local — audit P2 §7 #13. Priorité 0.7 car forte
+    // intention commerciale (mot-clé géo = visiteur prêt à contacter).
+    ...LOCATIONS.map((location): MetadataRoute.Sitemap[number] => ({
+      url: absoluteUrl(`/${location.slug}`),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })),
     {
       url: absoluteUrl('/mentions-legales'),
       lastModified: now,
