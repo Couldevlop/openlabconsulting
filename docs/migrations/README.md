@@ -22,9 +22,10 @@ Exemples :
 
 ## Index
 
-| Fichier                                                | Source | Date       | Contexte                                                                                                                                                                                                       |
-| ------------------------------------------------------ | ------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`2026-05-23-zone-lws.txt`](./2026-05-23-zone-lws.txt) | LWS    | 2026-05-23 | Zone DNS BIND complète exportée depuis le panel LWS avant le démarrage de la migration vers Cloudflare/Zoho/Hetzner. Sert de filet de sécurité pour la pré-config Cloudflare et de référence pour le rollback. |
+| Fichier                                                                | Source | Date       | Contexte                                                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------------- | ------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`2026-05-23-zone-lws.txt`](./2026-05-23-zone-lws.txt)                 | LWS    | 2026-05-23 | Zone DNS BIND complète exportée depuis le panel LWS avant le démarrage de la migration vers Cloudflare/Zoho/Hetzner. Sert de filet de sécurité pour la pré-config Cloudflare et de référence pour le rollback.                                                     |
+| [`2026-05-23-journal-migration.md`](./2026-05-23-journal-migration.md) | Équipe | 2026-05-23 | **Journal vivant** de la migration sortie LWS : timeline réalisée, tests post-bascule NS, étapes restantes (Phase 1.5 transfert registrar, Phase 2 emails Zoho, Phase 3 cutover site), éléments à sauvegarder, contacts d'urgence. À mettre à jour à chaque jalon. |
 
 ## Sécurité
 
