@@ -186,6 +186,7 @@ export function __resetMemoryStore(): void {
 export const RATE_LIMITS = {
   contact: { limit: 5, windowSec: 15 * 60 }, // 5 / 15 min / IP
   auditIa: { limit: 3, windowSec: 60 * 60 }, // 3 / 1 h / IP
+  whitepaper: { limit: 3, windowSec: 24 * 60 * 60 }, // 3 / jour / IP (collections/Whitepapers.ts spec)
   chat: { limit: 20, windowSec: 60 }, // 20 / 1 min / session
   login: { limit: 5, windowSec: 15 * 60 }, // 5 / 15 min / IP
   globalGet: { limit: 200, windowSec: 60 }, // 200 / 1 min / IP (GET)

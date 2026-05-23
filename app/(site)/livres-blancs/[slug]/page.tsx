@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Download, Mail } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { WhitepaperRequestForm } from '@/components/forms/WhitepaperRequestForm';
 
 interface Whitepaper {
   slug: string;
@@ -188,42 +188,11 @@ export default async function WhitepaperPage({
                 ) : null}
               </div>
 
-              <form
-                method="post"
-                action="/api/whitepapers/request"
-                aria-label="Recevoir le livre blanc par e-mail"
-                className="flex flex-col gap-4"
-              >
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-[var(--color-ol-night)]">
-                    Email professionnel
-                  </span>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="prenom@votre-entreprise.com"
-                    className="min-h-12 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                  />
-                </label>
-                <input type="hidden" name="slug" value={wp.slug} />
-
-                <Button type="submit" variant="primary" size="lg">
-                  <Mail width={20} height={20} aria-hidden />
-                  M’envoyer le livre blanc
-                </Button>
-
-                <p className="text-xs text-[var(--color-ol-graphite)]/60">
-                  Pipeline d’envoi (validation Zod + Resend + rate-limit Redis)
-                  branchée en P8 / P10. Pour l’instant le formulaire enregistre
-                  votre demande, vous recevrez manuellement le PDF.
-                </p>
-                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/55">
-                  <Download width={14} height={14} aria-hidden />
-                  PDF · ~{wp.pageCount} pages · français
-                </p>
-              </form>
+              <WhitepaperRequestForm
+                slug={wp.slug}
+                pageCount={wp.pageCount}
+                draft={wp.status === 'draft'}
+              />
             </div>
           </Card>
         </Container>

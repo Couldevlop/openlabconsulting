@@ -124,6 +124,16 @@ export const METRICS = {
       labels: { outcome },
     });
   },
+  whitepaperRequest(
+    slug: string,
+    outcome: 'accepted' | 'rate_limited' | 'invalid' | 'captcha_failed',
+  ): void {
+    counterInc({
+      name: 'openlab_whitepaper_requests_total',
+      help: 'Demandes de téléchargement de livre blanc, par slug et issue.',
+      labels: { slug, outcome },
+    });
+  },
   authEvent(
     event: 'login.success' | 'login.failed' | '2fa.verify' | '2fa.enable',
   ): void {

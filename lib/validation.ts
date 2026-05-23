@@ -51,6 +51,31 @@ export const auditIaSchema = z.object({
 export type AuditIaInput = z.infer<typeof auditIaSchema>;
 
 /**
+ * Whitelist des slugs de livres blancs téléchargeables. Empêche un
+ * attaquant d'injecter un slug arbitraire pour deviner des chemins
+ * ou polluer la collection `leads` avec des sources invalides.
+ *
+ * Sync avec les whitepapers disponibles dans
+ * `app/(site)/livres-blancs/[slug]/page.tsx` (hardcoded en attendant
+ * le binding Payload P6+).
+ */
+export const WHITEPAPER_SLUGS = ['ia-souveraine-ci-2026'] as const;
+
+export const whitepaperRequestSchema = z.object({
+  email: z.email().max(180),
+  name: z.string().min(2).max(120).optional().or(z.literal('')),
+  organization: z.string().max(180).optional().or(z.literal('')),
+  slug: z.enum(WHITEPAPER_SLUGS),
+  consentRgpd: z
+    .union([z.literal('on'), z.literal('true'), z.boolean()])
+    .transform((v) => v === true || v === 'on' || v === 'true'),
+  website: honeypot,
+  'cf-turnstile-response': z.string().min(1).max(2048).optional(),
+});
+
+export type WhitepaperRequestInput = z.infer<typeof whitepaperRequestSchema>;
+
+/**
  * Sérialise les erreurs Zod en `{ field: message }` pour les renvoyer
  * tels quels au client (i18n-friendly).
  */
