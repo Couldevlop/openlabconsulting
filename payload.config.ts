@@ -1,6 +1,10 @@
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
-import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import {
+  lexicalEditor,
+  HeadingFeature,
+  FixedToolbarFeature,
+} from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import sharp from 'sharp';
 import path from 'node:path';
@@ -91,7 +95,21 @@ export default buildConfig({
     FooterSettings,
     SeoDefaults,
   ],
-  editor: lexicalEditor({}),
+  // Éditeur richText premium pour la mise en forme professionnelle des
+  // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,
+  // italique, souligné, barré, code inline, listes puces/numéros/cases,
+  // liens internes + externes, citation, filet horizontal, upload d'images
+  // inline depuis la médiathèque MinIO) et on ajoute :
+  //   - titres restreints à H2/H3/H4 — le H1 est réservé au titre de page,
+  //     ce qui garde une hiérarchie SEO propre (un seul H1 par document) ;
+  //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur).
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
+      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+      FixedToolbarFeature(),
+    ],
+  }),
   db: postgresAdapter({
     pool: {
       connectionString:

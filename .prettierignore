@@ -18,3 +18,6 @@ public
 # YAML valide pour prettier — on les exclut.
 deploy/helm/**/templates/
 deploy/helm/**/charts/
+
+# Migrations Payload : code SQL auto-généré (drizzle) — non formaté.
+migrations/

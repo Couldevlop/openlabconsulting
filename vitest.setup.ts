@@ -46,6 +46,13 @@ if (typeof globalThis.matchMedia === 'undefined') {
 vi.mock('next/headers', () => ({
   headers: async () => new Headers(),
   cookies: async () => new Map(),
+  // draftMode désactivé par défaut → les pages empruntent le chemin
+  // « publié ». Les tests de prévisualisation surchargent ce mock.
+  draftMode: async () => ({
+    isEnabled: false,
+    enable: vi.fn(),
+    disable: vi.fn(),
+  }),
 }));
 
 afterEach(() => {

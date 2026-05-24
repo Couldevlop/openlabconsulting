@@ -49,8 +49,38 @@ open http://localhost:3000/admin
 | `pnpm db:migrate:create`      | Génère une migration depuis les diffs de schéma            |
 | `pnpm db:migrate:status`      | Affiche l'état des migrations                              |
 | `pnpm cms:seed`               | Crée un super-admin (idempotent — voir env vars ci-dessus) |
+| `pnpm cms:seed:articles`      | Seed/upsert les articles fondateurs Insights (idempotent)  |
 | `pnpm cms:generate-types`     | Régénère `payload-types.ts` (typage TS des collections)    |
 | `pnpm cms:generate-importmap` | Régénère `app/(payload)/admin/importMap.js`                |
+
+## Articles (Insights) — seed, prévisualisation, prod
+
+- **Source de vérité** : collection Payload `articles`. Les articles seedés
+  restent **entièrement éditables / supprimables dans `/admin`**.
+- **Seed** : `scripts/articles-content.ts` (Markdown sourcé) → converti en
+  Lexical par `scripts/seed-articles.ts`. Idempotent (upsert par `slug`).
+
+  ```bash
+  docker compose up -d postgres
+  pnpm db:migrate
+  pnpm cms:seed:articles
+  ```
+
+- **Prévisualisation des brouillons** : le bouton « Aperçu » de l'admin ouvre
+  `/api/preview?slug=…&collection=articles`, qui n'active le draft mode Next
+  **que pour un utilisateur Payload authentifié** (OWASP A01). Sortie via
+  `/api/preview/exit`. États gérés nativement par le versioning Payload
+  (`versions.drafts` → `_status` brouillon / publié + historique de versions).
+- **⚠️ Mise en prod** : les champs `summary` et `sources` ajoutés à la
+  collection nécessitent une **migration Payload committée** — en production
+  le `push` automatique du schéma est désactivé, c'est le `migrate-job` du
+  pipeline qui applique les migrations. Générer avec la DB up :
+
+  ```bash
+  docker compose up -d postgres
+  pnpm db:migrate:create   # snapshot du schéma + nouvelles colonnes
+  # committer le fichier généré dans migrations/
+  ```
 
 ## Architecture des routes
 

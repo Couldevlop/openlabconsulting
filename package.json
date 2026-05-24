@@ -28,8 +28,10 @@
     "cms:generate-types": "payload generate:types",
     "cms:generate-importmap": "tsx --env-file=.env scripts/payload-importmap.ts",
     "cms:seed": "tsx --env-file=.env scripts/cms-seed.ts",
+    "cms:seed:articles": "tsx --env-file=.env scripts/seed-articles.ts",
     "db:migrate": "tsx --env-file=.env scripts/payload-migrate.ts",
     "db:migrate:create": "payload migrate:create",
+    "db:migrate:create:tsx": "tsx --env-file=.env scripts/payload-migrate-create.ts",
     "db:migrate:status": "payload migrate:status",
     "payload": "payload"
   },

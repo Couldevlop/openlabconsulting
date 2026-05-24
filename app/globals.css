@@ -104,6 +104,115 @@ h2 {
   margin-block: 1.25em;
 }
 
+/* Corps d'article (Insights) — rendu Lexical premium, charte §3.
+ * Largeur de lecture confortable (60-75 car., §4.3), titres Bricolage,
+ * citations Fraunces (éditorial), liens orange, data en mono. */
+.article-prose {
+  max-width: 68ch;
+  font-size: 1.0625rem; /* ~17px (§4.3) */
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-ol-graphite) 92%, transparent);
+}
+
+.article-prose > * + * {
+  margin-block-start: 1.3em;
+}
+
+.article-prose h2,
+.article-prose h3,
+.article-prose h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ol-night);
+  scroll-margin-top: 90px; /* ancres sous la navbar sticky */
+}
+
+.article-prose h2 {
+  font-size: 1.6rem;
+  margin-block-start: 2.2em;
+  padding-block-end: 0.3em;
+  border-block-end: 1px solid var(--color-ol-mist);
+}
+
+.article-prose h3 {
+  font-size: 1.25rem;
+  margin-block-start: 1.8em;
+}
+
+.article-prose h4 {
+  font-size: 1.075rem;
+  margin-block-start: 1.5em;
+}
+
+.article-prose a {
+  color: var(--color-ol-orange-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.article-prose a:hover {
+  color: var(--color-ol-orange);
+}
+
+.article-prose strong {
+  font-weight: 600;
+  color: var(--color-ol-night);
+}
+
+.article-prose ul,
+.article-prose ol {
+  padding-inline-start: 1.4em;
+}
+
+.article-prose ul {
+  list-style: disc;
+}
+
+.article-prose ol {
+  list-style: decimal;
+}
+
+.article-prose li + li {
+  margin-block-start: 0.5em;
+}
+
+.article-prose li::marker {
+  color: var(--color-ol-orange);
+}
+
+/* Citation en exergue — Fraunces, filet orange. */
+.article-prose blockquote {
+  font-family: var(--font-editorial);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--color-ol-navy);
+  border-inline-start: 3px solid var(--color-ol-orange);
+  padding-inline-start: 1.25em;
+  margin-inline: 0;
+}
+
+.article-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-ol-mist);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.article-prose hr {
+  border: 0;
+  border-block-start: 1px solid var(--color-ol-mist);
+  margin-block: 2.5em;
+}
+
+.article-prose img {
+  border-radius: 8px;
+  box-shadow: var(--shadow-ol-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto !important;

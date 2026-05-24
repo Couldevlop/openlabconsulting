@@ -24,7 +24,10 @@ describe('Payload collections', () => {
       );
     });
 
-    it('a les champs critiques (title, slug, content, status, publishedAt)', () => {
+    it('a les champs critiques (title, slug, content, summary, sources, publishedAt)', () => {
+      // Le statut de publication n'est PAS un champ déclaré : il est fourni
+      // par le versioning natif (`versions.drafts` → `_status`). On évite
+      // ainsi la collision d'enum avec un champ `status` custom.
       const fieldNames = (Articles.fields ?? []).flatMap((f) =>
         'name' in f ? [f.name] : [],
       );
@@ -34,7 +37,8 @@ describe('Payload collections', () => {
         'excerpt',
         'content',
         'category',
-        'status',
+        'summary',
+        'sources',
         'publishedAt',
       ]) {
         expect(fieldNames).toContain(required);
