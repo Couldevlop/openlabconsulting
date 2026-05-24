@@ -20,18 +20,18 @@ describe('AuditIaQuizWizard', () => {
     vi.restoreAllMocks();
   });
 
+  /**
+   * fireEvent.click synchrone (vs userEvent qui timeout en mode coverage
+   * sur 5 clics enchaînés à cause de l'instrumentation V8). On garde
+   * userEvent pour les cas où le réalisme d'interaction compte vraiment
+   * (focus, keyboard, etc.) — pas ici, on clique juste des boutons.
+   */
   async function answerAllQuestions(): Promise<void> {
-    const user = userEvent.setup();
-    // Q1 maturity
-    await user.click(screen.getByText(/On en parle, on explore/i));
-    // Q2 sector
-    await user.click(await screen.findByText(/Banque & assurance/i));
-    // Q3 headcount
-    await user.click(await screen.findByText(/^Moins de 50$/i));
-    // Q4 scope
-    await user.click(await screen.findByText(/Un cas d.usage précis/i));
-    // Q5 urgency
-    await user.click(await screen.findByText(/Phase d.exploration/i));
+    fireEvent.click(screen.getByText(/On en parle, on explore/i));
+    fireEvent.click(await screen.findByText(/Banque & assurance/i));
+    fireEvent.click(await screen.findByText(/^Moins de 50$/i));
+    fireEvent.click(await screen.findByText(/Un cas d.usage précis/i));
+    fireEvent.click(await screen.findByText(/Phase d.exploration/i));
   }
 
   it('rend la barre de progression et la 1re question au démarrage', () => {
