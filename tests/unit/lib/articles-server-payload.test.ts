@@ -87,6 +87,17 @@ describe('toArticle — mapping document Payload', () => {
     const a = toArticle({ ...baseDoc(), publishedAt: undefined });
     expect(a?.isoDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
+
+  it('relativise une URL de cover absolue (next/image friendly)', () => {
+    const a = toArticle({
+      ...baseDoc(),
+      cover: {
+        url: 'http://localhost:3000/api/media/file/photo.png',
+        alt: 'Photo',
+      },
+    });
+    expect(a?.cover.src).toBe('/api/media/file/photo.png');
+  });
 });
 
 /**

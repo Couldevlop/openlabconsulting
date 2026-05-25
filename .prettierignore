@@ -21,3 +21,6 @@ deploy/helm/**/charts/
 
 # Migrations Payload : code SQL auto-généré (drizzle) — non formaté.
 migrations/
+
+# importMap admin auto-généré par Payload (réécrit au boot du dev server).
+app/(payload)/admin/importMap.js

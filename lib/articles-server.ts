@@ -132,13 +132,29 @@ function isCategory(value: unknown): value is ArticleCategory {
   return typeof value === 'string' && value in CATEGORY_LABELS;
 }
 
+/**
+ * Rend une URL média relative à l'origine.
+ *
+ * Payload préfixe les URLs d'upload par `serverURL` (ex.
+ * `http://localhost:3000/api/media/file/x.png`). En relativisant
+ * (`/api/media/file/x.png`), `next/image` l'accepte sans qu'on ait à
+ * whitelister chaque domaine (dev, preprod, prod) dans next.config.
+ */
+function toRelativeMediaUrl(url: string): string {
+  try {
+    return /^https?:\/\//i.test(url) ? new URL(url).pathname : url;
+  } catch {
+    return url;
+  }
+}
+
 function normalizeCover(
   cover: RawPayloadArticle['cover'],
   fallbackAlt: string,
 ): { src: string | null; alt: string } {
   if (cover && typeof cover === 'object' && 'url' in cover) {
     return {
-      src: typeof cover.url === 'string' ? cover.url : null,
+      src: typeof cover.url === 'string' ? toRelativeMediaUrl(cover.url) : null,
       alt: typeof cover.alt === 'string' ? cover.alt : fallbackAlt,
     };
   }
