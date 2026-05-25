@@ -11,8 +11,9 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { Mockup } from '@/components/atoms/Mockup';
 import { ProductDemo } from '@/components/demos/ProductDemo';
+import { ProductMockup } from '@/components/mockups/ProductMockup';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
 import {
@@ -145,14 +146,15 @@ export default async function SolutionDetailPage({
               </div>
             </div>
 
-            <MediaPlaceholder
-              src={null}
-              alt={`Capture d’écran ${name}`}
-              tone="neutral"
-              aspect="3/2"
-              placeholderLabel={`Mockup ${name}`}
+            <Mockup
+              variant="dashboard"
+              tone="orange"
+              aspect="16/9"
+              label={name}
               className="shadow-xl"
-            />
+            >
+              <ProductMockup slug={product.slug} />
+            </Mockup>
           </div>
         </Container>
       </section>
