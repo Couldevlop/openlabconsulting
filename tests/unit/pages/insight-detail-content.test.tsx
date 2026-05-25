@@ -72,7 +72,10 @@ vi.mock('@/lib/articles-server', () => ({
   getArticleBySlug: vi.fn(async () => fullArticle),
 }));
 
-import InsightArticlePage from '@/app/(site)/insights/[slug]/page';
+import InsightArticlePage, {
+  generateMetadata,
+} from '@/app/(site)/insights/[slug]/page';
+import { getArticleBySlug } from '@/lib/articles-server';
 
 async function renderPage(): Promise<void> {
   const params = Promise.resolve({ slug: 'article-complet' });
@@ -120,5 +123,34 @@ describe('Page /insights/[slug] — article avec contenu', () => {
     const link = screen.getByRole('link', { name: 'Source X' });
     expect(link.getAttribute('href')).toBe('https://x.example');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer nofollow');
+  });
+});
+
+describe('generateMetadata /insights/[slug]', () => {
+  it('expose title, canonical et openGraph pour un article publié', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ slug: 'article-complet' }),
+    });
+    expect(String(meta.title)).toContain('Article complet de test');
+    expect(meta.alternates?.canonical).toBe('/insights/article-complet');
+    expect((meta.openGraph as { type?: string })?.type).toBe('article');
+    expect(meta.robots).toBeUndefined();
+  });
+
+  it('retourne un titre « introuvable » si l’article est absent', async () => {
+    vi.mocked(getArticleBySlug).mockResolvedValueOnce(null);
+    const meta = await generateMetadata({
+      params: Promise.resolve({ slug: 'inconnu' }),
+    });
+    expect(String(meta.title)).toMatch(/introuvable/i);
+  });
+});
+
+describe('Page /insights/[slug] — article absent', () => {
+  it('déclenche notFound() quand le slug est introuvable', async () => {
+    vi.mocked(getArticleBySlug).mockResolvedValueOnce(null);
+    await expect(
+      InsightArticlePage({ params: Promise.resolve({ slug: 'inconnu' }) }),
+    ).rejects.toThrow();
   });
 });

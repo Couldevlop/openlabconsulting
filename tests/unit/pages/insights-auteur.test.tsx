@@ -1,6 +1,18 @@
 ﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import AuthorArchivePage from '@/app/(site)/insights/auteur/[author]/page';
+import AuthorArchivePage, {
+  generateMetadata,
+} from '@/app/(site)/insights/auteur/[author]/page';
+
+describe('auteur — generateMetadata', () => {
+  it('décode le nom de l’auteur depuis le slug', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ author: 'debora-ahouma' }),
+    });
+    expect(String(meta.title)).toContain('debora ahouma');
+    expect(meta.alternates?.canonical).toBe('/insights/auteur/debora-ahouma');
+  });
+});
 
 describe('Page /insights/auteur/[author]', () => {
   it('rend un h1 mentionnant le nom de l’auteur (décodé du slug)', async () => {

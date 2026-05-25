@@ -37,7 +37,18 @@ vi.mock('@/lib/articles-server', () => ({
   getArticleBySlug: vi.fn(async () => draftArticle),
 }));
 
-import InsightArticlePage from '@/app/(site)/insights/[slug]/page';
+import InsightArticlePage, {
+  generateMetadata,
+} from '@/app/(site)/insights/[slug]/page';
+
+describe('generateMetadata — mode prévisualisation', () => {
+  it('ajoute robots noindex/nofollow pour un brouillon', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ slug: 'brouillon' }),
+    });
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+});
 
 describe('Page /insights/[slug] — mode prévisualisation', () => {
   it('affiche la bannière brouillon + lien de sortie', async () => {

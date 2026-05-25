@@ -1,6 +1,9 @@
 ﻿import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import CategoryArchivePage from '@/app/(site)/insights/categorie/[cat]/page';
+import CategoryArchivePage, {
+  generateMetadata,
+  generateStaticParams,
+} from '@/app/(site)/insights/categorie/[cat]/page';
 
 describe('Page /insights/categorie/[cat]', () => {
   it('rend un h1 avec le libellé de la catégorie « souverainete » → « Souveraineté »', async () => {
@@ -31,5 +34,32 @@ describe('Page /insights/categorie/[cat]', () => {
     const empty = screen.queryByText(/Pas encore d/i);
     const articles = document.querySelectorAll('article');
     expect(empty !== null || articles.length > 0).toBe(true);
+  });
+
+  it('déclenche notFound() pour une catégorie inconnue', async () => {
+    await expect(
+      CategoryArchivePage({ params: Promise.resolve({ cat: 'inexistante' }) }),
+    ).rejects.toThrow();
+  });
+});
+
+describe('categorie — generateStaticParams & generateMetadata', () => {
+  it('generateStaticParams retourne les 7 catégories', () => {
+    expect(generateStaticParams()).toHaveLength(7);
+  });
+
+  it('generateMetadata pour une catégorie valide', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ cat: 'souverainete' }),
+    });
+    expect(String(meta.title)).toContain('Souveraineté');
+    expect(meta.alternates?.canonical).toBe('/insights/categorie/souverainete');
+  });
+
+  it('generateMetadata renvoie « introuvable » pour une catégorie inconnue', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ cat: 'inexistante' }),
+    });
+    expect(String(meta.title)).toMatch(/introuvable/i);
   });
 });
