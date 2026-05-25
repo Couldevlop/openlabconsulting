@@ -13,7 +13,12 @@ vi.mock('payload', () => ({
   getPayload: async () => ({ find: findMock }),
 }));
 
-import { getPublishedArticles, getArticleBySlug } from '@/lib/articles-server';
+import {
+  getPublishedArticles,
+  getArticleBySlug,
+  getRelatedArticles,
+  getPagedArticles,
+} from '@/lib/articles-server';
 import { FALLBACK_ARTICLES } from '@/lib/articles';
 
 function rawDoc(overrides: Record<string, unknown> = {}) {
@@ -79,5 +84,29 @@ describe('getArticleBySlug — Payload disponible', () => {
     findMock.mockResolvedValue({ docs: [] });
     const a = await getArticleBySlug('migration-ia-souveraine-k3s-hetzner');
     expect(a?.slug).toBe('migration-ia-souveraine-k3s-hetzner');
+  });
+});
+
+describe('getRelatedArticles — Payload disponible', () => {
+  it('mappe les articles liés trouvés', async () => {
+    findMock.mockResolvedValue({ docs: [rawDoc({ slug: 'lie-1' })] });
+    const r = await getRelatedArticles('agents-ia', 'courant', 3);
+    expect(r[0]?.slug).toBe('lie-1');
+    expect(findMock).toHaveBeenCalledWith(
+      expect.objectContaining({ collection: 'articles', limit: 3 }),
+    );
+  });
+});
+
+describe('getPagedArticles — Payload disponible', () => {
+  it('retourne la page demandée + le total de pages', async () => {
+    findMock.mockResolvedValue({ docs: [rawDoc()], totalPages: 5 });
+    const p = await getPagedArticles(2, 9);
+    expect(p.page).toBe(2);
+    expect(p.totalPages).toBe(5);
+    expect(p.articles[0]?.slug).toBe('depuis-payload');
+    expect(findMock).toHaveBeenCalledWith(
+      expect.objectContaining({ page: 2, limit: 9 }),
+    );
   });
 });

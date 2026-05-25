@@ -35,6 +35,7 @@ const draftArticle: Article = {
 
 vi.mock('@/lib/articles-server', () => ({
   getArticleBySlug: vi.fn(async () => draftArticle),
+  getRelatedArticles: vi.fn(async () => []),
 }));
 
 import InsightArticlePage, {

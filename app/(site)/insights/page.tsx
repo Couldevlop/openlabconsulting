@@ -1,18 +1,17 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { ArticleCard } from '@/components/insights/ArticleCard';
 import { Badge } from '@/components/atoms/Badge';
-import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { blogSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { CATEGORY_LABELS } from '@/lib/articles';
-import { getPublishedArticles } from '@/lib/articles-server';
+import { getPagedArticles } from '@/lib/articles-server';
 import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
@@ -26,13 +25,23 @@ export const metadata: Metadata = {
 };
 
 const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
+const PER_PAGE = 9;
 
-export default async function InsightsHubPage(): Promise<React.ReactElement> {
-  const [articles, hub] = await Promise.all([
-    getPublishedArticles(12),
+interface HubPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function InsightsHubPage({
+  searchParams,
+}: HubPageProps): Promise<React.ReactElement> {
+  const { page: pageParam } = await searchParams;
+  const requestedPage = Number.parseInt(pageParam ?? '1', 10);
+  const [paged, hub] = await Promise.all([
+    getPagedArticles(requestedPage, PER_PAGE),
     getInsightsHubContent(),
   ]);
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const { articles, page, totalPages } = paged;
 
   return (
     <main id="main">
@@ -85,47 +94,54 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
           <ul className="grid gap-8 md:grid-cols-3">
             {articles.map((a) => (
               <li key={a.slug}>
-                <Link
-                  href={`/insights/${a.slug}`}
-                  className="group block h-full focus:outline-none focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                >
-                  <Card
-                    as="article"
-                    interactive
-                    className="flex h-full flex-col gap-5 p-0 sm:p-0"
-                  >
-                    <MediaPlaceholder
-                      src={a.cover.src}
-                      alt={a.cover.alt}
-                      tone="cold"
-                      aspect="16/9"
-                      placeholderLabel="Couverture article"
-                      className="rounded-b-none border-0 border-b border-dashed border-[var(--color-ol-graphite)]/15"
-                    />
-                    <div className="flex flex-1 flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8">
-                      <Badge tone="orange">{a.categoryLabel}</Badge>
-                      <Heading
-                        level={2}
-                        visualLevel={4}
-                        className="leading-snug"
-                      >
-                        {a.title}
-                      </Heading>
-                      <p className="text-[var(--color-ol-graphite)]/75">
-                        {a.excerpt}
-                      </p>
-                      <footer className="mt-auto flex items-center justify-between gap-3 border-t border-[var(--color-ol-mist)] pt-4 text-xs text-[var(--color-ol-graphite)]/65">
-                        <span className="font-medium text-[var(--color-ol-night)]">
-                          {a.author}
-                        </span>
-                        <time dateTime={a.isoDate}>{a.publishedAt}</time>
-                      </footer>
-                    </div>
-                  </Card>
-                </Link>
+                <ArticleCard article={a} />
               </li>
             ))}
           </ul>
+
+          {/* Pagination SSR (sans JS) */}
+          {totalPages > 1 && (
+            <nav
+              aria-label="Pagination des articles"
+              className="mt-12 flex items-center justify-center gap-6 text-sm"
+            >
+              {page > 1 ? (
+                <Link
+                  href={`/insights?page=${page - 1}`}
+                  rel="prev"
+                  className="inline-flex items-center gap-1 font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
+                >
+                  <ChevronLeft width={16} height={16} aria-hidden />
+                  Précédent
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[var(--color-ol-graphite)]/30">
+                  <ChevronLeft width={16} height={16} aria-hidden />
+                  Précédent
+                </span>
+              )}
+
+              <span className="font-medium text-[var(--color-ol-graphite)]/70">
+                Page {page} / {totalPages}
+              </span>
+
+              {page < totalPages ? (
+                <Link
+                  href={`/insights?page=${page + 1}`}
+                  rel="next"
+                  className="inline-flex items-center gap-1 font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
+                >
+                  Suivant
+                  <ChevronRight width={16} height={16} aria-hidden />
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[var(--color-ol-graphite)]/30">
+                  Suivant
+                  <ChevronRight width={16} height={16} aria-hidden />
+                </span>
+              )}
+            </nav>
+          )}
 
           <div className="mt-12 rounded-lg border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 text-center">
             <Heading level={3} visualLevel={4}>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { ArticleBody } from '@/components/insights/ArticleBody';
+import { ArticleCard } from '@/components/insights/ArticleCard';
 import { Badge } from '@/components/atoms/Badge';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Container } from '@/components/atoms/Container';
@@ -14,7 +15,7 @@ import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { extractHeadings } from '@/lib/articles';
-import { getArticleBySlug } from '@/lib/articles-server';
+import { getArticleBySlug, getRelatedArticles } from '@/lib/articles-server';
 
 interface PageParams {
   params: Promise<{ slug: string }>;
@@ -53,6 +54,7 @@ export default async function InsightArticlePage({
 
   const headings = extractHeadings(article.content);
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const related = await getRelatedArticles(article.category, article.slug, 3);
 
   return (
     <main id="main">
@@ -269,6 +271,27 @@ export default async function InsightArticlePage({
           </div>
         </Container>
       </section>
+
+      {/* À lire aussi — articles de la même catégorie (anti cul-de-sac §4.9) */}
+      {related.length > 0 && (
+        <section
+          aria-labelledby="related-title"
+          className="bg-[var(--color-ol-ivory)] py-16 sm:py-20"
+        >
+          <Container width="wide">
+            <Heading id="related-title" level={2} visualLevel={3}>
+              À lire aussi
+            </Heading>
+            <ul className="mt-8 grid gap-8 md:grid-cols-3">
+              {related.map((a) => (
+                <li key={a.slug}>
+                  <ArticleCard article={a} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      )}
 
       <AuditIaCtaServer />
     </main>
