@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -8,6 +9,8 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { blogSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
 import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
@@ -16,7 +19,10 @@ export const metadata: Metadata = {
   title: 'Insights — Articles, études et retours de terrain',
   description:
     'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
-  alternates: { canonical: '/insights' },
+  alternates: {
+    canonical: '/insights',
+    types: { 'application/rss+xml': '/feed.xml' },
+  },
 };
 
 const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
@@ -26,9 +32,20 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
     getPublishedArticles(12),
     getInsightsHubContent(),
   ]);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
+      <JsonLd
+        nonce={nonce}
+        data={[
+          blogSchema(),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Insights', url: '/insights' },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="insights-hub-title"

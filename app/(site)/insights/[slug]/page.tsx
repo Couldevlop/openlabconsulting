@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { draftMode } from 'next/headers';
+import { draftMode, headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
@@ -11,6 +11,8 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { extractHeadings } from '@/lib/articles';
 import { getArticleBySlug } from '@/lib/articles-server';
 
@@ -50,9 +52,35 @@ export default async function InsightArticlePage({
   if (!article) notFound();
 
   const headings = extractHeadings(article.content);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
+      {/* SEO structuré : Article + fil d'Ariane (pas sur un brouillon noindex). */}
+      {!isDraft && (
+        <JsonLd
+          nonce={nonce}
+          data={[
+            articleSchema({
+              slug: article.slug,
+              title: article.title,
+              excerpt: article.excerpt,
+              author: article.author,
+              isoDate: article.isoDate,
+              categoryLabel: article.categoryLabel,
+              coverSrc: article.cover.src,
+            }),
+            breadcrumbSchema([
+              { name: 'Insights', url: '/insights' },
+              {
+                name: article.categoryLabel,
+                url: `/insights/categorie/${article.category}`,
+              },
+              { name: article.title, url: `/insights/${article.slug}` },
+            ]),
+          ]}
+        />
+      )}
       {isDraft && (
         <div className="bg-[var(--color-ol-night)] px-4 py-2 text-center text-sm text-white">
           Mode prévisualisation — brouillon non publié.{' '}
