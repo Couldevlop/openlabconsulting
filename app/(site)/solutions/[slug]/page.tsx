@@ -12,8 +12,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { Mockup } from '@/components/atoms/Mockup';
 import { ProductDemo, hasProductDemo } from '@/components/demos/ProductDemo';
 import { DemoRequestModal } from '@/components/forms/DemoRequestModal';
+import {
+  ProductMockup,
+  hasProductMockup,
+} from '@/components/mockups/ProductMockup';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { PRODUCTS } from '@/lib/data/products';
@@ -82,6 +87,7 @@ export default async function SolutionDetailPage({
   } = product;
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const caseStudy = await getCaseStudyForProduct(product.slug);
+  const screenshot = SOLUTION_SCREENSHOTS[product.slug] ?? null;
 
   return (
     <main id="main">
@@ -162,14 +168,39 @@ export default async function SolutionDetailPage({
               </div>
             </div>
 
-            <MediaPlaceholder
-              src={SOLUTION_SCREENSHOTS[slug] ?? null}
-              alt={`Capture d’écran ${name}`}
-              tone="neutral"
-              aspect="3/2"
-              placeholderLabel={`Mockup ${name}`}
-              className="shadow-xl"
-            />
+            {screenshot ? (
+              // Capture d'écran réelle (ex. NexusRH) — la plus convaincante.
+              <Mockup
+                variant="dashboard"
+                tone="orange"
+                aspect="16/9"
+                label={name}
+                src={screenshot}
+                alt={`Capture d’écran ${name}`}
+                className="shadow-xl"
+              />
+            ) : hasProductMockup(product.slug) ? (
+              // Mockup SVG dédié — signature visuelle propre (§7.1).
+              <Mockup
+                variant="dashboard"
+                tone="orange"
+                aspect="16/9"
+                label={name}
+                className="shadow-xl"
+              >
+                <ProductMockup slug={product.slug} />
+              </Mockup>
+            ) : (
+              // Produit créé depuis l'admin sans visuel dédié encore.
+              <MediaPlaceholder
+                src={null}
+                alt={`Capture d’écran ${name}`}
+                tone="neutral"
+                aspect="3/2"
+                placeholderLabel={`Mockup ${name}`}
+                className="shadow-xl"
+              />
+            )}
           </div>
         </Container>
       </section>

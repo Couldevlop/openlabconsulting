@@ -9,37 +9,10 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { Mockup } from '@/components/atoms/Mockup';
-import { AgrosenseMockup } from '@/components/mockups/AgrosenseMockup';
-import { FraudShieldMockup } from '@/components/mockups/FraudShieldMockup';
-import { NexusRhMockup } from '@/components/mockups/NexusRhMockup';
-import { SygescomMockup } from '@/components/mockups/SygescomMockup';
-import {
-  FALLBACK_CASE_STUDIES,
-  type CaseStudy,
-  type ProductSlug,
-} from '@/lib/case-studies';
+import { ProductMockup } from '@/components/mockups/ProductMockup';
+import { FALLBACK_CASE_STUDIES, type CaseStudy } from '@/lib/case-studies';
 
 const AUTOPLAY_MS = 7000;
-
-/**
- * Map productSlug → mockup SVG par défaut. Utilisé quand la collection
- * Payload ne fournit pas d'image téléversée pour ce slide.
- *
- * Quand un nouveau produit reçoit son propre mockup SVG, l'ajouter ici.
- * Pour les produits sans mockup encore créé, on retombe sur SygescomMockup
- * comme placeholder visuel le plus polyvalent (à remplacer ASAP par un
- * SVG dédié).
- */
-const DEFAULT_MOCKUPS: Record<ProductSlug, ReactElement> = {
-  nexusrh: <NexusRhMockup />,
-  sygescom: <SygescomMockup />,
-  agrosense: <AgrosenseMockup />,
-  'fraud-shield': <FraudShieldMockup />,
-  // À enrichir : ces 3 retombent sur un mockup générique en attendant.
-  nexuserp: <NexusRhMockup />,
-  qualitos: <SygescomMockup />,
-  'smart-city': <SygescomMockup />,
-};
 
 export interface CasesCarouselProps {
   /** Slides à afficher. Si omis, utilise le fallback hard-codé. */
@@ -190,7 +163,7 @@ export function CasesCarousel({
                   src={slide.imageUrl}
                   alt={slide.imageAlt ?? slide.client}
                 >
-                  {DEFAULT_MOCKUPS[slide.productSlug]}
+                  <ProductMockup slug={slide.productSlug} />
                 </Mockup>
               </motion.div>
             </AnimatePresence>
