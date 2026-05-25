@@ -9,6 +9,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { InsightsList } from '@/components/sections/InsightsList';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
+import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'Insights — Articles, études et retours de terrain',
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
 const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
 
 export default async function InsightsHubPage(): Promise<React.ReactElement> {
-  const articles = await getPublishedArticles(12);
+  const [articles, hub] = await Promise.all([
+    getPublishedArticles(12),
+    getInsightsHubContent(),
+  ]);
 
   return (
     <main id="main">
@@ -31,18 +35,16 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="max-w-3xl">
-            <Eyebrow tone="orange">Hub Insights</Eyebrow>
+            <Eyebrow tone="orange">{hub.eyebrow}</Eyebrow>
             <Heading id="insights-hub-title" level={1} className="mt-4">
-              Notre lecture du{' '}
+              {hub.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                terrain africain
+                {hub.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              Pas des billets d’opinion : des retours de déploiements réels,
-              sourcés, opérables dès lundi. Deux articles longs par semaine
-              (objectif éditorial 2026), un livre blanc par trimestre.
+              {hub.intro}
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-2">
@@ -66,18 +68,16 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
 
           <div className="mt-12 rounded-lg border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 text-center">
             <Heading level={3} visualLevel={4}>
-              Plus d’articles arrivent.
+              {hub.emptyState.heading}
             </Heading>
             <p className="mt-3 text-[var(--color-ol-graphite)]/75">
-              Les nouveaux insights sont publiés directement depuis l’admin
-              Payload. Reviens régulièrement, ou abonne-toi au flux RSS via la
-              racine du site.
+              {hub.emptyState.text}
             </p>
             <Link
-              href="/audit-ia"
+              href={hub.emptyState.ctaHref}
               className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
             >
-              En attendant, demande ton audit IA
+              {hub.emptyState.ctaLabel}
               <ArrowUpRight width={14} height={14} aria-hidden />
             </Link>
           </div>

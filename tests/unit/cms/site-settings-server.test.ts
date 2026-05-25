@@ -3,6 +3,7 @@ import {
   getAuditIaCtaContent,
   getFooterContent,
   getHeroContent,
+  getInsightsHubContent,
   getManifestoContent,
   getReassuranceContent,
 } from '@/lib/cms/site-settings-server';
@@ -10,6 +11,7 @@ import {
   AUDIT_IA_CTA_FALLBACK,
   FOOTER_FALLBACK,
   HERO_FALLBACK,
+  INSIGHTS_HUB_FALLBACK,
   MANIFESTO_FALLBACK,
   REASSURANCE_FALLBACK,
 } from '@/lib/cms/site-settings';
@@ -52,5 +54,13 @@ describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () =>
     const content = await getReassuranceContent();
     expect(content.eyebrow).toBe(REASSURANCE_FALLBACK.eyebrow);
     expect(content.partners).toEqual(REASSURANCE_FALLBACK.partners);
+  });
+
+  it('getInsightsHubContent retourne INSIGHTS_HUB_FALLBACK', async () => {
+    const content = await getInsightsHubContent();
+    expect(content.headlineHighlight).toBe(
+      INSIGHTS_HUB_FALLBACK.headlineHighlight,
+    );
+    expect(content.emptyState).toEqual(INSIGHTS_HUB_FALLBACK.emptyState);
   });
 });
