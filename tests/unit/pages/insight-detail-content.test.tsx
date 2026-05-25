@@ -130,6 +130,20 @@ describe('Page /insights/[slug] — article avec contenu', () => {
     expect(link.getAttribute('href')).toBe('https://x.example');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer nofollow');
   });
+
+  it('émet un JSON-LD Article', async () => {
+    const { container } = render(
+      await InsightArticlePage({
+        params: Promise.resolve({ slug: 'article-complet' }),
+      }),
+    );
+    const scripts = Array.from(
+      container.querySelectorAll('script[type="application/ld+json"]'),
+    );
+    expect(scripts.some((s) => s.textContent?.includes('"Article"'))).toBe(
+      true,
+    );
+  });
 });
 
 describe('generateMetadata /insights/[slug]', () => {

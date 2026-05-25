@@ -330,6 +330,21 @@ export function faqPageSchema(
   };
 }
 
+/** Blog schema pour le hub `/insights`. */
+export function blogSchema(): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': absoluteUrl('/insights#blog'),
+    url: absoluteUrl('/insights'),
+    name: 'Insights — OpenLab Consulting',
+    description:
+      'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
+    inLanguage: SITE.language,
+    publisher: { '@id': absoluteUrl('/#organization') },
+  };
+}
+
 /** Sérialise un objet Thing en chaîne JSON safe pour <script>. */
 export function jsonLdString(thing: Thing | Thing[]): string {
   return JSON.stringify(thing).replace(/</g, '\\u003c');

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   articleSchema,
+  blogSchema,
   bookSchema,
   breadcrumbSchema,
   faqPageSchema,
@@ -24,6 +25,12 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(s.name).toMatch(/OpenLab/);
     const addr = s.address as { addressLocality?: string };
     expect(addr.addressLocality).toBe('Cocody');
+  });
+
+  it('blogSchema : type Blog pointant /insights', () => {
+    const s = blogSchema();
+    expect(s['@type']).toBe('Blog');
+    expect(String(s.url)).toMatch(/\/insights$/);
   });
 
   it('localBusinessSchema : type ProfessionalService', () => {
