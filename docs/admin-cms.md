@@ -82,6 +82,28 @@ open http://localhost:3000/admin
   # committer le fichier généré dans migrations/
   ```
 
+## Stockage des médias (dev vs prod)
+
+Le stockage des uploads (couvertures d'articles, médiathèque) est piloté
+par la variable `MINIO_ENDPOINT` (cf. `payload.config.ts`, `useMinio`) :
+
+- **Dev local** : `MINIO_ENDPOINT` est **commenté** dans `.env` → Payload
+  écrit sur le **système de fichiers local** (`media/`, gitignoré). Simple et
+  rapide, aucun bucket à provisionner.
+- **Prod (K3s)** : la ConfigMap Helm définit `MINIO_ENDPOINT`,
+  `MINIO_BUCKET=openlab-media` → l'adaptateur `@payloadcms/storage-s3`
+  envoie les uploads sur **MinIO**. Points vérifiés côté chart :
+  - `minio.defaultBuckets: openlab-media` → le bucket est **auto-créé** au
+    déploiement (sous-chart Bitnami) ;
+  - le `Deployment` tourne en `readOnlyRootFilesystem: true` avec un volume
+    `emptyDir` monté sur `/tmp` → les fichiers temporaires de `sharp`
+    (génération AVIF/WebP) sont écrits hors du FS en lecture seule ;
+  - les clés `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` viennent du
+    SealedSecret (§14.8), jamais du dépôt.
+
+> ⚠️ Conséquence : en prod, **ne jamais** compter sur le FS local pour les
+> médias (il est en lecture seule). Tout passe par MinIO.
+
 ## Architecture des routes
 
 ```

@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { ArticleCard } from '@/components/insights/ArticleCard';
 import { Badge } from '@/components/atoms/Badge';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { InsightsList } from '@/components/sections/InsightsList';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { blogSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { CATEGORY_LABELS } from '@/lib/articles';
-import { getPublishedArticles } from '@/lib/articles-server';
+import { getPagedArticles } from '@/lib/articles-server';
 import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
@@ -25,13 +25,23 @@ export const metadata: Metadata = {
 };
 
 const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
+const PER_PAGE = 9;
 
-export default async function InsightsHubPage(): Promise<React.ReactElement> {
-  const [articles, hub] = await Promise.all([
-    getPublishedArticles(12),
+interface HubPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function InsightsHubPage({
+  searchParams,
+}: HubPageProps): Promise<React.ReactElement> {
+  const { page: pageParam } = await searchParams;
+  const requestedPage = Number.parseInt(pageParam ?? '1', 10);
+  const [paged, hub] = await Promise.all([
+    getPagedArticles(requestedPage, PER_PAGE),
     getInsightsHubContent(),
   ]);
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const { articles, page, totalPages } = paged;
 
   return (
     <main id="main">
@@ -81,7 +91,57 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
         className="bg-white py-20 sm:py-28"
       >
         <Container width="wide">
-          <InsightsList articles={articles} />
+          <ul className="grid gap-8 md:grid-cols-3">
+            {articles.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} />
+              </li>
+            ))}
+          </ul>
+
+          {/* Pagination SSR (sans JS) */}
+          {totalPages > 1 && (
+            <nav
+              aria-label="Pagination des articles"
+              className="mt-12 flex items-center justify-center gap-6 text-sm"
+            >
+              {page > 1 ? (
+                <Link
+                  href={`/insights?page=${page - 1}`}
+                  rel="prev"
+                  className="inline-flex items-center gap-1 font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
+                >
+                  <ChevronLeft width={16} height={16} aria-hidden />
+                  Précédent
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[var(--color-ol-graphite)]/30">
+                  <ChevronLeft width={16} height={16} aria-hidden />
+                  Précédent
+                </span>
+              )}
+
+              <span className="font-medium text-[var(--color-ol-graphite)]/70">
+                Page {page} / {totalPages}
+              </span>
+
+              {page < totalPages ? (
+                <Link
+                  href={`/insights?page=${page + 1}`}
+                  rel="next"
+                  className="inline-flex items-center gap-1 font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
+                >
+                  Suivant
+                  <ChevronRight width={16} height={16} aria-hidden />
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[var(--color-ol-graphite)]/30">
+                  Suivant
+                  <ChevronRight width={16} height={16} aria-hidden />
+                </span>
+              )}
+            </nav>
+          )}
 
           <div className="mt-12 rounded-lg border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 text-center">
             <Heading level={3} visualLevel={4}>
