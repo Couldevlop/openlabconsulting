@@ -3,10 +3,12 @@ import {
   AUDIT_IA_CTA_FALLBACK,
   FOOTER_FALLBACK,
   HERO_FALLBACK,
+  INSIGHTS_HUB_FALLBACK,
   MANIFESTO_FALLBACK,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
+  type InsightsHubContent,
   type ManifestoContent,
 } from './site-settings';
 
@@ -139,4 +141,8 @@ export async function getAuditIaCtaContent(): Promise<AuditIaCtaContent> {
 
 export async function getFooterContent(): Promise<FooterContent> {
   return readGlobal('footer-settings', FOOTER_FALLBACK);
+}
+
+export async function getInsightsHubContent(): Promise<InsightsHubContent> {
+  return readGlobal('insights-hub-settings', INSIGHTS_HUB_FALLBACK);
 }

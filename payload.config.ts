@@ -21,6 +21,7 @@ import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
+import { InsightsHubSettings } from './globals/InsightsHubSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
@@ -90,6 +91,7 @@ export default buildConfig({
   ],
   globals: [
     HeroSettings,
+    InsightsHubSettings,
     ManifestoSettings,
     AuditIaCtaSettings,
     FooterSettings,

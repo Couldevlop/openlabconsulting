@@ -62,6 +62,19 @@ export interface FooterContent {
   copyright: string;
 }
 
+export interface InsightsHubContent {
+  eyebrow: string;
+  headlineLead: string;
+  headlineHighlight: string;
+  intro: string;
+  emptyState: {
+    heading: string;
+    text: string;
+    ctaLabel: string;
+    ctaHref: string;
+  };
+}
+
 export const HERO_FALLBACK: HeroContent = {
   eyebrow: 'L’écosystème OpenLab',
   headlineLead: 'L’IA, au service',
@@ -187,4 +200,18 @@ export const FOOTER_FALLBACK: FooterContent = {
   ],
   copyright:
     'OpenLab Consulting SARL — RCCM CI-ABJ-03-2022-B13-03239. Tous droits réservés.',
+};
+
+export const INSIGHTS_HUB_FALLBACK: InsightsHubContent = {
+  eyebrow: 'Hub Insights',
+  headlineLead: 'Notre lecture du',
+  headlineHighlight: 'terrain africain',
+  intro:
+    'Pas des billets d’opinion : des retours de déploiements réels, sourcés, opérables dès lundi. Deux articles longs par semaine (objectif éditorial 2026), un livre blanc par trimestre.',
+  emptyState: {
+    heading: 'Plus d’articles arrivent.',
+    text: 'Les nouveaux insights sont publiés directement depuis l’admin Payload. Reviens régulièrement, ou abonne-toi au flux RSS via la racine du site.',
+    ctaLabel: 'En attendant, demande ton audit IA',
+    ctaHref: '/audit-ia',
+  },
 };
