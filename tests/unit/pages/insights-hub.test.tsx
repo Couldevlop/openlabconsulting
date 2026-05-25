@@ -25,4 +25,10 @@ describe('Page /insights (hub)', () => {
     render(await InsightsHubPage());
     expect(screen.getByTestId('audit-ia-cta')).toBeInTheDocument();
   });
+
+  it('émet un JSON-LD Blog', async () => {
+    const { container } = render(await InsightsHubPage());
+    const ld = container.querySelector('script[type="application/ld+json"]');
+    expect(ld?.textContent).toContain('"Blog"');
+  });
 });

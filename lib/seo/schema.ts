@@ -253,6 +253,62 @@ export function faqPageSchema(
   };
 }
 
+/** Champs minimaux d'un article requis pour le schema (découplé de Payload). */
+export interface ArticleSchemaInput {
+  slug: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  /** ISO YYYY-MM-DD. */
+  isoDate: string;
+  categoryLabel: string;
+  /** URL (relative ou absolue) de la couverture, ou null. */
+  coverSrc: string | null;
+}
+
+/**
+ * Article schema enrichi pour `/insights/[slug]` (CLAUDE.md §12.3 / GEO §12.4).
+ * Auteur typé `Person` par défaut, `Organization` pour une équipe/laboratoire.
+ */
+export function articleSchema(article: ArticleSchemaInput): Thing {
+  const url = absoluteUrl(`/insights/${article.slug}`);
+  const isOrgAuthor = /^(équipe|equipe|laboratoire)/i.test(article.author);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${url}#article`,
+    headline: article.title,
+    description: article.excerpt,
+    inLanguage: SITE.language,
+    datePublished: article.isoDate,
+    dateModified: article.isoDate,
+    articleSection: article.categoryLabel,
+    image: article.coverSrc
+      ? absoluteUrl(article.coverSrc)
+      : absoluteUrl('/OPENLAB.png'),
+    author: isOrgAuthor
+      ? { '@type': 'Organization', name: article.author }
+      : { '@type': 'Person', name: article.author },
+    publisher: { '@id': absoluteUrl('/#organization') },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  };
+}
+
+/** Blog schema pour le hub `/insights`. */
+export function blogSchema(): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': absoluteUrl('/insights#blog'),
+    url: absoluteUrl('/insights'),
+    name: 'Insights — OpenLab Consulting',
+    description:
+      'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
+    inLanguage: SITE.language,
+    publisher: { '@id': absoluteUrl('/#organization') },
+  };
+}
+
 /** Sérialise un objet Thing en chaîne JSON safe pour <script>. */
 export function jsonLdString(thing: Thing | Thing[]): string {
   return JSON.stringify(thing).replace(/</g, '\\u003c');

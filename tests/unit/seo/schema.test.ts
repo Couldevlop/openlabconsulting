@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+  articleSchema,
+  blogSchema,
   bookSchema,
   breadcrumbSchema,
   faqPageSchema,
@@ -23,6 +25,43 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(s.name).toMatch(/OpenLab/);
     const addr = s.address as { addressLocality?: string };
     expect(addr.addressLocality).toBe('Cocody');
+  });
+
+  it('articleSchema : type Article, author Person, image absolue', () => {
+    const s = articleSchema({
+      slug: 'mon-article',
+      title: 'Mon article',
+      excerpt: 'Accroche',
+      author: 'Debora Ahouma',
+      isoDate: '2026-05-01',
+      categoryLabel: 'Souveraineté',
+      coverSrc: '/api/media/file/x.png',
+    });
+    expect(s['@type']).toBe('Article');
+    expect(s.headline).toBe('Mon article');
+    expect((s.author as { '@type': string })['@type']).toBe('Person');
+    expect(s.image).toMatch(/^https?:\/\/.+\/api\/media\/file\/x\.png$/);
+    expect(s.datePublished).toBe('2026-05-01');
+  });
+
+  it('articleSchema : author Organization pour une équipe/laboratoire + fallback image', () => {
+    const s = articleSchema({
+      slug: 'a',
+      title: 'A',
+      excerpt: 'E',
+      author: 'Équipe Fraud Shield',
+      isoDate: '2026-03-20',
+      categoryLabel: 'Cybersécurité',
+      coverSrc: null,
+    });
+    expect((s.author as { '@type': string })['@type']).toBe('Organization');
+    expect(s.image).toMatch(/OPENLAB\.png$/);
+  });
+
+  it('blogSchema : type Blog pointant /insights', () => {
+    const s = blogSchema();
+    expect(s['@type']).toBe('Blog');
+    expect(String(s.url)).toMatch(/\/insights$/);
   });
 
   it('localBusinessSchema : type ProfessionalService', () => {
