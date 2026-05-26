@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  articleSchema,
   bookSchema,
   breadcrumbSchema,
   faqPageSchema,
@@ -122,5 +123,41 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(main).toHaveLength(2);
     expect(main[0]?.['@type']).toBe('Question');
     expect(main[0]?.acceptedAnswer.text).toBe('A1');
+  });
+
+  it('articleSchema : Article enrichi (headline, author Person, dates, publisher)', () => {
+    const s = articleSchema({
+      slug: 'ia-souveraine-ci',
+      headline: 'IA souveraine en Côte d’Ivoire',
+      description: 'Pourquoi héberger localement.',
+      author: 'Debora Ahouma',
+      isoDatePublished: '2026-05-22',
+      imageUrl: 'https://example.com/cover.jpg',
+      wordCount: 1800,
+      category: 'Souveraineté',
+    });
+    expect(s['@type']).toBe('Article');
+    expect(s.headline).toMatch(/souveraine/i);
+    expect(s.dateModified).toBe('2026-05-22');
+    const author = s.author as { '@type': string; name: string };
+    expect(author['@type']).toBe('Person');
+    expect(author.name).toBe('Debora Ahouma');
+    expect(s.wordCount).toBe(1800);
+    expect(s.articleSection).toBe('Souveraineté');
+    expect((s.image as string[])[0]).toBe('https://example.com/cover.jpg');
+  });
+
+  it('articleSchema : fallback image OG endpoint si imageUrl absent', () => {
+    const s = articleSchema({
+      slug: 'foo',
+      headline: 'Foo',
+      description: 'd',
+      author: 'X',
+      isoDatePublished: '2026-01-01',
+    });
+    expect((s.image as string[])[0]).toMatch(/\/insights\/foo\/opengraph/);
+    expect(s.dateModified).toBe('2026-01-01');
+    expect(s.wordCount).toBeUndefined();
+    expect(s.articleSection).toBeUndefined();
   });
 });
