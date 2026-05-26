@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, BookOpen, FileText, Mic } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -7,8 +8,9 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { breadcrumbSchema, publicationsSchema } from '@/lib/seo/schema';
 import { PUBLICATIONS, type Publication } from '@/lib/data/laboratoire';
-import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Publications — Laboratoire OpenLab',
@@ -16,14 +18,6 @@ export const metadata: Metadata = {
     'Livre IA & Agents Autonomes, livres blancs souveraineté + paie, conférences. Toutes les sorties publiques de la R&D OpenLab.',
   alternates: { canonical: '/laboratoire/publications' },
 };
-
-const breadcrumbJsonLd = jsonLdString(
-  breadcrumbSchema([
-    { name: 'Accueil', url: '/' },
-    { name: 'Laboratoire', url: '/laboratoire' },
-    { name: 'Publications', url: '/laboratoire/publications' },
-  ]),
-);
 
 const TYPE_LABEL: Record<Publication['type'], string> = {
   livre: 'Livre',
@@ -39,15 +33,23 @@ const TYPE_ICON: Record<Publication['type'], typeof BookOpen> = {
   conference: Mic,
 };
 
-export default function LaboratoirePublicationsPage(): React.ReactElement {
+export default async function LaboratoirePublicationsPage(): Promise<React.ReactElement> {
   // Groupé par année descendante.
   const byYear = [...PUBLICATIONS].sort((a, b) => b.year - a.year);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <main id="main">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      <JsonLd
+        nonce={nonce}
+        data={[
+          publicationsSchema(byYear),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Laboratoire', url: '/laboratoire' },
+            { name: 'Publications', url: '/laboratoire/publications' },
+          ]),
+        ]}
       />
       <section
         aria-labelledby="publications-title"
