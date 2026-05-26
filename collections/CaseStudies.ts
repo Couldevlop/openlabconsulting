@@ -38,7 +38,17 @@ export const CaseStudies: CollectionConfig = {
     maxPerDoc: 10,
   },
   access: {
-    read: (): boolean => true,
+    // OWASP A01 (Broken Access Control) : un visiteur non authentifié ne
+    // peut lire QUE les cas publiés, y compris via l'API REST/GraphQL
+    // auto-générée par Payload. On retourne une contrainte `Where` sur le
+    // champ éditorial `status` — appliquée par la base, pas seulement par les
+    // server components qui consomment `getPublishedCaseStudies` /
+    // `getCaseStudyForProduct`. Même champ que les requêtes front pour rester
+    // cohérent. Un utilisateur authentifié (admin/éditeur) voit tout.
+    read: ({ req }) => {
+      if (req.user) return true;
+      return { status: { equals: 'published' } };
+    },
   },
   fields: [
     {

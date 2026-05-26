@@ -15,6 +15,7 @@ import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { ProductDemo } from '@/components/demos/ProductDemo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
+import { getCaseStudyForProduct } from '@/lib/case-studies-server';
 import {
   breadcrumbSchema,
   faqPageSchema,
@@ -70,6 +71,7 @@ export default async function SolutionDetailPage({
     expertisesLies,
   } = product;
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const caseStudy = await getCaseStudyForProduct(product.slug);
 
   return (
     <main id="main">
@@ -298,6 +300,54 @@ export default async function SolutionDetailPage({
           </div>
         </Container>
       </section>
+
+      {/* Cas client — §7.1 (#7). Affiché uniquement si un cas réel existe. */}
+      {caseStudy ? (
+        <section
+          aria-labelledby="cas-client-title"
+          data-testid="solution-case-study"
+          className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+        >
+          <Container width="wide">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
+              <div>
+                <Eyebrow tone="orange">Cas client</Eyebrow>
+                <Heading id="cas-client-title" level={2} className="mt-4">
+                  {caseStudy.headline}
+                </Heading>
+                <p className="mt-4 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic sm:text-2xl">
+                  {caseStudy.punchline}
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-2">
+                  <Badge tone="orange">{caseStudy.sector}</Badge>
+                  <span className="text-sm text-[var(--color-ol-graphite)]/60">
+                    {caseStudy.client}
+                  </span>
+                </div>
+                <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
+                  {caseStudy.body}
+                </p>
+              </div>
+
+              <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-xl bg-[var(--color-ol-mist)] sm:grid-cols-3">
+                {caseStudy.results.map((r) => (
+                  <li
+                    key={r.label}
+                    className="flex flex-col justify-center bg-white p-6 text-center sm:p-8"
+                  >
+                    <span className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl">
+                      {r.value}
+                    </span>
+                    <span className="mt-2 text-sm text-[var(--color-ol-graphite)]/70">
+                      {r.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       {/* Tarification — §7.1 */}
       <section

@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { getPublishedCaseStudies } from '@/lib/case-studies-server';
+import {
+  getPublishedCaseStudies,
+  getCaseStudyForProduct,
+} from '@/lib/case-studies-server';
 import { FALLBACK_CASE_STUDIES } from '@/lib/case-studies';
 
 /**
@@ -22,5 +25,16 @@ describe('lib/case-studies-server — fallback en environnement test', () => {
     for (const s of studies) {
       expect(s.href).toMatch(/^\/solutions\//);
     }
+  });
+
+  it('getCaseStudyForProduct renvoie le cas réel d’un produit qui en a un', async () => {
+    const cas = await getCaseStudyForProduct('sygescom');
+    expect(cas).not.toBeNull();
+    expect(cas?.productSlug).toBe('sygescom');
+  });
+
+  it('getCaseStudyForProduct renvoie null pour un produit sans cas (pas de fabrication)', async () => {
+    const cas = await getCaseStudyForProduct('qualitos');
+    expect(cas).toBeNull();
   });
 });

@@ -74,6 +74,25 @@ describe('Page /solutions/[slug] (détail)', () => {
     expect(proofs.textContent).toMatch(/< 3 mois/);
   });
 
+  it('SYGESCOM affiche la section « Cas client » (cas réel existant)', async () => {
+    const element = await SolutionDetailPage({
+      params: Promise.resolve({ slug: 'sygescom' }),
+    });
+    render(element);
+    const cas = screen.getByTestId('solution-case-study');
+    expect(cas).toBeInTheDocument();
+    expect(cas.textContent).toMatch(/Pertes carburant divisées par 8/);
+    expect(cas.textContent).toMatch(/Distribution hydrocarbures/);
+  });
+
+  it('QualitOS n’affiche pas de cas client (aucun cas réel — pas de fabrication)', async () => {
+    const element = await SolutionDetailPage({
+      params: Promise.resolve({ slug: 'qualitos' }),
+    });
+    render(element);
+    expect(screen.queryByTestId('solution-case-study')).not.toBeInTheDocument();
+  });
+
   it('tous les produits affichent désormais un bandeau preuves (§7 enrichi)', async () => {
     for (const slug of [
       'nexusrh',
