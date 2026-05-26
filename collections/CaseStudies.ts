@@ -11,10 +11,14 @@ import type { CollectionConfig } from 'payload';
  * 4 slides hard-codés (NexusRH, SYGESCOM, AgroSense, FraudShield) —
  * cf. `lib/case-studies.ts` helper `getPublishedCaseStudies()`.
  *
+ * Publication : pilotée par le versioning natif Payload (`versions.drafts`)
+ * via le champ `_status` — pas de champ `status` custom (qui doublonnerait
+ * l'état des drafts ; aligné sur la collection Articles).
+ *
  * Sécurité :
- *   - Lecture publique (anyone peut voir un slide publié)
- *   - Le filtre `status === 'published'` est appliqué côté server
- *     component qui appelle Payload local API.
+ *   - Lecture publique des seuls cas publiés (`_status === 'published'`),
+ *     appliquée par la base via `access.read` ci-dessous — y compris sur
+ *     l'API REST/GraphQL auto-exposée par Payload.
  */
 export const CaseStudies: CollectionConfig = {
   slug: 'caseStudies',
@@ -26,7 +30,7 @@ export const CaseStudies: CollectionConfig = {
       'client',
       'sector',
       'productSlug',
-      'status',
+      '_status',
       'order',
     ],
     listSearchableFields: ['headline', 'client', 'sector'],
@@ -39,15 +43,14 @@ export const CaseStudies: CollectionConfig = {
   },
   access: {
     // OWASP A01 (Broken Access Control) : un visiteur non authentifié ne
-    // peut lire QUE les cas publiés, y compris via l'API REST/GraphQL
-    // auto-générée par Payload. On retourne une contrainte `Where` sur le
-    // champ éditorial `status` — appliquée par la base, pas seulement par les
-    // server components qui consomment `getPublishedCaseStudies` /
-    // `getCaseStudyForProduct`. Même champ que les requêtes front pour rester
-    // cohérent. Un utilisateur authentifié (admin/éditeur) voit tout.
+    // peut lire QUE les versions publiées, y compris via l'API REST/GraphQL
+    // de Payload. On retourne une contrainte `Where` sur le statut natif des
+    // drafts (`_status`), appliquée par la base — pas seulement par les server
+    // components (`getPublishedCaseStudies` / `getCaseStudyForProduct`). Un
+    // utilisateur authentifié (admin/éditeur) voit tout. Aligné sur Articles.
     read: ({ req }) => {
       if (req.user) return true;
-      return { status: { equals: 'published' } };
+      return { _status: { equals: 'published' } };
     },
   },
   fields: [
@@ -171,16 +174,6 @@ export const CaseStudies: CollectionConfig = {
         description:
           'Ordre d’affichage croissant (ex. 10, 20, 30, 40). Petit = en premier.',
       },
-    },
-    {
-      name: 'status',
-      type: 'select',
-      required: true,
-      defaultValue: 'draft',
-      options: [
-        { label: 'Brouillon', value: 'draft' },
-        { label: 'Publié', value: 'published' },
-      ],
     },
     {
       name: 'publishedAt',

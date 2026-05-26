@@ -26,7 +26,7 @@ export async function getPublishedCaseStudies(): Promise<readonly CaseStudy[]> {
     const payload = await getPayload({ config });
     const { docs } = await payload.find({
       collection: 'caseStudies',
-      where: { status: { equals: 'published' } },
+      where: { _status: { equals: 'published' } },
       sort: 'order',
       limit: 8,
       depth: 1,
@@ -63,7 +63,7 @@ export async function getCaseStudyForProduct(
       collection: 'caseStudies',
       where: {
         and: [
-          { status: { equals: 'published' } },
+          { _status: { equals: 'published' } },
           { productSlug: { equals: productSlug } },
         ],
       },
@@ -103,7 +103,6 @@ interface RawPayloadCaseStudy {
   results?: RawPayloadResult[];
   image?: RawPayloadMedia | string | number | null;
   order?: unknown;
-  status?: unknown;
 }
 
 function isProductSlug(value: unknown): value is ProductSlug {
