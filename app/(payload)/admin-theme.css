@@ -183,3 +183,47 @@ pre,
   outline: 2px solid var(--ol-orange);
   outline-offset: 2px;
 }
+
+/* ============================================================
+   9. Vue d'édition — colonne de saisie centrée (ergonomie UX/UI)
+
+   Par défaut Payload étire les champs sur toute la largeur disponible à
+   droite de la barre de navigation. On contraint la zone d'édition à une
+   colonne centrée et lisible (longueur de ligne confortable, CLAUDE.md
+   §4.3), tout en préservant la sidebar méta de Payload (statut, versions,
+   dates) et le comportement responsive (sur petit écran le bloc reste
+   pleine largeur car la max-width n'est jamais atteinte → auto-marges
+   neutres). Ces classes n'existent que dans la vue d'édition d'un
+   document : la liste, le dashboard custom et la navigation ne sont pas
+   touchés. Importé après le CSS Payload → pas de `!important`.
+   ============================================================ */
+:root {
+  /* Bloc complet (colonne de champs + sidebar méta) sur les vues avec
+     sidebar — laisse ~720px à la colonne principale + 325px de sidebar. */
+  --ol-admin-doc-max: 1180px;
+  /* Colonne de champs seule sur les vues sans sidebar (globals, etc.). */
+  --ol-admin-field-max: 820px;
+}
+
+/* Le bloc des champs ne s'étale plus bord à bord : centré sur grand écran. */
+.document-fields {
+  max-width: var(--ol-admin-doc-max);
+  margin-inline: auto;
+}
+
+/* Vues sans sidebar méta : on borne la colonne de saisie à une largeur de
+   lecture confortable et on la centre (les marges automatiques l'emportent
+   sur le flex-grow pour distribuer l'espace libre). */
+.document-fields:not(.document-fields--has-sidebar) .document-fields__main {
+  max-width: var(--ol-admin-field-max);
+  margin-inline: auto;
+}
+
+/* Barre d'actions (titre, statut, Enregistrer / Publier) alignée sur la
+   même colonne que les champs, pour une lecture verticale cohérente. Le
+   fond de la barre reste pleine largeur (sticky) ; seul son contenu est
+   centré. */
+.doc-controls__wrapper {
+  max-width: var(--ol-admin-doc-max);
+  margin-inline: auto;
+}
