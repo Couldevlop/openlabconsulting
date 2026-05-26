@@ -2,6 +2,7 @@ import { SITE, absoluteUrl } from './site';
 import type { Expertise } from '@/lib/data/expertises';
 import type { Product } from '@/lib/data/products';
 import type { Sector } from '@/lib/data/sectors';
+import type { Publication } from '@/lib/data/laboratoire';
 import { BOOK } from '@/lib/data/book';
 
 /**
@@ -250,6 +251,52 @@ export function faqPageSchema(
         text: item.answer,
       },
     })),
+  };
+}
+
+/** Type Schema.org selon la nature de la publication. */
+const PUBLICATION_SCHEMA_TYPE: Record<Publication['type'], string> = {
+  livre: 'Book',
+  'livre-blanc': 'Report',
+  'article-pair': 'ScholarlyArticle',
+  conference: 'Event',
+};
+
+/**
+ * ItemList des publications du Laboratoire (CLAUDE.md §12.3 / audit #11).
+ * Chaque entrée est typée Book / Report / ScholarlyArticle / Event selon
+ * sa nature. Auteur Person ou Organization (équipe/laboratoire).
+ */
+export function publicationsSchema(
+  publications: readonly Publication[],
+): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': absoluteUrl('/laboratoire/publications#list'),
+    name: 'Publications du Laboratoire OpenLab',
+    itemListElement: publications.map((p, i) => {
+      const url = /^https?:\/\//i.test(p.href) ? p.href : absoluteUrl(p.href);
+      const author = p.authors.map((name) =>
+        /^(équipe|equipe|laboratoire)/i.test(name)
+          ? { '@type': 'Organization', name }
+          : { '@type': 'Person', name },
+      );
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': PUBLICATION_SCHEMA_TYPE[p.type],
+          name: p.title,
+          author,
+          datePublished: String(p.year),
+          url,
+          description: p.summary,
+          inLanguage: SITE.language,
+          publisher: { '@id': absoluteUrl('/#organization') },
+        },
+      };
+    }),
   };
 }
 
