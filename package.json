@@ -13,7 +13,7 @@
     "dev:turbo": "next dev --turbopack",
     "dev:full": "docker-compose up -d postgres redis minio && pnpm db:migrate && pnpm cms:seed && pnpm dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node scripts/start-standalone.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
