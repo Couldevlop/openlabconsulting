@@ -2,25 +2,14 @@
 
 import { useEffect, useState, type ReactElement } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
+import { CommandPalette } from '@/components/atoms/CommandPalette';
 import { Container } from '@/components/atoms/Container';
 import { Logo } from '@/components/atoms/Logo';
+import { MegaMenu } from '@/components/atoms/MegaMenu';
 import { cn } from '@/lib/cn';
-
-interface NavItem {
-  href: string;
-  label: string;
-}
-
-const NAV_ITEMS: readonly NavItem[] = [
-  { href: '/expertises', label: 'Expertises' },
-  { href: '/laboratoire', label: 'Laboratoire' },
-  { href: '/solutions', label: 'Solutions' },
-  { href: '/livre', label: 'Livre IA' },
-  { href: '/insights', label: 'Insights' },
-  { href: '/a-propos', label: 'À propos' },
-] as const;
+import { NAV_ITEMS, type MegaMenuConfig } from '@/lib/navigation';
 
 export function Navbar(): ReactElement {
   const [open, setOpen] = useState(false);
@@ -58,21 +47,28 @@ export function Navbar(): ReactElement {
         </Link>
 
         <nav aria-label="Navigation principale" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:text-[var(--color-ol-orange)]"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="flex items-center gap-7">
+            {NAV_ITEMS.map((item) =>
+              item.kind === 'link' ? (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:text-[var(--color-ol-orange)]"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ) : (
+                <li key={item.config.label}>
+                  <MegaMenu config={item.config} />
+                </li>
+              ),
+            )}
           </ul>
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <CommandPalette />
           <Button as="a" href="/audit-ia" variant="primary" size="md">
             Audit IA gratuit
           </Button>
@@ -94,23 +90,32 @@ export function Navbar(): ReactElement {
         id="mobile-nav"
         className={cn(
           'overflow-hidden border-t border-[var(--color-ol-mist)] transition-[max-height] duration-300 lg:hidden',
-          open ? 'max-h-[80vh]' : 'max-h-0',
+          open ? 'max-h-[85vh] overflow-y-auto' : 'max-h-0',
         )}
         aria-hidden={!open}
       >
-        <Container as="nav" width="wide" className="py-6">
+        <Container as="nav" width="wide" className="py-4">
           <ul className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block rounded-md px-3 py-3 text-base font-medium text-[var(--color-ol-graphite)] hover:bg-[var(--color-ol-mist)]"
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.kind === 'link' ? (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block rounded-md px-3 py-3 text-base font-medium text-[var(--color-ol-graphite)] hover:bg-[var(--color-ol-mist)]"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ) : (
+                <li key={item.config.label}>
+                  <MobileMegaSection
+                    config={item.config}
+                    onNavigate={() => setOpen(false)}
+                  />
+                </li>
+              ),
+            )}
             <li className="mt-4">
               <Button
                 as="a"
@@ -126,5 +131,76 @@ export function Navbar(): ReactElement {
         </Container>
       </div>
     </header>
+  );
+}
+
+/**
+ * Section collapsible utilisée dans le drawer mobile pour rendre les
+ * méga-menus en accordéon (un seul ouvert à la fois côté visuel,
+ * indépendamment côté état — l'utilisateur peut en ouvrir plusieurs
+ * s'il veut comparer).
+ */
+function MobileMegaSection({
+  config,
+  onNavigate,
+}: {
+  readonly config: MegaMenuConfig;
+  readonly onNavigate: () => void;
+}): ReactElement {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="rounded-md">
+      <button
+        type="button"
+        aria-expanded={expanded}
+        onClick={() => setExpanded((v) => !v)}
+        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-base font-medium text-[var(--color-ol-graphite)] hover:bg-[var(--color-ol-mist)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+      >
+        {config.label}
+        <ChevronDown
+          width={16}
+          height={16}
+          aria-hidden
+          className={cn(
+            'transition-transform duration-200',
+            expanded ? 'rotate-180' : 'rotate-0',
+          )}
+        />
+      </button>
+      {expanded ? (
+        <div className="ml-3 border-l border-[var(--color-ol-mist)] pl-3">
+          <Link
+            href={config.overview.href}
+            onClick={onNavigate}
+            className="block py-2 text-sm font-medium text-[var(--color-ol-orange)]"
+          >
+            {config.overview.label}
+          </Link>
+          {config.sections.map((section, i) => (
+            <div key={i} className="mt-2">
+              {section.eyebrow ? (
+                <p className="text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+                  {section.eyebrow}
+                </p>
+              ) : null}
+              <ul className="mt-1 flex flex-col gap-0.5">
+                {section.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={onNavigate}
+                      className="block py-1.5 text-sm text-[var(--color-ol-graphite)] hover:text-[var(--color-ol-orange)]"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

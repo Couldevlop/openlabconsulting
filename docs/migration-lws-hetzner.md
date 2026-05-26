@@ -114,6 +114,31 @@ kubectl get pods -n kube-system | grep traefik            # Bash
 
 Le `ClusterIssuer` `letsencrypt-prod` doit exister. S'il manque, demande à l'admin du cluster.
 
+### Prérequis image GHCR
+
+Avant tout `bash deploy/scripts/deploy.sh ... v<X.Y.Z>`, l'image doit
+exister sur GHCR. C'est le rôle du workflow `.github/workflows/release.yml`
+qui se déclenche sur push d'un tag `v*`.
+
+**Procédure complète** : [`docs/release-procedure.md`](./release-procedure.md).
+
+Vérification rapide qu'une image existe (remplacer `<owner>` et la
+version) :
+
+```bash
+docker pull ghcr.io/<owner>/website:v1.0.0
+# ou :
+gh api "/users/<owner>/packages/container/website/versions" --jq '.[].metadata.container.tags[]'
+```
+
+Si l'image n'existe pas → tagger sur `main` :
+
+```bash
+git checkout main && git pull --ff-only
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0       # déclenche release.yml (~10-12 min)
+```
+
 ---
 
 ## 2. Audit DNS actuel (sauvegarde)

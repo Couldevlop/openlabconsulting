@@ -61,6 +61,7 @@ logs
 
 # OS
 .history
+*.stackdump
 
 # Claude Code (local settings only)
 .claude/settings.local.json
