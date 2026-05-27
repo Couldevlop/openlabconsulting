@@ -124,7 +124,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
                   size="lg"
                 >
                   <BookOpen width={20} height={20} aria-hidden />
-                  Acheter le livre
+                  Être prévenu·e à la sortie
                 </Button>
                 <Button
                   as="a"
@@ -223,8 +223,8 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               },
               {
                 href: '/livre/acheter',
-                title: 'Acheter',
-                body: 'PDF + ePub direct OpenLab, Amazon, Lulu, librairies CI. Versions imprimée et numérique.',
+                title: 'Réserver',
+                body: 'À paraître en 2026. Canaux prévus : PDF + ePub direct OpenLab, Amazon, Lulu, librairies CI. Soyez prévenu·e à la sortie.',
               },
               {
                 href: '/livre/companion',

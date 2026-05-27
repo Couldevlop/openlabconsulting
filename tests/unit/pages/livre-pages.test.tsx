@@ -111,7 +111,7 @@ describe('Page /livre/extraits', () => {
   it('CTA vers /livre/acheter en bas', () => {
     render(<LivreExtraitsPage />);
     expect(
-      screen.getByRole('link', { name: /Acheter le livre complet/i }),
+      screen.getByRole('link', { name: /Réserver le livre complet/i }),
     ).toHaveAttribute('href', '/livre/acheter');
   });
 });
@@ -119,7 +119,7 @@ describe('Page /livre/extraits', () => {
 describe('Page /livre/acheter', () => {
   it('met en avant le bouquet OpenLab direct (primaire)', () => {
     render(<LivreAcheterPage />);
-    expect(screen.getByText(/Recommandé/i)).toBeInTheDocument();
+    expect(screen.getByText(/Édition numérique directe/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Bouquet OpenLab — PDF \+ ePub direct/i),
     ).toBeInTheDocument();

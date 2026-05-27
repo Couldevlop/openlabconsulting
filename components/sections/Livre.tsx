@@ -99,7 +99,7 @@ export function Livre(): ReactElement {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <Button as="a" href={PURCHASE_HREF} variant="primary" size="lg">
                 <BookOpen width={20} height={20} aria-hidden />
-                Acheter le livre
+                Être prévenu·e à la sortie
               </Button>
               <Button
                 as="a"

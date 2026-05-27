@@ -41,7 +41,7 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     pillars: [
       'Cartographie des cas d’usage IA prioritaires en Afrique francophone',
       'Cadre de gouvernance compatible loi 2013-450 et RGPD',
-      'Stack technique souveraine (K3s, RAG fermé, données en zone UE/CI)',
+      'Stack technique souveraine (K3s, RAG fermé, données sous contrôle maîtrisé)',
       'Plan de bascule progressive en 6 mois',
     ],
     pitch: [
@@ -218,59 +218,34 @@ export default async function WhitepaperPage({
           <Card className="border-[var(--color-ol-mist)] bg-white p-8 sm:p-12">
             <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
               <div>
-                <Eyebrow tone="orange">Recevoir le PDF</Eyebrow>
+                <Eyebrow tone="orange">À la sortie</Eyebrow>
                 <Heading id="wp-download-title" level={2} className="mt-4">
-                  Accès gratuit contre email professionnel.
+                  Le livre blanc, gratuit, dès sa parution.
                 </Heading>
                 <p className="mt-4 text-[var(--color-ol-graphite)]/80">
-                  Le PDF (~{wp.pageCount} pages) est envoyé par email dès
-                  réception. Vous recevrez ensuite les mises à jour
-                  trimestrielles (désabonnement en un clic).
+                  {wp.publicationLabel}. À sa sortie, le PDF (~{wp.pageCount}{' '}
+                  pages) sera accessible gratuitement contre un simple email
+                  professionnel. Laissez-nous votre contact pour le recevoir en
+                  priorité.
                 </p>
-                {wp.status === 'draft' ? (
-                  <p className="mt-4 text-sm font-medium text-[var(--color-ol-orange)]">
-                    Statut : {wp.publicationLabel}. Inscrivez-vous pour recevoir
-                    le PDF dès sa sortie.
-                  </p>
-                ) : null}
               </div>
 
-              <form
-                method="post"
-                action="/api/whitepapers/request"
-                aria-label="Recevoir le livre blanc par e-mail"
-                className="flex flex-col gap-4"
-              >
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-[var(--color-ol-night)]">
-                    Email professionnel
-                  </span>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="prenom@votre-entreprise.com"
-                    className="min-h-12 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                  />
-                </label>
-                <input type="hidden" name="slug" value={wp.slug} />
-
-                <Button type="submit" variant="primary" size="lg">
+              <div className="flex flex-col gap-4">
+                <Button
+                  as="a"
+                  href={`/contact?sujet=livre-blanc-${wp.slug}`}
+                  variant="primary"
+                  size="lg"
+                  aria-label="Être prévenu de la sortie du livre blanc"
+                >
                   <Mail width={20} height={20} aria-hidden />
-                  M’envoyer le livre blanc
+                  Être prévenu·e à la sortie
                 </Button>
-
-                <p className="text-xs text-[var(--color-ol-graphite)]/60">
-                  Pipeline d’envoi (validation Zod + Resend + rate-limit Redis)
-                  branchée en P8 / P10. Pour l’instant le formulaire enregistre
-                  votre demande, vous recevrez manuellement le PDF.
-                </p>
                 <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/55">
                   <Download width={14} height={14} aria-hidden />
-                  PDF · ~{wp.pageCount} pages · français
+                  PDF · ~{wp.pageCount} pages · français · gratuit
                 </p>
-              </form>
+              </div>
             </div>
           </Card>
         </Container>

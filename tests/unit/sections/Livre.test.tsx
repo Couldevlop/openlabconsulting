@@ -53,7 +53,7 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
   it('expose les 3 CTAs aux bonnes routes', () => {
     render(<Livre />);
     expect(
-      screen.getByRole('link', { name: /Acheter le livre/i }),
+      screen.getByRole('link', { name: /Être prévenu.*sortie/i }),
     ).toHaveAttribute('href', '/livre/acheter');
     expect(
       screen.getByRole('link', { name: /Lire un extrait gratuit/i }),
@@ -66,7 +66,9 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
   it('respecte la règle "1 CTA primaire" : seul "Acheter" est primaire', () => {
     render(<Livre />);
     // Le CTA primaire utilise la variant orange (bg-ol-orange).
-    const primaryCta = screen.getByRole('link', { name: /Acheter le livre/i });
+    const primaryCta = screen.getByRole('link', {
+      name: /Être prévenu.*sortie/i,
+    });
     expect(primaryCta.className).toMatch(/color-ol-orange\)\]/);
   });
 });

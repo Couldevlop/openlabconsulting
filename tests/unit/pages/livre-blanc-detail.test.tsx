@@ -17,12 +17,13 @@ describe('Page /livres-blancs/[slug]', () => {
     expect(back.getAttribute('href')).toBe('/audit-ia');
   });
 
-  it('expose le formulaire de demande de téléchargement', async () => {
+  it('expose un CTA « être prévenu » vers le contact (livre blanc à paraître)', async () => {
     const params = Promise.resolve({ slug: 'ia-souveraine-ci-2026' });
     render(await WhitepaperPage({ params }));
-    expect(
-      screen.getByRole('form', { name: /Recevoir le livre blanc par e-mail/i }),
-    ).toBeInTheDocument();
+    const cta = screen.getByRole('link', { name: /Être prévenu.*sortie/i });
+    expect(cta.getAttribute('href')).toBe(
+      '/contact?sujet=livre-blanc-ia-souveraine-ci-2026',
+    );
   });
 
   it('throw notFound() pour un slug inconnu', async () => {

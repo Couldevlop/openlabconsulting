@@ -209,28 +209,28 @@ export const PURCHASE_CHANNELS: readonly PurchaseChannel[] = [
   {
     name: 'Boutique OpenLab — PDF + ePub',
     description:
-      'Téléchargement immédiat après paiement Stripe. Accès illimité aux mises à jour de l’édition courante.',
+      'À la parution : téléchargement immédiat après achat, accès illimité aux mises à jour de l’édition courante.',
     href: '/livre/acheter#openlab-direct',
     primary: true,
   },
   {
     name: 'Amazon France & Afrique',
     description:
-      'Version imprimée + Kindle. Distribution rapide depuis les entrepôts européens.',
-    href: 'https://www.amazon.fr',
+      'Version imprimée + Kindle, à la parution. Distribution depuis les entrepôts européens.',
+    href: '/livre/acheter',
     primary: false,
   },
   {
     name: 'Lulu (impression à la demande)',
     description:
-      'Pour les commandes hors zones de distribution Amazon. Couverture cartonnée disponible.',
-    href: 'https://www.lulu.com',
+      'Impression à la demande mondiale, à la parution — pour les zones hors distribution Amazon. Couverture cartonnée.',
+    href: '/livre/acheter',
     primary: false,
   },
   {
     name: 'Librairies de Côte d’Ivoire',
     description:
-      'Carrefour Mercure, Librairie de France Yopougon, Librairie Aleph. Stock physique à Abidjan.',
+      'Carrefour Mercure, Librairie de France Yopougon, Librairie Aleph. Stock physique à Abidjan dès la sortie.',
     href: '/livre/acheter#libraires-ci',
     primary: false,
   },

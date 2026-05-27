@@ -188,9 +188,9 @@ export default function LivreExtraitsPage(): React.ReactElement {
           className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center"
         >
           <p className="max-w-xl text-[var(--color-ol-graphite)]/80">
-            Envie de tout lire d’une traite ? La version PDF + ePub complète est
-            disponible directement chez OpenLab, et en imprimée chez les
-            principaux distributeurs.
+            Envie de tout lire d’une traite ? La version PDF + ePub complète
+            paraît en 2026, en numérique direct chez OpenLab puis en imprimé
+            chez les principaux distributeurs.
           </p>
           <Button
             as="a"
@@ -200,7 +200,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
             className="shrink-0"
           >
             <BookOpen width={20} height={20} aria-hidden />
-            Acheter le livre complet
+            Réserver le livre complet
           </Button>
         </Container>
       </section>

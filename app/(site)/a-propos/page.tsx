@@ -145,8 +145,8 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               </Heading>
               <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/75">
                 Raison sociale enregistrée à Abidjan, gouvernée par une équipe
-                ivoirienne. Données hébergées en Allemagne (Hetzner)
-                conformément au RGPD UE.
+                ivoirienne. Infrastructure souveraine sous notre seul contrôle
+                opérationnel.
               </p>
             </div>
 
