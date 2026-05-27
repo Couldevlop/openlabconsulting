@@ -31,7 +31,7 @@ const SUGGESTIONS: readonly Suggestion[] = [
   {
     href: '/livre',
     badge: 'Édition',
-    title: 'Le livre IA & Agents Autonomes',
+    title: 'Le livre IA OpenLab',
     body: 'Onze chapitres pour comprendre l’IA appliquée en Afrique francophone.',
   },
   {

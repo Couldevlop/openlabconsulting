@@ -320,7 +320,7 @@ export default async function SolutionDetailPage({
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-2">
                   <Badge tone="orange">{caseStudy.sector}</Badge>
-                  <span className="text-sm text-[var(--color-ol-graphite)]/60">
+                  <span className="text-sm text-[var(--color-ol-graphite)]/70">
                     {caseStudy.client}
                   </span>
                 </div>
@@ -408,7 +408,7 @@ export default async function SolutionDetailPage({
             </ul>
 
             {pricing.note ? (
-              <p className="mt-8 border-t border-[var(--color-ol-mist)] pt-6 text-sm text-[var(--color-ol-graphite)]/60">
+              <p className="mt-8 border-t border-[var(--color-ol-mist)] pt-6 text-sm text-[var(--color-ol-graphite)]/70">
                 {pricing.note}
               </p>
             ) : null}

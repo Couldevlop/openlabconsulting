@@ -32,7 +32,7 @@ const AXES: readonly Axis[] = [
     Icon: BookOpen,
     label: 'Édition académique',
     headline: 'Un livre de référence publié à Abidjan.',
-    body: '« Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Un capstone terrain (AgroSense CI), des chapitres pour étudiants, dirigeants et professeurs.',
+    body: '« Intégration de l’Intelligence Artificielle dans le développement logiciel ». Un capstone terrain (AgroSense CI), des chapitres pour étudiants, dirigeants et professeurs.',
     href: '/livre',
     ctaLabel: 'Explorer le livre',
   },

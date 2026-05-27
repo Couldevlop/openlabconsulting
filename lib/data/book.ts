@@ -51,8 +51,9 @@ export interface BookAudience {
 }
 
 export const BOOK = {
-  title: 'Intelligence Artificielle',
-  subtitle: 'Du Machine Learning aux Agents Autonomes',
+  title:
+    'Intégration de l’Intelligence Artificielle dans le développement logiciel',
+  subtitle: 'Du fondement mathématique à la mise en production',
   edition: 'Édition OpenLab Consulting · Abidjan',
   isbn: '978-2-XXXX-XXXX-X', // ISBN définitif à renseigner par l'admin Payload P6
   pageCount: 420, // estimatif, à confirmer par l'éditeur
@@ -87,8 +88,10 @@ export const BOOK = {
     },
   ] as readonly BookAudience[],
   cover: {
-    src: null as string | null, // Payload P6 fournira l'URL MinIO finale
-    alt: 'Couverture du livre Intelligence Artificielle — du Machine Learning aux Agents Autonomes, édition OpenLab Consulting',
+    src: '/livre/couverture-ia.webp' as string | null,
+    alt: 'Couverture du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel », édition OpenLab Consulting',
+    width: 1024,
+    height: 1450,
   },
 } as const;
 

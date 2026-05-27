@@ -141,7 +141,7 @@ export function CommandPalette(): ReactElement {
       >
         <Search width={14} height={14} aria-hidden />
         <span className="hidden sm:inline">Recherche</span>
-        <kbd className="hidden rounded border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-1.5 py-0.5 text-[10px] font-medium text-[var(--color-ol-graphite)]/60 sm:inline">
+        <kbd className="hidden rounded border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-1.5 py-0.5 text-[10px] font-medium text-[var(--color-ol-graphite)]/70 sm:inline">
           ⌘K
         </kbd>
       </button>

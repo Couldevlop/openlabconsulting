@@ -30,8 +30,11 @@ type ButtonAsLink = CommonProps &
 type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const variantMap: Record<ButtonVariant, string> = {
+  // Texte blanc sur orange vif (#ff5a00) = 3.12:1 → échec WCAG AA. On pose le
+  // fond sur orange foncé (#cc4800 → blanc = 4.66:1) et on assombrit au survol.
+  // L'orange vif reste réservé aux accents non-textuels (§3.2, §4.7).
   primary:
-    'bg-[var(--color-ol-orange)] text-white hover:bg-[var(--color-ol-orange-dark)] active:bg-[var(--color-ol-orange-dark)]',
+    'bg-[var(--color-ol-orange-dark)] text-white hover:bg-[var(--color-ol-orange-ink)] active:bg-[var(--color-ol-orange-ink)]',
   secondary:
     'bg-[var(--color-ol-night)] text-white hover:bg-[var(--color-ol-navy)] active:bg-[var(--color-ol-navy)]',
   ghost:

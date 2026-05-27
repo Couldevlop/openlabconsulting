@@ -33,7 +33,7 @@ describe('Page /a-propos/equipe (Person schema premium — audit P2 §7 #6)', ()
     // Le titre du livre peut apparaître plusieurs fois (bio + carte pub).
     expect(
       screen.getAllByText(
-        /Intelligence Artificielle.*Machine Learning.*Agents Autonomes/i,
+        /Intégration de l.Intelligence Artificielle dans le développement logiciel/i,
       ).length,
     ).toBeGreaterThanOrEqual(1);
     expect(

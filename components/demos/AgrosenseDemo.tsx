@@ -188,7 +188,7 @@ export function AgrosenseDemo(): ReactElement {
 
         <dl className="mt-6 space-y-4 text-sm">
           <div>
-            <dt className="text-[var(--color-ol-graphite)]/60">
+            <dt className="text-[var(--color-ol-graphite)]/70">
               Humidité du sol
             </dt>
             <dd className="mt-1 flex items-center gap-3">
@@ -208,7 +208,7 @@ export function AgrosenseDemo(): ReactElement {
             </dd>
           </div>
           <div>
-            <dt className="text-[var(--color-ol-graphite)]/60">
+            <dt className="text-[var(--color-ol-graphite)]/70">
               Rendement estimé
             </dt>
             <dd className="mt-1 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-ol-orange-text)]">

@@ -13,7 +13,9 @@ describe('Page /livre (landing)', () => {
   it('rend un h1 avec le titre du livre', async () => {
     render(await LivreLandingPage());
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1.textContent).toBe('Intelligence Artificielle');
+    expect(h1.textContent).toMatch(
+      /Intégration de l.Intelligence Artificielle dans le développement logiciel/,
+    );
   });
 
   it('liste les 4 audiences (cards dédiées)', async () => {

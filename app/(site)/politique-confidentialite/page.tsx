@@ -22,7 +22,7 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
           <Heading level={1} className="mt-4">
             Politique de confidentialité.
           </Heading>
-          <p className="mt-4 text-sm text-[var(--color-ol-graphite)]/60">
+          <p className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
             Dernière mise à jour : mai 2026
           </p>
 

@@ -34,6 +34,9 @@
   --color-ol-danger: #dc2626;
   --color-ol-warning: #f59e0b;
   --color-ol-info: #2563eb;
+  /* Bleu accessible pour le TEXTE sur tint clair (badges « Pilote ») :
+     #2563eb échoue (4.36:1), blue-700 passe. cf. §4.7. */
+  --color-ol-info-dark: #1d4ed8;
 
   /* --- Typographie (§3.3) ----------------------------------------------- */
   /* Les --font-*-src sont injectés par next/font (app/fonts.ts). */

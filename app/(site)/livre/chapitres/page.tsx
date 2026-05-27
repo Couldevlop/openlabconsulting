@@ -126,7 +126,7 @@ export default function LivreChapitresPage(): React.ReactElement {
                     </ul>
                   </div>
 
-                  <span className="text-sm text-[var(--color-ol-graphite)]/60 sm:text-right">
+                  <span className="text-sm text-[var(--color-ol-graphite)]/70 sm:text-right">
                     {c.readingTime}
                   </span>
                 </Card>

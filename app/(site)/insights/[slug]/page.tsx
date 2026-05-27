@@ -246,7 +246,7 @@ export default async function InsightArticlePage({
                 aria-label="Sommaire"
                 className="mt-12 hidden lg:sticky lg:top-24 lg:mt-0 lg:block"
               >
-                <p className="text-xs font-semibold tracking-wider text-[var(--color-ol-graphite)]/60 uppercase">
+                <p className="text-xs font-semibold tracking-wider text-[var(--color-ol-graphite)]/70 uppercase">
                   Sommaire
                 </p>
                 <nav className="mt-4">

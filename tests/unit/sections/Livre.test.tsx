@@ -18,20 +18,19 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
     expect(heading.id).toBe('livre-title');
     expect(heading.textContent).toMatch(/Intelligence Artificielle/);
     expect(
-      screen.getByText(/Du Machine Learning aux Agents Autonomes/i),
+      screen.getByText(/Du fondement mathématique à la mise en production/i),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/Édition OpenLab Consulting.*Abidjan/i),
     ).toBeInTheDocument();
   });
 
-  it('affiche le placeholder couverture (src null) avec alt explicite', () => {
+  it('affiche la couverture du livre (image) avec alt explicite', () => {
     render(<Livre />);
     const cover = screen.getByRole('img', {
-      name: /Couverture du livre.*Intelligence Artificielle.*capture à venir/i,
+      name: /Couverture du livre.*Intégration de l.Intelligence Artificielle/i,
     });
     expect(cover).toBeInTheDocument();
-    expect(within(cover).getByText(/Couverture du livre/i)).toBeInTheDocument();
   });
 
   it('expose les 4 publics cibles en badges', () => {
@@ -69,6 +68,6 @@ describe('Livre (homepage §6.8 — encart livre principal)', () => {
     const primaryCta = screen.getByRole('link', {
       name: /Être prévenu.*sortie/i,
     });
-    expect(primaryCta.className).toMatch(/color-ol-orange\)\]/);
+    expect(primaryCta.className).toMatch(/color-ol-orange-dark\)\]/);
   });
 });

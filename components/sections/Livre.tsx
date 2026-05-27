@@ -6,6 +6,7 @@ import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import Image from 'next/image';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { BOOK } from '@/lib/data/book';
 
@@ -48,16 +49,27 @@ export function Livre(): ReactElement {
 
       <Container width="wide">
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
-          {/* Couverture */}
-          <div className="mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md">
-            <MediaPlaceholder
-              src={BOOK.cover.src}
-              alt={BOOK.cover.alt}
-              tone="warm"
-              aspect="3/2"
-              placeholderLabel="Couverture du livre"
-              className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
-            />
+          {/* Couverture — ratio naturel (portrait), affichée en entier. */}
+          <div className="mx-auto w-full max-w-[18rem] lg:mx-0 lg:max-w-xs">
+            {BOOK.cover.src ? (
+              <Image
+                src={BOOK.cover.src}
+                alt={BOOK.cover.alt}
+                width={BOOK.cover.width}
+                height={BOOK.cover.height}
+                sizes="(min-width: 1024px) 20rem, (min-width: 640px) 18rem, 75vw"
+                className="h-auto w-full rotate-1 rounded-lg shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+              />
+            ) : (
+              <MediaPlaceholder
+                src={null}
+                alt={BOOK.cover.alt}
+                tone="warm"
+                aspect="3/2"
+                placeholderLabel="Couverture du livre"
+                className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+              />
+            )}
           </div>
 
           {/* Contenu */}

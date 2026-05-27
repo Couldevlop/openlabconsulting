@@ -35,7 +35,7 @@ const AXES = [
   {
     Icon: BookOpen,
     title: 'Édition académique',
-    body: '« Intelligence Artificielle : du Machine Learning aux Agents Autonomes » — 11 chapitres, capstone AgroSense, à destination des étudiants, dirigeants et enseignants.',
+    body: '« Intégration de l’Intelligence Artificielle dans le développement logiciel » — 11 chapitres, capstone AgroSense, à destination des étudiants, dirigeants et enseignants.',
     href: '/livre',
     cta: 'Explorer le livre',
   },
@@ -75,7 +75,7 @@ const PUBLICATIONS_PREVIEW = [
   {
     label: 'Livre',
     title:
-      'Intelligence Artificielle : du Machine Learning aux Agents Autonomes',
+      'Intégration de l’Intelligence Artificielle dans le développement logiciel',
     href: '/livre',
   },
   {

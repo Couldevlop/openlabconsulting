@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Download, FileText, Users } from 'lucide-react';
@@ -83,15 +84,27 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
 
         <Container width="wide">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
-            <div className="mx-auto w-full max-w-md lg:mx-0">
-              <MediaPlaceholder
-                src={BOOK.cover.src}
-                alt={BOOK.cover.alt}
-                tone="warm"
-                aspect="3/2"
-                placeholderLabel="Couverture du livre"
-                className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
-              />
+            <div className="mx-auto w-full max-w-[20rem] lg:mx-0">
+              {BOOK.cover.src ? (
+                <Image
+                  src={BOOK.cover.src}
+                  alt={BOOK.cover.alt}
+                  width={BOOK.cover.width}
+                  height={BOOK.cover.height}
+                  priority
+                  sizes="(min-width: 1024px) 22rem, (min-width: 640px) 20rem, 80vw"
+                  className="h-auto w-full rotate-1 rounded-lg shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+                />
+              ) : (
+                <MediaPlaceholder
+                  src={null}
+                  alt={BOOK.cover.alt}
+                  tone="warm"
+                  aspect="3/2"
+                  placeholderLabel="Couverture du livre"
+                  className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+                />
+              )}
             </div>
 
             <div>

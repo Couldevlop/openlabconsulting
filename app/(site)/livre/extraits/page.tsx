@@ -97,7 +97,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
             </p>
           </div>
 
-          <p className="mt-10 text-right text-sm text-[var(--color-ol-graphite)]/60">
+          <p className="mt-10 text-right text-sm text-[var(--color-ol-graphite)]/70">
             — Debora Ahouma · Abidjan, mai 2026
           </p>
         </Container>

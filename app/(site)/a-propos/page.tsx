@@ -49,7 +49,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
     name: 'Debora Ahouma',
     jobTitle: 'CEO & Fondatrice, OpenLab Consulting',
     description:
-      'Fondatrice du cabinet OpenLab Consulting, auteure du livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Spécialiste de l’IA appliquée en Afrique francophone.',
+      'Fondatrice du cabinet OpenLab Consulting, auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel ». Spécialiste de l’IA appliquée en Afrique francophone.',
     knowsAbout: [
       'Intelligence artificielle',
       'Machine learning',
@@ -159,7 +159,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <Building2 width={20} height={20} aria-hidden />
                 </span>
                 <div>
-                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     RCCM
                   </dt>
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
@@ -176,7 +176,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <MapPin width={20} height={20} aria-hidden />
                 </span>
                 <div>
-                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     Siège
                   </dt>
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
@@ -196,7 +196,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <Phone width={20} height={20} aria-hidden />
                 </span>
                 <div>
-                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     Téléphone
                   </dt>
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
@@ -218,7 +218,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <Mail width={20} height={20} aria-hidden />
                 </span>
                 <div>
-                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     Email
                   </dt>
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
@@ -240,7 +240,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <Globe2 width={20} height={20} aria-hidden />
                 </span>
                 <div>
-                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <dt className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     LinkedIn
                   </dt>
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">

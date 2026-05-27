@@ -197,7 +197,7 @@ export function MegaMenu({
                       >
                         <span className="block font-medium">{link.label}</span>
                         {link.description ? (
-                          <span className="mt-0.5 block text-xs text-[var(--color-ol-graphite)]/60">
+                          <span className="mt-0.5 block text-xs text-[var(--color-ol-graphite)]/70">
                             {link.description}
                           </span>
                         ) : null}

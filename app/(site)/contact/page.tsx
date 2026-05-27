@@ -47,7 +47,7 @@ export default function ContactPage(): React.ReactElement {
                     <Mail width={20} height={20} aria-hidden />
                   </span>
                   <div>
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                       Email général
                     </p>
                     <a
@@ -67,7 +67,7 @@ export default function ContactPage(): React.ReactElement {
                     <Mail width={20} height={20} aria-hidden />
                   </span>
                   <div>
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                       Commercial
                     </p>
                     <a
@@ -87,7 +87,7 @@ export default function ContactPage(): React.ReactElement {
                     <Phone width={20} height={20} aria-hidden />
                   </span>
                   <div>
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                       Téléphone
                     </p>
                     <p className="mt-1">
@@ -125,7 +125,7 @@ export default function ContactPage(): React.ReactElement {
                     <MapPin width={20} height={20} aria-hidden />
                   </span>
                   <div>
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                       Bureau
                     </p>
                     <address className="mt-1 text-lg font-medium text-[var(--color-ol-night)] not-italic">

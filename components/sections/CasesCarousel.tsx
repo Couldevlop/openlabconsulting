@@ -131,7 +131,7 @@ export function CasesCarousel({
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="orange">{slide.sector}</Badge>
-                  <span className="text-sm text-[var(--color-ol-graphite)]/60">
+                  <span className="text-sm text-[var(--color-ol-graphite)]/70">
                     {slide.client}
                   </span>
                 </div>

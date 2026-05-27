@@ -15,7 +15,7 @@ describe('Page 404 — not-found.tsx', () => {
       screen.getByRole('link', { name: /Découvrir l’écosystème OpenLab/i }),
     ).toHaveAttribute('href', '/solutions');
     expect(
-      screen.getByRole('link', { name: /Le livre IA & Agents Autonomes/i }),
+      screen.getByRole('link', { name: /Le livre IA OpenLab/i }),
     ).toHaveAttribute('href', '/livre');
     expect(
       screen.getByRole('link', { name: /Demander un audit IA gratuit/i }),

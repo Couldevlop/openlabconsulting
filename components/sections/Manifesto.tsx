@@ -76,7 +76,7 @@ export function Manifesto({
           {content.conclusion}
         </p>
 
-        <footer className="mt-12 flex flex-col gap-1 text-sm text-[var(--color-ol-graphite)]/60">
+        <footer className="mt-12 flex flex-col gap-1 text-sm text-[var(--color-ol-graphite)]/70">
           <span className="font-medium text-[var(--color-ol-night)]">
             {content.signature.name}
           </span>

@@ -8,8 +8,12 @@ import {
 
 describe('lib/data/book', () => {
   it('BOOK : titre, sous-titre, édition, capstone définis', () => {
-    expect(BOOK.title).toBe('Intelligence Artificielle');
-    expect(BOOK.subtitle).toBe('Du Machine Learning aux Agents Autonomes');
+    expect(BOOK.title).toMatch(
+      /Intégration de l.Intelligence Artificielle dans le développement logiciel/,
+    );
+    expect(BOOK.subtitle).toBe(
+      'Du fondement mathématique à la mise en production',
+    );
     expect(BOOK.edition).toMatch(/OpenLab Consulting/);
     expect(BOOK.edition).toMatch(/Abidjan/);
     expect(BOOK.capstone).toBe('AgroSense CI');

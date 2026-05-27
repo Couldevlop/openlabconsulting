@@ -34,7 +34,7 @@ import { SITE } from '@/lib/seo/site';
 export const metadata: Metadata = {
   title: 'Équipe — OpenLab Consulting',
   description:
-    'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
+    'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
   alternates: { canonical: '/a-propos/equipe' },
 };
 
@@ -102,7 +102,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                 placeholderLabel={`Portrait ${DEBORA.name}`}
                 className="shadow-2xl"
               />
-              <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/60">
+              <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
                 Photo de {DEBORA.name} — à venir.
               </figcaption>
             </figure>
@@ -205,7 +205,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                   >
                     <Icon width={20} height={20} aria-hidden />
                   </span>
-                  <p className="mt-4 text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <p className="mt-4 text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     {p.type} · {p.year}
                   </p>
                   <Heading level={3} visualLevel={4} className="mt-2">

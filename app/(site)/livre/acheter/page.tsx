@@ -114,7 +114,7 @@ export default function LivreAcheterPage(): React.ReactElement {
                   <BellRing width={20} height={20} aria-hidden />
                   Être prévenu·e à la sortie
                 </Button>
-                <p className="text-sm text-[var(--color-ol-graphite)]/60">
+                <p className="text-sm text-[var(--color-ol-graphite)]/70">
                   Le paiement en ligne (PDF + ePub) ouvrira à la parution. D’ici
                   là,{' '}
                   <Link

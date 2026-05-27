@@ -126,7 +126,7 @@ export function CasClient(): ReactElement {
             <figure>
               <Eyebrow
                 tone="graphite"
-                className="text-[var(--color-ol-graphite)]/60"
+                className="text-[var(--color-ol-graphite)]/70"
               >
                 Avant
               </Eyebrow>
