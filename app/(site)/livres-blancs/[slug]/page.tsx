@@ -123,7 +123,7 @@ export default async function WhitepaperPage({
         <Container width="wide">
           <Link
             href="/audit-ia"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/70 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/70 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page audit IA
@@ -160,7 +160,7 @@ export default async function WhitepaperPage({
               >
                 {wp.title}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange)] italic sm:text-3xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange-text)] italic sm:text-3xl">
                 {wp.subtitle}
               </p>
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
@@ -198,7 +198,7 @@ export default async function WhitepaperPage({
               >
                 <span
                   aria-hidden
-                  className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                  className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
                 >{`0${i + 1}`}</span>
                 <p className="mt-3 text-lg text-[var(--color-ol-night)]">
                   {pillar}
@@ -241,7 +241,7 @@ export default async function WhitepaperPage({
                   <Mail width={20} height={20} aria-hidden />
                   Être prévenu·e à la sortie
                 </Button>
-                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/55">
+                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/70">
                   <Download width={14} height={14} aria-hidden />
                   PDF · ~{wp.pageCount} pages · français · gratuit
                 </p>

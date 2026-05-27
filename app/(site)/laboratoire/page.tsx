@@ -124,21 +124,21 @@ export default function LaboratoirePage(): React.ReactElement {
                 className="mt-4 text-[var(--color-ol-ivory)]"
               >
                 Un cabinet qui code, qui édite,{' '}
-                <span className="text-[var(--color-ol-orange)]">
+                <span className="text-[var(--color-ol-orange-text)]">
                   qui publie
                 </span>
                 .
               </Heading>
             </div>
             <blockquote className="font-[family-name:var(--font-editorial)] text-xl leading-snug text-[var(--color-ol-ivory)]/85 italic sm:text-2xl">
-              <span aria-hidden className="text-[var(--color-ol-orange)]">
+              <span aria-hidden className="text-[var(--color-ol-orange-text)]">
                 “
               </span>
               La data est votre pétrole. La gouvernance est votre raffinerie.
               <br />
               Le laboratoire, lui, dessine ce qui sortira du puits dans cinq
               ans.
-              <span aria-hidden className="text-[var(--color-ol-orange)]">
+              <span aria-hidden className="text-[var(--color-ol-orange-text)]">
                 ”
               </span>
             </blockquote>
@@ -155,7 +155,7 @@ export default function LaboratoirePage(): React.ReactElement {
               >
                 <span
                   aria-hidden
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)]/5 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-ivory)]/10"
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)]/5 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-ivory)]/10"
                 >
                   <Icon width={24} height={24} aria-hidden />
                 </span>
@@ -169,7 +169,7 @@ export default function LaboratoirePage(): React.ReactElement {
                 <p className="text-[var(--color-ol-ivory)]/80">{body}</p>
                 <Link
                   href={href}
-                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-light)]"
+                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-light)]"
                 >
                   {cta}
                   <ArrowUpRight width={14} height={14} aria-hidden />
@@ -199,7 +199,7 @@ export default function LaboratoirePage(): React.ReactElement {
                 <Card className="flex h-full flex-col gap-4 p-7">
                   <span
                     aria-hidden
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                   >
                     <Icon width={24} height={24} aria-hidden />
                   </span>
@@ -248,7 +248,7 @@ export default function LaboratoirePage(): React.ReactElement {
                     <Heading level={3} visualLevel={4}>
                       {p.title}
                     </Heading>
-                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)]">
+                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)]">
                       Y aller
                       <ArrowUpRight
                         width={14}

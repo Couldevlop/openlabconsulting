@@ -31,7 +31,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
@@ -41,7 +41,10 @@ export default function LivreExtraitsPage(): React.ReactElement {
             <Eyebrow tone="orange">Extraits gratuits</Eyebrow>
             <Heading id="extraits-title" level={1} className="mt-4">
               Lisez avant{' '}
-              <span className="text-[var(--color-ol-orange)]">d’acheter</span>.
+              <span className="text-[var(--color-ol-orange-text)]">
+                d’acheter
+              </span>
+              .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
               On vous laisse jauger le ton, la rigueur, la profondeur technique.

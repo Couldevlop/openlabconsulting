@@ -30,7 +30,7 @@ export default function ExpertisesHubPage(): React.ReactElement {
             <Eyebrow tone="orange">Hub Expertises</Eyebrow>
             <Heading id="hub-expertises-title" level={1} className="mt-4">
               Quatre expertises.{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 Une seule logique
               </span>
               .
@@ -57,7 +57,7 @@ export default function ExpertisesHubPage(): React.ReactElement {
                     <div className="flex items-start justify-between gap-4">
                       <span
                         aria-hidden
-                        className="inline-flex h-14 w-14 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
+                        className="inline-flex h-14 w-14 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
                       >
                         <Icon width={28} height={28} aria-hidden />
                       </span>
@@ -65,7 +65,7 @@ export default function ExpertisesHubPage(): React.ReactElement {
                         width={20}
                         height={20}
                         aria-hidden
-                        className="text-[var(--color-ol-orange)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        className="text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       />
                     </div>
 

@@ -38,7 +38,7 @@ export default function LivreAcheterPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
@@ -48,7 +48,7 @@ export default function LivreAcheterPage(): React.ReactElement {
             <Eyebrow tone="orange">À paraître · 2026</Eyebrow>
             <Heading id="acheter-title" level={1} className="mt-4">
               {BOOK.title}.{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 Réservez votre exemplaire
               </span>
               .
@@ -95,7 +95,7 @@ export default function LivreAcheterPage(): React.ReactElement {
                   <li key={f} className="flex items-start gap-3">
                     <span
                       aria-hidden
-                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)]"
                     >
                       <Check
                         width={14}
@@ -119,7 +119,7 @@ export default function LivreAcheterPage(): React.ReactElement {
                   là,{' '}
                   <Link
                     href="/contact?sujet=achat-livre"
-                    className="font-medium text-[var(--color-ol-orange)] underline-offset-2 hover:underline"
+                    className="font-medium text-[var(--color-ol-orange-text)] underline-offset-2 hover:underline"
                   >
                     écrivez-nous
                   </Link>{' '}

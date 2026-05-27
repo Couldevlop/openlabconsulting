@@ -71,7 +71,7 @@ export function Livre(): ReactElement {
             >
               {BOOK.title}
             </Heading>
-            <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic sm:text-2xl">
+            <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic sm:text-2xl">
               {BOOK.subtitle}
             </p>
 
@@ -113,7 +113,7 @@ export function Livre(): ReactElement {
               </Button>
               <Link
                 href={CONFERENCE_HREF}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] sm:ml-2"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] sm:ml-2"
               >
                 Réserver une conférence
                 <ArrowRight width={16} height={16} aria-hidden />

@@ -53,7 +53,7 @@ export function Navbar(): ReactElement {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:text-[var(--color-ol-orange)]"
+                    className="text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:text-[var(--color-ol-orange-text)]"
                   >
                     {item.label}
                   </Link>
@@ -93,6 +93,11 @@ export function Navbar(): ReactElement {
           open ? 'max-h-[85vh] overflow-y-auto' : 'max-h-0',
         )}
         aria-hidden={!open}
+        // Quand le drawer est fermé (max-h-0), ses liens restent dans le DOM :
+        // `inert` les retire du parcours clavier ET de l'arbre d'accessibilité
+        // (OWASP/WCAG — corrige axe « aria-hidden-focus »). React 19 gère
+        // l'attribut booléen nativement.
+        inert={!open}
       >
         <Container as="nav" width="wide" className="py-4">
           <ul className="flex flex-col gap-1">
@@ -173,14 +178,14 @@ function MobileMegaSection({
           <Link
             href={config.overview.href}
             onClick={onNavigate}
-            className="block py-2 text-sm font-medium text-[var(--color-ol-orange)]"
+            className="block py-2 text-sm font-medium text-[var(--color-ol-orange-text)]"
           >
             {config.overview.label}
           </Link>
           {config.sections.map((section, i) => (
             <div key={i} className="mt-2">
               {section.eyebrow ? (
-                <p className="text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+                <p className="text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange-text)] uppercase">
                   {section.eyebrow}
                 </p>
               ) : null}
@@ -190,7 +195,7 @@ function MobileMegaSection({
                     <Link
                       href={link.href}
                       onClick={onNavigate}
-                      className="block py-1.5 text-sm text-[var(--color-ol-graphite)] hover:text-[var(--color-ol-orange)]"
+                      className="block py-1.5 text-sm text-[var(--color-ol-graphite)] hover:text-[var(--color-ol-orange-text)]"
                     >
                       {link.label}
                     </Link>

@@ -6,6 +6,13 @@
   --color-ol-orange: #ff5a00;
   --color-ol-orange-light: #ff7a33;
   --color-ol-orange-dark: #cc4800;
+  /* Orange « encre » : version assombrie pour le TEXTE sur fond clair,
+     conforme WCAG AA (≥ 4.5:1 sur ivory/blanc — cf. §4.7). #cc4800 échoue de
+     justesse (4.4:1), d'où ce ton dédié. */
+  --color-ol-orange-ink: #b34000;
+  /* Couleur de texte orange CONTEXTUELLE : encre par défaut (fonds clairs),
+     repassée en orange vif dans les conteneurs sombres (règle plus bas). */
+  --color-ol-orange-text: var(--color-ol-orange-ink);
   /* Orange amber — accent secondaire pour gradients & highlights chauds. */
   --color-ol-amber: #f59e0b;
   --color-ol-amber-soft: #fcd34d;
@@ -20,6 +27,9 @@
 
   /* --- Couleurs sémantiques -------------------------------------------- */
   --color-ol-success: #22c55e;
+  /* Vert accessible pour le TEXTE sur tint clair (badges « En production ») :
+     #22c55e échoue (2.05:1), green-800 passe largement. cf. §4.7. */
+  --color-ol-success-dark: #166534;
   --color-ol-sage: #84a98c; /* sage green — succès doux, validation calme */
   --color-ol-danger: #dc2626;
   --color-ol-warning: #f59e0b;
@@ -49,6 +59,18 @@
     0 4px 8px rgba(10, 14, 26, 0.08), 0 16px 48px rgba(10, 14, 26, 0.12);
   --shadow-ol-orange-glow:
     0 0 0 1px rgba(255, 90, 0, 0.1), 0 8px 24px rgba(255, 90, 0, 0.18);
+}
+
+/* §4.7 — Contraste AA du texte orange selon le fond.
+ * Le texte orange utilise `--color-ol-orange-text` : « encre » (#b34000) par
+ * défaut, lisible sur les fonds clairs. Dans les conteneurs à fond sombre
+ * (night / navy / graphite) où l'orange vif passe largement AA, on le
+ * réintroduit pour conserver l'éclat de marque. La règle s'applique par
+ * héritage à tout le sous-arbre de la section sombre (y compris en nesting). */
+[class*='bg-[var(--color-ol-night)]'],
+[class*='bg-[var(--color-ol-navy)]'],
+[class*='bg-[var(--color-ol-graphite)]'] {
+  --color-ol-orange-text: var(--color-ol-orange);
 }
 
 html {
@@ -146,7 +168,7 @@ h2 {
 }
 
 .article-prose a {
-  color: var(--color-ol-orange-dark);
+  color: var(--color-ol-orange-text);
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;

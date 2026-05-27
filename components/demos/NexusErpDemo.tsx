@@ -134,7 +134,7 @@ export function NexusErpDemo(): ReactElement {
         })}
       </div>
 
-      <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/55">
+      <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/70">
         Consolidation temps réel SYSCOHADA + PCG France. Drill-down par BU,
         pays, période en un clic dans l’application.
       </p>

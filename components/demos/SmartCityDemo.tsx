@@ -146,7 +146,7 @@ export function SmartCityDemo(): ReactElement {
         className="rounded-xl border border-[var(--color-ol-mist)] bg-white p-6 shadow-sm sm:p-8"
       >
         <Badge tone="orange">{selected.nom}</Badge>
-        <p className="mt-3 text-sm tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+        <p className="mt-3 text-sm tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
           Indice de risque
         </p>
         <p
@@ -160,7 +160,7 @@ export function SmartCityDemo(): ReactElement {
         </p>
 
         <div className="mt-6">
-          <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+          <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
             Facteurs contributeurs
           </p>
           <ul className="mt-3 space-y-2 text-sm">
@@ -179,7 +179,7 @@ export function SmartCityDemo(): ReactElement {
           </ul>
         </div>
 
-        <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/55">
+        <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/70">
           Anonymisation différentielle appliquée dès l’ingestion. Aucune
           identification individuelle possible.
         </p>

@@ -80,7 +80,7 @@ export function AuditIaCta({
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
               {content.headlineLead}{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 {content.headlineHighlight}
               </span>
               .
@@ -139,7 +139,7 @@ export function AuditIaCta({
               {content.reassuranceBullets.join(' · ')}. Voir notre{' '}
               <Link
                 href="/politique-confidentialite"
-                className="underline underline-offset-2 hover:text-[var(--color-ol-orange)]"
+                className="underline underline-offset-2 hover:text-[var(--color-ol-orange-text)]"
               >
                 politique de confidentialité
               </Link>
@@ -176,7 +176,7 @@ export function AuditIaCta({
                 </Heading>
               </div>
             </div>
-            <p className="mt-3 font-[family-name:var(--font-editorial)] text-lg text-[var(--color-ol-orange)] italic">
+            <p className="mt-3 font-[family-name:var(--font-editorial)] text-lg text-[var(--color-ol-orange-text)] italic">
               {whitepaperCard.subtitle}
             </p>
             <p className="mt-5 text-[var(--color-ol-ivory)]/80">

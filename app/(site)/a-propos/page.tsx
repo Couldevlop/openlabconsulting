@@ -79,7 +79,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
             <Eyebrow tone="orange">À propos</Eyebrow>
             <Heading id="apropos-title" level={1} className="mt-4">
               Cabinet ivoirien d’IA appliquée.{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 Pour l’Afrique francophone
               </span>
               .
@@ -115,7 +115,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               >
                 <span
                   aria-hidden
-                  className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                  className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
                 >
                   {`0${i + 1}`}
                 </span>
@@ -154,7 +154,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               <div className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                 >
                   <Building2 width={20} height={20} aria-hidden />
                 </span>
@@ -171,7 +171,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               <div className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                 >
                   <MapPin width={20} height={20} aria-hidden />
                 </span>
@@ -191,7 +191,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               <div className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                 >
                   <Phone width={20} height={20} aria-hidden />
                 </span>
@@ -202,7 +202,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
                     <a
                       href={`tel:${SITE.contact.primaryPhone.replace(/\s/g, '')}`}
-                      className="hover:text-[var(--color-ol-orange)]"
+                      className="hover:text-[var(--color-ol-orange-text)]"
                     >
                       {SITE.contact.primaryPhone}
                     </a>
@@ -213,7 +213,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               <div className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                 >
                   <Mail width={20} height={20} aria-hidden />
                 </span>
@@ -224,7 +224,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                   <dd className="mt-1 font-medium text-[var(--color-ol-night)]">
                     <a
                       href={`mailto:${SITE.contact.email}`}
-                      className="hover:text-[var(--color-ol-orange)]"
+                      className="hover:text-[var(--color-ol-orange-text)]"
                     >
                       {SITE.contact.email}
                     </a>
@@ -235,7 +235,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
               <div className="flex items-start gap-4 sm:col-span-2">
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                 >
                   <Globe2 width={20} height={20} aria-hidden />
                 </span>
@@ -248,7 +248,7 @@ export default async function AProposPage(): Promise<React.ReactElement> {
                       href={SITE.social.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 hover:text-[var(--color-ol-orange)]"
+                      className="inline-flex items-center gap-1 hover:text-[var(--color-ol-orange-text)]"
                     >
                       Suivre OpenLab Consulting
                       <ArrowUpRight width={14} height={14} aria-hidden />

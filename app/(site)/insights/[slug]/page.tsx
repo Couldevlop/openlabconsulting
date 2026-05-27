@@ -113,7 +113,7 @@ export default async function InsightArticlePage({
         <Container width="narrow">
           <Link
             href="/insights"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-graphite)]/70 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-graphite)]/70 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={14} height={14} aria-hidden />
             Tous les insights
@@ -174,7 +174,7 @@ export default async function InsightArticlePage({
                   aria-label="À retenir"
                   className="mb-10 rounded-xl border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-6 sm:p-8"
                 >
-                  <p className="text-xs font-semibold tracking-wider text-[var(--color-ol-orange)] uppercase">
+                  <p className="text-xs font-semibold tracking-wider text-[var(--color-ol-orange-text)] uppercase">
                     À retenir
                   </p>
                   <ul className="mt-4 space-y-2.5">
@@ -229,7 +229,7 @@ export default async function InsightArticlePage({
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer nofollow"
-                          className="underline decoration-[var(--color-ol-mist)] underline-offset-2 transition-colors hover:text-[var(--color-ol-orange)] hover:decoration-[var(--color-ol-orange)]"
+                          className="underline decoration-[var(--color-ol-mist)] underline-offset-2 transition-colors hover:text-[var(--color-ol-orange-text)] hover:decoration-[var(--color-ol-orange)]"
                         >
                           {source.label}
                         </a>
@@ -258,7 +258,7 @@ export default async function InsightArticlePage({
                       >
                         <a
                           href={`#${h.id}`}
-                          className="-ml-px block border-l border-transparent py-0.5 text-[var(--color-ol-graphite)]/70 transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange)]"
+                          className="-ml-px block border-l border-transparent py-0.5 text-[var(--color-ol-graphite)]/70 transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-text)]"
                         >
                           {h.text}
                         </a>

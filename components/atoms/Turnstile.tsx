@@ -118,7 +118,7 @@ export function Turnstile({
         className={className}
         data-testid="turnstile-dev-placeholder"
       >
-        <p className="rounded border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-3 py-2 text-xs text-[var(--color-ol-graphite)]/55">
+        <p className="rounded border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-3 py-2 text-xs text-[var(--color-ol-graphite)]/70">
           CAPTCHA désactivé en dev (clé publique absente). Le serveur accepte la
           soumission via fallback bypass.
         </p>

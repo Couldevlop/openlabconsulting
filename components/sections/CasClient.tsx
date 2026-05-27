@@ -82,7 +82,7 @@ export function CasClient(): ReactElement {
 
             <Heading id="cas-client-title" level={2} className="mt-4">
               Un réseau de stations{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 remis sous contrôle
               </span>
               .
@@ -138,7 +138,7 @@ export function CasClient(): ReactElement {
                 placeholderLabel="Capture avant"
                 className="mt-3"
               />
-              <figcaption className="mt-3 text-sm text-[var(--color-ol-graphite)]/55">
+              <figcaption className="mt-3 text-sm text-[var(--color-ol-graphite)]/70">
                 Reporting manuel : papier, tableurs, validation J+1.
               </figcaption>
             </figure>
@@ -153,7 +153,7 @@ export function CasClient(): ReactElement {
                 placeholderLabel="Capture après"
                 className="mt-3"
               />
-              <figcaption className="mt-3 text-sm text-[var(--color-ol-graphite)]/55">
+              <figcaption className="mt-3 text-sm text-[var(--color-ol-graphite)]/70">
                 Dashboard SYGESCOM : ingestion temps réel, alertes IA,
                 drill-down par station.
               </figcaption>
@@ -168,13 +168,13 @@ export function CasClient(): ReactElement {
         >
           {c.results.map((r) => (
             <li key={r.label} data-testid="cas-client-result">
-              <span className="block font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-5xl">
+              <span className="block font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-5xl">
                 {r.value}
               </span>
               <span className="mt-2 block text-base font-medium text-[var(--color-ol-night)]">
                 {r.label}
               </span>
-              <span className="mt-1 block text-xs text-[var(--color-ol-graphite)]/55">
+              <span className="mt-1 block text-xs text-[var(--color-ol-graphite)]/70">
                 {r.source}
               </span>
             </li>

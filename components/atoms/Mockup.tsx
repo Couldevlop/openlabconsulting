@@ -68,7 +68,7 @@ export function Mockup({
           <span className="block h-3 w-3 rounded-full bg-[var(--color-ol-success)]/60" />
         </div>
         {variant === 'browser' ? (
-          <div className="flex-1 truncate rounded-md bg-white px-3 py-1 text-xs text-[var(--color-ol-graphite)]/55 ring-1 ring-[var(--color-ol-mist)]">
+          <div className="flex-1 truncate rounded-md bg-white px-3 py-1 text-xs text-[var(--color-ol-graphite)]/70 ring-1 ring-[var(--color-ol-mist)]">
             {label ?? 'openlabconsulting.com'}
           </div>
         ) : (

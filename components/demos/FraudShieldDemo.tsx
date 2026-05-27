@@ -169,11 +169,11 @@ export function FraudShieldDemo(): ReactElement {
                   width={16}
                   height={16}
                   aria-hidden
-                  className="text-[var(--color-ol-orange)]"
+                  className="text-[var(--color-ol-orange-text)]"
                 />
                 {c.label}
               </span>
-              <span className="font-mono text-xs text-[var(--color-ol-graphite)]/55">
+              <span className="font-mono text-xs text-[var(--color-ol-graphite)]/70">
                 {c.score >= 80 ? 'OK' : c.score >= 50 ? '?' : '⚠'}
               </span>
             </button>
@@ -181,7 +181,7 @@ export function FraudShieldDemo(): ReactElement {
         </div>
 
         <div className="mt-8 rounded-lg bg-[var(--color-ol-ivory)] p-6 text-center">
-          <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+          <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
             Score d’authenticité
           </p>
           <p
@@ -324,7 +324,7 @@ export function FraudShieldDemo(): ReactElement {
 
         {!analyzing && selected.motifs.length > 0 ? (
           <div className="mt-6">
-            <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+            <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
               Motifs détectés
             </p>
             <ul className="mt-3 space-y-2 text-sm">

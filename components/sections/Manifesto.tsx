@@ -41,7 +41,7 @@ export function Manifesto({
           className="mt-6 max-w-3xl text-4xl leading-[1.05] tracking-tight sm:text-6xl"
         >
           {content.headline}{' '}
-          <span className="text-[var(--color-ol-orange)]">
+          <span className="text-[var(--color-ol-orange-text)]">
             {content.headlineHighlight}
           </span>
         </Heading>
@@ -58,7 +58,7 @@ export function Manifesto({
             >
               <span
                 aria-hidden
-                className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
               >
                 {String(idx + 1).padStart(2, '0')}
               </span>

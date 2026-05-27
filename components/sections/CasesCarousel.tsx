@@ -105,7 +105,7 @@ export function CasesCarousel({
             <Eyebrow tone="orange">Cas clients</Eyebrow>
             <Heading id="cas-clients-carousel-title" level={2} className="mt-4">
               Ce que ça donne{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 sur le terrain
               </span>
               .
@@ -140,7 +140,7 @@ export function CasesCarousel({
                   {slide.headline}
                 </Heading>
 
-                <p className="font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic">
+                <p className="font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic">
                   {slide.punchline}
                 </p>
 
@@ -151,7 +151,7 @@ export function CasesCarousel({
                 <ul className="mt-2 grid grid-cols-3 gap-4 border-t border-[var(--color-ol-mist)] pt-6">
                   {slide.results.map((r) => (
                     <li key={r.label}>
-                      <span className="block font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-ol-orange)] sm:text-3xl">
+                      <span className="block font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-ol-orange-text)] sm:text-3xl">
                         {r.value}
                       </span>
                       <span className="mt-1 block text-xs text-[var(--color-ol-graphite)]/65">
@@ -163,7 +163,7 @@ export function CasesCarousel({
 
                 <Link
                   href={slide.href}
-                  className="mt-2 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+                  className="mt-2 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-dark)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
                 >
                   Voir le produit complet
                   <ArrowRight width={14} height={14} aria-hidden />
@@ -204,7 +204,7 @@ export function CasesCarousel({
               type="button"
               onClick={prev}
               aria-label="Cas précédent"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ol-mist)] bg-white text-[var(--color-ol-night)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ol-mist)] bg-white text-[var(--color-ol-night)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
             >
               <ArrowLeft width={18} height={18} aria-hidden />
             </button>
@@ -212,7 +212,7 @@ export function CasesCarousel({
               type="button"
               onClick={next}
               aria-label="Cas suivant"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ol-mist)] bg-white text-[var(--color-ol-night)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ol-mist)] bg-white text-[var(--color-ol-night)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
             >
               <ArrowRight width={18} height={18} aria-hidden />
             </button>
@@ -220,7 +220,7 @@ export function CasesCarousel({
               type="button"
               onClick={() => setPaused((p) => !p)}
               aria-label={paused ? 'Reprendre la rotation' : 'Mettre en pause'}
-              className="ml-2 inline-flex h-11 items-center gap-2 rounded-full border border-[var(--color-ol-mist)] bg-white px-4 text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+              className="ml-2 inline-flex h-11 items-center gap-2 rounded-full border border-[var(--color-ol-mist)] bg-white px-4 text-sm font-medium text-[var(--color-ol-graphite)] transition-colors hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
             >
               {paused ? (
                 <Play width={14} height={14} aria-hidden />

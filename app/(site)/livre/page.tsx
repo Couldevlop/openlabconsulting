@@ -103,7 +103,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               >
                 {BOOK.title}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange)] italic sm:text-3xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange-text)] italic sm:text-3xl">
                 {BOOK.subtitle}
               </p>
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
@@ -146,7 +146,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               <li key={label} className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-orange)]/20"
+                  className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
                 >
                   <Icon width={22} height={22} aria-hidden />
                 </span>
@@ -248,7 +248,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
                     <p className="text-sm text-[var(--color-ol-graphite)]/75">
                       {item.body}
                     </p>
-                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)]">
+                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)]">
                       Y aller
                       <ArrowRight
                         width={14}

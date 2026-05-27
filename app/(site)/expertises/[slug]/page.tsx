@@ -76,7 +76,7 @@ export default async function ExpertiseDetailPage({
         <Container width="wide">
           <Link
             href="/expertises"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Toutes les expertises
@@ -85,7 +85,7 @@ export default async function ExpertiseDetailPage({
           <div className="mt-10 grid gap-10 lg:grid-cols-[auto_1fr] lg:items-start lg:gap-14">
             <span
               aria-hidden
-              className="inline-flex h-20 w-20 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-orange)]/20"
+              className="inline-flex h-20 w-20 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
             >
               <Icon width={40} height={40} aria-hidden />
             </span>
@@ -95,7 +95,7 @@ export default async function ExpertiseDetailPage({
               <Heading id="expertise-title" level={1} className="mt-4">
                 {title}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic sm:text-2xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic sm:text-2xl">
                 {punchline}
               </p>
               <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
@@ -127,7 +127,7 @@ export default async function ExpertiseDetailPage({
               >
                 <span
                   aria-hidden
-                  className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                  className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)]"
                 >
                   <Check width={14} height={14} aria-hidden strokeWidth={3} />
                 </span>
@@ -173,7 +173,7 @@ export default async function ExpertiseDetailPage({
               >
                 <span
                   aria-hidden
-                  className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-5xl"
+                  className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-5xl"
                 >
                   {step}
                 </span>
@@ -223,7 +223,7 @@ export default async function ExpertiseDetailPage({
                       width={14}
                       height={14}
                       aria-hidden
-                      className="text-[var(--color-ol-orange)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      className="text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
                   </Link>
                 </li>
@@ -248,7 +248,7 @@ export default async function ExpertiseDetailPage({
             </div>
             <Link
               href="/expertises"
-              className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)]"
+              className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
             >
               Hub expertises
               <ArrowUpRight width={16} height={16} aria-hidden />
@@ -269,7 +269,7 @@ export default async function ExpertiseDetailPage({
                   >
                     <span
                       aria-hidden
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                     >
                       <other.Icon width={20} height={20} aria-hidden />
                     </span>

@@ -42,7 +42,7 @@ export default function AuditIaPage(): React.ReactElement {
             <Eyebrow tone="orange">Audit IA gratuit</Eyebrow>
             <Heading id="audit-ia-page-title" level={1} className="mt-4">
               Trente minutes pour savoir si l’IA{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 vous fera gagner du temps
               </span>
               .
@@ -77,7 +77,7 @@ export default function AuditIaPage(): React.ReactElement {
               >
                 <span
                   aria-hidden
-                  className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                  className="block font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
                 >
                   {step}
                 </span>

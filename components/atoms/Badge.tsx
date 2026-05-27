@@ -9,7 +9,7 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 
 const toneMap: Record<BadgeTone, string> = {
   production:
-    'bg-[var(--color-ol-success)]/12 text-[var(--color-ol-success)] ring-[var(--color-ol-success)]/30',
+    'bg-[var(--color-ol-success)]/12 text-[var(--color-ol-success-dark)] ring-[var(--color-ol-success)]/30',
   pilot:
     'bg-[var(--color-ol-info)]/12 text-[var(--color-ol-info)] ring-[var(--color-ol-info)]/30',
   mvp: 'bg-[var(--color-ol-orange)]/12 text-[var(--color-ol-orange-dark)] ring-[var(--color-ol-orange)]/30',

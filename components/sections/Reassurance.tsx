@@ -60,7 +60,7 @@ export function Reassurance(): ReactElement {
               {CLIENTS.map((client) => (
                 <li
                   key={client.slug}
-                  className="text-[var(--color-ol-graphite)]/55 transition-colors duration-300 hover:text-[var(--color-ol-graphite)]"
+                  className="text-[var(--color-ol-graphite)]/70 transition-colors duration-300 hover:text-[var(--color-ol-graphite)]"
                 >
                   <Image
                     src={`/logos/${client.slug}.svg`}

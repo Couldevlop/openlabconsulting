@@ -48,7 +48,7 @@ export default function LivreCompanionPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
@@ -58,7 +58,10 @@ export default function LivreCompanionPage(): React.ReactElement {
             <Eyebrow tone="orange">Companion lecteurs</Eyebrow>
             <Heading id="companion-title" level={1} className="mt-4">
               Tout ce qui prolonge{' '}
-              <span className="text-[var(--color-ol-orange)]">la lecture</span>.
+              <span className="text-[var(--color-ol-orange-text)]">
+                la lecture
+              </span>
+              .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
               Acheter un livre, c’est bien. Pouvoir exécuter ses exemples,
@@ -87,7 +90,7 @@ export default function LivreCompanionPage(): React.ReactElement {
                     <div className="flex items-start justify-between gap-3">
                       <span
                         aria-hidden
-                        className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                        className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
                         <Icon width={24} height={24} aria-hidden />
                       </span>
@@ -103,7 +106,7 @@ export default function LivreCompanionPage(): React.ReactElement {
                       href={r.href}
                       target={external ? '_blank' : undefined}
                       rel={external ? 'noopener noreferrer' : undefined}
-                      className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+                      className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
                     >
                       Accéder
                       <ArrowUpRight width={14} height={14} aria-hidden />

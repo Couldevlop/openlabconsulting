@@ -93,17 +93,20 @@ export function Laboratoire(): ReactElement {
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
               Un cabinet qui code, qui édite,{' '}
-              <span className="text-[var(--color-ol-orange)]">qui publie</span>.
+              <span className="text-[var(--color-ol-orange-text)]">
+                qui publie
+              </span>
+              .
             </Heading>
           </div>
           <blockquote className="font-[family-name:var(--font-editorial)] text-xl leading-snug text-[var(--color-ol-ivory)]/85 italic sm:text-2xl">
-            <span aria-hidden className="text-[var(--color-ol-orange)]">
+            <span aria-hidden className="text-[var(--color-ol-orange-text)]">
               “
             </span>
             La data est votre pétrole. La gouvernance est votre raffinerie.
             <br />
             Le laboratoire, lui, dessine ce qui sortira du puits dans cinq ans.
-            <span aria-hidden className="text-[var(--color-ol-orange)]">
+            <span aria-hidden className="text-[var(--color-ol-orange-text)]">
               ”
             </span>
           </blockquote>
@@ -120,7 +123,7 @@ export function Laboratoire(): ReactElement {
             >
               <span
                 aria-hidden
-                className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)]/5 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-ivory)]/10"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)]/5 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-ivory)]/10"
               >
                 <Icon width={24} height={24} aria-hidden />
               </span>
@@ -137,7 +140,7 @@ export function Laboratoire(): ReactElement {
               <p className="text-[var(--color-ol-ivory)]/75">{body}</p>
               <Link
                 href={href}
-                className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
+                className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
               >
                 {ctaLabel}
                 <ArrowRight width={16} height={16} aria-hidden />

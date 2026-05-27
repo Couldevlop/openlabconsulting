@@ -39,7 +39,7 @@ export default function LaboratoireAxesPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/laboratoire"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/65 transition-colors hover:text-[var(--color-ol-orange)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/65 transition-colors hover:text-[var(--color-ol-orange-text)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Hub Laboratoire
@@ -76,7 +76,7 @@ export default function LaboratoireAxesPage(): React.ReactElement {
                   <div className="flex items-center gap-3">
                     <span
                       aria-hidden
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 font-mono text-sm font-semibold text-[var(--color-ol-orange)]"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 font-mono text-sm font-semibold text-[var(--color-ol-orange-text)]"
                     >
                       0{i + 1}
                     </span>
@@ -105,7 +105,7 @@ export default function LaboratoireAxesPage(): React.ReactElement {
                   </ul>
 
                   <div className="mt-4 border-t border-[var(--color-ol-mist)] pt-4">
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                       Produits qui incarnent cet axe
                     </p>
                     <ul className="mt-3 flex flex-wrap gap-2">
@@ -131,7 +131,7 @@ export default function LaboratoireAxesPage(): React.ReactElement {
             </p>
             <Link
               href="/laboratoire/publications"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)]"
+              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
             >
               Toutes les publications
               <ArrowUpRight width={14} height={14} aria-hidden />

@@ -182,7 +182,7 @@ export function AgrosenseDemo(): ReactElement {
         className="rounded-xl border border-[var(--color-ol-mist)] bg-white p-6 shadow-sm sm:p-8"
       >
         <Badge tone="orange">Parcelle {selected.id}</Badge>
-        <p className="mt-3 text-sm tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+        <p className="mt-3 text-sm tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
           {selected.culture} · {selected.surface} ha
         </p>
 
@@ -211,7 +211,7 @@ export function AgrosenseDemo(): ReactElement {
             <dt className="text-[var(--color-ol-graphite)]/60">
               Rendement estimé
             </dt>
-            <dd className="mt-1 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-ol-orange)]">
+            <dd className="mt-1 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--color-ol-orange-text)]">
               {selected.rendementEstime}
             </dd>
           </div>

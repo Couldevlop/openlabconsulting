@@ -71,7 +71,7 @@ export default function NotFoundPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Retour à l’accueil
@@ -82,7 +82,7 @@ export default function NotFoundPage(): React.ReactElement {
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden
-                  className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                  className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)]"
                 >
                   <Compass width={26} height={26} aria-hidden />
                 </span>
@@ -95,7 +95,7 @@ export default function NotFoundPage(): React.ReactElement {
                 className="mt-6 text-[var(--color-ol-ivory)]"
               >
                 Ici, c’est{' '}
-                <span className="text-[var(--color-ol-orange)]">
+                <span className="text-[var(--color-ol-orange-text)]">
                   le bout du chemin
                 </span>
                 .
@@ -116,7 +116,7 @@ export default function NotFoundPage(): React.ReactElement {
             {/* Logo ASCII discret — easter egg dev */}
             <pre
               aria-hidden
-              className="hidden font-mono text-xs leading-tight text-[var(--color-ol-orange)]/30 select-none lg:block"
+              className="hidden font-mono text-xs leading-tight text-[var(--color-ol-orange-text)]/30 select-none lg:block"
             >
               {`
    ██████╗ ██████╗ ███████╗███╗   ██╗
@@ -161,7 +161,7 @@ export default function NotFoundPage(): React.ReactElement {
                   <p className="mt-3 text-[var(--color-ol-graphite)]/75">
                     {s.body}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-transform group-hover:translate-x-0.5">
+                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5">
                     Continuer
                     <ArrowUpRight width={14} height={14} aria-hidden />
                   </span>
