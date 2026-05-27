@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Download, Mail } from 'lucide-react';
@@ -8,6 +9,7 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { cn } from '@/lib/cn';
 
 interface Whitepaper {
   slug: string;
@@ -19,6 +21,8 @@ interface Whitepaper {
   pitch: readonly string[];
   status: 'draft' | 'published';
   publicationLabel: string;
+  /** Couverture (chemin public). Affichée dans le hero si présente. */
+  cover?: { src: string; width: number; height: number };
 }
 
 /**
@@ -47,6 +51,11 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     ],
     status: 'draft',
     publicationLabel: 'En rédaction — sortie prévue T2 2026',
+    cover: {
+      src: '/livres-blancs/ia-souveraine-couverture.webp',
+      width: 1024,
+      height: 1536,
+    },
   },
 };
 
@@ -68,6 +77,23 @@ export async function generateMetadata({
     title: `${wp.title} — ${wp.subtitle}`,
     description: wp.pitch[0],
     alternates: { canonical: `/livres-blancs/${wp.slug}` },
+    openGraph: {
+      title: `${wp.title} · ${wp.subtitle}`,
+      description: wp.pitch[0],
+      type: 'article',
+      ...(wp.cover
+        ? {
+            images: [
+              {
+                url: wp.cover.src,
+                width: wp.cover.width,
+                height: wp.cover.height,
+                alt: `Couverture du livre blanc « ${wp.title} »`,
+              },
+            ],
+          }
+        : {}),
+    },
   };
 }
 
@@ -103,7 +129,28 @@ export default async function WhitepaperPage({
             Page audit IA
           </Link>
 
-          <div className="mt-10 grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20">
+          <div
+            className={cn(
+              'mt-10 grid gap-12 lg:items-center lg:gap-16',
+              wp.cover
+                ? 'lg:grid-cols-[0.7fr_1.3fr]'
+                : 'lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20',
+            )}
+          >
+            {wp.cover ? (
+              <div className="mx-auto w-full max-w-[17rem] lg:mx-0">
+                <Image
+                  src={wp.cover.src}
+                  alt={`Couverture du livre blanc « ${wp.title} — ${wp.subtitle} »`}
+                  width={wp.cover.width}
+                  height={wp.cover.height}
+                  priority
+                  sizes="(min-width: 1024px) 17rem, (min-width: 640px) 50vw, 75vw"
+                  className="h-auto w-full rounded-lg shadow-2xl ring-1 ring-[var(--color-ol-ivory)]/10"
+                />
+              </div>
+            ) : null}
+
             <div>
               <Badge tone="orange">Livre blanc · 2026</Badge>
               <Heading
@@ -119,12 +166,12 @@ export default async function WhitepaperPage({
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
                 {wp.audience}
               </p>
-            </div>
 
-            <div className="space-y-4 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
-              {wp.pitch.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              <div className="mt-6 space-y-4 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
+                {wp.pitch.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
             </div>
           </div>
         </Container>

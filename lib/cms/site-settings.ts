@@ -40,6 +40,8 @@ export interface AuditIaCtaWhitepaper {
   ctaLabel: string;
   ctaHref: string;
   footnote: string;
+  /** Vignette de couverture (chemin public). Optionnelle. */
+  cover?: { src: string; width: number; height: number };
 }
 
 export interface AuditIaCtaContent {
@@ -126,6 +128,11 @@ export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {
     ctaLabel: 'Télécharger le livre blanc',
     ctaHref: '/livres-blancs/ia-souveraine-ci-2026',
     footnote: 'Accès gratuit · PDF · ~25 pages · email pro requis.',
+    cover: {
+      src: '/livres-blancs/ia-souveraine-couverture.webp',
+      width: 1024,
+      height: 1536,
+    },
   },
 };
 
