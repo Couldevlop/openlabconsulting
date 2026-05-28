@@ -7,7 +7,8 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { PRODUCTS } from '@/lib/data/products';
+import { DynamicIcon } from '@/lib/icon-map';
+import { getPublishedProducts } from '@/lib/products-server';
 
 export const metadata: Metadata = {
   title: 'Solutions — 7 logiciels propriétaires OpenLab',
@@ -18,7 +19,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SolutionsHubPage(): React.ReactElement {
+export default async function SolutionsHubPage(): Promise<React.ReactElement> {
+  const products = await getPublishedProducts();
   return (
     <main id="main">
       {/* Hero */}
@@ -45,8 +47,16 @@ export default function SolutionsHubPage(): React.ReactElement {
           </div>
 
           <ul className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4">
-            {PRODUCTS.map(
-              ({ slug, name, Icon, tagline, target, status, statusLabel }) => (
+            {products.map(
+              ({
+                slug,
+                name,
+                iconKey,
+                tagline,
+                target,
+                status,
+                statusLabel,
+              }) => (
                 <li key={slug}>
                   <Link
                     href={`/solutions/${slug}`}
@@ -62,7 +72,12 @@ export default function SolutionsHubPage(): React.ReactElement {
                           aria-hidden
                           className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)] text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-mist)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white group-hover:ring-[var(--color-ol-orange)]"
                         >
-                          <Icon width={24} height={24} aria-hidden />
+                          <DynamicIcon
+                            name={iconKey}
+                            width={24}
+                            height={24}
+                            aria-hidden
+                          />
                         </span>
                         <Badge tone={status}>{statusLabel}</Badge>
                       </div>

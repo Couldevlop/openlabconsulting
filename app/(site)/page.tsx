@@ -9,7 +9,7 @@ import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
 import { Reassurance } from '@/components/sections/Reassurance';
-import { Solutions } from '@/components/sections/Solutions';
+import { SolutionsServer } from '@/components/sections/SolutionsServer';
 import {
   getHeroContent,
   getManifestoContent,
@@ -33,7 +33,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
       <Expertises />
       <Laboratoire />
       <CasesCarouselServer />
-      <Solutions />
+      <SolutionsServer />
       <Manifesto content={manifestoContent} />
       <Livre />
       <InsightsServer />

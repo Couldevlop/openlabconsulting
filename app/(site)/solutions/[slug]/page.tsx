@@ -14,7 +14,9 @@ import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { ProductDemo } from '@/components/demos/ProductDemo';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
+import { DynamicIcon } from '@/lib/icon-map';
+import { PRODUCTS } from '@/lib/data/products';
+import { getProductBySlug } from '@/lib/products-server';
 import { getCaseStudyForProduct } from '@/lib/case-studies-server';
 import {
   breadcrumbSchema,
@@ -34,7 +36,7 @@ export async function generateMetadata({
   params,
 }: RouteParams): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) {
     return { title: 'Produit introuvable' };
   }
@@ -49,12 +51,12 @@ export default async function SolutionDetailPage({
   params,
 }: RouteParams): Promise<React.ReactElement> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) {
     notFound();
   }
   const {
-    Icon,
+    iconKey,
     name,
     tagline,
     target,
@@ -114,7 +116,12 @@ export default async function SolutionDetailPage({
                   aria-hidden
                   className="inline-flex h-16 w-16 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
                 >
-                  <Icon width={32} height={32} aria-hidden />
+                  <DynamicIcon
+                    name={iconKey}
+                    width={32}
+                    height={32}
+                    aria-hidden
+                  />
                 </span>
                 <Badge tone={status}>{statusLabel}</Badge>
               </div>
@@ -209,14 +216,19 @@ export default async function SolutionDetailPage({
                 Quatre piliers concrets.
               </Heading>
               <ul className="mt-8 grid gap-5 sm:grid-cols-2">
-                {features.map(({ Icon: FIcon, title, body }) => (
+                {features.map(({ iconKey: featureIconKey, title, body }) => (
                   <li key={title}>
                     <Card className="flex h-full flex-col gap-3 p-6">
                       <span
                         aria-hidden
                         className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
-                        <FIcon width={20} height={20} aria-hidden />
+                        <DynamicIcon
+                          name={featureIconKey}
+                          width={20}
+                          height={20}
+                          aria-hidden
+                        />
                       </span>
                       <Heading level={3} visualLevel={4}>
                         {title}
@@ -566,7 +578,12 @@ export default async function SolutionDetailPage({
                         aria-hidden
                         className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
-                        <other.Icon width={20} height={20} aria-hidden />
+                        <DynamicIcon
+                          name={other.iconKey}
+                          width={20}
+                          height={20}
+                          aria-hidden
+                        />
                       </span>
                       <Heading level={3} visualLevel={4}>
                         {other.name}

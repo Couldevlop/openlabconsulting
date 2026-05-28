@@ -18,6 +18,7 @@ import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
 import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
+import { Products } from './collections/Products';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
@@ -35,6 +36,7 @@ const dirname = path.dirname(filename);
  * Collections actives :
  *   - articles    : insights longs format (homepage §6.9)
  *   - caseStudies : cas clients du carrousel homepage (§6.5)
+ *   - products    : 7 logiciels propriétaires (§1.3, §7)
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
  *   - users       : auth + 6 rôles RBAC + 2FA TOTP (§11)
@@ -82,6 +84,7 @@ export default buildConfig({
   collections: [
     Articles,
     CaseStudies,
+    Products,
     Whitepapers,
     Media,
     Users,

@@ -7,7 +7,8 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { PRODUCTS } from '@/lib/data/products';
+import { DynamicIcon } from '@/lib/icon-map';
+import { PRODUCTS, type Product } from '@/lib/data/products';
 
 /**
  * Solutions — Section 6 de la homepage (CLAUDE.md §6, §7).
@@ -18,8 +19,16 @@ import { PRODUCTS } from '@/lib/data/products';
  *
  * Aucun chiffre rond inventé (§4.10) — uniquement targets et statuts
  * documentés dans CLAUDE.md §1.3.
+ *
+ * Les produits sont injectés via la prop `products` (résolue côté server
+ * par `SolutionsServer` → collection Payload, fallback `PRODUCTS`). Par
+ * défaut, le fallback hard-codé garantit un rendu sans DB.
  */
-export function Solutions(): ReactElement {
+export function Solutions({
+  products = PRODUCTS,
+}: {
+  products?: readonly Product[];
+} = {}): ReactElement {
   return (
     <section
       aria-labelledby="solutions-title"
@@ -43,8 +52,8 @@ export function Solutions(): ReactElement {
         </div>
 
         <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4">
-          {PRODUCTS.map(
-            ({ slug, name, Icon, tagline, target, status, statusLabel }) => (
+          {products.map(
+            ({ slug, name, iconKey, tagline, target, status, statusLabel }) => (
               <li key={slug}>
                 <Link
                   href={`/solutions/${slug}`}
@@ -60,7 +69,12 @@ export function Solutions(): ReactElement {
                         aria-hidden
                         className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)] text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-mist)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white group-hover:ring-[var(--color-ol-orange)]"
                       >
-                        <Icon width={24} height={24} aria-hidden />
+                        <DynamicIcon
+                          name={iconKey}
+                          width={24}
+                          height={24}
+                          aria-hidden
+                        />
                       </span>
                       <Badge tone={status}>{statusLabel}</Badge>
                     </div>

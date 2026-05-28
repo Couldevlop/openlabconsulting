@@ -3,8 +3,10 @@ import { Articles } from '@/collections/Articles';
 import { CaseStudies } from '@/collections/CaseStudies';
 import { Leads } from '@/collections/Leads';
 import { Media } from '@/collections/Media';
+import { Products } from '@/collections/Products';
 import { Users } from '@/collections/Users';
 import { Whitepapers } from '@/collections/Whitepapers';
+import { ICON_KEYS } from '@/lib/icon-map';
 
 /**
  * Tests sur la structure des collections Payload — sans instancier
@@ -176,6 +178,110 @@ describe('Payload collections', () => {
       );
       expect((field as { minRows?: number }).minRows).toBe(3);
       expect((field as { maxRows?: number }).maxRows).toBe(3);
+    });
+  });
+
+  describe('Products', () => {
+    it('a le slug "products"', () => {
+      expect(Products.slug).toBe('products');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(Products.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('useAsTitle = name', () => {
+      expect(Products.admin?.useAsTitle).toBe('name');
+    });
+
+    it('access.read : anonyme → contrainte _status published (OWASP A01)', () => {
+      const read = CaseStudies.access?.read;
+      const productsRead = Products.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      // Anonyme : retourne une contrainte Where sur le statut natif des drafts.
+      expect(productsRead({ req: { user: null } })).toEqual({
+        _status: { equals: 'published' },
+      });
+      // Sanity : aligné sur CaseStudies (même politique de lecture).
+      expect(typeof read).toBe('function');
+    });
+
+    it('access.read : utilisateur authentifié → true', () => {
+      const productsRead = Products.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(productsRead({ req: { user: { id: 'u1' } } })).toBe(true);
+    });
+
+    it('a les champs critiques (slug, name, tagline, target, status, iconKey, features, stack, proofs, pricing, faq, order)', () => {
+      const fieldNames = (Products.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'slug',
+        'name',
+        'tagline',
+        'target',
+        'maturity',
+        'statusLabel',
+        'eyebrow',
+        'intro',
+        'problem',
+        'iconKey',
+        'features',
+        'stack',
+        'proofs',
+        'pricing',
+        'faq',
+        'expertisesLies',
+        'order',
+        'publishedAt',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('slug expose les 7 produits OpenLab', () => {
+      const field = (Products.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'slug',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [
+          'nexusrh',
+          'nexuserp',
+          'sygescom',
+          'agrosense',
+          'qualitos',
+          'fraud-shield',
+          'smart-city',
+        ].sort(),
+      );
+    });
+
+    it('iconKey est borné au registre ICON_KEYS', () => {
+      const field = (Products.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'iconKey',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [...ICON_KEYS].sort(),
+      );
+    });
+
+    it('proofs exige une source (§4.10) sur chaque entrée', () => {
+      const proofs = (Products.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'proofs',
+      );
+      const subFields = (
+        proofs as { fields?: { name: string; required?: boolean }[] }
+      ).fields;
+      const source = subFields?.find((sf) => sf.name === 'source');
+      expect(source).toBeDefined();
+      expect(source?.required).toBe(true);
     });
   });
 
