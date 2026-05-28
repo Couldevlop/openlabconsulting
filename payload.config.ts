@@ -21,6 +21,8 @@ import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
 import { Products } from './collections/Products';
 import { Sectors } from './collections/Sectors';
+import { TeamMembers } from './collections/TeamMembers';
+import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
@@ -41,6 +43,8 @@ const dirname = path.dirname(filename);
  *   - products    : 7 logiciels propriétaires (§1.3, §7)
  *   - expertises  : 4 axes de conseil (§5, §6.3)
  *   - sectors     : 5 secteurs cibles (§5)
+ *   - teamMembers : équipe dirigeante (page /a-propos/equipe)
+ *   - teamPublications : publications signature de l'équipe
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
  *   - users       : auth + 6 rôles RBAC + 2FA TOTP (§11)
@@ -91,6 +95,8 @@ export default buildConfig({
     Products,
     Expertises,
     Sectors,
+    TeamMembers,
+    TeamPublications,
     Whitepapers,
     Media,
     Users,
