@@ -89,7 +89,7 @@ export function Mockup({
             </span>
           </div>
         )}
-        <span className="text-[10px] tracking-widest text-[var(--color-ol-graphite)]/40 uppercase">
+        <span className="text-[10px] tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
           {variant}
         </span>
       </div>

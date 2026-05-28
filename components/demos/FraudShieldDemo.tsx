@@ -189,7 +189,7 @@ export function FraudShieldDemo(): ReactElement {
             className={`mt-2 font-[family-name:var(--font-display)] text-6xl font-semibold ${scoreColor}`}
           >
             {displayScore}
-            <span className="text-2xl text-[var(--color-ol-graphite)]/40">
+            <span className="text-2xl text-[var(--color-ol-graphite)]/70">
               /100
             </span>
           </p>

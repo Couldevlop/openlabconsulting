@@ -154,7 +154,7 @@ export function SmartCityDemo(): ReactElement {
           style={{ color: colorForRisk(selected.risque) }}
         >
           {selected.risque}
-          <span className="text-2xl text-[var(--color-ol-graphite)]/40">
+          <span className="text-2xl text-[var(--color-ol-graphite)]/70">
             /100
           </span>
         </p>
