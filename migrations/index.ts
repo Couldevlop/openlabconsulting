@@ -1,5 +1,6 @@
 import * as migration_20260524_135927_initial from './20260524_135927_initial';
 import * as migration_20260526_162656_case_studies_drop_custom_status from './20260526_162656_case_studies_drop_custom_status';
+import * as migration_20260528_193021_add_methodologie from './20260528_193021_add_methodologie';
 
 export const migrations = [
   {
@@ -10,6 +11,11 @@ export const migrations = [
   {
     up: migration_20260526_162656_case_studies_drop_custom_status.up,
     down: migration_20260526_162656_case_studies_drop_custom_status.down,
-    name: '20260526_162656_case_studies_drop_custom_status'
+    name: '20260526_162656_case_studies_drop_custom_status',
+  },
+  {
+    up: migration_20260528_193021_add_methodologie.up,
+    down: migration_20260528_193021_add_methodologie.down,
+    name: '20260528_193021_add_methodologie'
   },
 ];

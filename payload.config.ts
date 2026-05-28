@@ -22,6 +22,7 @@ import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
+import { MethodologieSettings } from './globals/MethodologieSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
@@ -91,6 +92,9 @@ export default buildConfig({
   globals: [
     HeroSettings,
     ManifestoSettings,
+    // Section « Notre méthodologie d'accompagnement IA » (3 axes), affichée
+    // sur la homepage et le hub /expertises (lue via getMethodologieContent).
+    MethodologieSettings,
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,

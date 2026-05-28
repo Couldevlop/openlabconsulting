@@ -8,11 +8,13 @@ import { InsightsServer } from '@/components/sections/InsightsServer';
 import { Laboratoire } from '@/components/sections/Laboratoire';
 import { Livre } from '@/components/sections/Livre';
 import { Manifesto } from '@/components/sections/Manifesto';
+import { Methodologie } from '@/components/sections/Methodologie';
 import { Reassurance } from '@/components/sections/Reassurance';
 import { Solutions } from '@/components/sections/Solutions';
 import {
   getHeroContent,
   getManifestoContent,
+  getMethodologieContent,
 } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
@@ -22,15 +24,18 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const [heroContent, manifestoContent] = await Promise.all([
-    getHeroContent(),
-    getManifestoContent(),
-  ]);
+  const [heroContent, manifestoContent, methodologieContent] =
+    await Promise.all([
+      getHeroContent(),
+      getManifestoContent(),
+      getMethodologieContent(),
+    ]);
   return (
     <main id="main">
       <Hero background={<HeroBackground />} content={heroContent} />
       <Reassurance />
       <Expertises />
+      <Methodologie content={methodologieContent} />
       <Laboratoire />
       <CasesCarouselServer />
       <Solutions />
