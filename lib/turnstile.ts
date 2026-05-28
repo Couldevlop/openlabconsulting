@@ -53,6 +53,18 @@ export async function verifyTurnstile(
       : { ok: true, mode: 'bypass' };
   }
 
+  // Clés de test officielles Cloudflare (documentées publiquement :
+  // developers.cloudflare.com/turnstile/troubleshooting/testing). Réservées
+  // aux E2E/CI : on valide le chemin nominal sans dépendre du réseau Cloudflare.
+  // Ce ne sont JAMAIS de vraies clés de prod → aucun affaiblissement réel
+  // (OWASP A04/A07). « Always passes » → ok ; « always fails » → invalid.
+  if (secret === '1x0000000000000000000000000000000AA') {
+    return { ok: true, mode: 'verified' };
+  }
+  if (secret === '2x0000000000000000000000000000000AA') {
+    return { ok: false, mode: 'invalid', errorCodes: ['test-always-fails'] };
+  }
+
   if (!token || typeof token !== 'string') {
     return {
       ok: false,

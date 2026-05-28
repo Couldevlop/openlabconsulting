@@ -7,13 +7,14 @@ test.describe('Hero §6.1 — canvas WebGL', () => {
     await page.goto('/');
     // Le canvas est chargé en dynamic ssr:false → on l'attend.
     await expect(page.getByTestId('hero-canvas')).toBeAttached({
-      timeout: 10_000,
+      timeout: 15_000,
     });
-    // C'est bien un <canvas> avec un contexte WebGL réel sous Chromium.
-    const handle = await page.getByTestId('hero-canvas').elementHandle();
-    expect(handle).not.toBeNull();
-    const tagName = await handle?.evaluate((el) => el.tagName.toLowerCase());
-    expect(tagName).toBe('canvas');
+    // R3F enveloppe le <canvas> WebGL dans un <div> conteneur qui porte le
+    // testid + aria-hidden. On vérifie donc que ce conteneur contient bien un
+    // élément <canvas> (robuste en CI headless, WebGL logiciel SwiftShader).
+    await expect(
+      page.getByTestId('hero-canvas').locator('canvas'),
+    ).toBeAttached({ timeout: 15_000 });
   });
 
   test('le canvas est aria-hidden (purement décoratif)', async ({ page }) => {

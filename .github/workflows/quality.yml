@@ -61,6 +61,10 @@ jobs:
         env:
           # Démarrage du dev server intégré (cf. playwright.config.ts).
           NEXT_TELEMETRY_DISABLED: '1'
+          # Clé de test Cloudflare « always passes » → /api/contact valide le
+          # chemin nominal (202) en CI sans vrai widget. Court-circuitée côté
+          # serveur (lib/turnstile.ts), sans appel réseau. Jamais une vraie clé.
+          TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA'
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
