@@ -1,13 +1,22 @@
 import type { ComponentType, ReactElement, SVGProps } from 'react';
 import { createElement } from 'react';
 import {
+  Antenna,
   BadgeCheck,
+  Bot,
   Building2,
+  Compass,
+  Database,
   Fuel,
+  HeartPulse,
+  Landmark,
   Radar,
   ScanSearch,
+  ShieldCheck,
   Sprout,
   Users,
+  Wallet,
+  Wheat,
 } from 'lucide-react';
 
 /**
@@ -34,6 +43,17 @@ export const ICON_MAP = {
   fuel: Fuel,
   sprout: Sprout,
   radar: Radar,
+  // Expertises (lib/data/expertises.ts).
+  compass: Compass,
+  bot: Bot,
+  database: Database,
+  'shield-check': ShieldCheck,
+  // Secteurs (lib/data/sectors.ts).
+  landmark: Landmark,
+  wallet: Wallet,
+  wheat: Wheat,
+  'heart-pulse': HeartPulse,
+  antenna: Antenna,
 } as const satisfies Record<string, LucideIcon>;
 
 /** Type union des clés valides (`'users' | 'badge-check' | …`). */

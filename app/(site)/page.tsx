@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { CasesCarouselServer } from '@/components/sections/CasesCarouselServer';
-import { Expertises } from '@/components/sections/Expertises';
+import { ExpertisesServer } from '@/components/sections/ExpertisesServer';
 import { Hero } from '@/components/sections/Hero';
 import { HeroBackground } from '@/components/sections/HeroBackground';
 import { InsightsServer } from '@/components/sections/InsightsServer';
@@ -30,7 +30,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
     <main id="main">
       <Hero background={<HeroBackground />} content={heroContent} />
       <Reassurance />
-      <Expertises />
+      <ExpertisesServer />
       <Laboratoire />
       <CasesCarouselServer />
       <SolutionsServer />

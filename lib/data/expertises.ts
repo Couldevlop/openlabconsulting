@@ -1,8 +1,3 @@
-import type { ComponentType, SVGProps } from 'react';
-import { Bot, Compass, Database, ShieldCheck } from 'lucide-react';
-
-export type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
-
 export type ExpertiseSlug =
   | 'conseil-strategie'
   | 'agents-automatisation'
@@ -22,7 +17,9 @@ export interface ApproachStep {
 
 export interface Expertise {
   slug: ExpertiseSlug;
-  Icon: LucideIcon;
+  /** Clé d'icône Lucide (résolue via `lib/icon-map.ts` → `DynamicIcon`).
+   *  String pour être sérialisable en base Payload. */
+  iconKey: string;
   /** Titre court utilisé dans cards + h1 page détail. */
   title: string;
   /** Phrase d'accroche §18 — homepage card + meta tag. */
@@ -53,7 +50,7 @@ export interface Expertise {
 export const EXPERTISES: readonly Expertise[] = [
   {
     slug: 'conseil-strategie',
-    Icon: Compass,
+    iconKey: 'compass',
     title: 'Conseil & stratégie IA',
     punchline:
       "Cartographier l'IA réellement utile. Écarter ce qui ne le sera jamais.",
@@ -90,7 +87,7 @@ export const EXPERTISES: readonly Expertise[] = [
   },
   {
     slug: 'agents-automatisation',
-    Icon: Bot,
+    iconKey: 'bot',
     title: 'Agents & automatisation',
     punchline:
       'Vos workflows, automatisés. Vos équipes, augmentées — pas remplacées.',
@@ -128,7 +125,7 @@ export const EXPERTISES: readonly Expertise[] = [
   },
   {
     slug: 'data-gouvernance',
-    Icon: Database,
+    iconKey: 'database',
     title: 'Data & gouvernance',
     punchline:
       'La data est votre pétrole. La gouvernance est votre raffinerie.',
@@ -165,7 +162,7 @@ export const EXPERTISES: readonly Expertise[] = [
   },
   {
     slug: 'cybersecurite-ia',
-    Icon: ShieldCheck,
+    iconKey: 'shield-check',
     title: 'Cybersécurité augmentée',
     punchline:
       "Détecter ce qui devient invisible. Anticiper ce qui n'a pas frappé.",
@@ -201,6 +198,14 @@ export const EXPERTISES: readonly Expertise[] = [
     ],
   },
 ] as const;
+
+/**
+ * Alias du fallback hard-codé — utilisé par `lib/expertises-server.ts`
+ * quand la collection Payload `expertises` est vide ou indisponible
+ * (build statique, dev sans docker, DB down). Nommage aligné sur
+ * `FALLBACK_PRODUCTS`.
+ */
+export const FALLBACK_EXPERTISES: readonly Expertise[] = EXPERTISES;
 
 /** Retourne une expertise par slug ou `undefined`. */
 export function getExpertiseBySlug(slug: string): Expertise | undefined {

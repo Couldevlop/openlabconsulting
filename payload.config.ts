@@ -16,9 +16,11 @@ import { fileURLToPath } from 'node:url';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
+import { Expertises } from './collections/Expertises';
 import { Leads } from './collections/Leads';
 import { Media } from './collections/Media';
 import { Products } from './collections/Products';
+import { Sectors } from './collections/Sectors';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
@@ -37,6 +39,8 @@ const dirname = path.dirname(filename);
  *   - articles    : insights longs format (homepage §6.9)
  *   - caseStudies : cas clients du carrousel homepage (§6.5)
  *   - products    : 7 logiciels propriétaires (§1.3, §7)
+ *   - expertises  : 4 axes de conseil (§5, §6.3)
+ *   - sectors     : 5 secteurs cibles (§5)
  *   - whitepapers : livres blancs lead magnet (§6.10)
  *   - media       : bibliothèque assets centralisée (MinIO)
  *   - users       : auth + 6 rôles RBAC + 2FA TOTP (§11)
@@ -85,6 +89,8 @@ export default buildConfig({
     Articles,
     CaseStudies,
     Products,
+    Expertises,
+    Sectors,
     Whitepapers,
     Media,
     Users,

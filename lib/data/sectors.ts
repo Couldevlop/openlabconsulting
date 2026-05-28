@@ -1,8 +1,3 @@
-import type { ComponentType, SVGProps } from 'react';
-import { Antenna, HeartPulse, Landmark, Wallet, Wheat } from 'lucide-react';
-
-export type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
-
 export type SectorSlug =
   | 'secteur-public'
   | 'banque-assurance'
@@ -17,7 +12,9 @@ export interface SectorCrossLink {
 
 export interface Sector {
   slug: SectorSlug;
-  Icon: LucideIcon;
+  /** Clé d'icône Lucide (résolue via `lib/icon-map.ts` → `DynamicIcon`).
+   *  String pour être sérialisable en base Payload. */
+  iconKey: string;
   /** Nom court affiché en card et h1. */
   name: string;
   /** Tagline §18 — homepage, hub, meta. */
@@ -48,7 +45,7 @@ export interface Sector {
 export const SECTORS: readonly Sector[] = [
   {
     slug: 'secteur-public',
-    Icon: Landmark,
+    iconKey: 'landmark',
     name: 'Secteur public',
     tagline:
       'Souveraineté des données. Service rendu. Et le citoyen au centre.',
@@ -80,7 +77,7 @@ export const SECTORS: readonly Sector[] = [
   },
   {
     slug: 'banque-assurance',
-    Icon: Wallet,
+    iconKey: 'wallet',
     name: 'Banque & assurance',
     tagline: 'KYC, AML, fraude documentaire. L’IA derrière chaque dossier.',
     intro:
@@ -110,7 +107,7 @@ export const SECTORS: readonly Sector[] = [
   },
   {
     slug: 'agro-industrie',
-    Icon: Wheat,
+    iconKey: 'wheat',
     name: 'Agro-industrie',
     tagline:
       'Cacao, anacarde, coton, hévéa. Du capteur à la chaîne de traçabilité.',
@@ -141,7 +138,7 @@ export const SECTORS: readonly Sector[] = [
   },
   {
     slug: 'sante',
-    Icon: HeartPulse,
+    iconKey: 'heart-pulse',
     name: 'Santé',
     tagline: 'Parcours patient fluide. Qualité ISO 22000. Données protégées.',
     intro:
@@ -170,7 +167,7 @@ export const SECTORS: readonly Sector[] = [
   },
   {
     slug: 'telecoms-energie',
-    Icon: Antenna,
+    iconKey: 'antenna',
     name: 'Télécoms & énergie',
     tagline:
       'Réseaux supervisés. Fraude isolée. Données pilotées en temps réel.',
@@ -201,6 +198,13 @@ export const SECTORS: readonly Sector[] = [
     ],
   },
 ] as const;
+
+/**
+ * Alias du fallback hard-codé — utilisé par `lib/sectors-server.ts` quand
+ * la collection Payload `sectors` est vide ou indisponible (build statique,
+ * dev sans docker, DB down). Nommage aligné sur `FALLBACK_PRODUCTS`.
+ */
+export const FALLBACK_SECTORS: readonly Sector[] = SECTORS;
 
 export function getSectorBySlug(slug: string): Sector | undefined {
   return SECTORS.find((s) => s.slug === slug);

@@ -10,6 +10,14 @@ vi.mock('@/components/sections/CasesCarouselServer', async () => {
   return { CasesCarouselServer: () => <CasesCarousel /> };
 });
 
+// ExpertisesServer : même pattern, on délègue au composant sync
+// `Expertises` qui utilise FALLBACK_EXPERTISES par défaut. Le binding réel
+// Payload est couvert par expertises-server-*.test.ts.
+vi.mock('@/components/sections/ExpertisesServer', async () => {
+  const { Expertises } = await import('@/components/sections/Expertises');
+  return { ExpertisesServer: () => <Expertises /> };
+});
+
 // SolutionsServer : même pattern, on délègue au composant sync `Solutions`
 // qui utilise FALLBACK_PRODUCTS par défaut. Le binding réel Payload est
 // couvert par products-server-*.test.ts.

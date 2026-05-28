@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { SECTORS, getSectorBySlug } from '@/lib/data/sectors';
+import { SECTORS, FALLBACK_SECTORS, getSectorBySlug } from '@/lib/data/sectors';
+import { isIconKey } from '@/lib/icon-map';
 
 describe('lib/data/sectors', () => {
   it('expose exactement 5 secteurs (CLAUDE.md §5)', () => {
@@ -25,7 +26,15 @@ describe('lib/data/sectors', () => {
       expect(s.name.length).toBeGreaterThan(3);
       expect(s.tagline.length).toBeGreaterThan(10);
       expect(s.intro.length).toBeGreaterThan(80);
-      expect(typeof s.Icon).toBe('object');
+      // iconKey sérialisable (string), résolu au rendu via DynamicIcon.
+      expect(typeof s.iconKey).toBe('string');
+      expect(s.iconKey.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('chaque iconKey est une clé du registre ICON_MAP', () => {
+    for (const s of SECTORS) {
+      expect(isIconKey(s.iconKey)).toBe(true);
     }
   });
 
@@ -95,5 +104,9 @@ describe('lib/data/sectors', () => {
   it('getSectorBySlug retrouve / retourne undefined', () => {
     expect(getSectorBySlug('sante')?.name).toBe('Santé');
     expect(getSectorBySlug('inexistant')).toBeUndefined();
+  });
+
+  it('FALLBACK_SECTORS est un alias de SECTORS', () => {
+    expect(FALLBACK_SECTORS).toBe(SECTORS);
   });
 });

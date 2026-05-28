@@ -5,15 +5,24 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { EXPERTISES } from '@/lib/data/expertises';
+import { DynamicIcon } from '@/lib/icon-map';
+import { EXPERTISES, type Expertise } from '@/lib/data/expertises';
 
 /**
  * Expertises — Section 3 de la homepage (CLAUDE.md §6).
  *
  * 4 cards cliquables sur fond ivory. Chaque card est un <Link> qui
  * englobe la Card (cible cliquable complète, simple lien pour l'a11y).
+ *
+ * Les expertises sont injectées via la prop `expertises` (résolue côté
+ * server par `ExpertisesServer` → collection Payload, fallback `EXPERTISES`).
+ * Par défaut, le fallback hard-codé garantit un rendu sans DB.
  */
-export function Expertises(): ReactElement {
+export function Expertises({
+  expertises = EXPERTISES,
+}: {
+  expertises?: readonly Expertise[];
+} = {}): ReactElement {
   return (
     <section
       aria-labelledby="expertises-title"
@@ -37,7 +46,7 @@ export function Expertises(): ReactElement {
         </div>
 
         <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {EXPERTISES.map(({ slug, title, punchline, Icon }) => (
+          {expertises.map(({ slug, title, punchline, iconKey }) => (
             <li key={slug}>
               <Link
                 href={`/expertises/${slug}`}
@@ -52,7 +61,12 @@ export function Expertises(): ReactElement {
                     aria-hidden
                     className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
                   >
-                    <Icon width={24} height={24} aria-hidden />
+                    <DynamicIcon
+                      name={iconKey}
+                      width={24}
+                      height={24}
+                      aria-hidden
+                    />
                   </span>
 
                   <Heading level={3} visualLevel={4}>

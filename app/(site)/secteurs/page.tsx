@@ -6,7 +6,8 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { SECTORS } from '@/lib/data/sectors';
+import { DynamicIcon } from '@/lib/icon-map';
+import { getPublishedSectors } from '@/lib/sectors-server';
 
 export const metadata: Metadata = {
   title: 'Secteurs — IA appliquée par industrie',
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SecteursHubPage(): React.ReactElement {
+export default async function SecteursHubPage(): Promise<React.ReactElement> {
+  const sectors = await getPublishedSectors();
   return (
     <main id="main">
       {/* Hero */}
@@ -44,7 +46,7 @@ export default function SecteursHubPage(): React.ReactElement {
           </div>
 
           <ul className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {SECTORS.map(({ slug, Icon, name, tagline, enjeux }) => (
+            {sectors.map(({ slug, iconKey, name, tagline, enjeux }) => (
               <li key={slug}>
                 <Link
                   href={`/secteurs/${slug}`}
@@ -60,7 +62,12 @@ export default function SecteursHubPage(): React.ReactElement {
                         aria-hidden
                         className="inline-flex h-14 w-14 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
                       >
-                        <Icon width={28} height={28} aria-hidden />
+                        <DynamicIcon
+                          name={iconKey}
+                          width={28}
+                          height={28}
+                          aria-hidden
+                        />
                       </span>
                       <ArrowUpRight
                         width={20}
