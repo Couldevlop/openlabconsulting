@@ -94,6 +94,11 @@ test.describe('Smoke — formulaire contact', () => {
     request,
   }) => {
     const res = await request.post('/api/contact', {
+      // IP unique par requête → quota de rate-limit (5/15 min/IP) frais, même
+      // quand la suite tourne sur 3 projets + retries contre un seul serveur.
+      headers: {
+        'x-forwarded-for': `198.51.100.${Math.floor(Math.random() * 250) + 1}`,
+      },
       data: {
         name: 'Test E2E',
         email: 'e2e@openlabconsulting.com',
@@ -111,6 +116,9 @@ test.describe('Smoke — formulaire contact', () => {
     request,
   }) => {
     const res = await request.post('/api/contact', {
+      headers: {
+        'x-forwarded-for': `198.51.100.${Math.floor(Math.random() * 250) + 1}`,
+      },
       data: {
         name: 'X',
         email: 'x@y.fr',

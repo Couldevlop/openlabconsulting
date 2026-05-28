@@ -49,7 +49,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        # chromium couvre les projets « chromium » et « mobile-chrome » ;
+        # « webkit » nécessite son propre binaire (sinon : Executable doesn't exist).
+        run: pnpm exec playwright install --with-deps chromium webkit
       - name: Build Next.js (standalone)
         env:
           NEXT_TELEMETRY_DISABLED: '1'
