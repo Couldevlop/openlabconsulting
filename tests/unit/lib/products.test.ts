@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
+import {
+  PRODUCTS,
+  FALLBACK_PRODUCTS,
+  getProductBySlug,
+} from '@/lib/data/products';
+import { ICON_KEYS } from '@/lib/icon-map';
 
 describe('lib/data/products', () => {
   it('expose exactement 7 produits (CLAUDE.md §1.3)', () => {
@@ -22,7 +27,7 @@ describe('lib/data/products', () => {
     );
   });
 
-  it('chaque produit a name, tagline, target, status, eyebrow, intro, problem, Icon', () => {
+  it('chaque produit a name, tagline, target, status, eyebrow, intro, problem, iconKey', () => {
     for (const p of PRODUCTS) {
       expect(p.name.length).toBeGreaterThan(3);
       expect(p.tagline.length).toBeGreaterThan(10);
@@ -32,20 +37,27 @@ describe('lib/data/products', () => {
       expect(p.eyebrow.length).toBeGreaterThan(3);
       expect(p.intro.length).toBeGreaterThan(50);
       expect(p.problem.length).toBeGreaterThan(30);
-      expect(typeof p.Icon).toBe('object');
+      // iconKey : clé string sérialisable (résolue via lib/icon-map.ts).
+      expect(typeof p.iconKey).toBe('string');
+      expect(ICON_KEYS).toContain(p.iconKey);
     }
   });
 
-  it('chaque produit a entre 4 et 6 features avec title, body, Icon', () => {
+  it('chaque produit a entre 4 et 6 features avec title, body, iconKey', () => {
     for (const p of PRODUCTS) {
       expect(p.features.length).toBeGreaterThanOrEqual(4);
       expect(p.features.length).toBeLessThanOrEqual(6);
       for (const f of p.features) {
         expect(f.title.length).toBeGreaterThan(3);
         expect(f.body.length).toBeGreaterThan(20);
-        expect(typeof f.Icon).toBe('object');
+        expect(typeof f.iconKey).toBe('string');
+        expect(ICON_KEYS).toContain(f.iconKey);
       }
     }
+  });
+
+  it('FALLBACK_PRODUCTS est un alias de PRODUCTS', () => {
+    expect(FALLBACK_PRODUCTS).toBe(PRODUCTS);
   });
 
   it('chaque produit a un stack de 3 à 8 lignes', () => {

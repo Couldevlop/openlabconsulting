@@ -1,16 +1,3 @@
-import type { ComponentType, SVGProps } from 'react';
-import {
-  BadgeCheck,
-  Building2,
-  Fuel,
-  Radar,
-  ScanSearch,
-  Sprout,
-  Users,
-} from 'lucide-react';
-
-export type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
-
 export type ProductSlug =
   | 'nexusrh'
   | 'nexuserp'
@@ -23,7 +10,9 @@ export type ProductSlug =
 export type ProductStatus = 'production' | 'pilot' | 'mvp' | 'dev';
 
 export interface ProductFeature {
-  Icon: LucideIcon;
+  /** Clé d'icône Lucide (résolue via `lib/icon-map.ts` → `DynamicIcon`).
+   *  String pour être sérialisable en base Payload. */
+  iconKey: string;
   title: string;
   body: string;
 }
@@ -58,7 +47,9 @@ export interface ProductFaq {
 
 export interface Product {
   slug: ProductSlug;
-  Icon: LucideIcon;
+  /** Clé d'icône Lucide (résolue via `lib/icon-map.ts` → `DynamicIcon`).
+   *  String pour être sérialisable en base Payload. */
+  iconKey: string;
   /** Nom public, ex : "NexusRH CI" ou "OpenLab Fraud Shield". */
   name: string;
   /** Tagline §18 — homepage card + meta description courte. */
@@ -101,7 +92,7 @@ export interface Product {
 export const PRODUCTS: readonly Product[] = [
   {
     slug: 'nexusrh',
-    Icon: Users,
+    iconKey: 'users',
     name: 'NexusRH CI',
     tagline: 'La paie ivoirienne sans friction. CNPS, ITS, FDFP, Mobile Money.',
     target: 'PME & grandes entreprises · Côte d’Ivoire',
@@ -114,22 +105,22 @@ export const PRODUCTS: readonly Product[] = [
       "Trois feuilles Excel, un fichier de virement, un compte CNPS qui n'ouvre que le mardi. À chaque embauche, un encodage triple. À chaque modification du barème ITS, un risque de pénalité.",
     features: [
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Paie multi-statuts',
         body: 'CDI, CDD, journaliers, stagiaires. Chaque statut a ses règles de cotisation et NexusRH les applique sans intervention manuelle.',
       },
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Conformité CNPS, ITS, FDFP native',
         body: 'Mise à jour automatique des barèmes à chaque changement réglementaire. Bordereau CNPS prêt à téléverser sur le portail.',
       },
       {
-        Icon: Building2,
+        iconKey: 'building',
         title: 'Mobile Money intégré',
         body: 'Diffusion salariale Orange Money, MTN Mobile Money, Moov Money — réconciliation automatique.',
       },
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Audit annuel sans surprise',
         body: 'Toutes les fiches de paie horodatées, immuables, exportables en quelques secondes. L’inspecteur du travail repart en 20 minutes.',
       },
@@ -199,7 +190,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'nexuserp',
-    Icon: Building2,
+    iconKey: 'building',
     name: 'NexusERP',
     tagline:
       'ERP SYSCOHADA nouvelle génération. Multi-devises, multi-pays, natif.',
@@ -213,22 +204,22 @@ export const PRODUCTS: readonly Product[] = [
       "Un module compta français qui ne reconnaît pas le plan SYSCOHADA. Un ERP nigérian qui ne gère pas le franc CFA. Un Excel qui compense entre les deux. Et l'expert-comptable qui découvre les écarts en mars.",
     features: [
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Comptabilité SYSCOHADA + PCG',
         body: 'Plans comptables ivoirien et français en parallèle, traduction automatique des écritures, états financiers conformes aux deux référentiels.',
       },
       {
-        Icon: Building2,
+        iconKey: 'building',
         title: 'Ventes, achats, stock, projets',
         body: 'Pipeline commercial, devis-facture, GRC clients, gestion projet par affaire (heures, marge, facturation à l’avancement).',
       },
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Dashboard exécutif multi-devises',
         body: 'CA consolidé temps réel en FCFA, EUR, USD. Drill-down par BU, pays, période. Alertes sur dérive de marge.',
       },
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Module RH intégré',
         body: 'Embauches, contrats, congés, fiches de paie SYSCOHADA. Bascule simple vers NexusRH si conformité CI requise.',
       },
@@ -299,7 +290,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'sygescom',
-    Icon: Fuel,
+    iconKey: 'fuel',
     name: 'SYGESCOM v2.0',
     tagline: 'Vos stations. Vos volumes. Sous contrôle, en temps réel.',
     target: 'Réseaux d’hydrocarbures · Afrique de l’Ouest',
@@ -312,22 +303,22 @@ export const PRODUCTS: readonly Product[] = [
       'Une station déclare un manco, une autre une livraison fantôme. Le contrôleur passe la semaine à reconstruire le mouvement réel. Pendant ce temps, la fraude s’installe.',
     features: [
       {
-        Icon: Fuel,
+        iconKey: 'fuel',
         title: 'Ingestion temps réel multi-stations',
         body: 'Connecteurs jauges, pompes, terminaux paiement. Chaque flux est tagué station × cuve × type de carburant.',
       },
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Détection IA d’anomalies',
         body: 'Modèles d’apprentissage non supervisé qui repèrent les écarts de stock inhabituels avant qu’ils ne deviennent des mancos déclarés.',
       },
       {
-        Icon: Radar,
+        iconKey: 'radar',
         title: 'Dashboard exécutif drill-down',
         body: 'Vue groupe → région → station → cuve → événement. Alertes Slack/email sur seuils paramétrables.',
       },
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Réconciliation comptable automatique',
         body: 'Ponts vers NexusERP ou SAP existant. Les écritures sont générées sans saisie manuelle.',
       },
@@ -397,7 +388,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'agrosense',
-    Icon: Sprout,
+    iconKey: 'sprout',
     name: 'AgroSense CI',
     tagline: 'Le cacao se voit, la météo se prévoit. La parcelle décide.',
     target: 'Coopératives & exploitants · cacao, anacarde, coton, hévéa',
@@ -410,22 +401,22 @@ export const PRODUCTS: readonly Product[] = [
       'Un producteur de cacao a 3 hectares, 2 GPS imprécis et un téléphone Android. Le service ag bicame agricole arrive trois semaines après la maladie. La coopérative ne sait pas où ses pertes apparaissent.',
     features: [
       {
-        Icon: Sprout,
+        iconKey: 'sprout',
         title: 'Imagerie multi-source',
         body: 'Sentinel-2, capteurs propriétaires terrain, drones photogrammétriques. Une seule carte parcelle, plusieurs couches.',
       },
       {
-        Icon: Radar,
+        iconKey: 'radar',
         title: 'Prédiction maladies & rendements',
         body: 'Modèles entraînés sur séries climatiques CHIRPS + données terrain ivoirienne. Alertes 7-15 jours avant apparition.',
       },
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Interface coopérative',
         body: 'Vue agrégée par coopérative, drill-down par village, par adhérent, par parcelle. Reporting subventionneurs en un clic.',
       },
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Traçabilité origine',
         body: 'Chaque livraison de fève est rattachable à sa parcelle GPS. Conformité EUDR (déforestation) intégrée.',
       },
@@ -495,7 +486,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'qualitos',
-    Icon: BadgeCheck,
+    iconKey: 'badge-check',
     name: 'QualitOS',
     tagline:
       'PDCA, 5S, DMAIC, ISO. Une seule plateforme. Aucune méthode laissée de côté.',
@@ -509,22 +500,22 @@ export const PRODUCTS: readonly Product[] = [
       'Trois logiciels qualité : un pour les audits, un pour les CAPA, un pour les indicateurs. Aucun ne parle au suivant. Le responsable qualité passe sa journée à réconcilier des Excel.',
     features: [
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Référentiel ISO unifié',
         body: 'ISO 9001, 14001, 45001, 22000 supportés en parallèle. Une non-conformité se rattache automatiquement aux exigences concernées.',
       },
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Ishikawa IA assistée',
         body: 'Claude propose une analyse de causes initiale sur la base de la description du non-conforme. L’opérateur valide ou recadre.',
       },
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Audit mobile offline-first',
         body: 'L’auditeur passe en mode hors-ligne sur site, ses constats remontent au siège dès reconnexion.',
       },
       {
-        Icon: Building2,
+        iconKey: 'building',
         title: 'CAPA tracées de bout en bout',
         body: 'Actions correctives jalonnées, responsables nommés, échéances notifiées, efficacité ré-évaluée à T+3 mois.',
       },
@@ -594,7 +585,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'fraud-shield',
-    Icon: ScanSearch,
+    iconKey: 'scan-search',
     name: 'OpenLab Fraud Shield',
     tagline: 'La fraude se cache. L’IA la rend visible.',
     target: 'Banques · assurances · administration · douanes',
@@ -607,22 +598,22 @@ export const PRODUCTS: readonly Product[] = [
       "Le contrôleur regarde 200 dossiers par jour. Au 50ᵉ, l'œil se fatigue. À midi, il signe les yeux fermés. La fraude documentaire ne s'arrête pas, elle attend que le contrôleur cligne.",
     features: [
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Détection multi-modale',
         body: 'Vision (manipulations pixel, anti-aliasing incohérent) + texte (cohérence montants, dates, signataires) + métadonnées EXIF.',
       },
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Score d’authenticité expliqué',
         body: 'Chaque document reçoit un score 0-100 + un overlay visuel pointant les zones suspectes. Pas de boîte noire pour l’auditeur.',
       },
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Workflow contrôleur intégré',
         body: 'API REST drop-in dans vos workflows existants (LDM, GED, dossier client). Pas de migration, pas de re-formation.',
       },
       {
-        Icon: Building2,
+        iconKey: 'building',
         title: 'Apprentissage continu sur vos cas',
         body: 'Vos faux positifs et vrais positifs ré-entraînent vos modèles, isolés des autres clients (multi-tenant strict).',
       },
@@ -692,7 +683,7 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     slug: 'smart-city',
-    Icon: Radar,
+    iconKey: 'radar',
     name: 'OpenLab Smart City',
     tagline: 'Anticiper la ville. Pas seulement la surveiller.',
     target: 'Collectivités · ministères · sécurité urbaine',
@@ -705,22 +696,22 @@ export const PRODUCTS: readonly Product[] = [
       'Les caméras filment. La police arrive. Les statistiques arrivent un mois plus tard. La décision politique se prend sur un sentiment, pas sur une cartographie.',
     features: [
       {
-        Icon: Radar,
+        iconKey: 'radar',
         title: 'Carte de chaleur urbaine',
         body: 'Visualisation temps réel des concentrations d’incidents, croisée avec densité, mobilité, équipements publics manquants.',
       },
       {
-        Icon: ScanSearch,
+        iconKey: 'scan-search',
         title: 'Modèles de prédiction',
         body: 'Risques d’embouteillage, de pic d’incidents, d’événements sociaux à fort potentiel. Les services préventifs sont positionnés en amont.',
       },
       {
-        Icon: Users,
+        iconKey: 'users',
         title: 'Portail citoyens',
         body: 'Signalements géolocalisés, suivi de résolution, transparence sur les actions municipales.',
       },
       {
-        Icon: BadgeCheck,
+        iconKey: 'badge-check',
         title: 'Anonymisation différentielle',
         body: 'Les visages, plaques, identifiants sont anonymisés avant ingestion. La conformité RGPD n’est pas une option.',
       },
@@ -789,6 +780,13 @@ export const PRODUCTS: readonly Product[] = [
     ],
   },
 ] as const;
+
+/**
+ * Alias du fallback hard-codé — utilisé par `lib/products-server.ts` quand
+ * la collection Payload `products` est vide ou indisponible (build statique,
+ * dev sans docker, DB down). Nommage aligné sur `FALLBACK_CASE_STUDIES`.
+ */
+export const FALLBACK_PRODUCTS: readonly Product[] = PRODUCTS;
 
 export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
