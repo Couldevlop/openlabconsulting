@@ -32,6 +32,22 @@ export interface ManifestoContent {
   signature: { name: string; role: string; locationDate: string };
 }
 
+export interface MethodologieAxis {
+  index: string;
+  title: string;
+  punchline: string;
+  body: string;
+}
+
+export interface MethodologieContent {
+  eyebrow: string;
+  titleLead: string;
+  titleHighlight: string;
+  intro: string;
+  axes: readonly MethodologieAxis[];
+  cta: { label: string; href: string };
+}
+
 export interface AuditIaCtaWhitepaper {
   badge: string;
   title: string;
@@ -120,6 +136,35 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
     role: 'Fondatrice & CEO · OpenLab Consulting',
     locationDate: 'Abidjan · Mai 2026',
   },
+};
+
+export const METHODOLOGIE_FALLBACK: MethodologieContent = {
+  eyebrow: 'Notre méthode',
+  titleLead: 'L’IA ne s’installe pas.',
+  titleHighlight: 'Elle s’adopte.',
+  intro:
+    'OpenLab accompagne les entreprises ivoiriennes et africaines à transformer l’IA en avantage compétitif réel. Trois étapes, dans l’ordre — pas un gadget, une adoption qui produit.',
+  axes: [
+    {
+      index: '01',
+      title: 'Audit de maturité digitale',
+      punchline: 'Où en êtes-vous vraiment ?',
+      body: 'Nous mesurons vos données, vos processus, vos compétences et votre infrastructure. On ne déploie pas l’IA sur des fondations qu’on n’a pas évaluées.',
+    },
+    {
+      index: '02',
+      title: 'Choix des données & des secteurs',
+      punchline: 'Quoi confier à l’IA — et quoi garder humain.',
+      body: 'Nous identifions les données et les processus à fort levier, leur qualité et leur sensibilité. La bonne IA, au bon endroit, sous gouvernance.',
+    },
+    {
+      index: '03',
+      title: 'Stratégie d’adoption effective',
+      punchline: 'Une feuille de route qui se déploie.',
+      body: 'Priorisation par ROI, conduite du changement, jalons concrets. Pas un POC qui dort : une adoption qui change les résultats.',
+    },
+  ],
+  cta: { label: 'Demander un audit IA', href: '/audit-ia' },
 };
 
 export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {

@@ -5,12 +5,15 @@ import {
   FOOTER_FALLBACK,
   HERO_FALLBACK,
   MANIFESTO_FALLBACK,
+  METHODOLOGIE_FALLBACK,
   REASSURANCE_FALLBACK,
   type AboutContent,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
   type ManifestoContent,
+  type MethodologieAxis,
+  type MethodologieContent,
   type ReassuranceContent,
   type ReassurancePartner,
 } from './site-settings';
@@ -128,6 +131,39 @@ export async function getManifestoContent(): Promise<ManifestoContent> {
   return {
     ...raw,
     stances: stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances,
+  };
+}
+
+export async function getMethodologieContent(): Promise<MethodologieContent> {
+  const raw = await readGlobal('methodologie', METHODOLOGIE_FALLBACK);
+  // Normalisation des axes : Payload renvoie {id?, index, title, punchline,
+  // body}, on garde uniquement les 4 strings non vides. Si un seul champ
+  // manque ou si la liste est vide, on retombe sur les 3 axes du fallback.
+  const axes = Array.isArray(raw.axes)
+    ? raw.axes
+        .filter(
+          (a): a is MethodologieAxis & Record<string, unknown> =>
+            typeof a === 'object' &&
+            a !== null &&
+            'index' in a &&
+            'title' in a &&
+            'punchline' in a &&
+            'body' in a &&
+            typeof (a as { index: unknown }).index === 'string' &&
+            typeof (a as { title: unknown }).title === 'string' &&
+            typeof (a as { punchline: unknown }).punchline === 'string' &&
+            typeof (a as { body: unknown }).body === 'string',
+        )
+        .map((a) => ({
+          index: a.index,
+          title: a.title,
+          punchline: a.punchline,
+          body: a.body,
+        }))
+    : [];
+  return {
+    ...raw,
+    axes: axes.length > 0 ? axes : METHODOLOGIE_FALLBACK.axes,
   };
 }
 

@@ -31,6 +31,11 @@ describe('Page /expertises (hub)', () => {
     );
   });
 
+  it('intègre la section Methodologie après l’intro du hub', async () => {
+    render(await ExpertisesHubPage());
+    expect(screen.getByTestId('methodologie')).toBeInTheDocument();
+  });
+
   it('intègre la section AuditIaCta en bas', async () => {
     render(await ExpertisesHubPage());
     expect(screen.getByTestId('audit-ia-cta')).toBeInTheDocument();

@@ -35,6 +35,7 @@ import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { ReassuranceSettings } from './globals/ReassuranceSettings';
+import { MethodologieSettings } from './globals/MethodologieSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
@@ -178,6 +179,9 @@ export default buildConfig({
     HeroSettings,
     ManifestoSettings,
     ReassuranceSettings,
+    // Section « Notre méthodologie d'accompagnement IA » (3 axes), affichée
+    // sur la homepage et le hub /expertises (lue via getMethodologieContent).
+    MethodologieSettings,
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,

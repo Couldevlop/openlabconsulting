@@ -4,6 +4,7 @@ import {
   FOOTER_FALLBACK,
   HERO_FALLBACK,
   MANIFESTO_FALLBACK,
+  METHODOLOGIE_FALLBACK,
 } from '@/lib/cms/site-settings';
 
 /**
@@ -27,6 +28,18 @@ describe('lib/cms/site-settings — fallbacks', () => {
     expect(MANIFESTO_FALLBACK.stances[0]?.excuse).toMatch(/outils/i);
     expect(MANIFESTO_FALLBACK.stances[0]?.fact).toMatch(/Sept logiciels/i);
     expect(MANIFESTO_FALLBACK.signature.locationDate).toContain('Abidjan');
+  });
+
+  it('METHODOLOGIE_FALLBACK : 3 axes ordonnés + CTA /audit-ia', () => {
+    expect(METHODOLOGIE_FALLBACK.eyebrow).toBe('Notre méthode');
+    expect(METHODOLOGIE_FALLBACK.axes).toHaveLength(3);
+    expect(METHODOLOGIE_FALLBACK.axes.map((a) => a.index)).toEqual([
+      '01',
+      '02',
+      '03',
+    ]);
+    expect(METHODOLOGIE_FALLBACK.axes[0]?.title).toMatch(/Audit de maturité/i);
+    expect(METHODOLOGIE_FALLBACK.cta.href).toBe('/audit-ia');
   });
 
   it('AUDIT_IA_CTA_FALLBACK : CTA pointe vers /audit-ia + 3 bullets', () => {
