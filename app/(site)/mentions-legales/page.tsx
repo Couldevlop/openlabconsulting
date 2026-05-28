@@ -43,7 +43,7 @@ export default function MentionsLegalesPage(): React.ReactElement {
                 <strong>Contact :</strong>{' '}
                 <a
                   href={`mailto:${SITE.contact.email}`}
-                  className="font-medium text-[var(--color-ol-orange)] hover:underline"
+                  className="font-medium text-[var(--color-ol-orange-text)] hover:underline"
                 >
                   {SITE.contact.email}
                 </a>

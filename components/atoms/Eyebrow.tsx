@@ -6,7 +6,7 @@ interface EyebrowProps extends HTMLAttributes<HTMLParagraphElement> {
 }
 
 const toneMap: Record<NonNullable<EyebrowProps['tone']>, string> = {
-  orange: 'text-[var(--color-ol-orange)]',
+  orange: 'text-[var(--color-ol-orange-text)]',
   ivory: 'text-[var(--color-ol-ivory)]',
   graphite: 'text-[var(--color-ol-graphite)]/70',
 };

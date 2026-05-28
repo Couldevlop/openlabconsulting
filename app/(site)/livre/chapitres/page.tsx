@@ -34,7 +34,7 @@ export default function LivreChapitresPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
@@ -44,7 +44,7 @@ export default function LivreChapitresPage(): React.ReactElement {
             <Eyebrow tone="orange">Table des chapitres</Eyebrow>
             <Heading id="chapitres-title" level={1} className="mt-4">
               {CHAPTERS.length} chapitres,{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 ~{totalHours} h de lecture
               </span>
               .
@@ -61,7 +61,7 @@ export default function LivreChapitresPage(): React.ReactElement {
                   width={16}
                   height={16}
                   aria-hidden
-                  className="text-[var(--color-ol-orange)]"
+                  className="text-[var(--color-ol-orange-text)]"
                 />
                 {codeCount} chapitres avec exemples de code
               </li>
@@ -70,7 +70,7 @@ export default function LivreChapitresPage(): React.ReactElement {
                   width={16}
                   height={16}
                   aria-hidden
-                  className="text-[var(--color-ol-orange)]"
+                  className="text-[var(--color-ol-orange-text)]"
                 />
                 {caseCount} chapitres avec étude de cas terrain
               </li>
@@ -94,7 +94,7 @@ export default function LivreChapitresPage(): React.ReactElement {
                 >
                   <span
                     aria-hidden
-                    className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                    className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
                   >
                     {c.index}
                   </span>
@@ -126,7 +126,7 @@ export default function LivreChapitresPage(): React.ReactElement {
                     </ul>
                   </div>
 
-                  <span className="text-sm text-[var(--color-ol-graphite)]/60 sm:text-right">
+                  <span className="text-sm text-[var(--color-ol-graphite)]/70 sm:text-right">
                     {c.readingTime}
                   </span>
                 </Card>

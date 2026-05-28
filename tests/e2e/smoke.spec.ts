@@ -28,6 +28,11 @@ test.describe('Smoke — parcours critiques', () => {
   test('home passe l’audit axe-core WCAG 2 AA — zéro violation critique', async ({
     page,
   }) => {
+    // Mouvement réduit : coupe l'autoplay + les fondus du carrousel
+    // (CasesCarousel) → slides à pleine opacité, audit déterministe. Sinon axe
+    // peut scanner un slide en plein fondu (badge orange à opacité réduite) et
+    // flaguer un faux contraste insuffisant.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -94,6 +99,11 @@ test.describe('Smoke — formulaire contact', () => {
     request,
   }) => {
     const res = await request.post('/api/contact', {
+      // IP unique par requête → quota de rate-limit (5/15 min/IP) frais, même
+      // quand la suite tourne sur 3 projets + retries contre un seul serveur.
+      headers: {
+        'x-forwarded-for': `198.51.100.${Math.floor(Math.random() * 250) + 1}`,
+      },
       data: {
         name: 'Test E2E',
         email: 'e2e@openlabconsulting.com',
@@ -111,6 +121,9 @@ test.describe('Smoke — formulaire contact', () => {
     request,
   }) => {
     const res = await request.post('/api/contact', {
+      headers: {
+        'x-forwarded-for': `198.51.100.${Math.floor(Math.random() * 250) + 1}`,
+      },
       data: {
         name: 'X',
         email: 'x@y.fr',

@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Download, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/atoms/Badge';
@@ -79,7 +80,7 @@ export function AuditIaCta({
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
               {content.headlineLead}{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 {content.headlineHighlight}
               </span>
               .
@@ -138,7 +139,7 @@ export function AuditIaCta({
               {content.reassuranceBullets.join(' · ')}. Voir notre{' '}
               <Link
                 href="/politique-confidentialite"
-                className="underline underline-offset-2 hover:text-[var(--color-ol-orange)]"
+                className="underline underline-offset-2 hover:text-[var(--color-ol-orange-text)]"
               >
                 politique de confidentialité
               </Link>
@@ -152,16 +153,30 @@ export function AuditIaCta({
             data-testid="whitepaper-card"
             className="rounded-lg border border-[var(--color-ol-ivory)]/10 bg-[var(--color-ol-ivory)]/5 p-8 backdrop-blur-sm"
           >
-            <Badge tone="orange">{whitepaperCard.badge}</Badge>
-            <Heading
-              id="whitepaper-title"
-              level={3}
-              visualLevel={3}
-              className="mt-4 text-[var(--color-ol-ivory)]"
-            >
-              {whitepaperCard.title}
-            </Heading>
-            <p className="mt-2 font-[family-name:var(--font-editorial)] text-lg text-[var(--color-ol-orange)] italic">
+            <div className="flex items-start gap-5">
+              {whitepaperCard.cover ? (
+                <Image
+                  src={whitepaperCard.cover.src}
+                  alt={`Couverture du livre blanc « ${whitepaperCard.title} »`}
+                  width={whitepaperCard.cover.width}
+                  height={whitepaperCard.cover.height}
+                  sizes="80px"
+                  className="h-auto w-20 flex-shrink-0 rounded shadow-lg ring-1 ring-[var(--color-ol-ivory)]/10"
+                />
+              ) : null}
+              <div>
+                <Badge tone="orange">{whitepaperCard.badge}</Badge>
+                <Heading
+                  id="whitepaper-title"
+                  level={3}
+                  visualLevel={3}
+                  className="mt-4 text-[var(--color-ol-ivory)]"
+                >
+                  {whitepaperCard.title}
+                </Heading>
+              </div>
+            </div>
+            <p className="mt-3 font-[family-name:var(--font-editorial)] text-lg text-[var(--color-ol-orange-text)] italic">
               {whitepaperCard.subtitle}
             </p>
             <p className="mt-5 text-[var(--color-ol-ivory)]/80">

@@ -130,8 +130,8 @@ export function MegaMenu({
         className={cn(
           'inline-flex items-center gap-1 text-sm font-medium transition-colors focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2',
           open
-            ? 'text-[var(--color-ol-orange)]'
-            : 'text-[var(--color-ol-graphite)] hover:text-[var(--color-ol-orange)]',
+            ? 'text-[var(--color-ol-orange-text)]'
+            : 'text-[var(--color-ol-graphite)] hover:text-[var(--color-ol-orange-text)]',
         )}
       >
         {config.label}
@@ -160,7 +160,7 @@ export function MegaMenu({
             onClick={() => setOpen(false)}
             className="block rounded-lg border border-[var(--color-ol-mist)]/60 bg-[var(--color-ol-ivory)] px-4 py-3 transition-colors hover:border-[var(--color-ol-orange)]/40 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
-            <span className="text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+            <span className="text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange-text)] uppercase">
               {config.label}
             </span>
             <span className="mt-1 block text-sm font-semibold text-[var(--color-ol-night)]">
@@ -183,7 +183,7 @@ export function MegaMenu({
             {config.sections.map((section, i) => (
               <div key={i}>
                 {section.eyebrow ? (
-                  <p className="px-3 pb-2 text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+                  <p className="px-3 pb-2 text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange-text)] uppercase">
                     {section.eyebrow}
                   </p>
                 ) : null}
@@ -197,7 +197,7 @@ export function MegaMenu({
                       >
                         <span className="block font-medium">{link.label}</span>
                         {link.description ? (
-                          <span className="mt-0.5 block text-xs text-[var(--color-ol-graphite)]/60">
+                          <span className="mt-0.5 block text-xs text-[var(--color-ol-graphite)]/70">
                             {link.description}
                           </span>
                         ) : null}
@@ -215,7 +215,7 @@ export function MegaMenu({
               <Link
                 href={config.cta.href}
                 onClick={() => setOpen(false)}
-                className="inline-flex items-center text-sm font-medium text-[var(--color-ol-orange)] underline-offset-4 hover:underline focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+                className="inline-flex items-center text-sm font-medium text-[var(--color-ol-orange-text)] underline-offset-4 hover:underline focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
               >
                 {config.cta.label}
               </Link>

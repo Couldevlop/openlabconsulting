@@ -40,6 +40,8 @@ export interface AuditIaCtaWhitepaper {
   ctaLabel: string;
   ctaHref: string;
   footnote: string;
+  /** Vignette de couverture (chemin public). Optionnelle. */
+  cover?: { src: string; width: number; height: number };
 }
 
 export interface AuditIaCtaContent {
@@ -81,7 +83,7 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
   headline: 'Cette fois,',
   headlineHighlight: 'l’Afrique n’a plus d’excuse.',
   intro:
-    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec sept produits, un livre, et un cluster Kubernetes à Abidjan.',
+    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec sept produits, un livre blanc préfacé par un ministre, et un cluster Kubernetes souverain.',
   stances: [
     {
       excuse: '« On n’a pas les outils. »',
@@ -89,11 +91,11 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
     },
     {
       excuse: '« On n’a pas la recherche. »',
-      fact: 'Un livre IA publié à Abidjan, capstone terrain ivoirien, lu par étudiants et dirigeants.',
+      fact: 'Un livre blanc « IA souveraine » préfacé par le ministre de la Transformation numérique. Un ouvrage de référence à paraître, capstone terrain ivoirien.',
     },
     {
       excuse: '« On n’a pas la souveraineté. »',
-      fact: 'K3s Hetzner, audit total, RGPD intégral, données en Europe, gouvernance francophone.',
+      fact: 'Cluster souverain sous notre seul contrôle opérationnel, audit total, code et données maîtrisés.',
     },
   ],
   conclusion:
@@ -126,6 +128,11 @@ export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {
     ctaLabel: 'Télécharger le livre blanc',
     ctaHref: '/livres-blancs/ia-souveraine-ci-2026',
     footnote: 'Accès gratuit · PDF · ~25 pages · email pro requis.',
+    cover: {
+      src: '/livres-blancs/ia-souveraine-couverture.webp',
+      width: 1024,
+      height: 1536,
+    },
   },
 };
 
@@ -174,7 +181,6 @@ export const FOOTER_FALLBACK: FooterContent = {
       links: [
         { label: 'À propos', href: '/a-propos' },
         { label: 'Équipe', href: '/a-propos/equipe' },
-        { label: 'Carrières', href: '/a-propos/carrieres' },
         { label: 'Contact', href: '/contact' },
       ],
     },

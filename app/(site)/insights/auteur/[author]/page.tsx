@@ -49,7 +49,7 @@ export default async function AuthorArchivePage({
         <Container width="wide">
           <Link
             href="/insights"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Tous les insights
@@ -84,7 +84,7 @@ export default async function AuthorArchivePage({
               </p>
               <Link
                 href="/insights"
-                className="mt-6 inline-block text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)]"
+                className="mt-6 inline-block text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
               >
                 Voir tous les insights
               </Link>

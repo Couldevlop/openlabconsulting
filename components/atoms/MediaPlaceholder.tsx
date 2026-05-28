@@ -22,10 +22,10 @@ interface MediaPlaceholderProps {
 }
 
 const toneMap: Record<NonNullable<MediaPlaceholderProps['tone']>, string> = {
-  cold: 'bg-gradient-to-br from-[var(--color-ol-mist)] via-[var(--color-ol-graphite)]/10 to-[var(--color-ol-navy-soft)]/20 text-[var(--color-ol-graphite)]/55',
+  cold: 'bg-gradient-to-br from-[var(--color-ol-mist)] via-[var(--color-ol-graphite)]/10 to-[var(--color-ol-navy-soft)]/20 text-[var(--color-ol-graphite)]/70',
   warm: 'bg-gradient-to-br from-[var(--color-ol-orange)]/15 via-[var(--color-ol-orange)]/8 to-[var(--color-ol-night)]/20 text-[var(--color-ol-orange-dark)]',
   neutral:
-    'bg-gradient-to-br from-[var(--color-ol-mist)] to-[var(--color-ol-ivory)] text-[var(--color-ol-graphite)]/55',
+    'bg-gradient-to-br from-[var(--color-ol-mist)] to-[var(--color-ol-ivory)] text-[var(--color-ol-graphite)]/70',
 };
 
 const aspectMap: Record<

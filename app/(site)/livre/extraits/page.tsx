@@ -31,7 +31,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
@@ -41,7 +41,10 @@ export default function LivreExtraitsPage(): React.ReactElement {
             <Eyebrow tone="orange">Extraits gratuits</Eyebrow>
             <Heading id="extraits-title" level={1} className="mt-4">
               Lisez avant{' '}
-              <span className="text-[var(--color-ol-orange)]">d’acheter</span>.
+              <span className="text-[var(--color-ol-orange-text)]">
+                d’acheter
+              </span>
+              .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
               On vous laisse jauger le ton, la rigueur, la profondeur technique.
@@ -94,7 +97,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
             </p>
           </div>
 
-          <p className="mt-10 text-right text-sm text-[var(--color-ol-graphite)]/60">
+          <p className="mt-10 text-right text-sm text-[var(--color-ol-graphite)]/70">
             — Debora Ahouma · Abidjan, mai 2026
           </p>
         </Container>
@@ -188,9 +191,9 @@ export default function LivreExtraitsPage(): React.ReactElement {
           className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center"
         >
           <p className="max-w-xl text-[var(--color-ol-graphite)]/80">
-            Envie de tout lire d’une traite ? La version PDF + ePub complète est
-            disponible directement chez OpenLab, et en imprimée chez les
-            principaux distributeurs.
+            Envie de tout lire d’une traite ? La version PDF + ePub complète
+            paraît en 2026, en numérique direct chez OpenLab puis en imprimé
+            chez les principaux distributeurs.
           </p>
           <Button
             as="a"
@@ -200,7 +203,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
             className="shrink-0"
           >
             <BookOpen width={20} height={20} aria-hidden />
-            Acheter le livre complet
+            Réserver le livre complet
           </Button>
         </Container>
       </section>

@@ -141,7 +141,7 @@ export function CommandPalette(): ReactElement {
       >
         <Search width={14} height={14} aria-hidden />
         <span className="hidden sm:inline">Recherche</span>
-        <kbd className="hidden rounded border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-1.5 py-0.5 text-[10px] font-medium text-[var(--color-ol-graphite)]/60 sm:inline">
+        <kbd className="hidden rounded border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-1.5 py-0.5 text-[10px] font-medium text-[var(--color-ol-graphite)]/70 sm:inline">
           ⌘K
         </kbd>
       </button>
@@ -184,7 +184,7 @@ export function CommandPalette(): ReactElement {
                 type="button"
                 onClick={close}
                 aria-label="Fermer la recherche"
-                className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded text-[var(--color-ol-graphite)]/55 hover:bg-[var(--color-ol-ivory)] hover:text-[var(--color-ol-graphite)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)]"
+                className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded text-[var(--color-ol-graphite)]/70 hover:bg-[var(--color-ol-ivory)] hover:text-[var(--color-ol-graphite)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)]"
               >
                 <X width={14} height={14} aria-hidden />
               </button>
@@ -198,7 +198,7 @@ export function CommandPalette(): ReactElement {
               className="max-h-[60vh] overflow-y-auto py-2"
             >
               {results.length === 0 ? (
-                <p className="px-4 py-8 text-center text-sm text-[var(--color-ol-graphite)]/55">
+                <p className="px-4 py-8 text-center text-sm text-[var(--color-ol-graphite)]/70">
                   Aucun résultat pour « {query} ». Essaie « livre », « audit »,
                   « cnps », « cacao », « rgpd »…
                 </p>
@@ -208,7 +208,7 @@ export function CommandPalette(): ReactElement {
                     key={section}
                     className="border-t border-[var(--color-ol-mist)]/40 first:border-0"
                   >
-                    <p className="px-4 pt-3 pb-1 text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+                    <p className="px-4 pt-3 pb-1 text-[10px] font-semibold tracking-widest text-[var(--color-ol-orange-text)] uppercase">
                       {section}
                     </p>
                     <ul>
@@ -235,7 +235,7 @@ export function CommandPalette(): ReactElement {
                                 {entry.badge ? (
                                   <span
                                     aria-hidden
-                                    className="inline-flex h-5 min-w-[40px] items-center justify-center rounded bg-[var(--color-ol-orange)]/15 px-1.5 text-[10px] font-semibold tracking-wider text-[var(--color-ol-orange)] uppercase"
+                                    className="inline-flex h-5 min-w-[40px] items-center justify-center rounded bg-[var(--color-ol-orange)]/15 px-1.5 text-[10px] font-semibold tracking-wider text-[var(--color-ol-orange-text)] uppercase"
                                   >
                                     {entry.badge}
                                   </span>
@@ -256,7 +256,7 @@ export function CommandPalette(): ReactElement {
             </div>
 
             {/* Footer indications clavier */}
-            <div className="flex items-center justify-between border-t border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 py-2 text-[11px] text-[var(--color-ol-graphite)]/55">
+            <div className="flex items-center justify-between border-t border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 py-2 text-[11px] text-[var(--color-ol-graphite)]/70">
               <span>
                 <kbd className="rounded bg-white px-1.5 py-0.5 font-medium">
                   ↑↓

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Download, FileText, Users } from 'lucide-react';
@@ -83,15 +84,27 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
 
         <Container width="wide">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
-            <div className="mx-auto w-full max-w-md lg:mx-0">
-              <MediaPlaceholder
-                src={BOOK.cover.src}
-                alt={BOOK.cover.alt}
-                tone="warm"
-                aspect="3/2"
-                placeholderLabel="Couverture du livre"
-                className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
-              />
+            <div className="mx-auto w-full max-w-[20rem] lg:mx-0">
+              {BOOK.cover.src ? (
+                <Image
+                  src={BOOK.cover.src}
+                  alt={BOOK.cover.alt}
+                  width={BOOK.cover.width}
+                  height={BOOK.cover.height}
+                  priority
+                  sizes="(min-width: 1024px) 22rem, (min-width: 640px) 20rem, 80vw"
+                  className="h-auto w-full rotate-1 rounded-lg shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+                />
+              ) : (
+                <MediaPlaceholder
+                  src={null}
+                  alt={BOOK.cover.alt}
+                  tone="warm"
+                  aspect="3/2"
+                  placeholderLabel="Couverture du livre"
+                  className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+                />
+              )}
             </div>
 
             <div>
@@ -103,7 +116,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               >
                 {BOOK.title}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange)] italic sm:text-3xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange-text)] italic sm:text-3xl">
                 {BOOK.subtitle}
               </p>
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
@@ -124,7 +137,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
                   size="lg"
                 >
                   <BookOpen width={20} height={20} aria-hidden />
-                  Acheter le livre
+                  Être prévenu·e à la sortie
                 </Button>
                 <Button
                   as="a"
@@ -146,7 +159,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               <li key={label} className="flex items-start gap-4">
                 <span
                   aria-hidden
-                  className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-orange)]/20"
+                  className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
                 >
                   <Icon width={22} height={22} aria-hidden />
                 </span>
@@ -223,8 +236,8 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               },
               {
                 href: '/livre/acheter',
-                title: 'Acheter',
-                body: 'PDF + ePub direct OpenLab, Amazon, Lulu, librairies CI. Versions imprimée et numérique.',
+                title: 'Réserver',
+                body: 'À paraître en 2026. Canaux prévus : PDF + ePub direct OpenLab, Amazon, Lulu, librairies CI. Soyez prévenu·e à la sortie.',
               },
               {
                 href: '/livre/companion',
@@ -248,7 +261,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
                     <p className="text-sm text-[var(--color-ol-graphite)]/75">
                       {item.body}
                     </p>
-                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)]">
+                    <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)]">
                       Y aller
                       <ArrowRight
                         width={14}

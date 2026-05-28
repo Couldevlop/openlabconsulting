@@ -26,7 +26,7 @@ export async function getPublishedCaseStudies(): Promise<readonly CaseStudy[]> {
     const payload = await getPayload({ config });
     const { docs } = await payload.find({
       collection: 'caseStudies',
-      where: { status: { equals: 'published' } },
+      where: { _status: { equals: 'published' } },
       sort: 'order',
       limit: 8,
       depth: 1,
@@ -45,6 +45,40 @@ export async function getPublishedCaseStudies(): Promise<readonly CaseStudy[]> {
     }
     return FALLBACK_CASE_STUDIES;
   }
+}
+
+/**
+ * Cas client associé à un produit (section §7.1 « Témoignage ou cas
+ * client » de /solutions/[slug]). Retourne null si aucun cas réel n'existe
+ * pour ce produit — on n'affiche jamais de témoignage fabriqué.
+ */
+export async function getCaseStudyForProduct(
+  productSlug: ProductSlug,
+): Promise<CaseStudy | null> {
+  try {
+    const { getPayload } = await import('payload');
+    const config = (await import('@payload-config')).default;
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: 'caseStudies',
+      where: {
+        and: [
+          { _status: { equals: 'published' } },
+          { productSlug: { equals: productSlug } },
+        ],
+      },
+      sort: 'order',
+      limit: 1,
+      depth: 1,
+    });
+    const study = docs[0] ? toCaseStudy(docs[0] as RawPayloadCaseStudy) : null;
+    if (study) return study;
+  } catch {
+    // fallthrough vers le fallback
+  }
+  return (
+    FALLBACK_CASE_STUDIES.find((s) => s.productSlug === productSlug) ?? null
+  );
 }
 
 interface RawPayloadResult {
@@ -69,7 +103,6 @@ interface RawPayloadCaseStudy {
   results?: RawPayloadResult[];
   image?: RawPayloadMedia | string | number | null;
   order?: unknown;
-  status?: unknown;
 }
 
 function isProductSlug(value: unknown): value is ProductSlug {

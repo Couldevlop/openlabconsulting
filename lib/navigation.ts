@@ -112,7 +112,7 @@ const LIVRE_MENU: MegaMenuConfig = {
     href: '/livre',
     label: 'Vue d’ensemble',
     description:
-      'Intelligence Artificielle : du Machine Learning aux Agents Autonomes.',
+      'Intégration de l’Intelligence Artificielle dans le développement logiciel.',
   },
   sections: [
     {

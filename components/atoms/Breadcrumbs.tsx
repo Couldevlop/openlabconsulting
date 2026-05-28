@@ -65,7 +65,7 @@ export function Breadcrumbs({
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="inline-flex items-center gap-1 rounded transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+                  className="inline-flex items-center gap-1 rounded transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
                 >
                   {isHome ? <Home width={14} height={14} aria-hidden /> : null}
                   <span>{item.label}</span>

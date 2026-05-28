@@ -78,7 +78,7 @@ export function NexusErpDemo(): ReactElement {
               onClick={(): void => setDevise(d)}
               className={
                 devise === d
-                  ? 'rounded bg-[var(--color-ol-orange)] px-3 py-1.5 text-xs font-semibold text-white'
+                  ? 'rounded bg-[var(--color-ol-orange-dark)] px-3 py-1.5 text-xs font-semibold text-white'
                   : 'rounded px-3 py-1.5 text-xs font-medium text-[var(--color-ol-graphite)]/70 hover:text-[var(--color-ol-night)]'
               }
             >
@@ -134,7 +134,7 @@ export function NexusErpDemo(): ReactElement {
         })}
       </div>
 
-      <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/55">
+      <p className="mt-6 text-xs text-[var(--color-ol-graphite)]/70">
         Consolidation temps réel SYSCOHADA + PCG France. Drill-down par BU,
         pays, période en un clic dans l’application.
       </p>

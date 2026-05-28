@@ -13,7 +13,9 @@ describe('Page /livre (landing)', () => {
   it('rend un h1 avec le titre du livre', async () => {
     render(await LivreLandingPage());
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1.textContent).toBe('Intelligence Artificielle');
+    expect(h1.textContent).toMatch(
+      /Intégration de l.Intelligence Artificielle dans le développement logiciel/,
+    );
   });
 
   it('liste les 4 audiences (cards dédiées)', async () => {
@@ -111,7 +113,7 @@ describe('Page /livre/extraits', () => {
   it('CTA vers /livre/acheter en bas', () => {
     render(<LivreExtraitsPage />);
     expect(
-      screen.getByRole('link', { name: /Acheter le livre complet/i }),
+      screen.getByRole('link', { name: /Réserver le livre complet/i }),
     ).toHaveAttribute('href', '/livre/acheter');
   });
 });
@@ -119,7 +121,7 @@ describe('Page /livre/extraits', () => {
 describe('Page /livre/acheter', () => {
   it('met en avant le bouquet OpenLab direct (primaire)', () => {
     render(<LivreAcheterPage />);
-    expect(screen.getByText(/Recommandé/i)).toBeInTheDocument();
+    expect(screen.getByText(/Édition numérique directe/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Bouquet OpenLab — PDF \+ ePub direct/i),
     ).toBeInTheDocument();

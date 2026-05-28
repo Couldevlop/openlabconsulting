@@ -101,7 +101,7 @@ export function ContactForm(): ReactElement {
         Réponse sous 24 h ouvrées. Vous pouvez aussi écrire directement à{' '}
         <a
           href={`mailto:${SITE.contact.email}`}
-          className="font-medium text-[var(--color-ol-orange)] underline-offset-2 hover:underline"
+          className="font-medium text-[var(--color-ol-orange-text)] underline-offset-2 hover:underline"
         >
           {SITE.contact.email}
         </a>
@@ -237,7 +237,7 @@ export function ContactForm(): ReactElement {
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-[var(--color-ol-graphite)]/55">
+        <p className="text-xs text-[var(--color-ol-graphite)]/70">
           Vos données restent en interne chez OpenLab. RGPD UE + loi ivoirienne
           2013-450.
         </p>

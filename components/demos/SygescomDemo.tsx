@@ -108,7 +108,7 @@ export function SygescomDemo(): ReactElement {
         <button
           type="button"
           onClick={(): void => setPaused((p) => !p)}
-          className="rounded-md border border-white/15 px-3 py-1 text-xs text-[var(--color-ol-ivory)]/80 hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange)]"
+          className="rounded-md border border-white/15 px-3 py-1 text-xs text-[var(--color-ol-ivory)]/80 hover:border-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-text)]"
         >
           {paused ? 'Reprendre' : 'Pause'}
         </button>
@@ -205,7 +205,7 @@ function KpiCard({
   accent: 'orange' | 'ivory' | 'success' | 'danger';
 }): ReactElement {
   const accentMap = {
-    orange: 'text-[var(--color-ol-orange)]',
+    orange: 'text-[var(--color-ol-orange-text)]',
     ivory: 'text-[var(--color-ol-ivory)]',
     success: 'text-[var(--color-ol-success)]',
     danger: 'text-[var(--color-ol-danger)]',

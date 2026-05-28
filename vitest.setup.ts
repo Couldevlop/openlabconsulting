@@ -46,6 +46,13 @@ if (typeof globalThis.matchMedia === 'undefined') {
 vi.mock('next/headers', () => ({
   headers: async () => new Headers(),
   cookies: async () => new Map(),
+  // draftMode désactivé par défaut → les pages empruntent le chemin
+  // « publié ». Les tests de prévisualisation surchargent ce mock.
+  draftMode: async () => ({
+    isEnabled: false,
+    enable: vi.fn(),
+    disable: vi.fn(),
+  }),
 }));
 
 // Mock `next/navigation` — hors RSC, le router App n'est pas monté en
@@ -64,7 +71,16 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(),
   redirect: vi.fn(),
-  notFound: vi.fn(),
+  // `notFound()` côté Next interrompt le rendu en *levant* une erreur
+  // (digest `NEXT_NOT_FOUND`). Le mock doit conserver cette sémantique,
+  // sinon les pages dynamiques continuent leur exécution sur des données
+  // absentes et les tests `await expect(Page(...)).rejects.toThrow()`
+  // (insights-categorie, insight-detail, livre-blanc) ne détectent plus
+  // le 404. Les tests qui ont besoin d'observer l'appel surchargent ce
+  // mock localement.
+  notFound: () => {
+    throw new Error('NEXT_NOT_FOUND');
+  },
 }));
 
 afterEach(() => {

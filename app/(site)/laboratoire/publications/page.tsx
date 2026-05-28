@@ -56,7 +56,7 @@ export default function LaboratoirePublicationsPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/laboratoire"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Hub Laboratoire
@@ -91,7 +91,7 @@ export default function LaboratoirePublicationsPage(): React.ReactElement {
                     <div className="flex items-center justify-between gap-3">
                       <span
                         aria-hidden
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
                         <Icon width={18} height={18} aria-hidden />
                       </span>
@@ -115,7 +115,7 @@ export default function LaboratoirePublicationsPage(): React.ReactElement {
                         href={p.href}
                         target={isExternal ? '_blank' : undefined}
                         rel={isExternal ? 'noopener noreferrer' : undefined}
-                        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)]"
+                        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
                       >
                         {isExternal ? 'Ouvrir' : 'Lire'}
                         <ArrowUpRight width={14} height={14} aria-hidden />

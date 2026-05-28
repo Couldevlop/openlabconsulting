@@ -91,7 +91,7 @@ export function Hero({
           className="mt-6 max-w-4xl text-[var(--color-ol-ivory)]"
         >
           {content.headlineLead}{' '}
-          <span className="text-[var(--color-ol-orange)]">
+          <span className="text-[var(--color-ol-orange-text)]">
             {content.headlineHighlight}
           </span>
         </Heading>

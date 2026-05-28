@@ -64,7 +64,7 @@ export default function LaboratoirePartenariatsPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/laboratoire"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Hub Laboratoire
@@ -107,7 +107,7 @@ export default function LaboratoirePartenariatsPage(): React.ReactElement {
                     <Card className="flex h-full flex-col gap-4 p-6 sm:p-8">
                       <span
                         aria-hidden
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
                         <Icon width={18} height={18} aria-hidden />
                       </span>

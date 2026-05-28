@@ -55,7 +55,7 @@ export default async function CategoryArchivePage({
         <Container width="wide">
           <Link
             href="/insights"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Tous les insights

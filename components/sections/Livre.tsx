@@ -6,6 +6,7 @@ import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import Image from 'next/image';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { BOOK } from '@/lib/data/book';
 
@@ -48,16 +49,27 @@ export function Livre(): ReactElement {
 
       <Container width="wide">
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
-          {/* Couverture */}
-          <div className="mx-auto w-full max-w-sm lg:mx-0 lg:max-w-md">
-            <MediaPlaceholder
-              src={BOOK.cover.src}
-              alt={BOOK.cover.alt}
-              tone="warm"
-              aspect="3/2"
-              placeholderLabel="Couverture du livre"
-              className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
-            />
+          {/* Couverture — ratio naturel (portrait), affichée en entier. */}
+          <div className="mx-auto w-full max-w-[18rem] lg:mx-0 lg:max-w-xs">
+            {BOOK.cover.src ? (
+              <Image
+                src={BOOK.cover.src}
+                alt={BOOK.cover.alt}
+                width={BOOK.cover.width}
+                height={BOOK.cover.height}
+                sizes="(min-width: 1024px) 20rem, (min-width: 640px) 18rem, 75vw"
+                className="h-auto w-full rotate-1 rounded-lg shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+              />
+            ) : (
+              <MediaPlaceholder
+                src={null}
+                alt={BOOK.cover.alt}
+                tone="warm"
+                aspect="3/2"
+                placeholderLabel="Couverture du livre"
+                className="rotate-1 shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
+              />
+            )}
           </div>
 
           {/* Contenu */}
@@ -71,7 +83,7 @@ export function Livre(): ReactElement {
             >
               {BOOK.title}
             </Heading>
-            <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic sm:text-2xl">
+            <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic sm:text-2xl">
               {BOOK.subtitle}
             </p>
 
@@ -99,7 +111,7 @@ export function Livre(): ReactElement {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <Button as="a" href={PURCHASE_HREF} variant="primary" size="lg">
                 <BookOpen width={20} height={20} aria-hidden />
-                Acheter le livre
+                Être prévenu·e à la sortie
               </Button>
               <Button
                 as="a"
@@ -113,7 +125,7 @@ export function Livre(): ReactElement {
               </Button>
               <Link
                 href={CONFERENCE_HREF}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] sm:ml-2"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-light)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] sm:ml-2"
               >
                 Réserver une conférence
                 <ArrowRight width={16} height={16} aria-hidden />

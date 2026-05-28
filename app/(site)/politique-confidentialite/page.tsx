@@ -22,7 +22,7 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
           <Heading level={1} className="mt-4">
             Politique de confidentialité.
           </Heading>
-          <p className="mt-4 text-sm text-[var(--color-ol-graphite)]/60">
+          <p className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
             Dernière mise à jour : mai 2026
           </p>
 
@@ -156,7 +156,7 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
                 Pour exercer ces droits, écrivez à{' '}
                 <a
                   href={`mailto:${SITE.contact.email}`}
-                  className="font-medium text-[var(--color-ol-orange)] hover:underline"
+                  className="font-medium text-[var(--color-ol-orange-text)] hover:underline"
                 >
                   {SITE.contact.email}
                 </a>
@@ -185,7 +185,7 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
                 fonction de DPO. Vous pouvez la contacter à{' '}
                 <a
                   href={`mailto:${SITE.contact.email}`}
-                  className="font-medium text-[var(--color-ol-orange)] hover:underline"
+                  className="font-medium text-[var(--color-ol-orange-text)] hover:underline"
                 >
                   {SITE.contact.email}
                 </a>
@@ -200,7 +200,7 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
                 Pour les mentions légales complètes, voir{' '}
                 <Link
                   href="/mentions-legales"
-                  className="font-medium text-[var(--color-ol-orange)] hover:underline"
+                  className="font-medium text-[var(--color-ol-orange-text)] hover:underline"
                 >
                   /mentions-legales
                 </Link>

@@ -25,7 +25,7 @@ export function Expertises(): ReactElement {
           <Eyebrow tone="orange">Ce que nous transformons</Eyebrow>
           <Heading id="expertises-title" level={2} className="mt-4">
             Quatre axes pour faire de l’IA un{' '}
-            <span className="text-[var(--color-ol-orange)]">
+            <span className="text-[var(--color-ol-orange-text)]">
               levier mesurable
             </span>
             .
@@ -50,7 +50,7 @@ export function Expertises(): ReactElement {
                 >
                   <span
                     aria-hidden
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white"
                   >
                     <Icon width={24} height={24} aria-hidden />
                   </span>
@@ -63,7 +63,7 @@ export function Expertises(): ReactElement {
                     {punchline}
                   </p>
 
-                  <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)]">
+                  <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)]">
                     Voir le détail
                     <ArrowUpRight
                       width={16}

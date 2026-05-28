@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Download, Mail } from 'lucide-react';
@@ -8,6 +9,7 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { cn } from '@/lib/cn';
 
 interface Whitepaper {
   slug: string;
@@ -19,6 +21,8 @@ interface Whitepaper {
   pitch: readonly string[];
   status: 'draft' | 'published';
   publicationLabel: string;
+  /** Couverture (chemin public). Affichée dans le hero si présente. */
+  cover?: { src: string; width: number; height: number };
 }
 
 /**
@@ -37,7 +41,7 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     pillars: [
       'Cartographie des cas d’usage IA prioritaires en Afrique francophone',
       'Cadre de gouvernance compatible loi 2013-450 et RGPD',
-      'Stack technique souveraine (K3s, RAG fermé, données en zone UE/CI)',
+      'Stack technique souveraine (K3s, RAG fermé, données sous contrôle maîtrisé)',
       'Plan de bascule progressive en 6 mois',
     ],
     pitch: [
@@ -47,6 +51,11 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     ],
     status: 'draft',
     publicationLabel: 'En rédaction — sortie prévue T2 2026',
+    cover: {
+      src: '/livres-blancs/ia-souveraine-couverture.webp',
+      width: 1024,
+      height: 1536,
+    },
   },
 };
 
@@ -68,6 +77,23 @@ export async function generateMetadata({
     title: `${wp.title} — ${wp.subtitle}`,
     description: wp.pitch[0],
     alternates: { canonical: `/livres-blancs/${wp.slug}` },
+    openGraph: {
+      title: `${wp.title} · ${wp.subtitle}`,
+      description: wp.pitch[0],
+      type: 'article',
+      ...(wp.cover
+        ? {
+            images: [
+              {
+                url: wp.cover.src,
+                width: wp.cover.width,
+                height: wp.cover.height,
+                alt: `Couverture du livre blanc « ${wp.title} »`,
+              },
+            ],
+          }
+        : {}),
+    },
   };
 }
 
@@ -97,13 +123,34 @@ export default async function WhitepaperPage({
         <Container width="wide">
           <Link
             href="/audit-ia"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/70 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-ivory)]/70 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page audit IA
           </Link>
 
-          <div className="mt-10 grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20">
+          <div
+            className={cn(
+              'mt-10 grid gap-12 lg:items-center lg:gap-16',
+              wp.cover
+                ? 'lg:grid-cols-[0.7fr_1.3fr]'
+                : 'lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20',
+            )}
+          >
+            {wp.cover ? (
+              <div className="mx-auto w-full max-w-[17rem] lg:mx-0">
+                <Image
+                  src={wp.cover.src}
+                  alt={`Couverture du livre blanc « ${wp.title} — ${wp.subtitle} »`}
+                  width={wp.cover.width}
+                  height={wp.cover.height}
+                  priority
+                  sizes="(min-width: 1024px) 17rem, (min-width: 640px) 50vw, 75vw"
+                  className="h-auto w-full rounded-lg shadow-2xl ring-1 ring-[var(--color-ol-ivory)]/10"
+                />
+              </div>
+            ) : null}
+
             <div>
               <Badge tone="orange">Livre blanc · 2026</Badge>
               <Heading
@@ -113,18 +160,18 @@ export default async function WhitepaperPage({
               >
                 {wp.title}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange)] italic sm:text-3xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange-text)] italic sm:text-3xl">
                 {wp.subtitle}
               </p>
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
                 {wp.audience}
               </p>
-            </div>
 
-            <div className="space-y-4 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
-              {wp.pitch.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              <div className="mt-6 space-y-4 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
+                {wp.pitch.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
             </div>
           </div>
         </Container>
@@ -151,7 +198,7 @@ export default async function WhitepaperPage({
               >
                 <span
                   aria-hidden
-                  className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+                  className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
                 >{`0${i + 1}`}</span>
                 <p className="mt-3 text-lg text-[var(--color-ol-night)]">
                   {pillar}
@@ -171,59 +218,34 @@ export default async function WhitepaperPage({
           <Card className="border-[var(--color-ol-mist)] bg-white p-8 sm:p-12">
             <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
               <div>
-                <Eyebrow tone="orange">Recevoir le PDF</Eyebrow>
+                <Eyebrow tone="orange">À la sortie</Eyebrow>
                 <Heading id="wp-download-title" level={2} className="mt-4">
-                  Accès gratuit contre email professionnel.
+                  Le livre blanc, gratuit, dès sa parution.
                 </Heading>
                 <p className="mt-4 text-[var(--color-ol-graphite)]/80">
-                  Le PDF (~{wp.pageCount} pages) est envoyé par email dès
-                  réception. Vous recevrez ensuite les mises à jour
-                  trimestrielles (désabonnement en un clic).
+                  {wp.publicationLabel}. À sa sortie, le PDF (~{wp.pageCount}{' '}
+                  pages) sera accessible gratuitement contre un simple email
+                  professionnel. Laissez-nous votre contact pour le recevoir en
+                  priorité.
                 </p>
-                {wp.status === 'draft' ? (
-                  <p className="mt-4 text-sm font-medium text-[var(--color-ol-orange)]">
-                    Statut : {wp.publicationLabel}. Inscrivez-vous pour recevoir
-                    le PDF dès sa sortie.
-                  </p>
-                ) : null}
               </div>
 
-              <form
-                method="post"
-                action="/api/whitepapers/request"
-                aria-label="Recevoir le livre blanc par e-mail"
-                className="flex flex-col gap-4"
-              >
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-[var(--color-ol-night)]">
-                    Email professionnel
-                  </span>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="prenom@votre-entreprise.com"
-                    className="min-h-12 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                  />
-                </label>
-                <input type="hidden" name="slug" value={wp.slug} />
-
-                <Button type="submit" variant="primary" size="lg">
+              <div className="flex flex-col gap-4">
+                <Button
+                  as="a"
+                  href={`/contact?sujet=livre-blanc-${wp.slug}`}
+                  variant="primary"
+                  size="lg"
+                  aria-label="Être prévenu de la sortie du livre blanc"
+                >
                   <Mail width={20} height={20} aria-hidden />
-                  M’envoyer le livre blanc
+                  Être prévenu·e à la sortie
                 </Button>
-
-                <p className="text-xs text-[var(--color-ol-graphite)]/60">
-                  Pipeline d’envoi (validation Zod + Resend + rate-limit Redis)
-                  branchée en P8 / P10. Pour l’instant le formulaire enregistre
-                  votre demande, vous recevrez manuellement le PDF.
-                </p>
-                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/55">
+                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/70">
                   <Download width={14} height={14} aria-hidden />
-                  PDF · ~{wp.pageCount} pages · français
+                  PDF · ~{wp.pageCount} pages · français · gratuit
                 </p>
-              </form>
+              </div>
             </div>
           </Card>
         </Container>

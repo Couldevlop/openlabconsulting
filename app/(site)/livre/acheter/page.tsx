@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUpRight, Check, Sparkles } from 'lucide-react';
+import { ArrowLeft, BellRing, Check } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
@@ -10,15 +10,18 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { BOOK, PURCHASE_CHANNELS } from '@/lib/data/book';
 
+const NOTIFY_HREF = '/contact?sujet=notification-livre';
+
 export const metadata: Metadata = {
-  title: `Acheter — ${BOOK.title}`,
+  title: `À paraître — ${BOOK.title}`,
   description:
-    'PDF + ePub direct OpenLab, Amazon, Lulu impression à la demande, librairies de Côte d’Ivoire. Choisissez le canal qui vous convient.',
+    'Le livre paraît en 2026. Découvrez les canaux de diffusion prévus (PDF + ePub direct OpenLab, Amazon, Lulu, librairies de Côte d’Ivoire) et faites-vous prévenir dès sa sortie.',
   alternates: { canonical: '/livre/acheter' },
 };
 
+// Ce que l'édition numérique inclura à la sortie.
 const BUNDLE_FEATURES = [
-  'PDF + ePub livrés immédiatement après paiement Stripe',
+  'PDF + ePub téléchargeables après achat, sans DRM',
   'Accès à toutes les mises à jour mineures de l’édition courante',
   'Code source GitHub et datasets companion inclus',
   'Réception d’un erratum trimestriel par e-mail (opt-in)',
@@ -35,27 +38,34 @@ export default function LivreAcheterPage(): React.ReactElement {
         <Container width="wide">
           <Link
             href="/livre"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Page du livre
           </Link>
 
           <div className="mt-10 max-w-3xl">
-            <Eyebrow tone="orange">Acheter le livre</Eyebrow>
+            <Eyebrow tone="orange">À paraître · 2026</Eyebrow>
             <Heading id="acheter-title" level={1} className="mt-4">
               {BOOK.title}.{' '}
-              <span className="text-[var(--color-ol-orange)]">
-                Quatre canaux disponibles
+              <span className="text-[var(--color-ol-orange-text)]">
+                Réservez votre exemplaire
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              {BOOK.subtitle} — {BOOK.edition}. Choisissez le canal qui
-              correspond à votre contexte : bouquet OpenLab direct (numérique),
-              Amazon (numérique + imprimé Europe), Lulu (imprimé à la demande
-              mondial), ou librairies physiques ivoiriennes.
+              {BOOK.subtitle} — {BOOK.edition}. L’ouvrage est en cours de
+              finalisation. À sa sortie, il sera diffusé en numérique (PDF +
+              ePub direct OpenLab) puis en imprimé via Amazon, Lulu et les
+              librairies partenaires d’Abidjan. Laissez-nous votre contact pour
+              être prévenu·e en priorité.
             </p>
+            <div className="mt-8">
+              <Button as="a" href={NOTIFY_HREF} variant="primary" size="lg">
+                <BellRing width={20} height={20} aria-hidden />
+                Être prévenu·e à la sortie
+              </Button>
+            </div>
           </div>
         </Container>
       </section>
@@ -69,14 +79,15 @@ export default function LivreAcheterPage(): React.ReactElement {
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-20">
             <div>
-              <Badge tone="orange">Recommandé</Badge>
+              <Badge tone="orange">Édition numérique directe</Badge>
               <Heading id="bundle-title" level={2} className="mt-4">
                 Bouquet OpenLab — PDF + ePub direct.
               </Heading>
               <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/80">
-                Sans intermédiaire, sans DRM, sans tracking tiers. Vous payez
-                OpenLab directement, vous téléchargez immédiatement, vous lisez
-                où vous voulez sur tous vos appareils.
+                Sans intermédiaire, sans DRM, sans tracking tiers. À la sortie,
+                vous achèterez directement auprès d’OpenLab, vous téléchargerez
+                immédiatement et vous lirez où vous voulez sur tous vos
+                appareils.
               </p>
 
               <ul className="mt-8 space-y-3">
@@ -84,7 +95,7 @@ export default function LivreAcheterPage(): React.ReactElement {
                   <li key={f} className="flex items-start gap-3">
                     <span
                       aria-hidden
-                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)]"
                     >
                       <Check
                         width={14}
@@ -99,24 +110,20 @@ export default function LivreAcheterPage(): React.ReactElement {
               </ul>
 
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="lg"
-                  aria-label="Acheter le bouquet OpenLab (paiement Stripe à venir)"
-                >
-                  <Sparkles width={20} height={20} aria-hidden />
-                  Acheter PDF + ePub
+                <Button as="a" href={NOTIFY_HREF} variant="primary" size="lg">
+                  <BellRing width={20} height={20} aria-hidden />
+                  Être prévenu·e à la sortie
                 </Button>
-                <p className="text-sm text-[var(--color-ol-graphite)]/60">
-                  Stripe Checkout intégré en P8. Pour l’instant, contactez{' '}
+                <p className="text-sm text-[var(--color-ol-graphite)]/70">
+                  Le paiement en ligne (PDF + ePub) ouvrira à la parution. D’ici
+                  là,{' '}
                   <Link
                     href="/contact?sujet=achat-livre"
-                    className="font-medium text-[var(--color-ol-orange)] underline-offset-2 hover:underline"
+                    className="font-medium text-[var(--color-ol-orange-text)] underline-offset-2 hover:underline"
                   >
-                    notre équipe
-                  </Link>
-                  .
+                    écrivez-nous
+                  </Link>{' '}
+                  pour une commande anticipée.
                 </p>
               </div>
             </div>
@@ -150,7 +157,7 @@ export default function LivreAcheterPage(): React.ReactElement {
                 </div>
                 <div className="flex justify-between gap-4 py-3">
                   <dt className="text-sm text-[var(--color-ol-graphite)]/65">
-                    Année
+                    Parution
                   </dt>
                   <dd className="text-sm font-medium text-[var(--color-ol-night)]">
                     {BOOK.publicationYear}
@@ -170,36 +177,36 @@ export default function LivreAcheterPage(): React.ReactElement {
         </Container>
       </section>
 
-      {/* Autres canaux */}
+      {/* Canaux de diffusion prévus */}
       <section
         aria-labelledby="autres-canaux-title"
         className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
       >
         <Container width="wide">
           <div className="max-w-2xl">
-            <Eyebrow tone="orange">Les autres canaux</Eyebrow>
+            <Eyebrow tone="orange">Les canaux prévus</Eyebrow>
             <Heading id="autres-canaux-title" level={2} className="mt-4">
-              Selon votre zone géographique et votre préférence.
+              Plusieurs canaux de diffusion, à la sortie.
             </Heading>
+            <p className="mt-4 text-[var(--color-ol-graphite)]/75">
+              Selon votre zone géographique et votre préférence. Les liens
+              d’achat seront activés dès la parution.
+            </p>
           </div>
 
           <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {PURCHASE_CHANNELS.filter((c) => !c.primary).map((channel) => (
               <li key={channel.name}>
                 <Card as="article" className="flex h-full flex-col gap-4 p-7">
-                  <Heading level={3} visualLevel={4}>
-                    {channel.name}
-                  </Heading>
+                  <div className="flex items-center justify-between gap-3">
+                    <Heading level={3} visualLevel={4}>
+                      {channel.name}
+                    </Heading>
+                    <Badge tone="neutral">À venir</Badge>
+                  </div>
                   <p className="text-sm text-[var(--color-ol-graphite)]/75">
                     {channel.description}
                   </p>
-                  <Link
-                    href={channel.href}
-                    className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                  >
-                    Y aller
-                    <ArrowUpRight width={14} height={14} aria-hidden />
-                  </Link>
                 </Card>
               </li>
             ))}
@@ -214,8 +221,8 @@ export default function LivreAcheterPage(): React.ReactElement {
               Librairies physiques en Côte d’Ivoire
             </Heading>
             <p className="mt-2 text-sm text-[var(--color-ol-graphite)]/75">
-              Pour acheter physiquement à Abidjan, le livre est disponible au
-              stock dans les enseignes suivantes :
+              À la sortie, le livre sera disponible au stock dans les enseignes
+              partenaires suivantes :
             </p>
             <ul className="mt-4 grid gap-2 text-sm text-[var(--color-ol-graphite)]/80 sm:grid-cols-3">
               <li>· Carrefour Mercure — Plateau</li>

@@ -31,7 +31,7 @@ export default function SolutionsHubPage(): React.ReactElement {
             <Eyebrow tone="orange">Hub Solutions</Eyebrow>
             <Heading id="hub-solutions-title" level={1} className="mt-4">
               Sept logiciels propriétaires.{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 Une suite cohérente
               </span>
               .
@@ -60,7 +60,7 @@ export default function SolutionsHubPage(): React.ReactElement {
                       <div className="flex items-start justify-between gap-3">
                         <span
                           aria-hidden
-                          className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)] text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-mist)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white group-hover:ring-[var(--color-ol-orange)]"
+                          className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--color-ol-ivory)] text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-mist)] transition-colors group-hover:bg-[var(--color-ol-orange)] group-hover:text-white group-hover:ring-[var(--color-ol-orange)]"
                         >
                           <Icon width={24} height={24} aria-hidden />
                         </span>
@@ -75,11 +75,11 @@ export default function SolutionsHubPage(): React.ReactElement {
                         {tagline}
                       </p>
 
-                      <p className="text-xs text-[var(--color-ol-graphite)]/55">
+                      <p className="text-xs text-[var(--color-ol-graphite)]/70">
                         {target}
                       </p>
 
-                      <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)]">
+                      <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)]">
                         Découvrir
                         <ArrowUpRight
                           width={16}

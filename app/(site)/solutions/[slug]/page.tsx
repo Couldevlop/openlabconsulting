@@ -15,6 +15,7 @@ import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { ProductDemo } from '@/components/demos/ProductDemo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PRODUCTS, getProductBySlug } from '@/lib/data/products';
+import { getCaseStudyForProduct } from '@/lib/case-studies-server';
 import {
   breadcrumbSchema,
   faqPageSchema,
@@ -70,6 +71,7 @@ export default async function SolutionDetailPage({
     expertisesLies,
   } = product;
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const caseStudy = await getCaseStudyForProduct(product.slug);
 
   return (
     <main id="main">
@@ -99,7 +101,7 @@ export default async function SolutionDetailPage({
         <Container width="wide">
           <Link
             href="/solutions"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ol-graphite)]/65 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={16} height={16} aria-hidden />
             Tous les produits
@@ -110,7 +112,7 @@ export default async function SolutionDetailPage({
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden
-                  className="inline-flex h-16 w-16 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] ring-1 ring-[var(--color-ol-orange)]/20"
+                  className="inline-flex h-16 w-16 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
                 >
                   <Icon width={32} height={32} aria-hidden />
                 </span>
@@ -123,10 +125,10 @@ export default async function SolutionDetailPage({
               <Heading id="solution-title" level={1} className="mt-3">
                 {name}
               </Heading>
-              <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange)] italic sm:text-2xl">
+              <p className="mt-3 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic sm:text-2xl">
                 {tagline}
               </p>
-              <p className="mt-2 text-sm tracking-widest text-[var(--color-ol-graphite)]/55 uppercase">
+              <p className="mt-2 text-sm tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                 {target}
               </p>
 
@@ -168,13 +170,13 @@ export default async function SolutionDetailPage({
             <ul className="grid gap-x-12 gap-y-10 sm:grid-cols-3">
               {proofs.map((proof) => (
                 <li key={proof.label}>
-                  <span className="block font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-5xl">
+                  <span className="block font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-5xl">
                     {proof.value}
                   </span>
                   <span className="mt-2 block text-base font-medium text-[var(--color-ol-night)]">
                     {proof.label}
                   </span>
-                  <span className="mt-1 block text-xs text-[var(--color-ol-graphite)]/55">
+                  <span className="mt-1 block text-xs text-[var(--color-ol-graphite)]/70">
                     {proof.source}
                   </span>
                 </li>
@@ -212,7 +214,7 @@ export default async function SolutionDetailPage({
                     <Card className="flex h-full flex-col gap-3 p-6">
                       <span
                         aria-hidden
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
                         <FIcon width={20} height={20} aria-hidden />
                       </span>
@@ -299,6 +301,54 @@ export default async function SolutionDetailPage({
         </Container>
       </section>
 
+      {/* Cas client — §7.1 (#7). Affiché uniquement si un cas réel existe. */}
+      {caseStudy ? (
+        <section
+          aria-labelledby="cas-client-title"
+          data-testid="solution-case-study"
+          className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+        >
+          <Container width="wide">
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
+              <div>
+                <Eyebrow tone="orange">Cas client</Eyebrow>
+                <Heading id="cas-client-title" level={2} className="mt-4">
+                  {caseStudy.headline}
+                </Heading>
+                <p className="mt-4 font-[family-name:var(--font-editorial)] text-xl text-[var(--color-ol-orange-text)] italic sm:text-2xl">
+                  {caseStudy.punchline}
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-2">
+                  <Badge tone="orange">{caseStudy.sector}</Badge>
+                  <span className="text-sm text-[var(--color-ol-graphite)]/70">
+                    {caseStudy.client}
+                  </span>
+                </div>
+                <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
+                  {caseStudy.body}
+                </p>
+              </div>
+
+              <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-xl bg-[var(--color-ol-mist)] sm:grid-cols-3">
+                {caseStudy.results.map((r) => (
+                  <li
+                    key={r.label}
+                    className="flex flex-col justify-center bg-white p-6 text-center sm:p-8"
+                  >
+                    <span className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl">
+                      {r.value}
+                    </span>
+                    <span className="mt-2 text-sm text-[var(--color-ol-graphite)]/70">
+                      {r.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
       {/* Tarification — §7.1 */}
       <section
         aria-labelledby="pricing-title"
@@ -334,7 +384,7 @@ export default async function SolutionDetailPage({
                 <li key={detail} className="flex items-start gap-3">
                   <span
                     aria-hidden
-                    className="mt-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange)]"
+                    className="mt-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)]"
                   >
                     <svg
                       width="12"
@@ -358,7 +408,7 @@ export default async function SolutionDetailPage({
             </ul>
 
             {pricing.note ? (
-              <p className="mt-8 border-t border-[var(--color-ol-mist)] pt-6 text-sm text-[var(--color-ol-graphite)]/60">
+              <p className="mt-8 border-t border-[var(--color-ol-mist)] pt-6 text-sm text-[var(--color-ol-graphite)]/70">
                 {pricing.note}
               </p>
             ) : null}
@@ -406,7 +456,7 @@ export default async function SolutionDetailPage({
                     <span>{item.question}</span>
                     <span
                       aria-hidden
-                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)] transition-transform group-open:rotate-45"
+                      className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] transition-transform group-open:rotate-45"
                     >
                       <svg
                         width="14"
@@ -466,7 +516,7 @@ export default async function SolutionDetailPage({
                       width={14}
                       height={14}
                       aria-hidden
-                      className="text-[var(--color-ol-orange)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      className="text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
                   </Link>
                 </li>
@@ -491,7 +541,7 @@ export default async function SolutionDetailPage({
             </div>
             <Link
               href="/solutions"
-              className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:text-[var(--color-ol-orange-dark)]"
+              className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
             >
               Hub solutions
               <ArrowUpRight width={16} height={16} aria-hidden />
@@ -514,7 +564,7 @@ export default async function SolutionDetailPage({
                     >
                       <span
                         aria-hidden
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                       >
                         <other.Icon width={20} height={20} aria-hidden />
                       </span>

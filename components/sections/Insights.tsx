@@ -44,7 +44,7 @@ export function Insights({
             <Eyebrow tone="orange">Insights</Eyebrow>
             <Heading id="insights-title" level={2} className="mt-4">
               Notre lecture du{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 terrain africain
               </span>
               .

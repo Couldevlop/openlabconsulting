@@ -31,14 +31,14 @@ export function Footer({
               <br />
               <a
                 href="tel:+2250709334238"
-                className="hover:text-[var(--color-ol-orange)]"
+                className="hover:text-[var(--color-ol-orange-text)]"
               >
                 +225 07 09 33 42 38
               </a>
               <br />
               <a
                 href="mailto:infos@openlabconsulting.com"
-                className="hover:text-[var(--color-ol-orange)]"
+                className="hover:text-[var(--color-ol-orange-text)]"
               >
                 infos@openlabconsulting.com
               </a>
@@ -47,7 +47,7 @@ export function Footer({
 
           {content.columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h2 className="text-sm font-semibold tracking-widest text-[var(--color-ol-orange)] uppercase">
+              <h2 className="text-sm font-semibold tracking-widest text-[var(--color-ol-orange-text)] uppercase">
                 {col.title}
               </h2>
               <ul className="mt-4 space-y-3">
@@ -55,7 +55,7 @@ export function Footer({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[var(--color-ol-ivory)]/80 hover:text-[var(--color-ol-orange)]"
+                      className="text-sm text-[var(--color-ol-ivory)]/80 hover:text-[var(--color-ol-orange-text)]"
                     >
                       {link.label}
                     </Link>
@@ -74,7 +74,7 @@ export function Footer({
             <li>
               <Link
                 href="/mentions-legales"
-                className="hover:text-[var(--color-ol-orange)]"
+                className="hover:text-[var(--color-ol-orange-text)]"
               >
                 Mentions légales
               </Link>
@@ -82,7 +82,7 @@ export function Footer({
             <li>
               <Link
                 href="/politique-confidentialite"
-                className="hover:text-[var(--color-ol-orange)]"
+                className="hover:text-[var(--color-ol-orange-text)]"
               >
                 Confidentialité
               </Link>

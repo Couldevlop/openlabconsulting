@@ -51,8 +51,9 @@ export interface BookAudience {
 }
 
 export const BOOK = {
-  title: 'Intelligence Artificielle',
-  subtitle: 'Du Machine Learning aux Agents Autonomes',
+  title:
+    'Intégration de l’Intelligence Artificielle dans le développement logiciel',
+  subtitle: 'Du fondement mathématique à la mise en production',
   edition: 'Édition OpenLab Consulting · Abidjan',
   isbn: '978-2-XXXX-XXXX-X', // ISBN définitif à renseigner par l'admin Payload P6
   pageCount: 420, // estimatif, à confirmer par l'éditeur
@@ -87,8 +88,10 @@ export const BOOK = {
     },
   ] as readonly BookAudience[],
   cover: {
-    src: null as string | null, // Payload P6 fournira l'URL MinIO finale
-    alt: 'Couverture du livre Intelligence Artificielle — du Machine Learning aux Agents Autonomes, édition OpenLab Consulting',
+    src: '/livre/couverture-ia.webp' as string | null,
+    alt: 'Couverture du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel », édition OpenLab Consulting',
+    width: 1024,
+    height: 1450,
   },
 } as const;
 
@@ -209,28 +212,28 @@ export const PURCHASE_CHANNELS: readonly PurchaseChannel[] = [
   {
     name: 'Boutique OpenLab — PDF + ePub',
     description:
-      'Téléchargement immédiat après paiement Stripe. Accès illimité aux mises à jour de l’édition courante.',
+      'À la parution : téléchargement immédiat après achat, accès illimité aux mises à jour de l’édition courante.',
     href: '/livre/acheter#openlab-direct',
     primary: true,
   },
   {
     name: 'Amazon France & Afrique',
     description:
-      'Version imprimée + Kindle. Distribution rapide depuis les entrepôts européens.',
-    href: 'https://www.amazon.fr',
+      'Version imprimée + Kindle, à la parution. Distribution depuis les entrepôts européens.',
+    href: '/livre/acheter',
     primary: false,
   },
   {
     name: 'Lulu (impression à la demande)',
     description:
-      'Pour les commandes hors zones de distribution Amazon. Couverture cartonnée disponible.',
-    href: 'https://www.lulu.com',
+      'Impression à la demande mondiale, à la parution — pour les zones hors distribution Amazon. Couverture cartonnée.',
+    href: '/livre/acheter',
     primary: false,
   },
   {
     name: 'Librairies de Côte d’Ivoire',
     description:
-      'Carrefour Mercure, Librairie de France Yopougon, Librairie Aleph. Stock physique à Abidjan.',
+      'Carrefour Mercure, Librairie de France Yopougon, Librairie Aleph. Stock physique à Abidjan dès la sortie.',
     href: '/livre/acheter#libraires-ci',
     primary: false,
   },

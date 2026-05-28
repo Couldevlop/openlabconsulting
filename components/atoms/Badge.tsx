@@ -9,15 +9,15 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 
 const toneMap: Record<BadgeTone, string> = {
   production:
-    'bg-[var(--color-ol-success)]/12 text-[var(--color-ol-success)] ring-[var(--color-ol-success)]/30',
+    'bg-[var(--color-ol-success)]/12 text-[var(--color-ol-success-dark)] ring-[var(--color-ol-success)]/30',
   pilot:
-    'bg-[var(--color-ol-info)]/12 text-[var(--color-ol-info)] ring-[var(--color-ol-info)]/30',
-  mvp: 'bg-[var(--color-ol-orange)]/12 text-[var(--color-ol-orange-dark)] ring-[var(--color-ol-orange)]/30',
+    'bg-[var(--color-ol-info)]/12 text-[var(--color-ol-info-dark)] ring-[var(--color-ol-info)]/30',
+  mvp: 'bg-[var(--color-ol-orange)]/12 text-[var(--color-ol-orange-text)] ring-[var(--color-ol-orange)]/30',
   dev: 'bg-[var(--color-ol-graphite)]/8 text-[var(--color-ol-graphite)]/75 ring-[var(--color-ol-graphite)]/20',
   neutral:
     'bg-[var(--color-ol-mist)] text-[var(--color-ol-graphite)] ring-[var(--color-ol-graphite)]/15',
   orange:
-    'bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-dark)] ring-[var(--color-ol-orange)]/40',
+    'bg-[var(--color-ol-orange)]/15 text-[var(--color-ol-orange-text)] ring-[var(--color-ol-orange)]/40',
 };
 
 export function Badge({

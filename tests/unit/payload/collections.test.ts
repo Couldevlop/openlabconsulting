@@ -24,7 +24,10 @@ describe('Payload collections', () => {
       );
     });
 
-    it('a les champs critiques (title, slug, content, status, publishedAt)', () => {
+    it('a les champs critiques (title, slug, content, summary, sources, publishedAt)', () => {
+      // Le statut de publication n'est PAS un champ déclaré : il est fourni
+      // par le versioning natif (`versions.drafts` → `_status`). On évite
+      // ainsi la collision d'enum avec un champ `status` custom.
       const fieldNames = (Articles.fields ?? []).flatMap((f) =>
         'name' in f ? [f.name] : [],
       );
@@ -34,7 +37,8 @@ describe('Payload collections', () => {
         'excerpt',
         'content',
         'category',
-        'status',
+        'summary',
+        'sources',
         'publishedAt',
       ]) {
         expect(fieldNames).toContain(required);
@@ -119,7 +123,10 @@ describe('Payload collections', () => {
       );
     });
 
-    it('a les champs critiques (headline, punchline, body, productSlug, results, image, order, status)', () => {
+    it('a les champs critiques (headline, punchline, body, productSlug, results, image, order)', () => {
+      // Le statut de publication n'est PAS un champ déclaré : il est fourni
+      // par le versioning natif (`versions.drafts` → `_status`), comme pour
+      // Articles. On évite ainsi le doublon avec un champ `status` custom.
       const fieldNames = (CaseStudies.fields ?? []).flatMap((f) =>
         'name' in f ? [f.name] : [],
       );
@@ -133,10 +140,16 @@ describe('Payload collections', () => {
         'results',
         'image',
         'order',
-        'status',
       ]) {
         expect(fieldNames).toContain(required);
       }
+    });
+
+    it('ne déclare pas de champ `status` custom (publication via `_status` natif)', () => {
+      const fieldNames = (CaseStudies.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).not.toContain('status');
     });
 
     it('productSlug expose les 7 produits OpenLab', () => {

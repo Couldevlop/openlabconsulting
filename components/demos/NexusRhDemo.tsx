@@ -72,7 +72,7 @@ export function NexusRhDemo(): ReactElement {
               aria-label="Curseur salaire brut"
               className="mt-3 w-full accent-[var(--color-ol-orange)]"
             />
-            <div className="mt-1 flex justify-between text-xs text-[var(--color-ol-graphite)]/55">
+            <div className="mt-1 flex justify-between text-xs text-[var(--color-ol-graphite)]/70">
               <span>75 000</span>
               <span>3 000 000</span>
             </div>
@@ -113,7 +113,7 @@ export function NexusRhDemo(): ReactElement {
               aria-label="Nombre d'enfants à charge"
               className="mt-2 min-h-11 w-full rounded-md border border-[var(--color-ol-mist)] bg-white px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none"
             />
-            <p className="mt-1 text-xs text-[var(--color-ol-graphite)]/55">
+            <p className="mt-1 text-xs text-[var(--color-ol-graphite)]/70">
               Abattement ITS : −10 % par enfant, plafonné à −50 %.
             </p>
           </label>
@@ -133,7 +133,7 @@ export function NexusRhDemo(): ReactElement {
             </p>
             <p
               data-testid="nexusrh-net"
-              className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange)] sm:text-4xl"
+              className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--color-ol-orange-text)] sm:text-4xl"
             >
               {formatFcfa(result.net)}
             </p>
@@ -167,7 +167,7 @@ export function NexusRhDemo(): ReactElement {
         </ul>
 
         <details className="mt-8 rounded-lg bg-white/5 p-4 text-sm">
-          <summary className="cursor-pointer text-[var(--color-ol-orange)]">
+          <summary className="cursor-pointer text-[var(--color-ol-orange-text)]">
             Voir le détail des charges employeur
           </summary>
           <ul className="mt-3 space-y-2">
@@ -181,7 +181,7 @@ export function NexusRhDemo(): ReactElement {
 
         {result.trancheIts.length > 0 ? (
           <details className="mt-3 rounded-lg bg-white/5 p-4 text-sm">
-            <summary className="cursor-pointer text-[var(--color-ol-orange)]">
+            <summary className="cursor-pointer text-[var(--color-ol-orange-text)]">
               Détail des tranches ITS appliquées
             </summary>
             <table className="mt-3 w-full text-left">
@@ -243,9 +243,9 @@ function Row({
       <span
         className={
           accent
-            ? 'font-mono text-[var(--color-ol-orange)]/85'
+            ? 'font-mono text-[var(--color-ol-orange-text)]/85'
             : bold
-              ? 'font-mono text-lg font-semibold text-[var(--color-ol-orange)]'
+              ? 'font-mono text-lg font-semibold text-[var(--color-ol-orange-text)]'
               : 'font-mono text-[var(--color-ol-ivory)]/90'
         }
       >

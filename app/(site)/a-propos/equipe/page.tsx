@@ -34,7 +34,7 @@ import { SITE } from '@/lib/seo/site';
 export const metadata: Metadata = {
   title: 'Équipe — OpenLab Consulting',
   description:
-    'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
+    'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
   alternates: { canonical: '/a-propos/equipe' },
 };
 
@@ -87,7 +87,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
         <Container width="wide">
           <Link
             href="/a-propos"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-graphite)]/70 transition-colors hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-graphite)]/70 transition-colors hover:text-[var(--color-ol-orange-text)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
           >
             <ArrowLeft width={14} height={14} aria-hidden />À propos d’OpenLab
           </Link>
@@ -102,7 +102,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                 placeholderLabel={`Portrait ${DEBORA.name}`}
                 className="shadow-2xl"
               />
-              <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/60">
+              <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
                 Photo de {DEBORA.name} — à venir.
               </figcaption>
             </figure>
@@ -201,11 +201,11 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                 >
                   <span
                     aria-hidden
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange)]"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
                   >
                     <Icon width={20} height={20} aria-hidden />
                   </span>
-                  <p className="mt-4 text-xs tracking-widest text-[var(--color-ol-graphite)]/60 uppercase">
+                  <p className="mt-4 text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
                     {p.type} · {p.year}
                   </p>
                   <Heading level={3} visualLevel={4} className="mt-2">
@@ -216,7 +216,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                   </p>
                   <Link
                     href={p.href}
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] hover:underline"
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:underline"
                   >
                     Voir
                     <ArrowUpRight width={12} height={12} aria-hidden />

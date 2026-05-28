@@ -103,7 +103,7 @@ export const PUBLICATIONS: readonly Publication[] = [
   {
     type: 'livre',
     title:
-      'Intelligence Artificielle : du Machine Learning aux Agents Autonomes',
+      'Intégration de l’Intelligence Artificielle dans le développement logiciel',
     authors: ['Debora Ahouma'],
     year: 2026,
     href: '/livre',

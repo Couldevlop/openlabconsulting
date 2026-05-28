@@ -135,7 +135,7 @@ export function LocationPage({
                     width={20}
                     height={20}
                     aria-hidden
-                    className="text-[var(--color-ol-graphite)]/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ol-orange)]"
+                    className="text-[var(--color-ol-graphite)]/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ol-orange-text)]"
                   />
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--color-ol-graphite)]/80">

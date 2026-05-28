@@ -35,7 +35,7 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
             <Eyebrow tone="orange">Hub Insights</Eyebrow>
             <Heading id="insights-hub-title" level={1} className="mt-4">
               Notre lecture du{' '}
-              <span className="text-[var(--color-ol-orange)]">
+              <span className="text-[var(--color-ol-orange-text)]">
                 terrain africain
               </span>
               .
@@ -119,7 +119,7 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
             </p>
             <Link
               href="/audit-ia"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
+              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] transition-colors hover:text-[var(--color-ol-orange-dark)]"
             >
               En attendant, demande ton audit IA
               <ArrowUpRight width={14} height={14} aria-hidden />

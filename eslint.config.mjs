@@ -38,6 +38,9 @@ const config = [
       'playwright-report/**',
       'test-results/**',
       'next-env.d.ts',
+      // Migrations Payload : code SQL auto-généré (drizzle) — committé pour
+      // la prod mais non soumis au lint.
+      'migrations/**',
     ],
   },
 ];
