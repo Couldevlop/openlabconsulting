@@ -28,6 +28,11 @@ test.describe('Smoke — parcours critiques', () => {
   test('home passe l’audit axe-core WCAG 2 AA — zéro violation critique', async ({
     page,
   }) => {
+    // Mouvement réduit : coupe l'autoplay + les fondus du carrousel
+    // (CasesCarousel) → slides à pleine opacité, audit déterministe. Sinon axe
+    // peut scanner un slide en plein fondu (badge orange à opacité réduite) et
+    // flaguer un faux contraste insuffisant.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
