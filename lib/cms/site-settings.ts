@@ -64,6 +64,21 @@ export interface FooterContent {
   copyright: string;
 }
 
+export interface ReassurancePartner {
+  /** Nom de marque (alt + libellé). */
+  name: string;
+  /** URL du logo (chemin public en fallback, URL Media uploadée sinon). */
+  src: string;
+  /** Dimensions intrinsèques pour next/image (zéro CLS). */
+  width: number;
+  height: number;
+}
+
+export interface ReassuranceContent {
+  eyebrow: string;
+  partners: readonly ReassurancePartner[];
+}
+
 export const HERO_FALLBACK: HeroContent = {
   eyebrow: 'L’écosystème OpenLab',
   headlineLead: 'L’IA, au service',
@@ -134,6 +149,17 @@ export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {
       height: 1536,
     },
   },
+};
+
+export const REASSURANCE_FALLBACK: ReassuranceContent = {
+  eyebrow: 'Ils nous accompagnent depuis le terrain',
+  // Logos clients réels self-hostés dans /public/logos. Sert de défaut
+  // tant que le global Payload `reassurance-settings` n'est pas rempli.
+  partners: [
+    { name: 'DOCI', src: '/logos/doci.png', width: 267, height: 189 },
+    { name: 'Sertemef', src: '/logos/sertemef.png', width: 602, height: 203 },
+    { name: 'SPITEC', src: '/logos/spitec.png', width: 413, height: 122 },
+  ],
 };
 
 export const FOOTER_FALLBACK: FooterContent = {

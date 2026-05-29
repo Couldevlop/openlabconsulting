@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { sendLeadAcknowledgement, sendLeadNotification } from '@/lib/email';
 import { persistLead } from '@/lib/leads';
 import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
@@ -13,12 +14,8 @@ import { contactSchema, flattenZodErrors } from '@/lib/validation';
  *   1. Rate limit Redis (5 / 15 min / IP)
  *   2. Validation Zod stricte (honeypot inclus)
  *   3. Vérification Turnstile server-side
- *   4. (TODO P7) envoi email Resend → contact@openlabconsulting.com
- *   5. (TODO P9) écriture dans la collection Payload `leads`
- *
- * Pour P10, on log la soumission et renvoie 202 Accepted. La fanout
- * email + persistance lead est branchée en P7 (Claude scoring) + P9
- * (CRM Kanban).
+ *   4. Persistance lead Payload + scoring Claude (best-effort)
+ *   5. Notification équipe + accusé prospect via ZeptoMail (best-effort)
  *
  * Codes de réponse :
  *   - 202 : reçu, traitement en cours
@@ -96,7 +93,24 @@ export async function POST(req: Request): Promise<NextResponse> {
     userAgent: req.headers.get('user-agent'),
   });
 
-  // 5. Métrique Prometheus
+  // 5. Emails transactionnels ZeptoMail (best-effort, fail-soft)
+  await Promise.allSettled([
+    sendLeadNotification({
+      source: 'contact',
+      name: parsed.data.name,
+      email: parsed.data.email,
+      organization: parsed.data.organization || null,
+      subject: parsed.data.subject,
+      message: parsed.data.message,
+    }),
+    sendLeadAcknowledgement({
+      source: 'contact',
+      name: parsed.data.name,
+      email: parsed.data.email,
+    }),
+  ]);
+
+  // 6. Métrique Prometheus
   METRICS.contactSubmission('accepted');
 
   return NextResponse.json(

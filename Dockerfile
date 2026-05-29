@@ -35,6 +35,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+# Clé SITE Turnstile (publique) — inlinée au build car NEXT_PUBLIC_*.
+# Passée par release.yml via la variable Actions du même nom. Absente →
+# build sans CAPTCHA (le widget affiche le placeholder dev). Le secret
+# serveur (TURNSTILE_SECRET_KEY) n'est JAMAIS un build-arg (OWASP A05).
+ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY=""
+ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
 RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 RUN pnpm build
 

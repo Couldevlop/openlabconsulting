@@ -27,6 +27,7 @@ import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { HeroSettings } from './globals/HeroSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
+import { ReassuranceSettings } from './globals/ReassuranceSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
@@ -106,6 +107,7 @@ export default buildConfig({
   globals: [
     HeroSettings,
     ManifestoSettings,
+    ReassuranceSettings,
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,

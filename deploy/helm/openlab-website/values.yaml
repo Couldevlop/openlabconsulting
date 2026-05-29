@@ -15,6 +15,13 @@ image:
 
 replicaCount: 2
 
+# ServiceAccount dédié (référencé par deployment + migrate-job).
+# `name: ''` → le helper retombe sur le fullname du release.
+serviceAccount:
+  create: true
+  name: ''
+  annotations: {}
+
 resources:
   requests:
     cpu: 100m
@@ -72,6 +79,11 @@ config:
   PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
   BETTER_AUTH_URL: 'https://openlabconsulting.com'
   OPENLAB_TIER: 'production'
+  # Email transactionnel ZeptoMail (le token vit dans le SealedSecret).
+  ZEPTOMAIL_API_URL: 'https://api.zeptomail.eu/v1.1/email'
+  EMAIL_FROM: 'noreply@openlabconsulting.com'
+  EMAIL_FROM_NAME: 'OpenLab Consulting'
+  EMAIL_TEAM: 'waopron@openlabconsulting.com'
 
 # Le Helm chart attend que `openlab-website-secrets` (SealedSecret)
 # soit déjà appliqué dans le namespace. Voir deploy/k8s/base/secret.sealedsecret.yaml.
