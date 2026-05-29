@@ -93,3 +93,10 @@ export const SIGNATURE_PUBLICATIONS: readonly TeamPublication[] = [
 
 /** Tous les membres de l'équipe — pour itération future. */
 export const TEAM_MEMBERS: readonly TeamMember[] = [DEBORA];
+
+/**
+ * Repli hard-codé consommé par `lib/team-server.ts` quand Payload est
+ * indisponible (DB down, collection vide). Alias de `TEAM_MEMBERS` pour
+ * s'aligner sur le pattern `FALLBACK_PRODUCTS` / `FALLBACK_EXPERTISES`.
+ */
+export const FALLBACK_TEAM_MEMBERS: readonly TeamMember[] = TEAM_MEMBERS;

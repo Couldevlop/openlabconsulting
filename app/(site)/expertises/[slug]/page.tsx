@@ -11,7 +11,12 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { EXPERTISES, getExpertiseBySlug } from '@/lib/data/expertises';
+import { DynamicIcon } from '@/lib/icon-map';
+import { FALLBACK_EXPERTISES } from '@/lib/data/expertises';
+import {
+  getPublishedExpertises,
+  getExpertiseBySlug,
+} from '@/lib/expertises-server';
 import { breadcrumbSchema, serviceSchema } from '@/lib/seo/schema';
 
 interface RouteParams {
@@ -19,14 +24,15 @@ interface RouteParams {
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return EXPERTISES.map((e) => ({ slug: e.slug }));
+  // Slugs stables issus du fallback hard-codé (CI sans DB, build statique).
+  return FALLBACK_EXPERTISES.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: RouteParams): Promise<Metadata> {
   const { slug } = await params;
-  const expertise = getExpertiseBySlug(slug);
+  const expertise = await getExpertiseBySlug(slug);
   if (!expertise) {
     return { title: 'Expertise introuvable' };
   }
@@ -41,12 +47,22 @@ export default async function ExpertiseDetailPage({
   params,
 }: RouteParams): Promise<React.ReactElement> {
   const { slug } = await params;
-  const expertise = getExpertiseBySlug(slug);
+  const [expertise, expertises] = await Promise.all([
+    getExpertiseBySlug(slug),
+    getPublishedExpertises(),
+  ]);
   if (!expertise) {
     notFound();
   }
-  const { Icon, title, punchline, intro, competences, approche, produitsLies } =
-    expertise;
+  const {
+    iconKey,
+    title,
+    punchline,
+    intro,
+    competences,
+    approche,
+    produitsLies,
+  } = expertise;
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
@@ -87,7 +103,7 @@ export default async function ExpertiseDetailPage({
               aria-hidden
               className="inline-flex h-20 w-20 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
             >
-              <Icon width={40} height={40} aria-hidden />
+              <DynamicIcon name={iconKey} width={40} height={40} aria-hidden />
             </span>
 
             <div>
@@ -256,33 +272,40 @@ export default async function ExpertiseDetailPage({
           </div>
 
           <ul className="mt-10 grid gap-6 sm:grid-cols-3">
-            {EXPERTISES.filter((e) => e.slug !== slug).map((other) => (
-              <li key={other.slug}>
-                <Link
-                  href={`/expertises/${other.slug}`}
-                  className="group block h-full focus:outline-none focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                >
-                  <Card
-                    as="article"
-                    interactive
-                    className="flex h-full flex-col gap-3"
+            {expertises
+              .filter((e) => e.slug !== slug)
+              .map((other) => (
+                <li key={other.slug}>
+                  <Link
+                    href={`/expertises/${other.slug}`}
+                    className="group block h-full focus:outline-none focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
                   >
-                    <span
-                      aria-hidden
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
+                    <Card
+                      as="article"
+                      interactive
+                      className="flex h-full flex-col gap-3"
                     >
-                      <other.Icon width={20} height={20} aria-hidden />
-                    </span>
-                    <Heading level={3} visualLevel={4}>
-                      {other.title}
-                    </Heading>
-                    <p className="text-sm text-[var(--color-ol-graphite)]/70">
-                      {other.punchline}
-                    </p>
-                  </Card>
-                </Link>
-              </li>
-            ))}
+                      <span
+                        aria-hidden
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)]"
+                      >
+                        <DynamicIcon
+                          name={other.iconKey}
+                          width={20}
+                          height={20}
+                          aria-hidden
+                        />
+                      </span>
+                      <Heading level={3} visualLevel={4}>
+                        {other.title}
+                      </Heading>
+                      <p className="text-sm text-[var(--color-ol-graphite)]/70">
+                        {other.punchline}
+                      </p>
+                    </Card>
+                  </Link>
+                </li>
+              ))}
           </ul>
         </Container>
       </section>

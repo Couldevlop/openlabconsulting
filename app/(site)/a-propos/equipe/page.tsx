@@ -17,15 +17,19 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { DEBORA, SIGNATURE_PUBLICATIONS } from '@/lib/data/team';
+import { DEBORA } from '@/lib/data/team';
+import { getTeamMembers, getSignaturePublications } from '@/lib/team-server';
 import { breadcrumbSchema, jsonLdString, personSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/seo/site';
 
 /**
  * /a-propos/equipe — page E-E-A-T premium pour Debora Ahouma (audit P2 §7 #6).
  *
- * Clean architecture : toutes les données sont lues depuis `lib/data/team.ts`
- * — la page ne fait que la composition UI + injection JSON-LD.
+ * Clean architecture : les données sont lues depuis Payload via
+ * `lib/team-server.ts` (`getTeamMembers` / `getSignaturePublications`), avec
+ * repli hard-codé conservé (`FALLBACK_TEAM_MEMBERS` / `SIGNATURE_PUBLICATIONS`).
+ * La page ne fait que la composition UI + injection JSON-LD. Le premier
+ * membre (par `order`) est mis en avant comme figure dirigeante.
  *
  * OWASP : aucune entrée utilisateur, JSON-LD échappé via `jsonLdString`
  * (escape <), lien externe LinkedIn protégé `rel="noopener noreferrer"`.
@@ -49,13 +53,22 @@ const PUB_ICON: Record<string, typeof BookOpen> = {
 export default async function EquipePage(): Promise<React.ReactElement> {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
-  const debora = personSchema({
-    name: DEBORA.name,
-    jobTitle: DEBORA.jobTitle,
-    description: DEBORA.shortBio,
-    imageUrl: DEBORA.imagePath,
-    knowsAbout: DEBORA.focusAreas,
-    sameAs: DEBORA.sameAs,
+  // Données éditables Payload (repli hard-codé via team-server). On met en
+  // avant le premier membre (par `order`) comme figure dirigeante ; le repli
+  // garantit `DEBORA` même si la collection est vide ou indisponible.
+  const [members, publications] = await Promise.all([
+    getTeamMembers(),
+    getSignaturePublications(),
+  ]);
+  const member = members[0] ?? DEBORA;
+
+  const personLd = personSchema({
+    name: member.name,
+    jobTitle: member.jobTitle,
+    description: member.shortBio,
+    imageUrl: member.imagePath,
+    knowsAbout: member.focusAreas,
+    sameAs: member.sameAs,
   });
 
   const breadcrumb = breadcrumbSchema([
@@ -68,7 +81,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
 
   return (
     <main id="main">
-      <JsonLd nonce={nonce} data={debora} />
+      <JsonLd nonce={nonce} data={personLd} />
       <script
         type="application/ld+json"
         nonce={nonce}
@@ -95,33 +108,33 @@ export default async function EquipePage(): Promise<React.ReactElement> {
           <div className="mt-10 grid items-start gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
             <figure>
               <MediaPlaceholder
-                src={DEBORA.imagePath}
-                alt={`Portrait de ${DEBORA.name}, ${DEBORA.jobTitle}`}
+                src={member.imagePath}
+                alt={`Portrait de ${member.name}, ${member.jobTitle}`}
                 tone="warm"
                 aspect="3/2"
-                placeholderLabel={`Portrait ${DEBORA.name}`}
+                placeholderLabel={`Portrait ${member.name}`}
                 className="shadow-2xl"
               />
               <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
-                Photo de {DEBORA.name} — à venir.
+                Photo de {member.name} — à venir.
               </figcaption>
             </figure>
 
             <div>
               <Eyebrow tone="orange">Équipe dirigeante</Eyebrow>
               <Heading id="equipe-title" level={1} className="mt-4">
-                {DEBORA.name}
+                {member.name}
               </Heading>
               <p className="mt-3 text-lg text-[var(--color-ol-graphite)]/75">
-                {DEBORA.jobTitle} · Abidjan
+                {member.jobTitle} · Abidjan
               </p>
 
               <p className="mt-8 font-[family-name:var(--font-editorial)] text-xl leading-relaxed text-[var(--color-ol-graphite)]/85 italic sm:text-2xl">
-                « {DEBORA.quote} »
+                « {member.quote} »
               </p>
 
               <div className="mt-8 space-y-4 text-[var(--color-ol-graphite)]/85">
-                {DEBORA.bio.map((paragraph) => (
+                {member.bio.map((paragraph) => (
                   <p key={paragraph.slice(0, 40)}>{paragraph}</p>
                 ))}
               </div>
@@ -141,7 +154,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                   href="/contact"
                   className="inline-flex items-center gap-1.5 rounded-md bg-[var(--color-ol-night)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-ol-navy)]"
                 >
-                  Solliciter {DEBORA.name.split(' ')[0]}
+                  Solliciter {member.name.split(' ')[0]}
                   <ArrowUpRight width={12} height={12} aria-hidden />
                 </Link>
               </div>
@@ -159,12 +172,12 @@ export default async function EquipePage(): Promise<React.ReactElement> {
           <div className="max-w-2xl">
             <Eyebrow tone="orange">Domaines d’expertise</Eyebrow>
             <Heading id="expertise-title" level={2} className="mt-4">
-              Ce que {DEBORA.name.split(' ')[0]} maîtrise et signe publiquement.
+              Ce que {member.name.split(' ')[0]} maîtrise et signe publiquement.
             </Heading>
           </div>
 
           <ul className="mt-10 flex flex-wrap gap-3">
-            {DEBORA.focusAreas.map((area) => (
+            {member.focusAreas.map((area) => (
               <li key={area}>
                 <Badge tone="neutral">{area}</Badge>
               </li>
@@ -192,7 +205,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
           </div>
 
           <ul className="mt-12 grid gap-x-8 gap-y-10 lg:grid-cols-3">
-            {SIGNATURE_PUBLICATIONS.map((p) => {
+            {publications.map((p) => {
               const Icon = PUB_ICON[p.type] ?? BookOpen;
               return (
                 <li

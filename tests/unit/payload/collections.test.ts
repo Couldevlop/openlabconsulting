@@ -1,9 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { Articles } from '@/collections/Articles';
 import { CaseStudies } from '@/collections/CaseStudies';
+import { Expertises } from '@/collections/Expertises';
 import { Leads } from '@/collections/Leads';
 import { Media } from '@/collections/Media';
 import { Products } from '@/collections/Products';
+import { Sectors } from '@/collections/Sectors';
+import { TeamMembers } from '@/collections/TeamMembers';
+import { TeamPublications } from '@/collections/TeamPublications';
 import { Users } from '@/collections/Users';
 import { Whitepapers } from '@/collections/Whitepapers';
 import { ICON_KEYS } from '@/lib/icon-map';
@@ -282,6 +286,335 @@ describe('Payload collections', () => {
       const source = subFields?.find((sf) => sf.name === 'source');
       expect(source).toBeDefined();
       expect(source?.required).toBe(true);
+    });
+  });
+
+  describe('Expertises', () => {
+    it('a le slug "expertises"', () => {
+      expect(Expertises.slug).toBe('expertises');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(Expertises.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('useAsTitle = title', () => {
+      expect(Expertises.admin?.useAsTitle).toBe('title');
+    });
+
+    it('access.read : anonyme → contrainte _status published (OWASP A01)', () => {
+      const read = Expertises.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: null } })).toEqual({
+        _status: { equals: 'published' },
+      });
+    });
+
+    it('access.read : utilisateur authentifié → true', () => {
+      const read = Expertises.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: { id: 'u1' } } })).toBe(true);
+    });
+
+    it('ne déclare pas de champ `status` custom (publication via `_status` natif)', () => {
+      const fieldNames = (Expertises.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).not.toContain('status');
+    });
+
+    it('a les champs critiques (slug, title, iconKey, punchline, intro, competences, approche, produitsLies, order, publishedAt)', () => {
+      const fieldNames = (Expertises.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'slug',
+        'title',
+        'iconKey',
+        'punchline',
+        'intro',
+        'competences',
+        'approche',
+        'produitsLies',
+        'order',
+        'publishedAt',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('slug expose les 4 expertises OpenLab', () => {
+      const field = (Expertises.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'slug',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [
+          'conseil-strategie',
+          'agents-automatisation',
+          'data-gouvernance',
+          'cybersecurite-ia',
+        ].sort(),
+      );
+    });
+
+    it('iconKey est borné au registre ICON_KEYS', () => {
+      const field = (Expertises.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'iconKey',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [...ICON_KEYS].sort(),
+      );
+    });
+
+    it('approche contrainte à exactement 3 étapes', () => {
+      const field = (Expertises.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'approche',
+      );
+      expect((field as { minRows?: number }).minRows).toBe(3);
+      expect((field as { maxRows?: number }).maxRows).toBe(3);
+    });
+  });
+
+  describe('Sectors', () => {
+    it('a le slug "sectors"', () => {
+      expect(Sectors.slug).toBe('sectors');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(Sectors.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('useAsTitle = name', () => {
+      expect(Sectors.admin?.useAsTitle).toBe('name');
+    });
+
+    it('access.read : anonyme → contrainte _status published (OWASP A01)', () => {
+      const read = Sectors.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: null } })).toEqual({
+        _status: { equals: 'published' },
+      });
+    });
+
+    it('access.read : utilisateur authentifié → true', () => {
+      const read = Sectors.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: { id: 'u1' } } })).toBe(true);
+    });
+
+    it('ne déclare pas de champ `status` custom (publication via `_status` natif)', () => {
+      const fieldNames = (Sectors.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).not.toContain('status');
+    });
+
+    it('a les champs critiques (slug, name, iconKey, tagline, intro, enjeux, regulation, produitsLies, expertisesLies, order, publishedAt)', () => {
+      const fieldNames = (Sectors.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'slug',
+        'name',
+        'iconKey',
+        'tagline',
+        'intro',
+        'enjeux',
+        'regulation',
+        'produitsLies',
+        'expertisesLies',
+        'order',
+        'publishedAt',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('slug expose les 5 secteurs OpenLab', () => {
+      const field = (Sectors.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'slug',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [
+          'secteur-public',
+          'banque-assurance',
+          'agro-industrie',
+          'sante',
+          'telecoms-energie',
+        ].sort(),
+      );
+    });
+
+    it('iconKey est borné au registre ICON_KEYS', () => {
+      const field = (Sectors.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'iconKey',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        [...ICON_KEYS].sort(),
+      );
+    });
+
+    it('regulation contrainte à 3-5 entrées', () => {
+      const field = (Sectors.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'regulation',
+      );
+      expect((field as { minRows?: number }).minRows).toBe(3);
+      expect((field as { maxRows?: number }).maxRows).toBe(5);
+    });
+  });
+
+  describe('TeamMembers', () => {
+    it('a le slug "teamMembers"', () => {
+      expect(TeamMembers.slug).toBe('teamMembers');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(TeamMembers.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('useAsTitle = name', () => {
+      expect(TeamMembers.admin?.useAsTitle).toBe('name');
+    });
+
+    it('access.read : anonyme → contrainte _status published (OWASP A01)', () => {
+      const read = TeamMembers.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: null } })).toEqual({
+        _status: { equals: 'published' },
+      });
+    });
+
+    it('access.read : utilisateur authentifié → true', () => {
+      const read = TeamMembers.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: { id: 'u1' } } })).toBe(true);
+    });
+
+    it('ne déclare pas de champ `status` custom (publication via `_status` natif)', () => {
+      const fieldNames = (TeamMembers.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).not.toContain('status');
+    });
+
+    it('utilise `memberId` comme slug stable (et non `id`)', () => {
+      const fieldNames = (TeamMembers.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).toContain('memberId');
+      expect(fieldNames).not.toContain('id');
+    });
+
+    it('a les champs critiques (memberId, name, jobTitle, shortBio, bio, image, quote, focusAreas, sameAs, order, publishedAt)', () => {
+      const fieldNames = (TeamMembers.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'memberId',
+        'name',
+        'jobTitle',
+        'shortBio',
+        'bio',
+        'image',
+        'quote',
+        'focusAreas',
+        'sameAs',
+        'order',
+        'publishedAt',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('le champ image est un upload vers media (optionnel)', () => {
+      const field = (TeamMembers.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'image',
+      );
+      expect((field as { type?: string }).type).toBe('upload');
+      expect((field as { relationTo?: string }).relationTo).toBe('media');
+      expect((field as { required?: boolean }).required).not.toBe(true);
+    });
+  });
+
+  describe('TeamPublications', () => {
+    it('a le slug "teamPublications"', () => {
+      expect(TeamPublications.slug).toBe('teamPublications');
+    });
+
+    it('a versions drafts activé', () => {
+      expect(TeamPublications.versions).toEqual(
+        expect.objectContaining({ drafts: true }),
+      );
+    });
+
+    it('useAsTitle = title', () => {
+      expect(TeamPublications.admin?.useAsTitle).toBe('title');
+    });
+
+    it('access.read : anonyme → contrainte _status published (OWASP A01)', () => {
+      const read = TeamPublications.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: null } })).toEqual({
+        _status: { equals: 'published' },
+      });
+    });
+
+    it('access.read : utilisateur authentifié → true', () => {
+      const read = TeamPublications.access?.read as (args: {
+        req: { user: unknown };
+      }) => unknown;
+      expect(read({ req: { user: { id: 'u1' } } })).toBe(true);
+    });
+
+    it('ne déclare pas de champ `status` custom (publication via `_status` natif)', () => {
+      const fieldNames = (TeamPublications.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      expect(fieldNames).not.toContain('status');
+    });
+
+    it('a les champs critiques (pubType, title, year, description, href, order, publishedAt)', () => {
+      const fieldNames = (TeamPublications.fields ?? []).flatMap((f) =>
+        'name' in f ? [f.name] : [],
+      );
+      for (const required of [
+        'pubType',
+        'title',
+        'year',
+        'description',
+        'href',
+        'order',
+        'publishedAt',
+      ]) {
+        expect(fieldNames).toContain(required);
+      }
+    });
+
+    it('pubType expose les 4 natures de publication', () => {
+      const field = (TeamPublications.fields ?? []).find(
+        (f) => 'name' in f && f.name === 'pubType',
+      );
+      const options = (field as { options?: { value: string }[] }).options;
+      expect(options?.map((o) => o.value).sort()).toEqual(
+        ['Livre', 'Livre blanc', 'Conférence', 'Article pair-évalué'].sort(),
+      );
     });
   });
 

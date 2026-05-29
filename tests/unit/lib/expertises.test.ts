@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { EXPERTISES, getExpertiseBySlug } from '@/lib/data/expertises';
+import {
+  EXPERTISES,
+  FALLBACK_EXPERTISES,
+  getExpertiseBySlug,
+} from '@/lib/data/expertises';
+import { isIconKey } from '@/lib/icon-map';
 
 describe('lib/data/expertises', () => {
   it('expose exactement 4 expertises (CLAUDE.md §5)', () => {
@@ -19,12 +24,20 @@ describe('lib/data/expertises', () => {
     );
   });
 
-  it('chaque expertise a un title, punchline, intro, Icon', () => {
+  it('chaque expertise a un title, punchline, intro, iconKey', () => {
     for (const e of EXPERTISES) {
       expect(e.title.length).toBeGreaterThan(3);
       expect(e.punchline.length).toBeGreaterThan(10);
       expect(e.intro.length).toBeGreaterThan(50);
-      expect(typeof e.Icon).toBe('object');
+      // iconKey sérialisable (string), résolu au rendu via DynamicIcon.
+      expect(typeof e.iconKey).toBe('string');
+      expect(e.iconKey.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('chaque iconKey est une clé du registre ICON_MAP', () => {
+    for (const e of EXPERTISES) {
+      expect(isIconKey(e.iconKey)).toBe(true);
     }
   });
 
@@ -72,5 +85,9 @@ describe('lib/data/expertises', () => {
   it('getExpertiseBySlug retourne undefined pour un slug inconnu', () => {
     expect(getExpertiseBySlug('inexistante')).toBeUndefined();
     expect(getExpertiseBySlug('')).toBeUndefined();
+  });
+
+  it('FALLBACK_EXPERTISES est un alias de EXPERTISES', () => {
+    expect(FALLBACK_EXPERTISES).toBe(EXPERTISES);
   });
 });
