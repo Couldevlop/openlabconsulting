@@ -18,30 +18,27 @@ describe('Reassurance (homepage §6.2)', () => {
     ).toBeInTheDocument();
   });
 
-  it('expose les 4 logos clients avec alt textuel', () => {
+  it('expose les 3 logos clients avec alt textuel', () => {
     render(<Reassurance />);
     const section = screen.getByTestId('reassurance');
     const list = within(section).getByRole('list');
     const items = within(list).getAllByRole('listitem');
-    expect(items).toHaveLength(4);
+    expect(items).toHaveLength(3);
 
     expect(
-      within(section).getByRole('img', { name: /SIDO/i }),
-    ).toBeInTheDocument();
-    expect(
-      within(section).getByRole('img', { name: /HCI/i }),
+      within(section).getByRole('img', { name: /DOCI/i }),
     ).toBeInTheDocument();
     expect(
       within(section).getByRole('img', { name: /Sertemef/i }),
     ).toBeInTheDocument();
     expect(
-      within(section).getByRole('img', { name: /DOCI/i }),
+      within(section).getByRole('img', { name: /SPITEC/i }),
     ).toBeInTheDocument();
   });
 
-  it('pointe sur les SVG self-hosted dans /logos/', () => {
+  it('pointe sur les logos self-hosted dans /logos/', () => {
     render(<Reassurance />);
-    const sido = screen.getByRole('img', { name: /SIDO/i });
-    expect(sido.getAttribute('src')).toContain('/logos/sido.svg');
+    const doci = screen.getByRole('img', { name: /DOCI/i });
+    expect(doci.getAttribute('src')).toContain('/logos/doci.png');
   });
 });
