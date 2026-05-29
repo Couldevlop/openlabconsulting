@@ -26,8 +26,8 @@ describe('Footer', () => {
       screen.getByRole('link', { name: /\+225 07 09 33 42 38/ }),
     ).toHaveAttribute('href', 'tel:+2250709334238');
     expect(
-      screen.getByRole('link', { name: /infos@openlabconsulting.com/i }),
-    ).toHaveAttribute('href', 'mailto:infos@openlabconsulting.com');
+      screen.getByRole('link', { name: /waopron@openlabconsulting.com/i }),
+    ).toHaveAttribute('href', 'mailto:waopron@openlabconsulting.com');
   });
 
   it('inclut mentions légales et politique de confidentialité', () => {
