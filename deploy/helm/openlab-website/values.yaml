@@ -144,7 +144,7 @@ postgresql:
     persistence:
       enabled: true
       size: 50Gi
-      storageClass: longhorn
+      storageClass: local-path
     resources:
       requests:
         cpu: 250m
@@ -163,7 +163,7 @@ redis:
     persistence:
       enabled: true
       size: 5Gi
-      storageClass: longhorn
+      storageClass: local-path
     resources:
       requests:
         cpu: 50m
@@ -183,7 +183,7 @@ minio:
   persistence:
     enabled: true
     size: 50Gi
-    storageClass: longhorn
+    storageClass: local-path
   defaultBuckets: 'openlab-media'
 
 # ────────────────────────────────────────────────────────────
@@ -197,7 +197,7 @@ meilisearch:
   persistence:
     enabled: true
     size: 10Gi
-    storageClass: longhorn
+    storageClass: local-path
   resources:
     requests:
       cpu: 100m
