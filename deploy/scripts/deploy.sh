@@ -109,25 +109,32 @@ helm upgrade --install "$RELEASE" "$CHART_DIR" \
 # ────────────────────────────────────────────────────────────
 # 6. Smoke test HTTPS (< 1 min)
 # ────────────────────────────────────────────────────────────
-echo "▶ 6/7 Smoke test"
-SMOKE_OK=0
-for i in $(seq 1 24); do
-  if curl -fsS --max-time 5 "https://${HOST}/api/health" >/dev/null 2>&1; then
-    SMOKE_OK=1
-    break
-  fi
-  sleep 5
-done
+# SKIP_SMOKE=1 : saute le test (utile en CD avant le cutover DNS, ou
+# quand le host public ne pointe pas encore sur le cluster). La santé
+# des pods est déjà garantie par `helm --wait --atomic` + readiness.
+if [[ "${SKIP_SMOKE:-0}" == "1" ]]; then
+  echo "▶ 6/7 Smoke test — SAUTÉ (SKIP_SMOKE=1)"
+else
+  echo "▶ 6/7 Smoke test"
+  SMOKE_OK=0
+  for i in $(seq 1 24); do
+    if curl -fsS --max-time 5 "https://${HOST}/api/health" >/dev/null 2>&1; then
+      SMOKE_OK=1
+      break
+    fi
+    sleep 5
+  done
 
-if [[ "$SMOKE_OK" -ne 1 ]]; then
-  echo "❌ Smoke test failed après 2 min"
-  echo "   Pods :"
-  kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/name=openlab-website
-  echo "   Logs (dernier pod) :"
-  kubectl logs -n "$NAMESPACE" -l app.kubernetes.io/name=openlab-website --tail=50
-  echo ""
-  echo "   Rollback recommandé : bash deploy/scripts/rollback.sh $ENVIRONMENT"
-  exit 1
+  if [[ "$SMOKE_OK" -ne 1 ]]; then
+    echo "❌ Smoke test failed après 2 min"
+    echo "   Pods :"
+    kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/name=openlab-website
+    echo "   Logs (dernier pod) :"
+    kubectl logs -n "$NAMESPACE" -l app.kubernetes.io/name=openlab-website --tail=50
+    echo ""
+    echo "   Rollback recommandé : bash deploy/scripts/rollback.sh $ENVIRONMENT"
+    exit 1
+  fi
 fi
 
 # ────────────────────────────────────────────────────────────
