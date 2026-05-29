@@ -37,6 +37,10 @@ dependencies:
     repository: 'https://charts.bitnami.com/bitnami'
     condition: redis.enabled
   - name: minio
-    version: '14.9.3'
+    # 14.9.3 a été purgé de l'index Bitnami (catalogue 2025). 17.x est la
+    # plus ancienne ligne encore servie. Clés `auth.*`/`mode`/`defaultBuckets`
+    # inchangées. ⚠️ « Bitnami Secure Images » (août 2025) peut déplacer
+    # l'image vers bitnamilegacy/minio — valider le pull au 1er déploiement.
+    version: '17.0.21'
     repository: 'https://charts.bitnami.com/bitnami'
     condition: minio.enabled

@@ -4,10 +4,13 @@ import {
   FOOTER_FALLBACK,
   HERO_FALLBACK,
   MANIFESTO_FALLBACK,
+  REASSURANCE_FALLBACK,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
   type ManifestoContent,
+  type ReassuranceContent,
+  type ReassurancePartner,
 } from './site-settings';
 
 /**
@@ -139,4 +142,85 @@ export async function getAuditIaCtaContent(): Promise<AuditIaCtaContent> {
 
 export async function getFooterContent(): Promise<FooterContent> {
   return readGlobal('footer-settings', FOOTER_FALLBACK);
+}
+
+interface RawMedia {
+  url?: string | null;
+  width?: number | null;
+  height?: number | null;
+}
+
+interface RawPartner {
+  name?: unknown;
+  logo?: RawMedia | string | number | null;
+}
+
+/**
+ * Payload préfixe les URLs d'upload par `serverURL`. On relativise pour
+ * que `next/image` les accepte sans whitelister de domaine (mirror de
+ * lib/team-server.ts / articles-server.ts).
+ */
+function toRelativeMediaUrl(url: string): string {
+  try {
+    return /^https?:\/\//i.test(url) ? new URL(url).pathname : url;
+  } catch {
+    return url;
+  }
+}
+
+/** Mappe un item Payload {name, logo:media} → ReassurancePartner, ou null. */
+function toPartner(raw: RawPartner): ReassurancePartner | null {
+  const name = typeof raw.name === 'string' ? raw.name.trim() : '';
+  const media =
+    raw.logo && typeof raw.logo === 'object' ? (raw.logo as RawMedia) : null;
+  const url = media?.url ? toRelativeMediaUrl(media.url) : '';
+  if (!name || !url) return null;
+  return {
+    name,
+    src: url,
+    // Media expose width/height ; défauts sûrs si absents.
+    width: typeof media?.width === 'number' ? media.width : 160,
+    height: typeof media?.height === 'number' ? media.height : 48,
+  };
+}
+
+/**
+ * Bandeau réassurance (CLAUDE.md §6.2). Fetch le global `reassurance-settings`,
+ * résout les logos uploadés (Media), retombe sur les logos par défaut si le
+ * global est vide ou Payload indisponible.
+ */
+export async function getReassuranceContent(): Promise<ReassuranceContent> {
+  try {
+    const { getPayload } = await import('payload');
+    const config = (await import('@payload-config')).default;
+    const payload = await getPayload({ config });
+    const doc = (await payload.findGlobal({
+      slug: 'reassurance-settings',
+      depth: 1,
+    })) as { eyebrow?: unknown; partners?: unknown };
+
+    const eyebrow =
+      typeof doc.eyebrow === 'string' && doc.eyebrow.trim()
+        ? doc.eyebrow.trim()
+        : REASSURANCE_FALLBACK.eyebrow;
+
+    const partners = Array.isArray(doc.partners)
+      ? doc.partners
+          .map((p) => toPartner(p as RawPartner))
+          .filter((p): p is ReassurancePartner => p !== null)
+      : [];
+
+    return {
+      eyebrow,
+      partners: partners.length > 0 ? partners : REASSURANCE_FALLBACK.partners,
+    };
+  } catch (err) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        '[cms] fallback Global reassurance-settings — Payload indisponible:',
+        (err as Error).message,
+      );
+    }
+    return REASSURANCE_FALLBACK;
+  }
 }

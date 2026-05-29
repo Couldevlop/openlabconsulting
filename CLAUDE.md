@@ -204,7 +204,7 @@ CMS              : Payload CMS v3 (self-hosted, Node.js, intégré Next.js)
 Authentification : Better-Auth (Next.js natif) + Keycloak (SSO unifié avec NexusRH)
 i18n             : next-intl (FR par défaut, EN en S2)
 Analytics        : Plausible self-hosted (RGPD)
-Email transac    : Resend ou Brevo SMTP
+Email transac    : Zoho ZeptoMail (API HTTP, port 443 — compatible NetworkPolicy)
 Storage fichiers : MinIO self-hosted (S3-compatible, dans le cluster)
 IA on-site       : Anthropic Claude API (assistant + audit IA + résumés blog)
 Recherche        : Meilisearch self-hosted (rapide, faible RAM)

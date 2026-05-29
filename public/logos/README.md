@@ -1,22 +1,28 @@
-# Logos clients
+# Logos clients / partenaires
 
-SVG vectoriels utilisés par `components/sections/Reassurance.tsx` (§6 section 2 du CLAUDE.md).
+Bandeau « Ils nous accompagnent depuis le terrain » (CLAUDE.md §6.2),
+rendu par `components/sections/Reassurance.tsx`.
 
-## Placeholders à remplacer
+## Pilotage depuis l'admin (source de vérité)
 
-Les SVG actuels sont des **placeholders typographiques** (mot-clé client en Bricolage Grotesque). À substituer dès que le design fournit les vrais logos officiels :
+Les logos sont **pilotables depuis Payload** via le global
+**Réassurance — Homepage** (`globals/ReassuranceSettings.ts`,
+slug `reassurance-settings`) : l'éditeur ajoute/retire des partenaires
+(nom + logo uploadé dans Media) sans toucher au code.
 
-| Slug | Client | Statut |
-|---|---|---|
-| `sido.svg` | SIDO | Placeholder |
-| `hci.svg` | HCI | Placeholder |
-| `sertemef.svg` | Sertemef | Placeholder |
-| `doci.svg` | DOCI | Placeholder |
+Le helper `getReassuranceContent()` (`lib/cms/site-settings-server.ts`)
+fetch ce global et retombe sur les fichiers ci-dessous (`REASSURANCE_FALLBACK`
+dans `lib/cms/site-settings.ts`) tant que le global n'est pas rempli, ou
+si Payload est indisponible (résilience).
 
-## Contraintes pour les SVG officiels
+## Logos par défaut (fallback)
 
-- Format : `<svg viewBox="0 0 W H">` avec ratio cohérent (largeur ≈ 3-4× hauteur).
-- Couleur : utiliser `fill="currentColor"` pour que la couleur suive `text-*` côté composant (filtre grayscale appliqué par défaut, colorisation au hover via `group-hover`).
-- Pas de filtres CSS lourds, pas de gradients complexes (impact perf).
-- Inclure `<title>` ou `role="img" aria-label="..."` pour l'a11y — le composant fournit déjà `alt` via `next/image`, mais doubler en accessibilité interne SVG ne coûte rien.
-- Hauteur visuelle cible : 32-40 px sur desktop, 24-28 px sur mobile.
+| Fichier | Client | Dimensions |
+| --- | --- | --- |
+| `doci.png` | DOCI | 267×189 |
+| `sertemef.png` | Sertemef | 602×203 |
+| `spitec.png` | SPITEC | 413×122 |
+
+Pour changer le fallback, remplacer ces fichiers (mêmes noms) et ajuster
+les dimensions dans `REASSURANCE_FALLBACK`. Pour le contenu réel en prod,
+préférer l'upload via l'admin.

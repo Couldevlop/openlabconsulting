@@ -74,6 +74,10 @@ schema.graphql
 .payload/
 media/
 
+# Helm — sous-charts vendored (re-fetchés par `helm dependency build`).
+# Chart.lock EST commité (pin reproductible), pas les archives.
+deploy/helm/*/charts/
+
 # Credentials dev — JAMAIS commit (OWASP §10 A02 + A07).
 # Convention : tout fichier `.local.md` est ignoré par git.
 *.local.md

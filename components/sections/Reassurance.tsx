@@ -3,41 +3,36 @@ import Image from 'next/image';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Marquee } from '@/components/atoms/Marquee';
+import {
+  REASSURANCE_FALLBACK,
+  type ReassuranceContent,
+} from '@/lib/cms/site-settings';
 
-interface ClientLogo {
-  /** Slug (= nom de fichier sans extension dans /public/logos). */
-  slug: 'sido' | 'hci' | 'sertemef' | 'doci';
-  /** Nom de marque tel que prononcé (utilisé comme alt + visible). */
-  name: string;
-  /** Ratio approximatif pour next/image — viewBox du SVG. */
-  width: number;
+interface ReassuranceProps {
+  /** Contenu CMS (global `reassurance-settings`). Fallback si omis. */
+  content?: ReassuranceContent;
 }
 
-const CLIENTS: readonly ClientLogo[] = [
-  { slug: 'sido', name: 'SIDO', width: 140 },
-  { slug: 'hci', name: 'HCI', width: 140 },
-  { slug: 'sertemef', name: 'Sertemef', width: 180 },
-  { slug: 'doci', name: 'DOCI', width: 140 },
-] as const;
-
 /**
- * Reassurance — Section 2 de la homepage (CLAUDE.md §6).
+ * Reassurance — Section 2 de la homepage (CLAUDE.md §6.2).
  *
- * Bande sobre juste après le Hero. Sert de preuve sociale immédiate
- * (« qui leur fait déjà confiance ? ») sans étourdir le visiteur.
+ * Bande sobre juste après le Hero. Preuve sociale immédiate (« qui leur
+ * fait déjà confiance ? ») sans étourdir le visiteur.
  *
- * Depuis P2 polish-v1 : marquee continu (Motion v12) au lieu d'un
- * wrap statique. Plus dynamique, signature visuelle. La liste est
- * dupliquée DOM pour SEO (les noms restent indexables, plus une
- * fois pour la boucle infinie).
+ * Clean architecture : composant purement présentationnel. Le contenu
+ * (libellé + logos partenaires) est piloté depuis l'admin Payload via le
+ * global `reassurance-settings`, fetché par `getReassuranceContent()` et
+ * passé en prop. Sans contenu, on retombe sur `REASSURANCE_FALLBACK`.
  *
  * Règles respectées :
- * - Pas de stock photo : SVG vectoriels self-hosted dans /public/logos
+ * - Pas de stock photo : logos clients réels self-hosted (ou uploadés admin)
  * - Orange < 15 % : aucun orange ici, contraste assuré par typo
  * - Mobile-first : marquee responsive
  * - A11y : noms en alt, prefers-reduced-motion → marquee gelée
  */
-export function Reassurance(): ReactElement {
+export function Reassurance({ content }: ReassuranceProps): ReactElement {
+  const { eyebrow, partners } = content ?? REASSURANCE_FALLBACK;
+
   return (
     <section
       aria-label="Clients et partenaires"
@@ -46,7 +41,7 @@ export function Reassurance(): ReactElement {
     >
       <Container width="wide">
         <Eyebrow tone="graphite" className="text-center">
-          Ils nous accompagnent depuis le terrain
+          {eyebrow}
         </Eyebrow>
 
         <div className="mt-10">
@@ -57,19 +52,19 @@ export function Reassurance(): ReactElement {
               data-testid="reassurance-logos"
               className="flex items-center gap-x-12 sm:gap-x-16"
             >
-              {CLIENTS.map((client) => (
+              {partners.map((partner) => (
                 <li
-                  key={client.slug}
-                  className="text-[var(--color-ol-graphite)]/70 transition-colors duration-300 hover:text-[var(--color-ol-graphite)]"
+                  key={partner.name}
+                  className="opacity-80 transition-opacity duration-300 hover:opacity-100"
                 >
                   <Image
-                    src={`/logos/${client.slug}.svg`}
-                    alt={client.name}
-                    width={client.width}
-                    height={40}
+                    src={partner.src}
+                    alt={partner.name}
+                    width={partner.width}
+                    height={partner.height}
                     priority={false}
                     unoptimized
-                    className="h-8 w-auto sm:h-10"
+                    className="h-9 w-auto sm:h-11"
                   />
                 </li>
               ))}

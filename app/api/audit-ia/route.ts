@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { sendLeadAcknowledgement, sendLeadNotification } from '@/lib/email';
 import { persistLead } from '@/lib/leads';
 import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
@@ -13,8 +14,8 @@ import { auditIaSchema, flattenZodErrors } from '@/lib/validation';
  *   1. Rate limit Redis (3 / 1h / IP — plus strict que contact)
  *   2. Validation Zod (consentement RGPD obligatoire)
  *   3. Turnstile server-side
- *   4. (TODO P7) scoring Claude + génération rapport PDF + envoi email
- *   5. (TODO P9) écriture lead enrichi dans Payload `leads`
+ *   4. Persistance lead enrichi Payload + scoring Claude (best-effort)
+ *   5. Notification équipe + accusé prospect via ZeptoMail (best-effort)
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -96,6 +97,27 @@ export async function POST(req: Request): Promise<NextResponse> {
     ipAddress: ip,
     userAgent: req.headers.get('user-agent'),
   });
+
+  // Emails transactionnels ZeptoMail (best-effort, fail-soft)
+  await Promise.allSettled([
+    sendLeadNotification({
+      source: 'audit-ia',
+      name: parsed.data.name,
+      email: parsed.data.email,
+      organization: parsed.data.organization,
+      jobTitle: parsed.data.jobTitle,
+      message: parsed.data.goal,
+      details: {
+        'Maturité IA': parsed.data.maturity,
+        Effectif: parsed.data.headcount,
+      },
+    }),
+    sendLeadAcknowledgement({
+      source: 'audit-ia',
+      name: parsed.data.name,
+      email: parsed.data.email,
+    }),
+  ]);
 
   METRICS.auditIaSubmission('accepted');
 
