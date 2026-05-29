@@ -37,10 +37,10 @@ export function Footer({
               </a>
               <br />
               <a
-                href="mailto:infos@openlabconsulting.com"
+                href="mailto:waopron@openlabconsulting.com"
                 className="hover:text-[var(--color-ol-orange-text)]"
               >
-                infos@openlabconsulting.com
+                waopron@openlabconsulting.com
               </a>
             </address>
           </div>

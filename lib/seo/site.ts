@@ -28,7 +28,7 @@ export const SITE = {
   contact: {
     primaryPhone: '+225 07 09 33 42 38',
     secondaryPhone: '+33 06 19 24 53 29',
-    email: 'infos@openlabconsulting.com',
+    email: 'waopron@openlabconsulting.com',
     salesEmail: 'waopron@openlabconsulting.com',
   },
   social: {
