@@ -15,6 +15,13 @@ image:
 
 replicaCount: 2
 
+# ServiceAccount dédié (référencé par deployment + migrate-job).
+# `name: ''` → le helper retombe sur le fullname du release.
+serviceAccount:
+  create: true
+  name: ''
+  annotations: {}
+
 resources:
   requests:
     cpu: 100m
