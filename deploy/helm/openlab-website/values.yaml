@@ -46,11 +46,13 @@ service:
   port: 3000
 
 # ────────────────────────────────────────────────────────────
-# Ingress + TLS (Traefik + cert-manager)
+# Ingress + TLS (ingress-nginx + cert-manager)
+# Le cluster K3s Hetzner tourne ingress-nginx (k3s --disable traefik),
+# comme nexusrh/diagnostix déjà en prod. Classe = nginx.
 # ────────────────────────────────────────────────────────────
 ingress:
   enabled: true
-  className: 'traefik'
+  className: 'nginx'
   hosts:
     - host: openlabconsulting.com
       paths:
@@ -66,9 +68,14 @@ ingress:
         - openlabconsulting.com
         - www.openlabconsulting.com
   annotations:
+    # cert-manager émet le cert Let's Encrypt (HTTP-01 via ingress-nginx).
+    # Recette alignée sur nexusrh/diagnostix (déjà en prod sur ce cluster).
     cert-manager.io/cluster-issuer: 'letsencrypt-prod'
-    traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
-    traefik.ingress.kubernetes.io/router.tls: 'true'
+    # Force HTTPS (redirect 80→443) côté contrôleur nginx.
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    # Uploads médias admin Payload → MinIO : relever la limite de corps
+    # (défaut nginx = 1m → 413 sur images). 50m comme nexusrh.
+    nginx.ingress.kubernetes.io/proxy-body-size: '50m'
 
 # ────────────────────────────────────────────────────────────
 # Configuration applicative (CLAUDE.md §14.8)

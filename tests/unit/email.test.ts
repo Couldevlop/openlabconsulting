@@ -167,4 +167,87 @@ describe('lib/email — envoi ZeptoMail', () => {
     expect(res.ok).toBe(false);
     expect(res.error).toBe('network down');
   });
+
+  it('accusé audit-ia : objet et délai spécifiques', async () => {
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue({ ok: true, status: 201 } as Response);
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    const res = await sendLeadAcknowledgement({
+      source: 'audit-ia',
+      name: 'Awa',
+      email: 'awa@example.ci',
+    });
+
+    expect(res.ok).toBe(true);
+    const [, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.subject).toContain('audit IA');
+    expect(body.textbody).toContain('48 h');
+  });
+
+  it('notification : champs optionnels (subject/score/résumé) et absences', async () => {
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue({ ok: true, status: 201 } as Response);
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    // subject connu + aiScore + aiSummary présents ; org/jobTitle/message absents.
+    await sendLeadNotification({
+      source: 'contact',
+      name: 'Solo',
+      email: 'solo@example.com',
+      subject: 'presse',
+      aiScore: 72,
+      aiSummary: 'Lead presse à fort potentiel.',
+    });
+    const [, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.htmlbody).toContain('Presse'); // libellé mappé
+    expect(body.htmlbody).toContain('72 / 100');
+    expect(body.textbody).toContain('Lead presse à fort potentiel.');
+  });
+
+  it('notification : sujet inconnu → libellé brut (fallback subjectLabel)', async () => {
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue({ ok: true, status: 201 } as Response);
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    await sendLeadNotification({
+      source: 'contact',
+      name: 'X',
+      email: 'x@example.com',
+      subject: 'sujet-non-mappe',
+    });
+    const [, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.htmlbody).toContain('sujet-non-mappe');
+  });
+
+  it('readConfig : valeurs par défaut quand seules les variables minimales sont définies', async () => {
+    delete process.env.ZEPTOMAIL_API_URL;
+    delete process.env.EMAIL_FROM;
+    delete process.env.EMAIL_FROM_NAME;
+    delete process.env.EMAIL_TEAM;
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue({ ok: true, status: 201 } as Response);
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    await sendLeadNotification({
+      source: 'contact',
+      name: 'Def',
+      email: 'def@example.com',
+    });
+    const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe('https://api.zeptomail.eu/v1.1/email');
+    const body = JSON.parse(init.body as string);
+    expect(body.from.address).toBe('noreply@openlabconsulting.com');
+    expect(body.from.name).toBe('OpenLab Consulting');
+    expect(body.to[0].email_address.address).toBe(
+      'waopron@openlabconsulting.com',
+    );
+  });
 });
