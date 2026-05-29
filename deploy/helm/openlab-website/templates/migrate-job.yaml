@@ -7,9 +7,13 @@ metadata:
     {{- include "openlab-website.labels" . | nindent 4 }}
     app.kubernetes.io/component: migration
   annotations:
-    # Hook Helm : pré-install + pré-upgrade. Le Job est nettoyé après
-    # succès, recréé à chaque release. Migrations Payload idempotentes.
-    helm.sh/hook: pre-install,pre-upgrade
+    # Hook Helm. Migrations Payload idempotentes, Job nettoyé après succès.
+    # - post-install : 1ʳᵉ install → Postgres (sous-chart) est déjà prêt
+    #   (les hooks pre-install tournent AVANT les ressources, donc avant
+    #   Postgres → deadlock sur l'attente de la DB). post-install corrige.
+    # - pre-upgrade : montées de version → la DB existe, on migre avant
+    #   de basculer les nouveaux pods applicatifs.
+    helm.sh/hook: post-install,pre-upgrade
     helm.sh/hook-weight: '0'
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
