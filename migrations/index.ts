@@ -3,6 +3,7 @@ import * as migration_20260526_162656_case_studies_drop_custom_status from './20
 import * as migration_20260528_180745_add_products from './20260528_180745_add_products';
 import * as migration_20260528_204729_add_expertises_sectors from './20260528_204729_add_expertises_sectors';
 import * as migration_20260528_223718_add_team from './20260528_223718_add_team';
+import * as migration_20260530_083756_add_reassurance_settings from './20260530_083756_add_reassurance_settings';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20260528_223718_add_team.up,
     down: migration_20260528_223718_add_team.down,
-    name: '20260528_223718_add_team'
+    name: '20260528_223718_add_team',
+  },
+  {
+    up: migration_20260530_083756_add_reassurance_settings.up,
+    down: migration_20260530_083756_add_reassurance_settings.down,
+    name: '20260530_083756_add_reassurance_settings'
   },
 ];
