@@ -133,6 +133,17 @@ networkPolicy:
 postgresql:
   enabled: true
   fullnameOverride: 'postgres'
+  # Bitnami a retiré les images versionnées de `docker.io/bitnami` (Secure
+  # Images / Broadcom, août 2025) → tags archivés sous `bitnamilegacy`.
+  # On surcharge le repository (namespace `bitnamilegacy/…`, PAS via
+  # global.imageRegistry qui ne préfixe que le registre et casserait le
+  # chemin) + allowInsecureImages (charts récents refusent un repo non
+  # officiel sinon).
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/postgresql
   auth:
     username: 'openlab'
     database: 'openlab'
@@ -156,6 +167,12 @@ postgresql:
 redis:
   enabled: true
   fullnameOverride: 'redis'
+  # Idem postgres : image Bitnami archivée sous bitnamilegacy.
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/redis
   architecture: 'standalone'
   auth:
     enabled: false # Réseau interne, NetworkPolicy filtre déjà.
@@ -175,6 +192,16 @@ redis:
 minio:
   enabled: true
   fullnameOverride: 'minio'
+  # Idem postgres : images Bitnami (minio + minio-object-browser console)
+  # archivées sous bitnamilegacy. On surcharge les deux repositories.
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/minio
+  console:
+    image:
+      repository: bitnamilegacy/minio-object-browser
   mode: 'standalone'
   auth:
     existingSecret: 'openlab-website-secrets'
