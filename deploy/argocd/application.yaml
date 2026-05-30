@@ -1,0 +1,74 @@
+# ArgoCD Application — OpenLab Website (production).
+#
+# GitOps pull-based : ArgoCD, depuis l'intérieur du cluster K3s Hetzner,
+# surveille ce repo et applique le chart Helm `deploy/helm/openlab-website`.
+# Plus aucune connexion SSH entrante ni secret `DEPLOY_SSH_*` côté GitHub
+# (OWASP A05 — surface d'exposition réduite). GitHub ne fait que builder
+# et pousser l'image sur GHCR (workflow release.yml, job `publish`).
+#
+# Le tag d'image est tenu à jour automatiquement par ArgoCD Image Updater
+# (cf. annotations ci-dessous + deploy/argocd/README.md) : à chaque
+# nouvelle release `vX.Y.Z`, l'image `ghcr.io/couldevlop/website:X.Y.Z`
+# est publiée, Image Updater détecte la version la plus haute et écrit le
+# nouveau tag — déclenchant un sync automatique.
+#
+# Prérequis appliqués HORS de cet objet (cf. deploy/argocd/README.md) :
+#   - Namespace `openlab` + Secret `openlab-website-secrets` (kubectl).
+#   - ArgoCD + ArgoCD Image Updater installés dans le namespace `argocd`.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openlab-website
+  namespace: argocd
+  annotations:
+    # ── ArgoCD Image Updater ───────────────────────────────────────
+    # Suit l'image et ne met à jour QUE le tag (repository fixe).
+    argocd-image-updater.argoproj.io/image-list: web=ghcr.io/couldevlop/website
+    # Stratégie semver : prend toujours le plus haut tag stable X.Y.Z.
+    argocd-image-updater.argoproj.io/web.update-strategy: semver
+    # N'accepte que les tags de release `X.Y.Z` (ignore `latest`, `sha-…`,
+    # `X`, `X.Y`, et les pré-releases `X.Y.Z-rc.N`).
+    argocd-image-updater.argoproj.io/web.allow-tags: 'regexp:^[0-9]+\.[0-9]+\.[0-9]+$'
+    # Mappe l'image sur les clés du chart Helm.
+    argocd-image-updater.argoproj.io/web.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/web.helm.image-tag: image.tag
+    # write-back = argocd : le nouveau tag est écrit dans les paramètres
+    # Helm de CETTE Application (pas de push Git → aucun token d'écriture
+    # GitHub à stocker dans le cluster). Pour basculer en GitOps « pur »
+    # (write-back git), voir README.md §5.
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/Couldevlop/openlabconsulting.git
+    targetRevision: main
+    path: deploy/helm/openlab-website
+    helm:
+      valueFiles:
+        - values-production.yaml
+      # Tag initial = image déjà publiée. Image Updater le fera ensuite
+      # évoluer tout seul (write-back argocd patche ce paramètre).
+      parameters:
+        - name: image.tag
+          value: '1.0.2'
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openlab
+
+  syncPolicy:
+    automated:
+      prune: true # supprime les ressources retirées du chart
+      selfHeal: true # ré-applique si dérive manuelle dans le cluster
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
