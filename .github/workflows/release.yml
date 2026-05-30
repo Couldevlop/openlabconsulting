@@ -1,37 +1,28 @@
-# Release workflow — build + push image GHCR + signature Cosign.
+# Release workflow — CD continu déclenché par un PUSH sur `main`.
 #
-# Déclenché sur tag `v*` (ex. v1.0.0, v1.2.3-rc.1). Permet à
-# `deploy/scripts/deploy.sh production v1.0.0` de pull l'image depuis
-# GHCR. Cf. CLAUDE.md §14.7 et docs/migration-lws-hetzner.md §6.
+# Flux voulu : push/merge sur `main`  →  portes vertes (CI)  →  création
+# automatique d'un tag `vX.Y.Z`  →  build + push de l'image GHCR `X.Y.Z`
+# →  ArgoCD Image Updater (stratégie semver) déploie sur le cluster.
 #
-# Reuse du pipeline de build CI (Chainguard distroless final, multi-arch
-# amd64 suffisant pour K3s Hetzner). Différences vs ci.yml :
-#   - `push: true` au lieu de `load: true`
-#   - Tags multiples (semver, sha) générés par docker/metadata-action
-#   - Signature Cosign keyless (OIDC GitHub → Sigstore Rekor public log)
+# « une fois ok » = le job `gate` (format/lint/typecheck/test) doit passer
+# AVANT que le tag soit créé et l'image construite. Si une porte échoue :
+# pas de tag, pas d'image, pas de déploiement.
 #
-# Permissions OIDC requises pour Cosign keyless : `id-token: write`.
-# Permission GHCR push : `packages: write`.
+# Tout reste sur le GITHUB_TOKEN : le tag ET l'image sont produits dans CE
+# workflow (pas de chaînage tag→workflow, donc aucun PAT à gérer). GitHub
+# ne fait que builder/pousser l'image ; le déploiement est tiré par ArgoCD
+# (cf. deploy/argocd/). CLAUDE.md §14.6/§14.7.
 name: release
 
 on:
   push:
-    # CD continu : tout push sur `main` (= merge d'une PR) construit et
-    # pousse l'image `ghcr.io/couldevlop/website:sha-<court>`. ArgoCD Image
-    # Updater (stratégie newest-build) la détecte et synchronise le cluster
-    # → déploiement automatique sur arrivée sur main (cf. deploy/argocd/).
     branches:
       - main
-    # Les tags `vX.Y.Z` restent publiables (rollback / jalons) : ils
-    # produisent aussi un `sha-*`, donc cohérents avec newest-build.
-    tags:
-      - 'v*'
-  # Permet aussi un dispatch manuel sur la dernière commit develop pour
-  # publier une image de pré-release sans créer de tag (rare).
+  # Permet une release manuelle (version explicite ou bump patch auto).
   workflow_dispatch:
     inputs:
-      tag:
-        description: "Tag à publier (ex: v1.0.0-rc.1). Si vide, prend l'image sha-<short>."
+      version:
+        description: 'Version explicite sans v (ex: 1.1.0). Vide = bump patch auto.'
         required: false
         default: ''
 
@@ -40,15 +31,80 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-  # `github.repository_owner` est `Couldevlop` en User account. Si on
-  # crée une org `openlab-consulting` plus tard, mettre à jour `deploy/
-  # scripts/deploy.sh` (IMAGE_REPO) ET ce nom d'image en conséquence.
-  # Lowercase imposé par OCI (ghcr.io rejette les majuscules dans le path).
+  # `github.repository_owner` = `Couldevlop` (compte user). Lowercase imposé
+  # par OCI (ghcr.io rejette les majuscules dans le path).
   IMAGE_NAME: ${{ github.repository_owner }}/website
 
 jobs:
+  # ──────────────────────────────────────────────────────────────────────
+  # 1. Portes vertes — « une fois ok ». Bloque tout le reste si rouge.
+  # ──────────────────────────────────────────────────────────────────────
+  gate:
+    name: Portes vertes (format/lint/typecheck/test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  # ──────────────────────────────────────────────────────────────────────
+  # 2. Tag de version — créé seulement si les portes sont vertes.
+  #    Bump patch auto à partir du dernier tag vX.Y.Z (ou version manuelle).
+  # ──────────────────────────────────────────────────────────────────────
+  tag:
+    name: Créer le tag de version
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # pousser le tag avec le GITHUB_TOKEN
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # besoin de tout l'historique des tags
+      - id: bump
+        name: Calculer et pousser le tag
+        run: |
+          set -euo pipefail
+          MANUAL="${{ github.event.inputs.version }}"
+          if [ -n "$MANUAL" ]; then
+            VER="$MANUAL"
+          else
+            LATEST=$(git tag -l 'v*' --sort=-v:refname | head -n1)
+            LATEST=${LATEST:-v0.0.0}
+            BASE=${LATEST#v}
+            MAJ=${BASE%%.*}; REST=${BASE#*.}; MIN=${REST%%.*}; PAT=${REST##*.}
+            PAT=$((PAT + 1))
+            VER="${MAJ}.${MIN}.${PAT}"
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "→ Nouveau tag : v$VER"
+          if git rev-parse "v$VER" >/dev/null 2>&1; then
+            echo "::error::Le tag v$VER existe déjà." && exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VER" -m "release v$VER (auto — portes vertes sur main)"
+          git push origin "v$VER"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # 3. Build + push image GHCR + scan Trivy + signature Cosign keyless.
+  #    Image taguée `X.Y.Z` (suivie par Image Updater semver) + `sha-<court>`.
+  # ──────────────────────────────────────────────────────────────────────
   publish:
     name: Build + push GHCR + sign Cosign
+    needs: tag
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
@@ -58,9 +114,12 @@ jobs:
       security-events: write
     env:
       TRIVY_DISABLE_VEX_NOTICE: 'true'
+      VERSION: ${{ needs.tag.outputs.version }}
     steps:
-      - name: Checkout
+      - name: Checkout (sur le tag créé)
         uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.tag.outputs.version }}
 
       - name: Lowercase image owner
         id: img
@@ -76,28 +135,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Génère 3 types de tags :
-      #   - vX.Y.Z (tag sémantique tel quel)
-      #   - vX.Y et vX (alias glissants pour suivre les patchs/minors)
-      #   - sha-<short> (traçabilité commit + cible du CD newest-build)
-      # Sur push `main` : seul `sha-<short>` est produit (les types semver
-      # ne s'appliquent qu'aux tags) → c'est lui que suit Image Updater.
+      # Tags produits :
+      #   - X.Y.Z      → cible de l'Image Updater (stratégie semver)
+      #   - sha-<court> → traçabilité commit / rollback rapide
       - name: Extract image metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ steps.img.outputs.name }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=raw,value=${{ needs.tag.outputs.version }}
             type=sha,prefix=sha-,format=short
-            type=raw,value=${{ inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' && inputs.tag != '' }}
           labels: |
             org.opencontainers.image.title=OpenLab Consulting Website
             org.opencontainers.image.description=Refonte 2026 — Next.js 15 + Payload v3 sur K3s Hetzner
             org.opencontainers.image.vendor=OpenLab Consulting SARL
             org.opencontainers.image.licenses=UNLICENSED
+            org.opencontainers.image.version=${{ needs.tag.outputs.version }}
 
       - name: Build & push image
         id: build
@@ -107,11 +161,10 @@ jobs:
           push: true
           pull: true # force pull base images à chaque run (anti-CVE drift)
           platforms: linux/amd64
-          # Clé SITE Turnstile = publique par conception (exposée dans le HTML
-          # data-sitekey). Inlinée au build car NEXT_PUBLIC_* (client). Le
-          # secret correspondant (TURNSTILE_SECRET_KEY) reste côté serveur via
-          # le Secret K8s (OWASP A02/A05). Définir la variable Actions
-          # `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (Settings → Variables, pas Secrets).
+          # Clé SITE Turnstile = publique par conception (data-sitekey dans le
+          # HTML). Inlinée au build car NEXT_PUBLIC_* (client). Le secret
+          # correspondant (TURNSTILE_SECRET_KEY) reste côté serveur via le
+          # Secret K8s. Définir la variable Actions `NEXT_PUBLIC_TURNSTILE_SITE_KEY`.
           build-args: |
             NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -121,8 +174,8 @@ jobs:
           provenance: mode=max
           sbom: true
 
-      # Re-scan l'image publiée (par digest, pas par tag — anti-TOCTOU).
-      # SARIF d'abord (exit 0) pour audit Code Scanning, puis bloquant.
+      # Re-scan l'image publiée par digest (anti-TOCTOU). SARIF d'abord
+      # (exit 0) pour Code Scanning, puis passe bloquante.
       - name: Trivy image scan (SARIF)
         uses: aquasecurity/trivy-action@master
         with:
@@ -151,10 +204,8 @@ jobs:
           exit-code: '1'
 
       # Signature Cosign keyless (OIDC GitHub → Sigstore Rekor public).
-      # Permet à `deploy.sh` ou ArgoCD de vérifier que l'image a bien été
-      # produite par CE workflow sur CE repo, sans clé privée à stocker.
       # Vérification :
-      #   cosign verify ghcr.io/<owner>/website:vX.Y.Z \
+      #   cosign verify ghcr.io/<owner>/website:X.Y.Z \
       #     --certificate-identity-regexp='https://github.com/${{ github.repository }}/.github/workflows/release.yml@.*' \
       #     --certificate-oidc-issuer=https://token.actions.githubusercontent.com
       - name: Install Cosign
@@ -168,7 +219,7 @@ jobs:
       - name: Output release summary
         run: |
           {
-            echo "## Image publiée"
+            echo "## Image publiée — v${VERSION}"
             echo ""
             echo "- **Repository** : \`ghcr.io/${{ steps.img.outputs.name }}\`"
             echo "- **Digest** : \`${{ steps.build.outputs.digest }}\`"
@@ -177,6 +228,6 @@ jobs:
             echo ""
             echo "## Déploiement (GitOps — ArgoCD)"
             echo ""
-            echo "Aucune action : ArgoCD Image Updater détecte ce nouveau tag"
-            echo "et synchronise le cluster automatiquement (cf. deploy/argocd/)."
+            echo "Aucune action : ArgoCD Image Updater (semver) détecte le tag"
+            echo "\`${VERSION}\` et synchronise le cluster (cf. deploy/argocd/)."
           } >> "$GITHUB_STEP_SUMMARY"
