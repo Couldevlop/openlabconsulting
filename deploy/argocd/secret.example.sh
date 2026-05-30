@@ -15,8 +15,10 @@ NAMESPACE="${NAMESPACE:-openlab}"
 
 # ── À remplir (NE PAS committer une version remplie) ──────────────────
 POSTGRES_PASSWORD="${POSTGRES_PASSWORD:?définir POSTGRES_PASSWORD}"
-# Host = service du subchart Bitnami postgres (alias `postgres`, release `openlab`).
-DATABASE_URL="${DATABASE_URL:-postgresql://openlab:${POSTGRES_PASSWORD}@openlab-postgres.openlab.svc.cluster.local:5432/openlab}"
+# Host = service du subchart Bitnami postgres. Le chart force
+# `postgresql.fullnameOverride: postgres` → le Service s'appelle exactement
+# `postgres` (user `openlab`, db `openlab` — cf. values.yaml).
+DATABASE_URL="${DATABASE_URL:-postgresql://openlab:${POSTGRES_PASSWORD}@postgres.openlab.svc.cluster.local:5432/openlab}"
 PAYLOAD_SECRET="${PAYLOAD_SECRET:?définir PAYLOAD_SECRET}"
 BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET:?définir BETTER_AUTH_SECRET}"
 METRICS_TOKEN="${METRICS_TOKEN:?définir METRICS_TOKEN}"
