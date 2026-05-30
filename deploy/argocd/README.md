@@ -64,8 +64,8 @@ kubectl rollout status deploy/argocd-image-updater -n argocd --timeout=180s
 
 Le repository GHCR étant **public**, aucune config de registre/credential
 n'est nécessaire : Image Updater liste les tags anonymement. La stratégie
-(`semver`, tags `X.Y.Z`, write-back `argocd`) est portée par les annotations
-de l'`Application` (cf. `application.yaml`).
+(`newest-build`, tags `sha-<hex>`, write-back `argocd`) est portée par les
+annotations de l'`Application` (cf. `application.yaml`).
 
 ---
 
@@ -103,12 +103,15 @@ ArgoCD crée le namespace `openlab` (si absent), résout les dépendances Helm
 (postgres/redis/minio/meilisearch), exécute le hook de migration Payload,
 puis déploie l'app. `automated + selfHeal + prune` maintiennent l'état.
 
-### Cycle de release désormais
+### Cycle de release désormais (CD continu sur `main`)
 
 1. PR `feat/*` → `develop` → PR `develop` → `main` (UI GitHub).
-2. Tag `vX.Y.Z` sur `main` → `release.yml` build + push `ghcr.io/couldevlop/website:X.Y.Z`.
-3. **Image Updater** détecte la nouvelle version la plus haute et patche
-   `image.tag` → ArgoCD **sync automatiquement**. Aucune action manuelle.
+2. Le **merge sur `main`** déclenche `release.yml` → build + push
+   `ghcr.io/couldevlop/website:sha-<court>`.
+3. **Image Updater** (stratégie `newest-build`) détecte le build le plus
+   récent et patche `image.tag` → ArgoCD **sync automatiquement**. Aucune
+   action manuelle. (Les tags `vX.Y.Z` restent publiables pour jalons /
+   rollback : ils produisent aussi un `sha-*`.)
 
 > Délai de détection Image Updater : ~2 min (intervalle de polling par
 > défaut). Forcer : `kubectl -n argocd rollout restart deploy/argocd-image-updater`.
@@ -132,10 +135,10 @@ puis déploie l'app. `automated + selfHeal + prune` maintiennent l'état.
 
 ## 6. Dépannage
 
-| Symptôme                              | Piste                                                                                                          |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `ComparisonError` / repo inaccessible | repoURL/targetRevision ; repo privé → `argocd repo add`                                                        |
-| App `OutOfSync` figée                 | `kubectl describe application openlab-website -n argocd` ; events de sync                                      |
-| Image non mise à jour                 | logs `deploy/argocd-image-updater -n argocd` ; package GHCR public ? tag conforme `^[0-9]+\.[0-9]+\.[0-9]+$` ? |
-| Pods `CreateContainerConfigError`     | Secret `openlab-website-secrets` absent/incomplet (§3)                                                         |
-| Hook migration en échec               | logs du Job `…-migrate` dans le ns `openlab`                                                                   |
+| Symptôme                              | Piste                                                                                                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `ComparisonError` / repo inaccessible | repoURL/targetRevision ; repo privé → `argocd repo add`                                               |
+| App `OutOfSync` figée                 | `kubectl describe application openlab-website -n argocd` ; events de sync                             |
+| Image non mise à jour                 | logs `deploy/argocd-image-updater -n argocd` ; package GHCR public ? tag conforme `^sha-[0-9a-f]+$` ? |
+| Pods `CreateContainerConfigError`     | Secret `openlab-website-secrets` absent/incomplet (§3)                                                |
+| Hook migration en échec               | logs du Job `…-migrate` dans le ns `openlab`                                                          |

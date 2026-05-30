@@ -7,10 +7,10 @@
 # et pousser l'image sur GHCR (workflow release.yml, job `publish`).
 #
 # Le tag d'image est tenu à jour automatiquement par ArgoCD Image Updater
-# (cf. annotations ci-dessous + deploy/argocd/README.md) : à chaque
-# nouvelle release `vX.Y.Z`, l'image `ghcr.io/couldevlop/website:X.Y.Z`
-# est publiée, Image Updater détecte la version la plus haute et écrit le
-# nouveau tag — déclenchant un sync automatique.
+# (cf. annotations ci-dessous + deploy/argocd/README.md) : à chaque push
+# sur `main`, l'image `ghcr.io/couldevlop/website:sha-<court>` est publiée
+# par release.yml, Image Updater détecte le build le plus récent et écrit
+# le nouveau tag — déclenchant un sync automatique (CD continu sur main).
 #
 # Prérequis appliqués HORS de cet objet (cf. deploy/argocd/README.md) :
 #   - Namespace `openlab` + Secret `openlab-website-secrets` (kubectl).
@@ -24,11 +24,14 @@ metadata:
     # ── ArgoCD Image Updater ───────────────────────────────────────
     # Suit l'image et ne met à jour QUE le tag (repository fixe).
     argocd-image-updater.argoproj.io/image-list: web=ghcr.io/couldevlop/website
-    # Stratégie semver : prend toujours le plus haut tag stable X.Y.Z.
-    argocd-image-updater.argoproj.io/web.update-strategy: semver
-    # N'accepte que les tags de release `X.Y.Z` (ignore `latest`, `sha-…`,
-    # `X`, `X.Y`, et les pré-releases `X.Y.Z-rc.N`).
-    argocd-image-updater.argoproj.io/web.allow-tags: 'regexp:^[0-9]+\.[0-9]+\.[0-9]+$'
+    # CD continu sur push `main` : release.yml publie
+    # `ghcr.io/couldevlop/website:sha-<court>` à chaque arrivée sur main.
+    # Stratégie newest-build : déploie le tag `sha-*` le plus RÉCEMMENT
+    # publié (= dernier build de main).
+    argocd-image-updater.argoproj.io/web.update-strategy: newest-build
+    # N'accepte que les tags de commit `sha-<hex>` (ignore `latest`, semver
+    # `X.Y.Z`, `X`, `X.Y`). Un tag vX.Y.Z produit aussi un `sha-*` → cohérent.
+    argocd-image-updater.argoproj.io/web.allow-tags: 'regexp:^sha-[0-9a-f]+$'
     # Mappe l'image sur les clés du chart Helm.
     argocd-image-updater.argoproj.io/web.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/web.helm.image-tag: image.tag
@@ -49,8 +52,8 @@ spec:
     helm:
       valueFiles:
         - values-production.yaml
-      # Tag initial = image déjà publiée. Image Updater le fera ensuite
-      # évoluer tout seul (write-back argocd patche ce paramètre).
+      # Tag de bootstrap (image existante). Dès le 1er poll, Image Updater
+      # le remplace par le dernier `sha-*` de main (write-back argocd).
       parameters:
         - name: image.tag
           value: '1.0.2'
