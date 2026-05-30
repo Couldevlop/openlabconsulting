@@ -8,14 +8,17 @@ metadata:
     app.kubernetes.io/component: migration
   annotations:
     # Hook Helm. Migrations Payload idempotentes, Job nettoyé après succès.
-    # - post-install : 1ʳᵉ install → Postgres (sous-chart) est déjà prêt
-    #   (les hooks pre-install tournent AVANT les ressources, donc avant
-    #   Postgres → deadlock sur l'attente de la DB). post-install corrige.
-    # - pre-upgrade : montées de version → la DB existe, on migre avant
-    #   de basculer les nouveaux pods applicatifs.
-    helm.sh/hook: post-install,pre-upgrade
+    # post-install/post-upgrade UNIQUEMENT : le Job doit tourner APRÈS le
+    # wave principal (sinon Postgres — sous-chart — n'existe pas encore et
+    # l'init-container wait-postgres boucle jusqu'au deadline).
+    # ⚠️ ArgoCD traduit les hooks Helm : `pre-*` → PreSync (tourne AVANT les
+    # ressources → deadlock observé). On reste donc en post-* = PostSync, et
+    # on déclare explicitement le hook ArgoCD pour lever toute ambiguïté.
+    helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: '0'
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   ttlSecondsAfterFinished: 600
   backoffLimit: 2

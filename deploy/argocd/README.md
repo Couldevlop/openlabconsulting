@@ -84,8 +84,8 @@ export POSTGRES_PASSWORD='…' PAYLOAD_SECRET='…' BETTER_AUTH_SECRET='…' \
 bash deploy/argocd/secret.example.sh
 ```
 
-Clés requises et host Postgres (`openlab-postgres.openlab.svc.cluster.local`)
-documentés dans le script.
+Clés requises et host Postgres (`postgres.openlab.svc.cluster.local` —
+le chart force `fullnameOverride: postgres`) documentés dans le script.
 
 ---
 
