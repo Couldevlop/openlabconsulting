@@ -16,6 +16,14 @@ name: release
 
 on:
   push:
+    # CD continu : tout push sur `main` (= merge d'une PR) construit et
+    # pousse l'image `ghcr.io/couldevlop/website:sha-<court>`. ArgoCD Image
+    # Updater (stratégie newest-build) la détecte et synchronise le cluster
+    # → déploiement automatique sur arrivée sur main (cf. deploy/argocd/).
+    branches:
+      - main
+    # Les tags `vX.Y.Z` restent publiables (rollback / jalons) : ils
+    # produisent aussi un `sha-*`, donc cohérents avec newest-build.
     tags:
       - 'v*'
   # Permet aussi un dispatch manuel sur la dernière commit develop pour
@@ -71,8 +79,9 @@ jobs:
       # Génère 3 types de tags :
       #   - vX.Y.Z (tag sémantique tel quel)
       #   - vX.Y et vX (alias glissants pour suivre les patchs/minors)
-      #   - sha-<short> (traçabilité commit, utile pour rollback rapide)
-      # Branche develop / main n'est PAS publiée ici (pas de trigger push).
+      #   - sha-<short> (traçabilité commit + cible du CD newest-build)
+      # Sur push `main` : seul `sha-<short>` est produit (les types semver
+      # ne s'appliquent qu'aux tags) → c'est lui que suit Image Updater.
       - name: Extract image metadata
         id: meta
         uses: docker/metadata-action@v5
