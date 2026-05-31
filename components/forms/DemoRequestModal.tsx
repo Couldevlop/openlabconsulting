@@ -25,6 +25,10 @@ interface DemoRequestModalProps {
   productName: string;
   /** Libellé du bouton déclencheur. */
   triggerLabel?: string;
+  /** Variante visuelle du bouton déclencheur (défaut: primary). */
+  triggerVariant?: 'primary' | 'secondary' | 'ghost';
+  /** Taille du bouton déclencheur (défaut: lg). */
+  triggerSize?: 'sm' | 'md' | 'lg';
 }
 
 /**
@@ -51,6 +55,8 @@ export function DemoRequestModal({
   productSlug,
   productName,
   triggerLabel = 'Demander une démo',
+  triggerVariant = 'primary',
+  triggerSize = 'lg',
 }: DemoRequestModalProps): ReactElement {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -170,14 +176,18 @@ export function DemoRequestModal({
     <>
       <Button
         type="button"
-        variant="primary"
-        size="lg"
+        variant={triggerVariant}
+        size={triggerSize}
         onClick={() => setOpen(true)}
         data-testid="demo-modal-trigger"
         aria-haspopup="dialog"
       >
         {triggerLabel}
-        <ArrowUpRight width={20} height={20} aria-hidden />
+        <ArrowUpRight
+          width={triggerSize === 'lg' ? 20 : 16}
+          height={triggerSize === 'lg' ? 20 : 16}
+          aria-hidden
+        />
       </Button>
 
       {open ? (

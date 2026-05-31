@@ -430,15 +430,13 @@ export default async function SolutionDetailPage({
               <Button as="a" href="/contact" variant="primary" size="md">
                 Demander un devis
               </Button>
-              <Button
-                as="a"
-                href={`/contact?sujet=demo-${product.slug}`}
-                variant="ghost"
-                size="md"
-              >
-                Réserver une démo
-                <ArrowUpRight width={16} height={16} aria-hidden />
-              </Button>
+              <DemoRequestModal
+                productSlug={product.slug}
+                productName={name}
+                triggerLabel="Réserver une démo"
+                triggerVariant="ghost"
+                triggerSize="md"
+              />
             </div>
           </div>
         </Container>
