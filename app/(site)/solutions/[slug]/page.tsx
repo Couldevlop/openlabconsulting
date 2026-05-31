@@ -13,6 +13,7 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { ProductDemo } from '@/components/demos/ProductDemo';
+import { DemoRequestModal } from '@/components/forms/DemoRequestModal';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { PRODUCTS } from '@/lib/data/products';
@@ -144,10 +145,10 @@ export default async function SolutionDetailPage({
               </p>
 
               <div className="mt-10 flex flex-wrap gap-3">
-                <Button as="a" href="/audit-ia" variant="primary" size="lg">
-                  Demander une démo
-                  <ArrowUpRight width={20} height={20} aria-hidden />
-                </Button>
+                <DemoRequestModal
+                  productSlug={product.slug}
+                  productName={name}
+                />
                 <Button as="a" href="/contact" variant="ghost" size="lg">
                   Parler à l’équipe produit
                 </Button>

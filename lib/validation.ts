@@ -51,6 +51,37 @@ export const auditIaSchema = z.object({
 export type AuditIaInput = z.infer<typeof auditIaSchema>;
 
 /**
+ * Demande de démo produit (modale page /solutions/[slug]).
+ *
+ * `productSlug` est validé contre un format strict (slug kebab-case) pour
+ * éviter toute injection ; le serveur revérifie que le produit existe
+ * (lib/products) avant persistance (OWASP A03/A04). `message` est
+ * optionnel — la friction doit rester minimale pour un lead chaud.
+ */
+export const demoRequestSchema = z.object({
+  name: z.string().min(2).max(120),
+  email: z.email().max(180),
+  organization: z.string().min(2).max(180),
+  phone: z
+    .string()
+    .max(32)
+    .regex(/^[+()0-9.\s-]{6,32}$/, 'Numéro de téléphone invalide')
+    .optional()
+    .or(z.literal('')),
+  productSlug: z
+    .string()
+    .min(1)
+    .max(64)
+    .regex(/^[a-z0-9-]+$/, 'Produit invalide'),
+  productName: z.string().min(1).max(120),
+  message: z.string().max(2000).optional().or(z.literal('')),
+  website: honeypot,
+  'cf-turnstile-response': z.string().min(1).max(2048).optional(),
+});
+
+export type DemoRequestInput = z.infer<typeof demoRequestSchema>;
+
+/**
  * Sérialise les erreurs Zod en `{ field: message }` pour les renvoyer
  * tels quels au client (i18n-friendly).
  */
