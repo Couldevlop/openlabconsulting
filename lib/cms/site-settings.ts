@@ -144,9 +144,9 @@ export const AUDIT_IA_CTA_FALLBACK: AuditIaCtaContent = {
     ctaHref: '/livres-blancs/ia-souveraine-ci-2026',
     footnote: 'Accès gratuit · PDF · ~25 pages · email pro requis.',
     cover: {
-      src: '/livres-blancs/ia-souveraine-couverture.webp',
-      width: 1024,
-      height: 1536,
+      src: '/livres-blancs/ia-souveraine-couverture.png',
+      width: 1023,
+      height: 1537,
     },
   },
 };

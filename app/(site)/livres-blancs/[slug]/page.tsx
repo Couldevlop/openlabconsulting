@@ -52,9 +52,9 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     status: 'draft',
     publicationLabel: 'En rédaction — sortie prévue T2 2026',
     cover: {
-      src: '/livres-blancs/ia-souveraine-couverture.webp',
-      width: 1024,
-      height: 1536,
+      src: '/livres-blancs/ia-souveraine-couverture.png',
+      width: 1023,
+      height: 1537,
     },
   },
 };
