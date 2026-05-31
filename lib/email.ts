@@ -192,7 +192,7 @@ function row(label: string, value: string): string {
 // ────────────────────────────────────────────────────────────
 
 export interface LeadNotificationInput {
-  source: 'contact' | 'audit-ia';
+  source: 'contact' | 'audit-ia' | 'demo-produit';
   name: string;
   email: string;
   organization?: string | null;
@@ -216,7 +216,11 @@ export async function sendLeadNotification(
   if (!cfg) return { ok: false, skipped: true };
 
   const sourceLabel =
-    input.source === 'audit-ia' ? 'Audit IA' : 'Formulaire de contact';
+    input.source === 'audit-ia'
+      ? 'Audit IA'
+      : input.source === 'demo-produit'
+        ? 'Demande de démo'
+        : 'Formulaire de contact';
   const subjectLine = `Nouveau lead — ${sourceLabel} · ${input.name}`;
 
   const detailRows = Object.entries(input.details ?? {})
@@ -283,7 +287,7 @@ ${
 // ────────────────────────────────────────────────────────────
 
 export interface AcknowledgementInput {
-  source: 'contact' | 'audit-ia';
+  source: 'contact' | 'audit-ia' | 'demo-produit';
   name: string;
   email: string;
 }
@@ -298,13 +302,18 @@ export async function sendLeadAcknowledgement(
   const cfg = readConfig();
   if (!cfg) return { ok: false, skipped: true };
 
-  const isAudit = input.source === 'audit-ia';
-  const title = isAudit
-    ? 'Votre demande d’audit IA est bien reçue'
-    : 'Votre message est bien reçu';
-  const delay = isAudit
-    ? 'Votre rapport personnalisé vous parviendra sous 48 h ouvrées.'
-    : 'Notre équipe vous répond sous 24 h ouvrées.';
+  const title =
+    input.source === 'audit-ia'
+      ? 'Votre demande d’audit IA est bien reçue'
+      : input.source === 'demo-produit'
+        ? 'Votre demande de démo est bien reçue'
+        : 'Votre message est bien reçu';
+  const delay =
+    input.source === 'audit-ia'
+      ? 'Votre rapport personnalisé vous parviendra sous 48 h ouvrées.'
+      : input.source === 'demo-produit'
+        ? 'Un consultant vous recontacte sous 24 h ouvrées pour planifier votre démonstration.'
+        : 'Notre équipe vous répond sous 24 h ouvrées.';
 
   const firstName = input.name.split(' ')[0] || input.name;
 
