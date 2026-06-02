@@ -19,6 +19,14 @@ export interface RateLimitOptions {
   limit: number;
   /** Taille de la fenêtre en secondes. */
   windowSec: number;
+  /**
+   * Comportement en cas d'indisponibilité de Redis (incident/timeout).
+   *   - `false` (défaut) : fail-open — on laisse passer (dispo > sécurité).
+   *   - `true` : fail-closed — on renvoie `ok:false` (429). À réserver aux
+   *     endpoints sensibles (contact, audit-ia, login) où une panne Redis
+   *     ne doit pas ouvrir un flood/brute-force (OWASP A07).
+   */
+  failClosed?: boolean;
 }
 
 export interface RateLimitResult {
@@ -128,10 +136,11 @@ async function redisRateLimit(
   pipeline.pttl(ns);
   const res = await pipeline.exec();
   if (!res) {
-    // Exec rejeté → on autorise (fail-open en cas d'incident Redis).
+    // Exec rejeté → fail-closed sur endpoints sensibles, sinon fail-open.
+    const open = opts.failClosed !== true;
     return {
-      ok: true,
-      remaining: opts.limit,
+      ok: open,
+      remaining: open ? opts.limit : 0,
       resetAt: Date.now() + opts.windowSec * 1000,
     };
   }
@@ -166,7 +175,16 @@ export async function rateLimit(
     try {
       return await redisRateLimit(redis, key, opts);
     } catch {
-      // Fallback in-memory si erreur transitoire (timeout, etc.).
+      // Incident Redis (timeout, etc.). Sur endpoint sensible → fail-closed
+      // (429) plutôt que de retomber sur un bucket mémoire par-pod qui, en
+      // prod multi-réplicas, laisserait passer le flood. Sinon fail-open dev.
+      if (opts.failClosed === true) {
+        return {
+          ok: false,
+          remaining: 0,
+          resetAt: Date.now() + opts.windowSec * 1000,
+        };
+      }
       return memoryRateLimit(key, opts);
     }
   }
@@ -184,10 +202,10 @@ export function __resetMemoryStore(): void {
  * Préréglages de quotas par endpoint (CLAUDE.md §10.4).
  */
 export const RATE_LIMITS = {
-  contact: { limit: 5, windowSec: 15 * 60 }, // 5 / 15 min / IP
-  auditIa: { limit: 3, windowSec: 60 * 60 }, // 3 / 1 h / IP
+  contact: { limit: 5, windowSec: 15 * 60, failClosed: true }, // 5 / 15 min / IP
+  auditIa: { limit: 3, windowSec: 60 * 60, failClosed: true }, // 3 / 1 h / IP
   chat: { limit: 20, windowSec: 60 }, // 20 / 1 min / session
-  login: { limit: 5, windowSec: 15 * 60 }, // 5 / 15 min / IP
+  login: { limit: 5, windowSec: 15 * 60, failClosed: true }, // 5 / 15 min / IP
   globalGet: { limit: 200, windowSec: 60 }, // 200 / 1 min / IP (GET)
   globalAll: { limit: 1000, windowSec: 60 }, // 1000 / 1 min / IP (toutes méthodes)
 } as const satisfies Record<string, RateLimitOptions>;

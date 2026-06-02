@@ -46,10 +46,22 @@ describe('lib/rate-limit (in-memory fallback)', () => {
     expect(r.resetAt).toBeLessThanOrEqual(before + opts.windowSec * 1000 + 100);
   });
 
-  it('expose les presets §10.4', () => {
-    expect(RATE_LIMITS.contact).toEqual({ limit: 5, windowSec: 900 });
-    expect(RATE_LIMITS.auditIa).toEqual({ limit: 3, windowSec: 3600 });
+  it('expose les presets §10.4 (endpoints sensibles en fail-closed)', () => {
+    expect(RATE_LIMITS.contact).toEqual({
+      limit: 5,
+      windowSec: 900,
+      failClosed: true,
+    });
+    expect(RATE_LIMITS.auditIa).toEqual({
+      limit: 3,
+      windowSec: 3600,
+      failClosed: true,
+    });
     expect(RATE_LIMITS.chat).toEqual({ limit: 20, windowSec: 60 });
-    expect(RATE_LIMITS.login).toEqual({ limit: 5, windowSec: 900 });
+    expect(RATE_LIMITS.login).toEqual({
+      limit: 5,
+      windowSec: 900,
+      failClosed: true,
+    });
   });
 });

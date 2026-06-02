@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload';
+import { accessEditorPlus, accessEditorChiefPlus } from '../lib/auth/roles';
+import { isPublicHttpUrl } from '../lib/safe-url';
 
 /**
  * Articles — Insights publiés sur /insights et carte homepage §6.9.
@@ -40,6 +42,13 @@ export const Articles: CollectionConfig = {
       if (req.user) return true;
       return { _status: { equals: 'published' } };
     },
+    // OWASP A01 : écriture réservée. Sans ces règles, le défaut Payload
+    // (« tout utilisateur authentifié ») laissait un compte `viewer` créer,
+    // modifier, supprimer et publier n'importe quel article.
+    // create/update : éditeur+ ; delete/publish : rédacteur en chef+.
+    create: accessEditorPlus,
+    update: accessEditorPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {
@@ -106,9 +115,9 @@ export const Articles: CollectionConfig = {
           type: 'text',
           required: true,
           validate: (value: unknown): true | string =>
-            typeof value === 'string' && /^https?:\/\//.test(value)
+            isPublicHttpUrl(value)
               ? true
-              : 'URL invalide (doit commencer par http:// ou https://).',
+              : 'URL invalide : http(s) vers un domaine public requis (pas d’adresse interne/locale).',
         },
       ],
       admin: {

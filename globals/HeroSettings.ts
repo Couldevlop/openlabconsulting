@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { accessEditorPlus } from '../lib/auth/roles';
 
 /**
  * Global HeroSettings — paramétrage du Hero homepage (CLAUDE.md §6.1).
@@ -23,15 +24,7 @@ export const HeroSettings: GlobalConfig = {
   },
   access: {
     read: (): boolean => true,
-    update: ({ req }): boolean => {
-      const role = req.user?.role;
-      return (
-        role === 'SUPER_ADMIN' ||
-        role === 'ADMIN' ||
-        role === 'EDITOR_CHIEF' ||
-        role === 'EDITOR'
-      );
-    },
+    update: accessEditorPlus,
   },
   fields: [
     {

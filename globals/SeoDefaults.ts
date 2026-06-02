@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { accessAdminPlus } from '../lib/auth/roles';
 
 /**
  * Global SeoDefaults — paramètres SEO globaux par défaut (CLAUDE.md §12).
@@ -17,10 +18,7 @@ export const SeoDefaults: GlobalConfig = {
   },
   access: {
     read: (): boolean => true,
-    update: ({ req }): boolean => {
-      const role = req.user?.role;
-      return role === 'SUPER_ADMIN' || role === 'ADMIN';
-    },
+    update: accessAdminPlus,
   },
   fields: [
     {

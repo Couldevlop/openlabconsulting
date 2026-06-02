@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { accessEditorPlus } from '../lib/auth/roles';
 
 /**
  * Global AuditIaCtaSettings — bandeau « Audit IA gratuit » (CLAUDE.md §6.10).
@@ -18,15 +19,7 @@ export const AuditIaCtaSettings: GlobalConfig = {
   },
   access: {
     read: (): boolean => true,
-    update: ({ req }): boolean => {
-      const role = req.user?.role;
-      return (
-        role === 'SUPER_ADMIN' ||
-        role === 'ADMIN' ||
-        role === 'EDITOR_CHIEF' ||
-        role === 'EDITOR'
-      );
-    },
+    update: accessEditorPlus,
   },
   fields: [
     { name: 'eyebrow', type: 'text', maxLength: 60 },
