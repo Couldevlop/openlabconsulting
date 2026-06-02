@@ -13,6 +13,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { extractHeadings } from '@/lib/articles';
 import { getArticleBySlug } from '@/lib/articles-server';
+import { createCodeRenderer } from '@/lib/insights/code-highlighter';
 import {
   articleSchema,
   breadcrumbSchema,
@@ -195,7 +196,10 @@ export default async function InsightArticlePage({
               )}
 
               {article.content ? (
-                <ArticleBody content={article.content} />
+                <ArticleBody
+                  content={article.content}
+                  renderCode={await createCodeRenderer()}
+                />
               ) : (
                 <div className="rounded-lg border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8">
                   <Badge tone="neutral">Contenu complet en ligne</Badge>
