@@ -1,4 +1,8 @@
 import type { CollectionConfig } from 'payload';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * TeamPublications — publications signature de l'équipe OpenLab
@@ -39,10 +43,10 @@ export const TeamPublications: CollectionConfig = {
     // OWASP A01 (Broken Access Control) : un visiteur non authentifié ne
     // peut lire QUE les versions publiées, y compris via l'API REST/GraphQL
     // de Payload. Aligné sur Products / Expertises / Sectors.
-    read: ({ req }) => {
-      if (req.user) return true;
-      return { _status: { equals: 'published' } };
-    },
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {

@@ -98,6 +98,47 @@ describe('lib/rate-limit — chemin Redis', () => {
     expect(r.ok).toBe(true);
   });
 
+  it('fail-CLOSED : refuse si exec retourne null et failClosed=true', async () => {
+    vi.doMock('ioredis', () => ({
+      default: vi.fn(() => ({
+        multi: () => ({
+          incr: vi.fn(),
+          expire: vi.fn(),
+          pttl: vi.fn(),
+          exec: vi.fn().mockResolvedValue(null),
+        }),
+      })),
+    }));
+    const { rateLimit } = await import('@/lib/rate-limit');
+    const r = await rateLimit('test:null-closed', {
+      limit: 5,
+      windowSec: 60,
+      failClosed: true,
+    });
+    expect(r.ok).toBe(false);
+    expect(r.remaining).toBe(0);
+  });
+
+  it('fail-CLOSED : refuse si exec throw et failClosed=true (pas de bypass mémoire)', async () => {
+    vi.doMock('ioredis', () => ({
+      default: vi.fn(() => ({
+        multi: () => ({
+          incr: vi.fn(),
+          expire: vi.fn(),
+          pttl: vi.fn(),
+          exec: vi.fn().mockRejectedValue(new Error('Redis down')),
+        }),
+      })),
+    }));
+    const { rateLimit } = await import('@/lib/rate-limit');
+    const r = await rateLimit('test:err-closed', {
+      limit: 3,
+      windowSec: 60,
+      failClosed: true,
+    });
+    expect(r.ok).toBe(false);
+  });
+
   it('si import ioredis throw, utilise fallback in-memory', async () => {
     vi.doMock('ioredis', () => {
       throw new Error('ioredis non installé');

@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload';
 // Imports sans extension : compatibles webpack Next + tsx CLI.
 import { logAudit } from '../lib/audit-log';
 import { validatePasswordStrength } from '../lib/password-policy';
+import { isSuperAdmin } from '../lib/auth/roles';
 
 /**
  * Users — auth admin Payload (§9 + §11).
@@ -61,6 +62,13 @@ export const Users: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'author',
+      // OWASP A07 (escalade de privilèges) : seul un super-admin peut
+      // attribuer/modifier un rôle. Sans ça, un `admin` (qui a `update` sur
+      // la collection Users) pouvait se promouvoir lui-même `super-admin`
+      // via PATCH /api/users/<id> { role: 'super-admin' }.
+      access: {
+        update: ({ req }): boolean => isSuperAdmin(req.user),
+      },
       options: [
         { label: 'Super Admin', value: 'super-admin' },
         { label: 'Admin', value: 'admin' },

@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { accessEditorPlus } from '../lib/auth/roles';
 
 /**
  * Global ReassuranceSettings — bandeau clients/partenaires de la
@@ -22,15 +23,7 @@ export const ReassuranceSettings: GlobalConfig = {
   },
   access: {
     read: (): boolean => true,
-    update: ({ req }): boolean => {
-      const role = req.user?.role;
-      return (
-        role === 'SUPER_ADMIN' ||
-        role === 'ADMIN' ||
-        role === 'EDITOR_CHIEF' ||
-        role === 'EDITOR'
-      );
-    },
+    update: accessEditorPlus,
   },
   fields: [
     {

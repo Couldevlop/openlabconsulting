@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { accessEditorChiefPlus } from '../lib/auth/roles';
 
 /**
  * Global FooterSettings — pied de page premium (CLAUDE.md §6.11).
@@ -16,12 +17,7 @@ export const FooterSettings: GlobalConfig = {
   },
   access: {
     read: (): boolean => true,
-    update: ({ req }): boolean => {
-      const role = req.user?.role;
-      return (
-        role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'EDITOR_CHIEF'
-      );
-    },
+    update: accessEditorChiefPlus,
   },
   fields: [
     {

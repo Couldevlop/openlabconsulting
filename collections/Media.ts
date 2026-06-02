@@ -19,7 +19,20 @@ export const Media: CollectionConfig = {
     read: (): boolean => true,
   },
   upload: {
-    mimeTypes: ['image/*', 'application/pdf', 'video/mp4', 'application/zip'],
+    // OWASP A03/XSS stocké : on N'autorise PAS `image/*` (qui couvre
+    // `image/svg+xml` — un SVG peut embarquer du <script> exécuté si le
+    // fichier est ouvert en navigation directe depuis notre domaine). Liste
+    // blanche explicite de formats raster sûrs + documents.
+    mimeTypes: [
+      'image/png',
+      'image/jpeg',
+      'image/webp',
+      'image/avif',
+      'image/gif',
+      'application/pdf',
+      'video/mp4',
+      'application/zip',
+    ],
     imageSizes: [
       { name: 'thumbnail', width: 320, height: 180, position: 'centre' },
       { name: 'card', width: 768, height: 432, position: 'centre' },

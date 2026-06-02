@@ -1,5 +1,9 @@
 import type { CollectionConfig } from 'payload';
 import { ICON_KEYS } from '../lib/icon-map';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * Products — les 7 logiciels propriétaires OpenLab (CLAUDE.md §1.3, §7).
@@ -61,10 +65,10 @@ export const Products: CollectionConfig = {
     // drafts (`_status`), appliquée par la base — pas seulement par les
     // server components. Un utilisateur authentifié voit tout. Aligné sur
     // Articles et CaseStudies.
-    read: ({ req }) => {
-      if (req.user) return true;
-      return { _status: { equals: 'published' } };
-    },
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {

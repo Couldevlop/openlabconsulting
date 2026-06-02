@@ -1,4 +1,8 @@
 import type { CollectionConfig } from 'payload';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * Whitepapers — Livres blancs téléchargeables sous gating email.
@@ -26,7 +30,14 @@ export const Whitepapers: CollectionConfig = {
     maxPerDoc: 5,
   },
   access: {
-    read: (): boolean => true,
+    // OWASP A01 : un visiteur anonyme ne voit que les livres blancs publiés
+    // (via `_status`, appliqué en base) — sinon `read: () => true` exposait
+    // les brouillons et le PDF lead-magnet via l'API REST/GraphQL, rendant
+    // le gating email contournable. Écriture réservée au rédacteur en chef+.
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {
