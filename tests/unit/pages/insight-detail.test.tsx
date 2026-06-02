@@ -6,6 +6,11 @@ vi.mock('@/components/sections/AuditIaCtaServer', async () => {
   return { AuditIaCtaServer: () => <AuditIaCta /> };
 });
 
+// Shiki (server-only) mocké : évite le chargement réel des grammaires.
+vi.mock('@/lib/insights/code-highlighter', () => ({
+  createCodeRenderer: async () => (code: string) => `<pre>${code}</pre>`,
+}));
+
 import InsightArticlePage from '@/app/(site)/insights/[slug]/page';
 
 describe('Page /insights/[slug]', () => {

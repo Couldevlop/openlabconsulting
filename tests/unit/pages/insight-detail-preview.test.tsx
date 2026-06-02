@@ -6,6 +6,11 @@ vi.mock('@/components/sections/AuditIaCtaServer', () => ({
   AuditIaCtaServer: () => <div data-testid="audit-ia-cta" />,
 }));
 
+// Shiki (server-only) mocké : évite le chargement réel des grammaires.
+vi.mock('@/lib/insights/code-highlighter', () => ({
+  createCodeRenderer: async () => (code: string) => `<pre>${code}</pre>`,
+}));
+
 // draftMode activé → la page doit afficher la bannière de prévisualisation.
 vi.mock('next/headers', () => ({
   headers: async () => new Headers(),

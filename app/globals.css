@@ -238,6 +238,114 @@ h2 {
   box-shadow: var(--shadow-ol-soft);
 }
 
+/* Bloc de code — coloration Shiki (thème sombre), zéro JS client.
+ * On neutralise le style « chip » du code inline pour le <code> interne. */
+.article-code {
+  position: relative;
+  margin-inline: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-ol-soft);
+}
+
+.article-code pre {
+  margin: 0;
+  padding: 1.15rem 1.25rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.article-code pre code,
+.article-prose pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Badge langue en haut à droite du bloc. */
+.article-code::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ol-white) 60%, transparent);
+  background: color-mix(in srgb, var(--color-ol-night) 55%, transparent);
+  border-bottom-left-radius: 8px;
+  pointer-events: none;
+}
+
+/* Encadrés éditoriaux (callouts) — 4 tonalités. */
+.article-callout {
+  --callout-accent: var(--color-ol-info-blue);
+  margin-inline: 0;
+  padding: 1rem 1.25rem;
+  border-inline-start: 3px solid var(--callout-accent);
+  border-radius: 0 8px 8px 0;
+  background: color-mix(
+    in srgb,
+    var(--callout-accent) 8%,
+    var(--color-ol-ivory)
+  );
+}
+
+.article-callout--info {
+  --callout-accent: var(--color-ol-info-blue);
+}
+.article-callout--tip {
+  --callout-accent: var(--color-ol-success);
+}
+.article-callout--warning {
+  --callout-accent: var(--color-ol-orange);
+}
+.article-callout--danger {
+  --callout-accent: var(--color-ol-danger);
+}
+
+.article-callout__title {
+  margin: 0 0 0.35em;
+  font-weight: 600;
+  color: var(--color-ol-night);
+}
+
+.article-callout__body {
+  margin: 0;
+  white-space: pre-line;
+  color: color-mix(in srgb, var(--color-ol-graphite) 88%, transparent);
+}
+
+/* Tableaux — données comparatives. Scroll horizontal sur mobile. */
+.article-prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.article-prose th,
+.article-prose td {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-ol-mist);
+  text-align: start;
+  vertical-align: top;
+}
+
+.article-prose th {
+  background: var(--color-ol-ivory);
+  font-weight: 600;
+  color: var(--color-ol-night);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto !important;

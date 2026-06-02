@@ -4,6 +4,9 @@ import {
   lexicalEditor,
   HeadingFeature,
   FixedToolbarFeature,
+  BlocksFeature,
+  CodeBlock,
+  EXPERIMENTAL_TableFeature,
 } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import sharp from 'sharp';
@@ -25,6 +28,7 @@ import { TeamMembers } from './collections/TeamMembers';
 import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
+import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { ReassuranceSettings } from './globals/ReassuranceSettings';
@@ -119,12 +123,21 @@ export default buildConfig({
   // inline depuis la médiathèque MinIO) et on ajoute :
   //   - titres restreints à H2/H3/H4 — le H1 est réservé au titre de page,
   //     ce qui garde une hiérarchie SEO propre (un seul H1 par document) ;
-  //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur).
+  //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur) ;
+  //   - des TABLEAUX (TableFeature) pour les données comparatives ;
+  //   - un bloc CODE multi-langages (éditeur Monaco en admin, coloration
+  //     Shiki côté serveur au rendu — cf. lib/insights/code-highlighter) ;
+  //   - des ENCADRÉS (bloc `callout` : info / astuce / avertissement /
+  //     danger), signature éditoriale des meilleures docs tech.
+  // Les blocs Lexical sont stockés inline dans le JSON du champ richText :
+  // aucune table SQL dédiée, donc aucune migration de schéma.
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
       FixedToolbarFeature(),
+      EXPERIMENTAL_TableFeature(),
+      BlocksFeature({ blocks: [CodeBlock(), Callout] }),
     ],
   }),
   db: postgresAdapter({
