@@ -11,8 +11,8 @@ describe('middleware — security headers + nonce CSP', () => {
     return new NextRequest(`http://localhost:3000${path}`);
   }
 
-  it('pose les headers OWASP de base', () => {
-    const res = middleware(req('/'));
+  it('pose les headers OWASP de base', async () => {
+    const res = await middleware(req('/'));
     expect(res.headers.get('X-Frame-Options')).toBe('DENY');
     expect(res.headers.get('X-Content-Type-Options')).toBe('nosniff');
     expect(res.headers.get('Referrer-Policy')).toBe(
@@ -22,9 +22,9 @@ describe('middleware — security headers + nonce CSP', () => {
     expect(res.headers.get('Cross-Origin-Opener-Policy')).toBe('same-origin');
   });
 
-  it('génère un nonce CSP unique par requête', () => {
-    const res1 = middleware(req('/'));
-    const res2 = middleware(req('/'));
+  it('génère un nonce CSP unique par requête', async () => {
+    const res1 = await middleware(req('/'));
+    const res2 = await middleware(req('/'));
     const csp1 = res1.headers.get('Content-Security-Policy') ?? '';
     const csp2 = res2.headers.get('Content-Security-Policy') ?? '';
     const nonce1 = csp1.match(/'nonce-([^']+)'/)?.[1];
@@ -34,8 +34,8 @@ describe('middleware — security headers + nonce CSP', () => {
     expect(nonce1).not.toBe(nonce2);
   });
 
-  it('inclut strict-dynamic et challenges.cloudflare.com dans la CSP', () => {
-    const res = middleware(req('/'));
+  it('inclut strict-dynamic et challenges.cloudflare.com dans la CSP', async () => {
+    const res = await middleware(req('/'));
     const csp = res.headers.get('Content-Security-Policy') ?? '';
     expect(csp).toContain("'strict-dynamic'");
     expect(csp).toContain('challenges.cloudflare.com');
@@ -43,12 +43,12 @@ describe('middleware — security headers + nonce CSP', () => {
     expect(csp).toContain('upgrade-insecure-requests');
   });
 
-  it('propage le nonce dans le header request x-nonce', () => {
+  it('propage le nonce dans le header request x-nonce', async () => {
     const r = req('/');
-    middleware(r);
+    await middleware(r);
     // NextRequest est immutable côté tests ; on vérifie via la
     // réponse que le nonce est cohérent entre header et CSP.
-    const res = middleware(r);
+    const res = await middleware(r);
     const csp = res.headers.get('Content-Security-Policy') ?? '';
     const nonce = csp.match(/'nonce-([^']+)'/)?.[1];
     expect(nonce).toBeTruthy();

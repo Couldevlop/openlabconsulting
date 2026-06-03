@@ -3,6 +3,10 @@ import { verifyTotp } from '@/lib/totp';
 import { logAudit } from '@/lib/audit-log';
 import { getRequestIp } from '@/lib/request-ip';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
+import { TOTP_COOKIE, signTotpSession } from '@/lib/auth/totp-session';
+
+// Durée de validité de la session 2FA, alignée sur tokenExpiration (8 h).
+const TOTP_SESSION_TTL_SEC = 28800;
 
 /**
  * POST /api/admin/2fa/verify
@@ -103,15 +107,20 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'invalid_code' }, { status: 400 });
   }
 
-  // Pose un cookie session signaling "TOTP validé pour cette session".
-  // Le middleware admin lit ce cookie pour autoriser /admin/**.
+  // Pose un cookie de session 2FA SIGNÉ (HMAC PAYLOAD_SECRET, lié à l'user +
+  // expiration). Le middleware admin le vérifie pour autoriser /admin/**.
+  // OWASP A07 : remplace l'ancien `totp-verified=1` constant/forgeable.
+  const secret = process.env.PAYLOAD_SECRET ?? '';
+  const token = await signTotpSession(user.id, TOTP_SESSION_TTL_SEC, secret);
   const res = NextResponse.json({ ok: true });
-  res.cookies.set('totp-verified', '1', {
+  res.cookies.set(TOTP_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 28800, // 8 h, aligné sur tokenExpiration
-    path: '/admin',
+    maxAge: TOTP_SESSION_TTL_SEC,
+    // Portée racine : le middleware doit lire ce cookie sur /admin ET sur la
+    // page de challenge /admin-2fa (hors /admin pour éviter une boucle).
+    path: '/',
   });
   return res;
 }
