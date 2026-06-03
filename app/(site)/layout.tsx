@@ -50,10 +50,15 @@ export default async function SiteLayout({
 
   return (
     <html lang="fr-CI" className={fontVariables}>
-      <head>
-        <GlobalJsonLd nonce={nonce} />
-      </head>
+      {/*
+        Pas de <head> manuel : en App Router, un <head> défini par
+        l'utilisateur empêche Next d'injecter les balises issues de l'API
+        Metadata (dont <meta name="description"> → SEO Lighthouse 0.92).
+        Next gère le <head> ; le JSON-LD est rendu dans le flux (valide en
+        <body> pour Google) et hissé par Next.
+      */}
       <body className="flex min-h-screen flex-col">
+        <GlobalJsonLd nonce={nonce} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-[var(--color-ol-night)] focus:px-4 focus:py-2 focus:text-white"
