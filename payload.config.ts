@@ -34,6 +34,7 @@ import { ReassuranceSettings } from './globals/ReassuranceSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
+import { AboutSettings } from './globals/AboutSettings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -176,6 +177,7 @@ export default buildConfig({
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,
+    AboutSettings,
   ],
   // Éditeur richText premium pour la mise en forme professionnelle des
   // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,
