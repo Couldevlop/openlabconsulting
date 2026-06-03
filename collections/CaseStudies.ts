@@ -1,4 +1,8 @@
 import type { CollectionConfig } from 'payload';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * CaseStudies — Cas clients du carrousel homepage §6.5.
@@ -48,10 +52,10 @@ export const CaseStudies: CollectionConfig = {
     // drafts (`_status`), appliquée par la base — pas seulement par les server
     // components (`getPublishedCaseStudies` / `getCaseStudyForProduct`). Un
     // utilisateur authentifié (admin/éditeur) voit tout. Aligné sur Articles.
-    read: ({ req }) => {
-      if (req.user) return true;
-      return { _status: { equals: 'published' } };
-    },
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {

@@ -1,4 +1,8 @@
 import type { CollectionConfig } from 'payload';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * TeamMembers — l'équipe dirigeante OpenLab (CLAUDE.md §6, page /a-propos/equipe).
@@ -45,10 +49,10 @@ export const TeamMembers: CollectionConfig = {
     // peut lire QUE les versions publiées, y compris via l'API REST/GraphQL
     // de Payload. On retourne une contrainte `Where` sur le statut natif des
     // drafts (`_status`), appliquée par la base. Aligné sur Products.
-    read: ({ req }) => {
-      if (req.user) return true;
-      return { _status: { equals: 'published' } };
-    },
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {

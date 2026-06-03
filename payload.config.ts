@@ -70,9 +70,61 @@ const useMinio =
   typeof process.env.MINIO_ENDPOINT === 'string' &&
   process.env.MINIO_ENDPOINT.length > 0;
 
+const isProd = process.env.NODE_ENV === 'production';
+
+// `next build` évalue ce module (collecte des routes /api/*) en
+// NODE_ENV=production mais SANS les secrets runtime (injectés seulement au
+// déploiement). On ne doit donc PAS échouer pendant la phase de build —
+// uniquement au démarrage du serveur de prod. Next pose
+// NEXT_PHASE='phase-production-build' durant `next build`.
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+
+/**
+ * Récupère une variable d'environnement sensible. Au DÉMARRAGE du serveur de
+ * production, son absence est FATALE (throw) — OWASP A07/A02 : sans ça, un
+ * oubli d'injection (ConfigMap/SealedSecret) ferait démarrer le serveur avec
+ * un secret par défaut public connu, permettant de forger un JWT super-admin.
+ * Pendant `next build` (pas de secrets) et en dev/test, on retombe sur une
+ * valeur locale explicite.
+ */
+function requireSecret(name: string, devFallback: string): string {
+  const value = process.env[name];
+  if (typeof value === 'string' && value.length > 0) return value;
+  if (isProd && !isBuildPhase) {
+    throw new Error(
+      `[payload] Variable d'environnement requise manquante en production : ${name}. ` +
+        'Refus de démarrer avec une valeur par défaut (sécurité).',
+    );
+  }
+  return devFallback;
+}
+
+const serverURL =
+  process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000';
+
+// Origines de confiance pour CORS + protection CSRF des mutations
+// authentifiées (OWASP A01/CSRF). Le same-origin est toujours autorisé ;
+// cette liste borne les origines cross-site pouvant porter le cookie de
+// session. On inclut l'apex + le sous-domaine www.
+const trustedOrigins = Array.from(
+  new Set(
+    [serverURL, serverURL.replace('://', '://www.')].filter((u) =>
+      u.startsWith('http'),
+    ),
+  ),
+);
+
 export default buildConfig({
-  secret: process.env.PAYLOAD_SECRET ?? 'dev-secret-replace-in-prod',
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
+  secret: requireSecret('PAYLOAD_SECRET', 'dev-secret-replace-in-prod'),
+  serverURL,
+  cors: trustedOrigins,
+  csrf: trustedOrigins,
+  // Borne la taille des uploads (busboy) — évite le DoS disque MinIO par un
+  // compte éditeur uploadant des fichiers énormes. 20 Mo couvre largement
+  // les couvertures (~2 Mo) et PDF de livres blancs.
+  upload: {
+    limits: { fileSize: 20 * 1024 * 1024 },
+  },
   admin: {
     user: 'users',
     meta: {
@@ -129,9 +181,10 @@ export default buildConfig({
   }),
   db: postgresAdapter({
     pool: {
-      connectionString:
-        process.env.DATABASE_URL ??
+      connectionString: requireSecret(
+        'DATABASE_URL',
         'postgresql://openlab:devpass@localhost:5432/openlab',
+      ),
     },
     migrationDir: path.resolve(dirname, 'migrations'),
   }),
@@ -147,8 +200,8 @@ export default buildConfig({
               ? process.env.MINIO_ENDPOINT
               : `http://${process.env.MINIO_ENDPOINT ?? 'localhost:9000'}`,
             credentials: {
-              accessKeyId: process.env.MINIO_ACCESS_KEY ?? 'minioadmin',
-              secretAccessKey: process.env.MINIO_SECRET_KEY ?? 'minioadmin',
+              accessKeyId: requireSecret('MINIO_ACCESS_KEY', 'minioadmin'),
+              secretAccessKey: requireSecret('MINIO_SECRET_KEY', 'minioadmin'),
             },
             region: 'us-east-1',
             forcePathStyle: true, // MinIO requiert path-style

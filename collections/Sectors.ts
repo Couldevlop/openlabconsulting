@@ -1,5 +1,9 @@
 import type { CollectionConfig } from 'payload';
 import { ICON_KEYS } from '../lib/icon-map';
+import {
+  accessReadPublishedOrAuth,
+  accessEditorChiefPlus,
+} from '../lib/auth/roles';
 
 /**
  * Sectors — les 5 secteurs cibles OpenLab (CLAUDE.md §5).
@@ -58,10 +62,10 @@ export const Sectors: CollectionConfig = {
     // peut lire QUE les versions publiées, y compris via l'API REST/GraphQL
     // de Payload. On retourne une contrainte `Where` sur le statut natif des
     // drafts (`_status`), appliquée par la base. Aligné sur Products.
-    read: ({ req }) => {
-      if (req.user) return true;
-      return { _status: { equals: 'published' } };
-    },
+    read: accessReadPublishedOrAuth,
+    create: accessEditorChiefPlus,
+    update: accessEditorChiefPlus,
+    delete: accessEditorChiefPlus,
   },
   fields: [
     {
