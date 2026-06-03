@@ -72,17 +72,25 @@ const useMinio =
 
 const isProd = process.env.NODE_ENV === 'production';
 
+// `next build` évalue ce module (collecte des routes /api/*) en
+// NODE_ENV=production mais SANS les secrets runtime (injectés seulement au
+// déploiement). On ne doit donc PAS échouer pendant la phase de build —
+// uniquement au démarrage du serveur de prod. Next pose
+// NEXT_PHASE='phase-production-build' durant `next build`.
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+
 /**
- * Récupère une variable d'environnement sensible. En production, son
- * absence est FATALE (throw au démarrage) — OWASP A07/A02 : sans ça, un
- * oubli d'injection (ConfigMap/SealedSecret) ferait démarrer le serveur
- * avec un secret par défaut public connu, permettant de forger un JWT
- * super-admin. En dev/test, on retombe sur une valeur locale explicite.
+ * Récupère une variable d'environnement sensible. Au DÉMARRAGE du serveur de
+ * production, son absence est FATALE (throw) — OWASP A07/A02 : sans ça, un
+ * oubli d'injection (ConfigMap/SealedSecret) ferait démarrer le serveur avec
+ * un secret par défaut public connu, permettant de forger un JWT super-admin.
+ * Pendant `next build` (pas de secrets) et en dev/test, on retombe sur une
+ * valeur locale explicite.
  */
 function requireSecret(name: string, devFallback: string): string {
   const value = process.env[name];
   if (typeof value === 'string' && value.length > 0) return value;
-  if (isProd) {
+  if (isProd && !isBuildPhase) {
     throw new Error(
       `[payload] Variable d'environnement requise manquante en production : ${name}. ` +
         'Refus de démarrer avec une valeur par défaut (sécurité).',
