@@ -1,10 +1,12 @@
 import 'server-only';
 import {
+  ABOUT_FALLBACK,
   AUDIT_IA_CTA_FALLBACK,
   FOOTER_FALLBACK,
   HERO_FALLBACK,
   MANIFESTO_FALLBACK,
   REASSURANCE_FALLBACK,
+  type AboutContent,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
@@ -142,6 +144,28 @@ export async function getAuditIaCtaContent(): Promise<AuditIaCtaContent> {
 
 export async function getFooterContent(): Promise<FooterContent> {
   return readGlobal('footer-settings', FOOTER_FALLBACK);
+}
+
+export async function getAboutContent(): Promise<AboutContent> {
+  const raw = await readGlobal('about-settings', ABOUT_FALLBACK);
+  // Normalise les piliers : Payload renvoie {id?, title, body} ; on ne garde
+  // que les entrées avec title + body non vides, sinon le fallback.
+  const pillars = Array.isArray(raw.pillars)
+    ? raw.pillars
+        .filter(
+          (p): p is { title: string; body: string } =>
+            typeof p === 'object' &&
+            p !== null &&
+            typeof (p as { title?: unknown }).title === 'string' &&
+            typeof (p as { body?: unknown }).body === 'string' &&
+            (p as { title: string }).title.trim().length > 0,
+        )
+        .map((p) => ({ title: p.title, body: p.body }))
+    : [];
+  return {
+    ...raw,
+    pillars: pillars.length > 0 ? pillars : ABOUT_FALLBACK.pillars,
+  };
 }
 
 interface RawMedia {

@@ -16,6 +16,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { personSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/seo/site';
+import { getAboutContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'À propos — OpenLab Consulting',
@@ -24,23 +25,12 @@ export const metadata: Metadata = {
   alternates: { canonical: '/a-propos' },
 };
 
-const PILLARS = [
-  {
-    title: 'Conseil & Intégration IA',
-    body: 'Diagnostic, cadrage, déploiement et gouvernance IA pour PME, grandes entreprises, institutions publiques en Afrique de l’Ouest et France.',
-  },
-  {
-    title: 'R&D Produits',
-    body: 'Sept logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City.',
-  },
-  {
-    title: 'Édition académique',
-    body: 'Livre IA de référence, livres blancs trimestriels, conférences universitaires. La science qui se publie est la science qui se vérifie.',
-  },
-];
-
 export default async function AProposPage(): Promise<React.ReactElement> {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const [nonceHeader, about] = await Promise.all([
+    headers(),
+    getAboutContent(),
+  ]);
+  const nonce = nonceHeader.get('x-nonce') ?? undefined;
 
   // Person schema Debora Ahouma — boost E-E-A-T pour le ranking sur
   // les sujets IA / Afrique francophone. À enrichir au fil du temps
@@ -76,19 +66,16 @@ export default async function AProposPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="max-w-3xl">
-            <Eyebrow tone="orange">À propos</Eyebrow>
+            <Eyebrow tone="orange">{about.eyebrow}</Eyebrow>
             <Heading id="apropos-title" level={1} className="mt-4">
-              Cabinet ivoirien d’IA appliquée.{' '}
+              {about.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                Pour l’Afrique francophone
+                {about.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 font-[family-name:var(--font-editorial)] text-xl leading-relaxed text-[var(--color-ol-graphite)]/85 italic sm:text-2xl">
-              OpenLab Consulting a été fondé pour résoudre une équation simple :
-              comment déployer de l’IA réellement utile dans un contexte
-              africain francophone, sans renoncer à la rigueur scientifique ni à
-              la souveraineté des données.
+              {about.intro}
             </p>
           </div>
         </Container>
@@ -101,14 +88,14 @@ export default async function AProposPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="max-w-2xl">
-            <Eyebrow tone="orange">Trois piliers</Eyebrow>
+            <Eyebrow tone="orange">{about.pillarsEyebrow}</Eyebrow>
             <Heading id="piliers-title" level={2} className="mt-4">
-              Conseil, produits, édition. Aucun concurrent ne couvre les trois.
+              {about.pillarsHeadline}
             </Heading>
           </div>
 
           <ol className="mt-12 grid gap-x-12 gap-y-10 lg:grid-cols-3">
-            {PILLARS.map((p, i) => (
+            {about.pillars.map((p, i) => (
               <li
                 key={p.title}
                 className="border-t-2 border-[var(--color-ol-orange)] pt-6"
