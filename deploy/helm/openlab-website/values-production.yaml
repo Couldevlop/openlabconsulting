@@ -34,3 +34,14 @@ config:
   EMAIL_FROM: 'noreply@openlabconsulting.com'
   EMAIL_FROM_NAME: 'OpenLab Consulting'
   EMAIL_TEAM: 'waopron@openlabconsulting.com'
+  # 2FA admin (OWASP A07). 'false' par défaut — passer à 'true' UNIQUEMENT
+  # après avoir configuré son TOTP via /admin-2fa et testé (sinon lockout).
+  ENFORCE_ADMIN_2FA: 'false'
+
+# Job de migration Payload désactivé : l'image runner est distroless (pas de
+# /bin/sh) et le standalone Next n'embarque pas le CLI payload + migrations/,
+# donc le hook échoue et bloque la synchro ArgoCD. Les migrations sont
+# appliquées manuellement via tunnel (cf. deploy/argocd/README.md) jusqu'à un
+# fix Dockerfile dédié. NE PAS réactiver sans une image capable de migrer.
+migrate:
+  enabled: false
