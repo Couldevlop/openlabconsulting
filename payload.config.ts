@@ -4,6 +4,9 @@ import {
   lexicalEditor,
   HeadingFeature,
   FixedToolbarFeature,
+  TextStateFeature,
+  defaultColors,
+  createServerFeature,
 } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import sharp from 'sharp';
@@ -114,6 +117,16 @@ const trustedOrigins = Array.from(
   ),
 );
 
+// Feature Lexical custom : sélecteur d'emoji dans la barre d'outils. Le
+// composant client est résolu via l'importMap (cf. cms:generate-importmap).
+const EmojiServerFeature = createServerFeature({
+  feature: {
+    ClientFeature:
+      '/components/admin/lexical/EmojiFeatureClient.tsx#EmojiFeatureClient',
+  },
+  key: 'emoji',
+});
+
 export default buildConfig({
   secret: requireSecret('PAYLOAD_SECRET', 'dev-secret-replace-in-prod'),
   serverURL,
@@ -171,12 +184,21 @@ export default buildConfig({
   // inline depuis la médiathèque MinIO) et on ajoute :
   //   - titres restreints à H2/H3/H4 — le H1 est réservé au titre de page,
   //     ce qui garde une hiérarchie SEO propre (un seul H1 par document) ;
-  //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur).
+  //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur) ;
+  //   - couleurs de texte + surlignage (TextStateFeature + defaultColors) pour
+  //     la mise en forme ;
+  //   - un sélecteur d'emoji (EmojiServerFeature) pour enrichir la saisie.
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
       FixedToolbarFeature(),
+      TextStateFeature({
+        state: {
+          color: { ...defaultColors.text, ...defaultColors.background },
+        },
+      }),
+      EmojiServerFeature(),
     ],
   }),
   db: postgresAdapter({
