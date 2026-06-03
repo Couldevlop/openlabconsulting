@@ -47,6 +47,13 @@ export async function generateMetadata({
   };
 }
 
+// Captures d'écran produit réelles (assets statiques public/). Affichées dans
+// le hero à la place du placeholder « mockup ». À enrichir au fil des visuels
+// disponibles (clé = slug produit).
+const SOLUTION_SCREENSHOTS: Record<string, string> = {
+  nexusrh: '/solutions/nexusrh.png',
+};
+
 export default async function SolutionDetailPage({
   params,
 }: RouteParams): Promise<React.ReactElement> {
@@ -155,7 +162,7 @@ export default async function SolutionDetailPage({
             </div>
 
             <MediaPlaceholder
-              src={null}
+              src={SOLUTION_SCREENSHOTS[slug] ?? null}
               alt={`Capture d’écran ${name}`}
               tone="neutral"
               aspect="3/2"
