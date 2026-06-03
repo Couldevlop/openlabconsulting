@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { TOTP_COOKIE, verifyTotpSession } from '@/lib/auth/totp-session';
 
 /**
  * Middleware de sécurité — CLAUDE.md §10.3.
@@ -25,6 +26,40 @@ import { NextResponse, type NextRequest } from 'next/server';
  */
 
 const isProd = process.env.NODE_ENV === 'production';
+
+// Application de la 2FA admin (OWASP A07). OFF par défaut : activer via la
+// variable d'env `ENFORCE_ADMIN_2FA=true` UNE FOIS le TOTP configuré et testé
+// (sinon risque de lockout). Break-glass : repasser la variable à false, ou
+// `UPDATE users SET totp_enabled=false WHERE ...` en base.
+const enforceAdmin2fa = process.env.ENFORCE_ADMIN_2FA === 'true';
+
+/**
+ * Garde 2FA pour `/admin` (et sous-routes). Exécutée AVANT que Payload ne
+ * serve le back-office. Ne touche PAS aux headers (Payload gère les siens).
+ *
+ *   - flag OFF        → laisse passer (aucun changement de comportement) ;
+ *   - non authentifié → laisse passer (la page de login Payload doit s'afficher) ;
+ *   - authentifié + cookie 2FA signé valide → laisse passer ;
+ *   - authentifié sans 2FA valide → redirige vers /admin-2fa (challenge/setup).
+ *
+ * La page /admin-2fa est HORS de `/admin` (pas de boucle de redirection).
+ */
+async function guardAdmin2fa(req: NextRequest): Promise<NextResponse> {
+  if (!enforceAdmin2fa) return NextResponse.next();
+
+  // Pas de session Payload → on laisse la page de login s'afficher.
+  if (!req.cookies.get('payload-token')) return NextResponse.next();
+
+  const secret = process.env.PAYLOAD_SECRET ?? '';
+  const totp = req.cookies.get(TOTP_COOKIE)?.value;
+  const valid = secret ? await verifyTotpSession(totp, secret) : null;
+  if (valid) return NextResponse.next();
+
+  const url = req.nextUrl.clone();
+  url.pathname = '/admin-2fa';
+  url.search = '';
+  return NextResponse.redirect(url);
+}
 
 function generateNonce(): string {
   // crypto.randomUUID est dispo en Edge runtime mais on veut du base64.
@@ -62,7 +97,15 @@ function buildCsp(nonce: string): string {
   ].join('; ');
 }
 
-export function middleware(req: NextRequest): NextResponse {
+export async function middleware(req: NextRequest): Promise<NextResponse> {
+  // Branche /admin : garde 2FA uniquement (pas d'injection de headers — le
+  // back-office Payload gère sa propre CSP). `/admin-2fa` n'est PAS couvert
+  // (préfixe distinct) donc pas de boucle.
+  const { pathname } = req.nextUrl;
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    return guardAdmin2fa(req);
+  }
+
   const nonce = generateNonce();
   const csp = buildCsp(nonce);
 
@@ -97,7 +140,10 @@ export function middleware(req: NextRequest): NextResponse {
 export const config = {
   matcher: [
     // Tous les paths sauf assets, sitemap, robots, favicon, admin Payload,
-    // API Payload (qui gère ses propres headers).
+    // API Payload (qui gère ses propres headers). Pose les headers de sécurité.
     '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|admin|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webmanifest|woff|woff2|ttf|otf)).*)',
+    // /admin + sous-routes : couvert en plus pour la garde 2FA (pas de headers).
+    '/admin',
+    '/admin/:path*',
   ],
 };
