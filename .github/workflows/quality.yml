@@ -89,10 +89,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Build Next.js
         run: pnpm build
-      - name: Start Next.js production server
-        run: pnpm start &
+      # Sert le build STANDALONE (le vrai artefact de prod, identique à
+      # l'image Docker). `next start` est incompatible avec
+      # `output: standalone` (Next l'avertit) et sert une app dégradée où
+      # les balises de l'API Metadata ne sont pas émises → Lighthouse
+      # voyait `meta-description` absente (SEO 0.92). Le serveur standalone,
+      # lui, rend exactement comme la prod.
+      - name: Start Next.js production server (standalone)
+        run: |
+          cp -r .next/static .next/standalone/.next/static
+          cp -r public .next/standalone/public
+          node .next/standalone/server.js &
         env:
           PORT: '3000'
+          HOSTNAME: '0.0.0.0'
+          NODE_ENV: 'production'
+          # Secrets factices : payload.config (fail-fast prod) doit pouvoir se
+          # charger ; la DB est injoignable → les pages rendent via fallback.
+          PAYLOAD_SECRET: 'ci-lighthouse-dummy-secret'
+          DATABASE_URL: 'postgresql://ci:ci@127.0.0.1:1/none'
       - name: Wait for server
         run: |
           for i in $(seq 1 30); do
