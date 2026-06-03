@@ -3,11 +3,10 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Badge } from '@/components/atoms/Badge';
-import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { InsightsList } from '@/components/sections/InsightsList';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
 
@@ -63,50 +62,7 @@ export default async function InsightsHubPage(): Promise<React.ReactElement> {
         className="bg-white py-20 sm:py-28"
       >
         <Container width="wide">
-          <ul className="grid gap-8 md:grid-cols-3">
-            {articles.map((a) => (
-              <li key={a.slug}>
-                <Link
-                  href={`/insights/${a.slug}`}
-                  className="group block h-full focus:outline-none focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-                >
-                  <Card
-                    as="article"
-                    interactive
-                    className="flex h-full flex-col gap-5 p-0 sm:p-0"
-                  >
-                    <MediaPlaceholder
-                      src={a.cover.src}
-                      alt={a.cover.alt}
-                      tone="cold"
-                      aspect="16/9"
-                      placeholderLabel="Couverture article"
-                      className="rounded-b-none border-0 border-b border-dashed border-[var(--color-ol-graphite)]/15"
-                    />
-                    <div className="flex flex-1 flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8">
-                      <Badge tone="orange">{a.categoryLabel}</Badge>
-                      <Heading
-                        level={2}
-                        visualLevel={4}
-                        className="leading-snug"
-                      >
-                        {a.title}
-                      </Heading>
-                      <p className="text-[var(--color-ol-graphite)]/75">
-                        {a.excerpt}
-                      </p>
-                      <footer className="mt-auto flex items-center justify-between gap-3 border-t border-[var(--color-ol-mist)] pt-4 text-xs text-[var(--color-ol-graphite)]/65">
-                        <span className="font-medium text-[var(--color-ol-night)]">
-                          {a.author}
-                        </span>
-                        <time dateTime={a.isoDate}>{a.publishedAt}</time>
-                      </footer>
-                    </div>
-                  </Card>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <InsightsList articles={articles} />
 
           <div className="mt-12 rounded-lg border border-dashed border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 text-center">
             <Heading level={3} visualLevel={4}>
