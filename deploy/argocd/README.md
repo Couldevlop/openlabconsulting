@@ -146,3 +146,49 @@ puis déploie l'app. `automated + selfHeal + prune` maintiennent l'état.
 | Image non mise à jour                 | logs `deploy/argocd-image-updater -n argocd` ; package GHCR public ? tag conforme `^[0-9]+\.[0-9]+\.[0-9]+$` ? |
 | Pods `CreateContainerConfigError`     | Secret `openlab-website-secrets` absent/incomplet (§3)                                                         |
 | Hook migration en échec               | logs du Job `…-migrate` dans le ns `openlab`                                                                   |
+
+## ⚠️ Dépannage — ArgoCD bloqué sur K8s 1.35 (diff `terminatingReplicas`)
+
+**Symptôme** : `kubectl get application openlab-website -n argocd` → `Synced/Healthy`
+mais `op=Error` :
+
+```
+ComparisonError: ... error building typed value from live resource:
+.status.terminatingReplicas: field not declared in schema
+```
+
+→ ArgoCD v2.13.2 ne connaît pas ce champ (Deployments K8s ≥ 1.33) → **tout sync
+échoue**, l'Image Updater écrit le bon tag mais rien ne se déploie, et le
+`selfHeal` est inerte. C'est ce qui a figé l'image sur `1.0.10` (page `/admin`
+blanche, vieux importMap) alors que `v1.0.17` était dispo.
+
+**Interim (déployer quand même)** — le selfHeal étant cassé, un set image manuel tient :
+
+```bash
+bash deploy/scripts/roll-image.sh 1.0.18    # après chaque release vX.Y.Z
+```
+
+**Fix durable — UPGRADE ArgoCD** (le cluster héberge aussi NexusRH → fenêtre de
+maintenance) vers une version dont les libs k8s connaissent `terminatingReplicas`
+(≥ v2.14 / dernier patch 2.13) :
+
+```bash
+# exemple (adapter à la méthode d'install : manifests ou helm)
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.14.x/manifests/install.yaml
+kubectl -n argocd rollout status statefulset/argocd-application-controller
+```
+
+ServerSideDiff est déjà activé (annotation Application + `controller.diff.server.side=true`)
+mais ne suffit pas sur 2.13.2 — l'upgrade est nécessaire.
+
+## Migrations Payload (manuel, tant que `migrate.enabled=false`)
+
+L'image runner distroless ne peut pas exécuter le migrate-job. Appliquer les
+migrations via tunnel depuis un poste avec le repo :
+
+```bash
+ssh -N -L 35432:<postgres-clusterIP>:5432 root@<noeud> &   # tunnel Postgres
+DATABASE_URL=postgresql://openlab:<pwd>@localhost:35432/openlab \
+PAYLOAD_SECRET=<secret> NODE_ENV=production \
+  node ./node_modules/tsx/dist/cli.mjs scripts/payload-migrate.ts
+```

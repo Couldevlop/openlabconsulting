@@ -220,3 +220,44 @@ export const FOOTER_FALLBACK: FooterContent = {
   copyright:
     'OpenLab Consulting SARL — RCCM CI-ABJ-03-2022-B13-03239. Tous droits réservés.',
 };
+
+export interface AboutPillar {
+  title: string;
+  body: string;
+}
+
+/** Contenu éditable de la page /a-propos (hero + trois piliers). */
+export interface AboutContent {
+  eyebrow: string;
+  headlineLead: string;
+  headlineHighlight: string;
+  intro: string;
+  pillarsEyebrow: string;
+  pillarsHeadline: string;
+  pillars: readonly AboutPillar[];
+}
+
+export const ABOUT_FALLBACK: AboutContent = {
+  eyebrow: 'À propos',
+  headlineLead: 'Cabinet ivoirien d’IA appliquée.',
+  headlineHighlight: 'Pour l’Afrique francophone',
+  intro:
+    'OpenLab Consulting a été fondé pour résoudre une équation simple : comment déployer de l’IA réellement utile dans un contexte africain francophone, sans renoncer à la rigueur scientifique ni à la souveraineté des données.',
+  pillarsEyebrow: 'Trois piliers',
+  pillarsHeadline:
+    'Conseil, produits, édition. Aucun concurrent ne couvre les trois.',
+  pillars: [
+    {
+      title: 'Conseil & Intégration IA',
+      body: 'Diagnostic, cadrage, déploiement et gouvernance IA pour PME, grandes entreprises, institutions publiques en Afrique de l’Ouest et France.',
+    },
+    {
+      title: 'R&D Produits',
+      body: 'Sept logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City.',
+    },
+    {
+      title: 'Édition académique',
+      body: 'Livre IA de référence, livres blancs trimestriels, conférences universitaires. La science qui se publie est la science qui se vérifie.',
+    },
+  ],
+};

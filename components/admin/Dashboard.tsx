@@ -1,5 +1,18 @@
 import type { ReactElement } from 'react';
 import type { AdminViewServerProps } from 'payload';
+import {
+  Users,
+  MailPlus,
+  FileText,
+  ShieldCheck,
+  PlusCircle,
+  SlidersHorizontal,
+  Target,
+  UserCog,
+  ImageIcon,
+  Globe,
+  type LucideIcon,
+} from 'lucide-react';
 
 /**
  * Dashboard admin custom v2 — refonte « cPanel premium »
@@ -151,7 +164,7 @@ export default async function OpenLabAdminDashboard(
 
   const kpis: KpiCard[] = [
     {
-      icon: '👥',
+      icon: Users,
       label: 'Leads totaux',
       value: leadsTotal,
       hint: 'Pipeline CRM complet',
@@ -160,7 +173,7 @@ export default async function OpenLabAdminDashboard(
       href: '/admin/collections/leads',
     },
     {
-      icon: '📨',
+      icon: MailPlus,
       label: 'Nouveaux 7j',
       value: leadsRecent,
       hint: 'Soumissions /contact + /audit-ia',
@@ -169,7 +182,7 @@ export default async function OpenLabAdminDashboard(
       href: `/admin/collections/leads?where[createdAt][greater_than]=${sevenDaysAgo}`,
     },
     {
-      icon: '📝',
+      icon: FileText,
       label: 'Brouillons articles',
       value: articlesDraft,
       hint: `${articlesPublished} publié(s) au total`,
@@ -178,7 +191,7 @@ export default async function OpenLabAdminDashboard(
       href: '/admin/collections/articles?where[status][equals]=draft',
     },
     {
-      icon: '🛡️',
+      icon: ShieldCheck,
       label: 'Audit log 24h',
       value: auditLast24h,
       hint: 'Événements sensibles',
@@ -190,42 +203,42 @@ export default async function OpenLabAdminDashboard(
 
   const quickActions: QuickAction[] = [
     {
-      icon: '+',
+      icon: PlusCircle,
       label: 'Nouvel article',
       hint: 'Insights blog',
       href: '/admin/collections/articles/create',
       tone: 'orange',
     },
     {
-      icon: '⚙',
+      icon: SlidersHorizontal,
       label: 'Contenu site',
       hint: 'Globals Hero / Manifeste / Footer',
       href: '/admin/globals/hero-settings',
       tone: 'navy',
     },
     {
-      icon: '🎯',
+      icon: Target,
       label: 'Audit IA CTA',
       hint: 'Bandeau lead magnet',
       href: '/admin/globals/audit-ia-cta-settings',
       tone: 'navy',
     },
     {
-      icon: '👤',
+      icon: UserCog,
       label: 'Utilisateurs',
       hint: 'Comptes + RBAC',
       href: '/admin/collections/users',
       tone: 'navy',
     },
     {
-      icon: '🖼️',
+      icon: ImageIcon,
       label: 'Médias',
       hint: 'Bibliothèque MinIO',
       href: '/admin/collections/media',
       tone: 'navy',
     },
     {
-      icon: '🌐',
+      icon: Globe,
       label: 'Voir le site',
       hint: 'openlabconsulting.com',
       href: '/',
@@ -388,13 +401,16 @@ export default async function OpenLabAdminDashboard(
 function KpiBlock({ kpi }: { kpi: KpiCard }): ReactElement {
   const accentColor = kpi.accent === 'orange' ? '#FF5A00' : '#0B1B3D';
   const deltaColor = (kpi.delta ?? 0) >= 0 ? '#22c55e' : '#dc2626';
+  const Icon = kpi.icon;
   return (
     <a
       href={kpi.href}
       style={{ ...dashboardStyles.kpi, textDecoration: 'none' }}
     >
       <div style={dashboardStyles.kpiHead}>
-        <span style={dashboardStyles.kpiIcon}>{kpi.icon}</span>
+        <span style={dashboardStyles.kpiIcon}>
+          <Icon size={22} color={accentColor} aria-hidden />
+        </span>
         <span style={{ ...dashboardStyles.kpiLabel, color: '#4A4E58' }}>
           {kpi.label}
         </span>
@@ -425,6 +441,7 @@ function KpiBlock({ kpi }: { kpi: KpiCard }): ReactElement {
 
 function QuickActionBlock({ action }: { action: QuickAction }): ReactElement {
   const accent = action.tone === 'orange' ? '#FF5A00' : '#0B1B3D';
+  const Icon = action.icon;
   return (
     <a href={action.href} style={dashboardStyles.action}>
       <span
@@ -434,7 +451,7 @@ function QuickActionBlock({ action }: { action: QuickAction }): ReactElement {
           color: accent,
         }}
       >
-        {action.icon}
+        <Icon size={20} aria-hidden />
       </span>
       <div>
         <div style={dashboardStyles.actionLabel}>{action.label}</div>
@@ -559,7 +576,7 @@ function EmptyState({ message }: { message: string }): ReactElement {
 // =============================================================
 
 interface KpiCard {
-  icon: string;
+  icon: LucideIcon;
   label: string;
   value: number;
   hint: string;
@@ -568,7 +585,7 @@ interface KpiCard {
   href: string;
 }
 interface QuickAction {
-  icon: string;
+  icon: LucideIcon;
   label: string;
   hint: string;
   href: string;

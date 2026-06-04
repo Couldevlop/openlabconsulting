@@ -4,6 +4,9 @@ import {
   lexicalEditor,
   HeadingFeature,
   FixedToolbarFeature,
+  TextStateFeature,
+  defaultColors,
+  createServerFeature,
   BlocksFeature,
   CodeBlock,
   EXPERIMENTAL_TableFeature,
@@ -35,6 +38,7 @@ import { ReassuranceSettings } from './globals/ReassuranceSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
+import { AboutSettings } from './globals/AboutSettings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -118,6 +122,16 @@ const trustedOrigins = Array.from(
   ),
 );
 
+// Feature Lexical custom : sélecteur d'emoji dans la barre d'outils. Le
+// composant client est résolu via l'importMap (cf. cms:generate-importmap).
+const EmojiServerFeature = createServerFeature({
+  feature: {
+    ClientFeature:
+      '/components/admin/lexical/EmojiFeatureClient.tsx#EmojiFeatureClient',
+  },
+  key: 'emoji',
+});
+
 export default buildConfig({
   secret: requireSecret('PAYLOAD_SECRET', 'dev-secret-replace-in-prod'),
   serverURL,
@@ -167,6 +181,7 @@ export default buildConfig({
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,
+    AboutSettings,
   ],
   // Éditeur richText premium pour la mise en forme professionnelle des
   // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,
@@ -176,6 +191,9 @@ export default buildConfig({
   //   - titres restreints à H2/H3/H4 — le H1 est réservé au titre de page,
   //     ce qui garde une hiérarchie SEO propre (un seul H1 par document) ;
   //   - une barre d'outils fixe en haut de l'éditeur (confort rédacteur) ;
+  //   - couleurs de texte + surlignage (TextStateFeature + defaultColors) pour
+  //     la mise en forme ;
+  //   - un sélecteur d'emoji (EmojiServerFeature) pour enrichir la saisie.
   //   - des TABLEAUX (TableFeature) pour les données comparatives ;
   //   - un bloc CODE multi-langages (éditeur Monaco en admin, coloration
   //     Shiki côté serveur au rendu — cf. lib/insights/code-highlighter) ;
@@ -188,6 +206,12 @@ export default buildConfig({
       ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
       FixedToolbarFeature(),
+      TextStateFeature({
+        state: {
+          color: { ...defaultColors.text, ...defaultColors.background },
+        },
+      }),
+      EmojiServerFeature(),
       EXPERIMENTAL_TableFeature(),
       BlocksFeature({ blocks: [CodeBlock(), Callout] }),
     ],
