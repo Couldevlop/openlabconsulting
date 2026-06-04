@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { accessEditorPlus, accessEditorChiefPlus } from '../lib/auth/roles';
 
 /**
  * Media — bibliothèque centralisée d'assets uploadés via Payload.
@@ -16,7 +17,15 @@ export const Media: CollectionConfig = {
     useAsTitle: 'filename',
   },
   access: {
+    // Les médias publiés sont servis publiquement (images du site).
     read: (): boolean => true,
+    // OWASP A01 : écriture réservée. Sans ces règles, le défaut Payload
+    // (« tout utilisateur authentifié ») laissait un compte `viewer`
+    // uploader, remplacer ou supprimer n'importe quel média. Aligné sur
+    // Articles : upload/update = éditeur+, delete = rédacteur en chef+.
+    create: accessEditorPlus,
+    update: accessEditorPlus,
+    delete: accessEditorChiefPlus,
   },
   upload: {
     // OWASP A03/XSS stocké : on N'autorise PAS `image/*` (qui couvre
