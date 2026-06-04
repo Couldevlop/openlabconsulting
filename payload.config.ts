@@ -7,6 +7,9 @@ import {
   TextStateFeature,
   defaultColors,
   createServerFeature,
+  BlocksFeature,
+  CodeBlock,
+  EXPERIMENTAL_TableFeature,
 } from '@payloadcms/richtext-lexical';
 import { s3Storage } from '@payloadcms/storage-s3';
 import sharp from 'sharp';
@@ -28,6 +31,7 @@ import { TeamMembers } from './collections/TeamMembers';
 import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
+import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { ReassuranceSettings } from './globals/ReassuranceSettings';
@@ -190,6 +194,13 @@ export default buildConfig({
   //   - couleurs de texte + surlignage (TextStateFeature + defaultColors) pour
   //     la mise en forme ;
   //   - un sélecteur d'emoji (EmojiServerFeature) pour enrichir la saisie.
+  //   - des TABLEAUX (TableFeature) pour les données comparatives ;
+  //   - un bloc CODE multi-langages (éditeur Monaco en admin, coloration
+  //     Shiki côté serveur au rendu — cf. lib/insights/code-highlighter) ;
+  //   - des ENCADRÉS (bloc `callout` : info / astuce / avertissement /
+  //     danger), signature éditoriale des meilleures docs tech.
+  // Les blocs Lexical sont stockés inline dans le JSON du champ richText :
+  // aucune table SQL dédiée, donc aucune migration de schéma.
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures.filter((feature) => feature.key !== 'heading'),
@@ -201,6 +212,8 @@ export default buildConfig({
         },
       }),
       EmojiServerFeature(),
+      EXPERIMENTAL_TableFeature(),
+      BlocksFeature({ blocks: [CodeBlock(), Callout] }),
     ],
   }),
   db: postgresAdapter({

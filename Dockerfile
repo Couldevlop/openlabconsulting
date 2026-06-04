@@ -45,6 +45,20 @@ RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 RUN pnpm build
 
 # -----------------------------------------------------------------------------
+# Stage 2b : sharp pour glibc
+# -----------------------------------------------------------------------------
+# Le stage `deps` (Alpine/musl) compile sharp pour musl libc. Or le runner
+# Chainguard est basé sur glibc → le binaire natif musl ne charge pas
+# ("Could not load the sharp module using the linux-x64 runtime"), ce qui
+# casse tout traitement d'image Payload (uploads médias, AVIF/WebP).
+# On réinstalle donc sharp sur une base glibc (node:22-slim = Debian) pour
+# récupérer les bons binaires `@img/sharp-linux*-x64` et on les copie dans
+# le runner. Version épinglée sur celle du package.json (sharp ^0.34.5).
+FROM node:22-slim AS sharp-glibc
+WORKDIR /sharp
+RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.34.5
+
+# -----------------------------------------------------------------------------
 # Stage 3 : runner (Chainguard Node, non-root par défaut)
 # -----------------------------------------------------------------------------
 FROM cgr.dev/chainguard/node:latest AS runner
@@ -58,6 +72,11 @@ ENV HOSTNAME=0.0.0.0
 COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
 COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
 COPY --from=builder --chown=nonroot:nonroot /app/public ./public
+
+# Écrase le sharp musl (issu du standalone Alpine) par la build glibc.
+# `sharp` (JS) + `@img/*` (binaires natifs linux-x64 glibc) — cf. stage sharp-glibc.
+COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/sharp ./node_modules/sharp
+COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/@img ./node_modules/@img
 
 USER nonroot
 EXPOSE 3000

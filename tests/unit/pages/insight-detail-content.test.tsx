@@ -6,6 +6,12 @@ vi.mock('@/components/sections/AuditIaCtaServer', () => ({
   AuditIaCtaServer: () => <div data-testid="audit-ia-cta" />,
 }));
 
+// Shiki (server-only) mocké : la page crée le rendu de code via
+// createCodeRenderer. On évite le chargement réel des grammaires en test.
+vi.mock('@/lib/insights/code-highlighter', () => ({
+  createCodeRenderer: async () => (code: string) => `<pre>${code}</pre>`,
+}));
+
 function text(value: string): Record<string, unknown> {
   return {
     type: 'text',
