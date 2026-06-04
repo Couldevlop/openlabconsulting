@@ -34,9 +34,13 @@ config:
   EMAIL_FROM: 'noreply@openlabconsulting.com'
   EMAIL_FROM_NAME: 'OpenLab Consulting'
   EMAIL_TEAM: 'waopron@openlabconsulting.com'
-  # 2FA admin (OWASP A07). 'false' par défaut — passer à 'true' UNIQUEMENT
-  # après avoir configuré son TOTP via /admin-2fa et testé (sinon lockout).
-  ENFORCE_ADMIN_2FA: 'false'
+  # 2FA admin OBLIGATOIRE (OWASP A07, CLAUDE.md §11.2 — finding critique de
+  # l'audit 2026-06-02). Tout utilisateur authentifié sans session TOTP valide
+  # est redirigé vers /admin-2fa : enrôlement automatique (QR code) au premier
+  # accès, challenge ensuite — pas de risque de lockout à l'activation.
+  # Break-glass : repasser à 'false' (rolling restart via checksum/config) ou
+  # `UPDATE users SET totp_enabled=false WHERE email='...'` en base.
+  ENFORCE_ADMIN_2FA: 'true'
 
 # Job de migration Payload désactivé : l'image runner est distroless (pas de
 # /bin/sh) et le standalone Next n'embarque pas le CLI payload + migrations/,
