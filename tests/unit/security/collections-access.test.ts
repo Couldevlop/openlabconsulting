@@ -7,6 +7,7 @@ import { Sectors } from '@/collections/Sectors';
 import { TeamMembers } from '@/collections/TeamMembers';
 import { TeamPublications } from '@/collections/TeamPublications';
 import { Whitepapers } from '@/collections/Whitepapers';
+import { Media } from '@/collections/Media';
 import { Users } from '@/collections/Users';
 import { HeroSettings } from '@/globals/HeroSettings';
 import { FooterSettings } from '@/globals/FooterSettings';
@@ -62,6 +63,24 @@ describe('Access control des collections de contenu (OWASP A01)', () => {
     const read = Whitepapers.access?.read as AccessFn;
     expect(read(as(null))).toEqual({ _status: { equals: 'published' } });
     expect(read(as('viewer'))).toBe(true);
+  });
+
+  it('Media : upload/update = éditeur+, delete = chef+ ; viewer refusé partout', () => {
+    const create = Media.access?.create as AccessFn;
+    const update = Media.access?.update as AccessFn;
+    const del = Media.access?.delete as AccessFn;
+    expect(typeof create, 'Media.create défini').toBe('function');
+    expect(typeof update, 'Media.update défini').toBe('function');
+    expect(typeof del, 'Media.delete défini').toBe('function');
+    expect(create(as('editor'))).toBe(true);
+    expect(update(as('editor'))).toBe(true);
+    expect(del(as('editor'))).toBe(false);
+    expect(del(as('editor-chief'))).toBe(true);
+    for (const fn of [create, update, del]) {
+      expect(fn(as('viewer'))).toBe(false);
+      expect(fn(as('author'))).toBe(false);
+      expect(fn(as(null))).toBe(false);
+    }
   });
 });
 
