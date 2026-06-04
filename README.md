@@ -113,6 +113,46 @@ pnpm dev
   `deploy/scripts/rollback-admin.sh` (à venir P11) ou `kubectl exec`
   dans le pod pour lancer un re-seed.
 
+### 2FA admin (TOTP) — fonctionnement & break-glass
+
+La 2FA TOTP (CLAUDE.md §11.2, OWASP A07) protège `/admin`. Elle est
+gardée par le middleware derrière la variable d'env `ENFORCE_ADMIN_2FA`
+(**`'true'` en production** — `deploy/helm/openlab-website/values-production.yaml`,
+clé `config.ENFORCE_ADMIN_2FA` ; `false` par défaut en dev).
+
+**Enrôlement (premier accès, aucune action préalable requise)** :
+
+1. Se connecter sur `/admin` avec email + password → redirection
+   automatique vers `/admin-2fa` (mode _setup_ auto-détecté).
+2. Scanner le QR code avec une app TOTP (Google Authenticator,
+   Aegis, Authy) et saisir le code à 6 chiffres.
+3. Le TOTP est activé et la session 2FA ouverte (cookie signé
+   HMAC `PAYLOAD_SECRET`, TTL aligné sur la session Payload — 8 h).
+   Aux connexions suivantes, `/admin-2fa` passe en mode _challenge_
+   (code seul).
+
+Il n'y a **pas de risque de lockout à l'activation du flag** :
+un compte sans TOTP est simplement envoyé vers l'enrôlement.
+Le endpoint de vérification est rate-limité (5 req / 15 min / IP)
+et chaque événement 2FA est journalisé dans l'audit log.
+
+**Break-glass (perte du téléphone / TOTP cassé)** :
+
+- Option 1 — désactiver le TOTP du compte en base (via le tunnel
+  SSH vers le cluster, cf. `deploy/argocd/README.md`) :
+  ```sql
+  UPDATE users SET totp_enabled = false WHERE email = '...';
+  ```
+  Au prochain accès, l'utilisateur ré-enrôle un nouveau secret.
+- Option 2 — désactiver la garde globalement : passer
+  `ENFORCE_ADMIN_2FA: 'false'` dans `values-production.yaml` + sync
+  ArgoCD (rolling restart automatique via l'annotation
+  `checksum/config`). À réserver aux urgences, et **remettre `'true'`
+  immédiatement après**.
+
+Le changement de ce flag (ConfigMap) redéploie les pods tout seul —
+aucun rebuild d'image nécessaire.
+
 ### Rôles disponibles (RBAC §11.3)
 
 | Rôle           | Permissions principales                                      |
