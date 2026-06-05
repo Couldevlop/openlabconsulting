@@ -51,9 +51,12 @@ export async function getPublishedCaseStudies(): Promise<readonly CaseStudy[]> {
  * Cas client associé à un produit (section §7.1 « Témoignage ou cas
  * client » de /solutions/[slug]). Retourne null si aucun cas réel n'existe
  * pour ce produit — on n'affiche jamais de témoignage fabriqué.
+ *
+ * `productSlug` est un string libre (slug produit créable depuis l'admin) :
+ * un produit sans cas client retourne simplement null.
  */
 export async function getCaseStudyForProduct(
-  productSlug: ProductSlug,
+  productSlug: string,
 ): Promise<CaseStudy | null> {
   try {
     const { getPayload } = await import('payload');

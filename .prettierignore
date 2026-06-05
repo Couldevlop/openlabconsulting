@@ -24,3 +24,6 @@ migrations/
 
 # importMap admin auto-généré par Payload (réécrit au boot du dev server).
 app/(payload)/admin/importMap.js
+
+# Artefacts sources (maquettes HTML, matériaux produits) — pas du code.
+docs/images/*.html
