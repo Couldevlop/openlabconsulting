@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ProductDemo } from '@/components/demos/ProductDemo';
+import { ProductDemo, hasProductDemo } from '@/components/demos/ProductDemo';
 
 describe('ProductDemo (router de démo par slug)', () => {
   it('route vers NexusRhDemo pour le slug "nexusrh"', () => {
@@ -38,5 +38,17 @@ describe('ProductDemo (router de démo par slug)', () => {
   it('route vers SmartCityDemo pour le slug "smart-city"', () => {
     render(<ProductDemo slug="smart-city" />);
     expect(screen.getByText(/modèle prédictif J\+7/i)).toBeInTheDocument();
+  });
+
+  it('slug sans démo enregistrée (produit créé depuis l’admin) → rien, pas de crash', () => {
+    const { container } = render(<ProductDemo slug="sentinelbtp" />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('hasProductDemo distingue slugs avec et sans démo', () => {
+    expect(hasProductDemo('nexusrh')).toBe(true);
+    expect(hasProductDemo('smart-city')).toBe(true);
+    expect(hasProductDemo('sentinelbtp')).toBe(false);
+    expect(hasProductDemo('')).toBe(false);
   });
 });

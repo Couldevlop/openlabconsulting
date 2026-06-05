@@ -75,8 +75,14 @@ describe('getPublishedProducts — Payload disponible', () => {
     expect(products).toEqual(FALLBACK_PRODUCTS);
   });
 
-  it('ignore les documents invalides (slug manquant) → fallback si plus aucun valide', async () => {
-    findMock.mockResolvedValue({ docs: [rawDoc({ slug: 'pas-un-slug' })] });
+  it('accepte un slug libre kebab-case inconnu du fallback (produit créé depuis l’admin)', async () => {
+    findMock.mockResolvedValue({ docs: [rawDoc({ slug: 'sentinelbtp' })] });
+    const products = await getPublishedProducts();
+    expect(products[0]?.slug).toBe('sentinelbtp');
+  });
+
+  it('ignore les documents invalides (slug mal formé) → fallback si plus aucun valide', async () => {
+    findMock.mockResolvedValue({ docs: [rawDoc({ slug: 'Pas Un Slug !' })] });
     const products = await getPublishedProducts();
     expect(products).toEqual(FALLBACK_PRODUCTS);
   });

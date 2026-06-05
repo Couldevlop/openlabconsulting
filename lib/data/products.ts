@@ -1,3 +1,9 @@
+/**
+ * Slugs des produits *fondateurs* (fallback hard-codé, démos, mockups).
+ * Le slug d'un produit n'est PAS limité à cette union : la collection
+ * Payload accepte tout slug kebab-case (`PRODUCT_SLUG_PATTERN`) pour
+ * qu'un nouveau produit soit créable depuis l'admin sans déploiement.
+ */
 export type ProductSlug =
   | 'nexusrh'
   | 'nexuserp'
@@ -6,6 +12,14 @@ export type ProductSlug =
   | 'qualitos'
   | 'fraud-shield'
   | 'smart-city';
+
+/**
+ * Format de slug produit : minuscules/chiffres séparés par des tirets
+ * (ex. `sentinelbtp`, `fraud-shield`). Partagé entre la validation du
+ * champ Payload (`collections/Products.ts`) et l'assainissement des
+ * documents CMS (`lib/products-server.ts`). Client-safe.
+ */
+export const PRODUCT_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export type ProductStatus = 'production' | 'pilot' | 'mvp' | 'dev';
 
@@ -46,7 +60,8 @@ export interface ProductFaq {
 }
 
 export interface Product {
-  slug: ProductSlug;
+  /** Slug URL (kebab-case, `PRODUCT_SLUG_PATTERN`) — libre depuis l'admin. */
+  slug: string;
   /** Clé d'icône Lucide (résolue via `lib/icon-map.ts` → `DynamicIcon`).
    *  String pour être sérialisable en base Payload. */
   iconKey: string;

@@ -3,7 +3,7 @@ import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
 import { EXPERTISES } from '@/lib/data/expertises';
 import { LOCATIONS } from '@/lib/data/locations';
-import { PRODUCTS } from '@/lib/data/products';
+import { getPublishedProducts } from '@/lib/products-server';
 import { SECTORS } from '@/lib/data/sectors';
 import { absoluteUrl } from '@/lib/seo/site';
 
@@ -171,7 +171,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const solutionPages: MetadataRoute.Sitemap = PRODUCTS.map((p) => ({
+  // Produits depuis le CMS (slug libre — un produit créé dans l'admin
+  // apparaît au prochain build/revalidate) avec fallback hard-codé intégré.
+  const products = await getPublishedProducts();
+  const solutionPages: MetadataRoute.Sitemap = products.map((p) => ({
     url: absoluteUrl(`/solutions/${p.slug}`),
     lastModified: now,
     changeFrequency: 'monthly' as const,
