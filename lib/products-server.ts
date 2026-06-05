@@ -1,8 +1,8 @@
 import 'server-only';
 import {
   FALLBACK_PRODUCTS,
+  PRODUCT_SLUG_PATTERN,
   type Product,
-  type ProductSlug,
   type ProductStatus,
   type ProductFeature,
   type ProductProof,
@@ -136,16 +136,12 @@ interface RawPayloadProduct {
   expertisesLies?: RawPayloadExpertise[];
 }
 
-function isProductSlug(value: unknown): value is ProductSlug {
-  return (
-    value === 'nexusrh' ||
-    value === 'nexuserp' ||
-    value === 'sygescom' ||
-    value === 'agrosense' ||
-    value === 'qualitos' ||
-    value === 'fraud-shield' ||
-    value === 'smart-city'
-  );
+/**
+ * Slug libre (plus d'union fermée) : tout kebab-case valide est accepté
+ * pour qu'un produit créé depuis l'admin soit servi sans déploiement.
+ */
+function isProductSlug(value: unknown): value is string {
+  return typeof value === 'string' && PRODUCT_SLUG_PATTERN.test(value);
 }
 
 function isProductStatus(value: unknown): value is ProductStatus {

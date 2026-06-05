@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { ICON_KEYS } from '../lib/icon-map';
+import { PRODUCT_SLUG_PATTERN } from '../lib/data/products';
 import {
   accessReadPublishedOrAuth,
   accessEditorChiefPlus,
@@ -32,16 +33,6 @@ import {
  *     y compris sur l'API REST/GraphQL auto-exposée par Payload. Aligné
  *     sur Articles et CaseStudies.
  */
-const PRODUCT_SLUG_OPTIONS = [
-  { label: 'NexusRH CI', value: 'nexusrh' },
-  { label: 'NexusERP', value: 'nexuserp' },
-  { label: 'SYGESCOM', value: 'sygescom' },
-  { label: 'AgroSense CI', value: 'agrosense' },
-  { label: 'QualitOS', value: 'qualitos' },
-  { label: 'Fraud Shield', value: 'fraud-shield' },
-  { label: 'Smart City', value: 'smart-city' },
-];
-
 const ICON_OPTIONS = ICON_KEYS.map((key) => ({ label: key, value: key }));
 
 export const Products: CollectionConfig = {
@@ -72,14 +63,22 @@ export const Products: CollectionConfig = {
   },
   fields: [
     {
+      // Champ texte libre (et NON un select fermé) : un nouveau produit
+      // doit être créable depuis l'admin sans déploiement de code. La démo
+      // interactive et le mockup restent optionnels par slug (registres
+      // `components/demos/ProductDemo.tsx` / fallback graceful).
       name: 'slug',
-      type: 'select',
+      type: 'text',
       required: true,
       unique: true,
-      options: PRODUCT_SLUG_OPTIONS,
+      index: true,
+      maxLength: 60,
+      validate: (value: unknown): true | string =>
+        (typeof value === 'string' && PRODUCT_SLUG_PATTERN.test(value)) ||
+        'Slug invalide — minuscules, chiffres et tirets uniquement (ex. « sentinelbtp », « fraud-shield »).',
       admin: {
         description:
-          'Identifiant du produit. Pilote l’URL /solutions/<slug> et la démo interactive associée.',
+          'Identifiant URL du produit (/solutions/<slug>) — minuscules, chiffres, tirets. Ex : « sentinelbtp ».',
       },
     },
     {

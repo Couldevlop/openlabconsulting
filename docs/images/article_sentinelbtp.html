@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voir le danger avant l'effondrement — Openlab Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a1428;
+    --navy-2:#0f1f3d;
+    --navy-3:#152a4f;
+    --orange:#f47216;
+    --orange-soft:#ff8a3d;
+    --ink:#1a2336;
+    --paper:#fbfaf7;
+    --paper-2:#f3f1ea;
+    --line:#e3e0d6;
+    --muted:#5d6577;
+    --teal:#15c2a0;
+    --red:#e23b3b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4',Georgia,serif;
+    font-size:19px;
+    line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+  /* HERO */
+  .hero{
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(244,114,22,.22), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(21,194,160,.12), transparent 60%),
+      linear-gradient(160deg,var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    border-bottom:3px solid var(--orange);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(700px 400px at 70% 20%,#000,transparent 75%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;padding:64px 24px 72px;max-width:760px;margin:0 auto;}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:.5px;
+    text-transform:uppercase;font-size:14px;
+  }
+  .brand .dot{width:13px;height:13px;border-radius:50%;border:3px solid var(--orange);}
+  .brand .o{color:var(--orange);}
+  .kicker{
+    margin-top:38px;display:inline-block;
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:12.5px;
+    letter-spacing:3px;text-transform:uppercase;color:var(--orange-soft);
+    border:1px solid rgba(244,114,22,.45);border-radius:40px;padding:7px 16px;
+  }
+  h1.title{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:clamp(34px,6.4vw,58px);line-height:1.02;letter-spacing:-1px;
+    margin-top:22px;text-transform:uppercase;
+  }
+  h1.title .hl{color:var(--orange);}
+  .dek{
+    font-size:21px;color:#c8d0e0;margin-top:22px;max-width:620px;line-height:1.6;
+    font-style:italic;
+  }
+  .meta{
+    margin-top:30px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;
+    font-family:'Archivo',sans-serif;font-size:13px;letter-spacing:.5px;
+    color:#9aa6bd;text-transform:uppercase;font-weight:600;
+  }
+  .meta .sep{width:5px;height:5px;border-radius:50%;background:var(--orange);}
+
+  /* hero badges */
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;}
+  .badge{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;
+    text-transform:uppercase;color:#fff;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:9px 13px;
+    display:flex;gap:8px;align-items:center;
+  }
+  .badge b{color:var(--orange-soft);}
+
+  /* BODY */
+  article{padding:60px 0 40px;}
+  .lead{font-size:22px;line-height:1.6;color:#26304a;}
+  .lead::first-letter{
+    font-family:'Archivo',sans-serif;font-weight:900;float:left;
+    font-size:74px;line-height:.78;padding:8px 12px 0 0;color:var(--orange);
+  }
+  p{margin:0 0 22px;}
+  article p + p{margin-top:0;}
+  h2{
+    font-family:'Archivo',sans-serif;font-weight:800;
+    font-size:clamp(24px,4vw,32px);line-height:1.12;letter-spacing:-.5px;
+    color:var(--navy);margin:54px 0 8px;position:relative;padding-top:22px;
+  }
+  h2::before{
+    content:"";position:absolute;top:0;left:0;width:52px;height:4px;background:var(--orange);
+  }
+  .sub{font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--orange);margin-bottom:26px;display:block;}
+  strong{color:var(--navy);font-weight:600;}
+  a{color:var(--orange);text-decoration:none;border-bottom:1px solid rgba(244,114,22,.4);}
+
+  /* STAT STRIP */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    margin:40px 0;
+  }
+  .stat{background:#fff;padding:24px 16px;text-align:center;}
+  .stat .num{
+    font-family:'Archivo',sans-serif;font-weight:900;font-size:33px;color:var(--navy);
+    line-height:1;letter-spacing:-1px;
+  }
+  .stat .num .u{color:var(--orange);font-size:20px;vertical-align:super;}
+  .stat .lab{font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.6px;
+    text-transform:uppercase;color:var(--muted);margin-top:10px;line-height:1.35;font-weight:600;}
+  @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
+
+  /* TIMELINE */
+  .timeline{
+    background:var(--navy);border-radius:16px;padding:34px 30px;margin:40px 0;color:#fff;
+    position:relative;overflow:hidden;
+  }
+  .timeline::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+    border-radius:50%;background:radial-gradient(circle,rgba(244,114,22,.25),transparent 70%);}
+  .timeline h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--orange-soft);margin-bottom:24px;}
+  .tl-item{display:flex;gap:18px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.09);}
+  .tl-item:last-child{border-bottom:none;}
+  .tl-date{font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;color:var(--orange);
+    min-width:74px;letter-spacing:.5px;padding-top:3px;}
+  .tl-body{font-family:'Source Serif 4',serif;font-size:16px;line-height:1.5;color:#d6dcea;}
+  .tl-body b{color:#fff;font-weight:600;}
+  .tl-toll{display:inline-block;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;
+    color:#fff;background:var(--red);border-radius:5px;padding:2px 8px;margin-left:4px;letter-spacing:.5px;}
+
+  /* CALLOUT */
+  .callout{
+    border-left:4px solid var(--orange);background:var(--paper-2);
+    padding:22px 26px;border-radius:0 12px 12px 0;margin:36px 0;font-size:18px;
+  }
+  .callout .tag{font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--orange);display:block;margin-bottom:8px;}
+
+  /* PULL QUOTE */
+  .pull{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(22px,3.6vw,28px);
+    line-height:1.32;color:var(--navy);text-align:left;margin:48px 0;
+    padding:30px 0;border-top:3px solid var(--navy);border-bottom:3px solid var(--navy);letter-spacing:-.3px;
+  }
+  .pull .hl{color:var(--orange);}
+
+  /* ARCHITECTURE */
+  .arch{margin:42px 0;}
+  .layer{
+    display:flex;align-items:flex-start;gap:18px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:20px 22px;margin-bottom:12px;position:relative;
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .layer:hover{transform:translateX(5px);box-shadow:-6px 6px 0 rgba(244,114,22,.16);}
+  .layer .n{
+    font-family:'Archivo',sans-serif;font-weight:900;font-size:22px;color:#fff;
+    background:var(--navy);border-radius:10px;min-width:48px;height:48px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .layer:nth-child(3) .n{background:var(--orange);}
+  .layer .lt{font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;color:var(--navy);
+    text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+  .layer .ld{font-size:15.5px;color:var(--muted);line-height:1.5;}
+  .layer .arrow{position:absolute;left:43px;bottom:-13px;color:var(--line);font-size:20px;z-index:2;}
+  .layer:last-child .arrow{display:none;}
+
+  /* KPI grid */
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:38px 0;}
+  .kpi{background:linear-gradient(160deg,var(--navy),var(--navy-3));border-radius:14px;
+    padding:22px 18px;color:#fff;text-align:center;}
+  .kpi .v{font-family:'Archivo',sans-serif;font-weight:900;font-size:30px;color:var(--orange-soft);
+    line-height:1;letter-spacing:-1px;}
+  .kpi .v .s{font-size:16px;color:#fff;}
+  .kpi .k{font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase;
+    color:#aeb9d0;margin-top:11px;line-height:1.4;font-weight:600;}
+  @media(max-width:640px){.kpis{grid-template-columns:1fr;}}
+
+  /* CTA */
+  .cta{
+    background:
+      radial-gradient(700px 300px at 85% 0%,rgba(244,114,22,.25),transparent 60%),
+      linear-gradient(150deg,var(--navy),var(--navy-2));
+    color:#fff;border-radius:20px;padding:46px 38px;margin:60px 0 20px;text-align:center;
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .cta h3{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(24px,4.5vw,34px);
+    text-transform:uppercase;letter-spacing:-.5px;line-height:1.08;}
+  .cta h3 .hl{color:var(--orange);}
+  .cta p{color:#c4cde0;font-size:18px;margin:18px auto 28px;max-width:520px;}
+  .cta a.btn{
+    display:inline-block;font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;
+    letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--orange);
+    padding:16px 34px;border-radius:10px;border-bottom:none;transition:transform .15s ease;
+  }
+  .cta a.btn:hover{transform:translateY(-2px);}
+
+  footer{padding:30px 0 70px;color:var(--muted);font-size:14.5px;line-height:1.6;
+    border-top:1px solid var(--line);}
+  footer .sig{font-family:'Archivo',sans-serif;font-weight:800;color:var(--navy);
+    text-transform:uppercase;letter-spacing:1px;font-size:13px;}
+
+  /* fade-in */
+  .fx{opacity:0;transform:translateY(18px);animation:rise .7s ease forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .hero .fx:nth-child(1){animation-delay:.05s}
+  .hero .fx:nth-child(2){animation-delay:.15s}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand fx"><span class="dot"></span><span><span class="o">OPEN</span>LAB</span> <span style="opacity:.5;font-weight:600;">CONSULTING</span></div>
+    <span class="kicker fx">Innovation &amp; IA · Secteur BTP</span>
+    <h1 class="title fx">Voir le danger<br><span class="hl">avant</span> l'effondrement</h1>
+    <p class="dek fx">Comment l'IA prédictive et l'IoT peuvent transformer la sécurité des bâtiments en Côte d'Ivoire — d'une posture réactive et tardive à une anticipation mesurable.</p>
+    <div class="meta fx">
+      <span>Openlab Consulting</span><span class="sep"></span>
+      <span>Pôle Innovation &amp; IA</span><span class="sep"></span>
+      <span>Lecture 8 min</span>
+    </div>
+    <div class="badges fx">
+      <span class="badge">Surveillance <b>24/7</b></span>
+      <span class="badge">IA prédictive <b>·</b> anticipe</span>
+      <span class="badge">Alertes <b>temps réel</b></span>
+      <span class="badge">Conformité <b>assurée</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<article>
+
+  <p class="lead">À Abidjan, un immeuble qui s'effondre ne tombe presque jamais sans avoir prévenu. Le béton fissure, la structure s'incline de quelques millimètres, les vibrations changent de signature. Le problème n'est pas l'absence de signaux : c'est que personne ne les écoute.</p>
+
+  <p>Pendant que la Côte d'Ivoire investit massivement pour devenir un pôle régional de l'intelligence artificielle, l'un des risques les plus meurtriers de son urbanisation reste géré comme il l'était il y a trente ans — à l'œil nu, et toujours trop tard. C'est précisément cet écart que nous voulons combler.</p>
+
+  <h2>Un drame récurrent, documenté, et pourtant évitable</h2>
+  <span class="sub">Le constat</span>
+
+  <p>Le constat est brutal. Pour la seule année 2024, la presse et les services de secours ivoiriens ont recensé une quinzaine d'effondrements majeurs à Abidjan et à l'intérieur du pays.</p>
+
+  <div class="timeline">
+    <h3>◢ 2024 — une année noire pour le bâti abidjanais</h3>
+    <div class="tl-item">
+      <div class="tl-date">Juin 2024</div>
+      <div class="tl-body"><b>Riviera-Palmeraie, Cocody.</b> Effondrement d'un immeuble déclenché par les travaux d'un bâtiment voisin. <span class="tl-toll">18 victimes · 2 décès</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Oct. 2024</div>
+      <div class="tl-body"><b>Yopougon.</b> Un R+3 en construction s'effondre sur une habitation. <span class="tl-toll">5 victimes</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Oct. 2024</div>
+      <div class="tl-body"><b>Yopougon-Abobodoumé.</b> Quelques jours plus tard, un second effondrement. <span class="tl-toll">2 décès</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2024</div>
+      <div class="tl-body"><b>Yamoussoukro.</b> Un effondrement parmi les plus meurtriers de l'année. <span class="tl-toll">8 décès</span></div>
+    </div>
+  </div>
+
+  <p>Ces événements ne sont pas des accidents isolés. Ils sont le symptôme d'une équation structurelle, mesurable en chiffres.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="num">~15</div><div class="lab">Effondrements majeurs en 2024</div></div>
+    <div class="stat"><div class="num">830<span class="u">k</span></div><div class="lab">Déficit de logements (unités)</div></div>
+    <div class="stat"><div class="num">80<span class="u">%</span></div><div class="lab">Du besoin concentré sur Abidjan</div></div>
+    <div class="stat"><div class="num">+10<span class="u">%</span></div><div class="lab">Croissance annuelle du déficit</div></div>
+  </div>
+
+  <p>Face à un déficit de logements estimé entre 500 000 et plus de 830 000 unités selon les sources — dont près de 80 % concentrés sur le seul district d'Abidjan —, la construction privée explose, souvent dans l'urgence, parfois dans l'illégalité. Le ministère de la Construction, du Logement et de l'Urbanisme (MCLU) a lui-même estimé qu'une large majorité des constructions réalisées à Abidjan ne disposait pas d'un permis de construire valide.</p>
+
+  <p>Les causes techniques sont parfaitement connues des ingénieurs : absence d'étude de sol, structures sous-dimensionnées, ferraillage insuffisant, matériaux de mauvaise qualité, construction sur terrains marécageux. Mais une seconde cause, plus insidieuse, est presque toujours absente du débat : <strong>l'absence totale de suivi du comportement de la structure dans le temps.</strong></p>
+
+  <div class="callout">
+    <span class="tag">Le point aveugle</span>
+    Aucun dispositif ne mesure en continu les tassements, inclinaisons, fissurations ou vibrations — ni pendant le chantier, ni durant l'exploitation. Le système actuel repose sur des inspections humaines, ponctuelles et tardives. Il est, par conception, incapable d'anticiper.
+  </div>
+
+  <h2>Le coût de l'inaction n'est pas seulement humain</h2>
+  <span class="sub">L'enjeu économique</span>
+
+  <p>On évoque, à juste titre, les vies perdues. Mais le coût économique de cette gestion réactive est tout aussi réel. Le secteur immobilier contribue à hauteur de <strong>6 à 10 % du PIB ivoirien</strong> : chaque effondrement érode la confiance des acheteurs, des banques qui financent l'accession à la propriété et des assureurs.</p>
+
+  <p>L'article 37 du Code de la Construction et de l'Habitat dispose pourtant que le maître d'ouvrage demeure responsable de la stabilité du bâtiment. Mais sans donnée objective, continue et horodatée, comment prouver sa diligence ? Comment un bureau de contrôle peut-il superviser des milliers de chantiers à la fois ? La réponse est qu'il ne le peut pas. Et c'est exactement là que la technologie change la donne.</p>
+
+  <h2>La maturité technologique existe déjà — ailleurs</h2>
+  <span class="sub">L'état de l'art</span>
+
+  <p>Il faut être honnête sur un point : surveiller la santé d'une structure n'est pas une idée nouvelle. Le marché mondial du <em>Structural Health Monitoring</em> (SHM) est mature et en forte croissance.</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">10,5<span class="s"> Md$</span></div><div class="k">Marché SHM mondial visé en 2030</div></div>
+    <div class="kpi"><div class="v">~19<span class="s">%</span></div><div class="k">Croissance annuelle du marché</div></div>
+    <div class="kpi"><div class="v">138<span class="s">e</span></div><div class="k">Rang IA de la Côte d'Ivoire (Oxford, 2023)</div></div>
+  </div>
+
+  <p>Selon Grand View Research, ce marché devrait atteindre environ 10,5 milliards de dollars d'ici 2030, porté par une croissance annuelle proche de 19 %. Le moteur est triple : l'effondrement du prix des capteurs, la densité de connectivité IoT, et surtout des modèles d'IA capables de transformer des flux de mesures haute fréquence en alertes exploitables. Fait notable : les assureurs internationaux récompensent déjà les actifs instrumentés par des réductions de prime.</p>
+
+  <p>Le problème n'est donc pas technologique. Il est d'accessibilité et de localisation. Les leaders mondiaux — comme Sixense, filiale du groupe Vinci — conçoivent une ingénierie de très haut niveau, mais pensée pour les méga-projets. Leur modèle, par son coût, exclut de fait les milliers d'immeubles R+2 à R+6 d'Abidjan — précisément là où le risque se concentre.</p>
+
+  <div class="pull">Personne ne réunit aujourd'hui les quatre briques essentielles : le capteur, l'IA prédictive, la conformité réglementaire et <span class="hl">l'ancrage local.</span></div>
+
+  <h2>SentinelBTP : une réponse intégrée, prédictive et souveraine</h2>
+  <span class="sub">Notre solution</span>
+
+  <p>C'est cet espace stratégique qu'Openlab Consulting a choisi d'occuper avec <strong>SentinelBTP</strong>, une plateforme de surveillance structurelle conçue pour le contexte ivoirien et africain. Sa logique tient en une phrase : <em>transformer une posture réactive en posture préventive.</em> Elle repose sur une architecture en quatre couches.</p>
+
+  <div class="arch">
+    <div class="layer"><div class="n">1</div><div><div class="lt">Captation (Edge)</div><div class="ld">Inclinomètres, accéléromètres, jauges de fissuration, capteurs de tassement, sondes de température et d'hygrométrie mesurent en continu le comportement physique de l'ouvrage.</div></div><div class="arrow">▼</div></div>
+    <div class="layer"><div class="n">2</div><div><div class="lt">Ingestion &amp; données</div><div class="ld">Connectivité longue portée basse consommation (LoRaWAN, NB-IoT) avec mode dégradé hors-ligne. Les mesures sont ingérées, sécurisées et historisées sur une plateforme cloud souveraine.</div></div><div class="arrow">▼</div></div>
+    <div class="layer"><div class="n">3</div><div><div class="lt">Intelligence (le cœur de la valeur)</div><div class="ld">Des modèles d'IA sur séries temporelles comparent chaque mesure à la trajectoire historique de l'ouvrage et calculent un score de risque évolutif — au lieu de simples seuils fixes.</div></div><div class="arrow">▼</div></div>
+    <div class="layer"><div class="n">4</div><div><div class="lt">Restitution &amp; conformité</div><div class="ld">Alertes multicanal graduées (vigilance · alerte · danger) et dossier de preuve numérique horodaté, infalsifiable, adossé au Code de la Construction et de l'Habitat.</div></div><div class="arrow">▼</div></div>
+  </div>
+
+  <p>L'objectif opérationnel est ambitieux mais mesurable :</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">≥ 72<span class="s">h</span></div><div class="k">Préavis avant le seuil de danger</div></div>
+    <div class="kpi"><div class="v">&lt; 60<span class="s">s</span></div><div class="k">Délai d'alerte après détection</div></div>
+    <div class="kpi"><div class="v">&lt; 8<span class="s">%</span></div><div class="k">Taux de faux positifs ciblé</div></div>
+  </div>
+
+  <p>La couche conformité, souvent négligée par la concurrence, transforme la contrainte légale de l'article 37 en valeur démontrable et opposable : la diligence du maître d'ouvrage cesse d'être un risque juridique flou pour devenir une preuve horodatée.</p>
+
+  <h2>Pourquoi la souveraineté change tout</h2>
+  <span class="sub">L'alignement national</span>
+
+  <p>Ce dernier point n'est pas qu'un argument technique ; il est aligné avec la trajectoire nationale. En 2024, la Côte d'Ivoire publiait sa <strong>Stratégie Nationale de l'Intelligence Artificielle (SNIA 2030)</strong>, structurée autour de trois piliers — investissement, inclusion et gouvernance — et adossée à un effort d'investissement annoncé de 1,8 milliard de dollars. Cette stratégie répond à un diagnostic sans complaisance : en 2023, le pays se classait 138e sur 193 à l'indice Oxford Insights de préparation des gouvernements à l'IA.</p>
+
+  <div class="callout">
+    <span class="tag">Souveraineté &amp; frugalité — aligné SNIA 2030</span>
+    SentinelBTP privilégie par construction le traitement en périphérie (edge), une connectivité frugale et un hébergement des données sous contrôle national. Dans un secteur où les données décrivent la vulnérabilité d'ouvrages habités, déléguer cette information à des plateformes étrangères n'est pas une option neutre.
+  </div>
+
+  <h2>Le rôle d'un cabinet : de la technologie disponible à la valeur adoptée</h2>
+  <span class="sub">Notre conviction</span>
+
+  <p>Il serait facile de conclure que la solution est purement technique. Ce serait une erreur. La technologie du SHM existe ; ce qui manque en Côte d'Ivoire, c'est un acteur capable de l'assembler, de l'adapter au cadre réglementaire local, de la rendre économiquement accessible au marché de masse et d'accompagner son adoption auprès des entreprises de BTP, bureaux de contrôle, autorités et assureurs.</p>
+
+  <p>Notre conviction, chez Openlab Consulting, est que l'adoption de l'IA en Afrique ne réussira pas par l'importation de solutions premium pensées pour d'autres réalités, mais par la conception de solutions <strong>frugales, souveraines et profondément ancrées</strong> dans les problèmes concrets du continent. Un immeuble qui s'effondre à Yopougon n'est pas un problème abstrait ; c'est un problème que la donnée, l'IoT et l'IA prédictive savent aujourd'hui adresser — à condition que quelqu'un fasse le pont entre la technologie disponible et le terrain.</p>
+
+  <p>Le phénomène des effondrements est récurrent, meurtrier et évitable. Les causes sont connues. Ce qui manquait, c'était un dispositif capable de voir venir le danger et de le documenter.</p>
+
+  <div class="cta">
+    <h3>Voir le danger avant l'effondrement<br>n'est plus une promesse. <span class="hl">C'est une décision.</span></h3>
+    <p>Openlab Consulting accompagne les entreprises ivoiriennes et africaines dans l'adoption opérationnelle de l'intelligence artificielle, de la conception à l'industrialisation.</p>
+    <a class="btn" href="https://openlabconsulting.com">Échanger sur votre projet IA</a>
+  </div>
+
+</article>
+
+<footer>
+  <p class="sig">Openlab Consulting — Pôle Innovation &amp; IA</p>
+  <p>Article basé sur des données publiques (services de secours et presse ivoirienne 2024, MCLU, CNPC-CI, Grand View Research, SNIA 2030 / Oxford Insights). Pour échanger sur SentinelBTP ou votre transformation par l'IA : <a href="https://openlabconsulting.com">openlabconsulting.com</a>.</p>
+</footer>
+</div>
+
+<script>
+  // reveal sections on scroll
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('fx');io.unobserve(e.target);}})},{threshold:.12});
+  document.querySelectorAll('article > *:not(.lead)').forEach(el=>{el.style.opacity=0;el.style.transform='translateY(18px)';el.style.animationDuration='.6s';io.observe(el);});
+</script>
+</body>
+</html>

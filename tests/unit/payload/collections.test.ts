@@ -248,22 +248,38 @@ describe('Payload collections', () => {
       }
     });
 
-    it('slug expose les 7 produits OpenLab', () => {
+    it('slug est un texte libre kebab-case (unique) — nouveau produit créable depuis l’admin', () => {
       const field = (Products.fields ?? []).find(
         (f) => 'name' in f && f.name === 'slug',
-      );
-      const options = (field as { options?: { value: string }[] }).options;
-      expect(options?.map((o) => o.value).sort()).toEqual(
-        [
-          'nexusrh',
-          'nexuserp',
-          'sygescom',
-          'agrosense',
-          'qualitos',
-          'fraud-shield',
-          'smart-city',
-        ].sort(),
-      );
+      ) as
+        | {
+            type?: string;
+            unique?: boolean;
+            validate?: (value: unknown) => true | string;
+          }
+        | undefined;
+      expect(field?.type).toBe('text');
+      expect(field?.unique).toBe(true);
+      const validate = field?.validate;
+      expect(typeof validate).toBe('function');
+      // Slugs valides : produits existants + nouveaux (ex. SentinelBTP).
+      for (const ok of ['nexusrh', 'fraud-shield', 'sentinelbtp']) {
+        expect(validate!(ok)).toBe(true);
+      }
+      // Slugs invalides : majuscules, espaces, accents, tirets pendants.
+      for (const ko of [
+        'SentinelBTP',
+        'sentinel btp',
+        'sentinel_btp',
+        '-sentinel',
+        'sentinel-',
+        'a--b',
+        '',
+        42,
+        null,
+      ]) {
+        expect(typeof validate!(ko)).toBe('string');
+      }
     });
 
     it('iconKey est borné au registre ICON_KEYS', () => {
