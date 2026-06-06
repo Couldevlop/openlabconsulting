@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   articleSchema,
+  blogSchema,
   bookSchema,
   breadcrumbSchema,
   faqPageSchema,
@@ -41,6 +42,12 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     const types = items.map((it) => it.item['@type']);
     expect(types).toContain('Book');
     expect(types).toContain('Event');
+  });
+
+  it('blogSchema : type Blog pointant /insights', () => {
+    const s = blogSchema();
+    expect(s['@type']).toBe('Blog');
+    expect(String(s.url)).toMatch(/\/insights$/);
   });
 
   it('localBusinessSchema : type ProfessionalService', () => {

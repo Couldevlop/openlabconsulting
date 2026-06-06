@@ -75,4 +75,18 @@ describe('Page /insights/[slug] — mode prévisualisation', () => {
     );
     expect(screen.getByText(/Contenu complet en ligne/)).toBeInTheDocument();
   });
+
+  it('n’émet pas de JSON-LD Article sur un brouillon (noindex)', async () => {
+    const { container } = render(
+      await InsightArticlePage({
+        params: Promise.resolve({ slug: 'brouillon' }),
+      }),
+    );
+    const scripts = Array.from(
+      container.querySelectorAll('script[type="application/ld+json"]'),
+    );
+    expect(scripts.some((s) => s.textContent?.includes('"Article"'))).toBe(
+      false,
+    );
+  });
 });
