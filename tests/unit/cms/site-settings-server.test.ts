@@ -5,6 +5,7 @@ import {
   getHeroContent,
   getInsightsHubContent,
   getManifestoContent,
+  getMethodologieContent,
   getReassuranceContent,
 } from '@/lib/cms/site-settings-server';
 import {
@@ -13,6 +14,7 @@ import {
   HERO_FALLBACK,
   INSIGHTS_HUB_FALLBACK,
   MANIFESTO_FALLBACK,
+  METHODOLOGIE_FALLBACK,
   REASSURANCE_FALLBACK,
 } from '@/lib/cms/site-settings';
 
@@ -34,6 +36,12 @@ describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () =>
     const content = await getManifestoContent();
     expect(content.headline).toBe(MANIFESTO_FALLBACK.headline);
     expect(content.stances).toEqual(MANIFESTO_FALLBACK.stances);
+  });
+
+  it('getMethodologieContent retourne METHODOLOGIE_FALLBACK', async () => {
+    const content = await getMethodologieContent();
+    expect(content.axes).toEqual(METHODOLOGIE_FALLBACK.axes);
+    expect(content.cta).toEqual(METHODOLOGIE_FALLBACK.cta);
   });
 
   it('getAuditIaCtaContent retourne AUDIT_IA_CTA_FALLBACK', async () => {

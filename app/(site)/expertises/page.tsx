@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { Methodologie } from '@/components/sections/Methodologie';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedExpertises } from '@/lib/expertises-server';
+import { getMethodologieContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'Expertises — Conseil, agents, data, cybersécurité IA',
@@ -19,7 +21,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
-  const expertises = await getPublishedExpertises();
+  const [expertises, methodologieContent] = await Promise.all([
+    getPublishedExpertises(),
+    getMethodologieContent(),
+  ]);
   return (
     <main id="main">
       {/* Hero */}
@@ -103,6 +108,8 @@ export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
           </ul>
         </Container>
       </section>
+
+      <Methodologie content={methodologieContent} />
 
       <AuditIaCta />
     </main>
