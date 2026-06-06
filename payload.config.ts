@@ -33,6 +33,7 @@ import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
+import { InsightsHubSettings } from './globals/InsightsHubSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { ReassuranceSettings } from './globals/ReassuranceSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
@@ -176,6 +177,7 @@ export default buildConfig({
   ],
   globals: [
     HeroSettings,
+    InsightsHubSettings,
     ManifestoSettings,
     ReassuranceSettings,
     AuditIaCtaSettings,

@@ -4,12 +4,14 @@ import {
   AUDIT_IA_CTA_FALLBACK,
   FOOTER_FALLBACK,
   HERO_FALLBACK,
+  INSIGHTS_HUB_FALLBACK,
   MANIFESTO_FALLBACK,
   REASSURANCE_FALLBACK,
   type AboutContent,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
+  type InsightsHubContent,
   type ManifestoContent,
   type ReassuranceContent,
   type ReassurancePartner,
@@ -247,4 +249,8 @@ export async function getReassuranceContent(): Promise<ReassuranceContent> {
     }
     return REASSURANCE_FALLBACK;
   }
+}
+
+export async function getInsightsHubContent(): Promise<InsightsHubContent> {
+  return readGlobal('insights-hub-settings', INSIGHTS_HUB_FALLBACK);
 }
