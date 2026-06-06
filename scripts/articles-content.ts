@@ -675,4 +675,249 @@ L’IA ivoirienne ne sera pas une copie. Elle protégera des villes qui doublent
 
 Le futur ne s’attend pas, il se décide. Données sécurisées, compétences locales, technologie souveraine, conformité, impact durable : les briques sont là. Reste à les assembler — et à commencer maintenant.`,
   },
+  // ───────────────────────────────────── 8. NexusERP / SYSCOHADA (data-gouv.)
+  {
+    slug: 'erp-syscohada-digitalisation-pme-uemoa',
+    title:
+      'ERP & SYSCOHADA : pourquoi tant de PME africaines pilotent encore à l’aveugle',
+    excerpt:
+      'SYSCOHADA est obligatoire dans 17 pays. Pourtant la majorité des PME de l’UEMOA n’ont aucune stratégie digitale. L’ERP n’est plus un luxe.',
+    category: 'data-gouvernance',
+    author: 'Équipe NexusERP',
+    publishedAt: '2026-04-05',
+    keywords: [
+      'ERP',
+      'SYSCOHADA',
+      'PME',
+      'UEMOA',
+      'digitalisation',
+      'comptabilité',
+    ],
+    summary: [
+      'Les PME représentent plus de 90 % des entreprises et 70 % des emplois du continent.',
+      'En 2025, seules 38 % des PME de la zone UEMOA avaient une stratégie digitale définie.',
+      'SYSCOHADA est obligatoire dans les 17 pays de l’OHADA — un ERP conforme transforme la contrainte en pilotage.',
+    ],
+    sources: [
+      {
+        label:
+          'Mali Actu — Digitalisation des PME africaines (UEMOA) : >90 % des entreprises, 38 % avec stratégie digitale',
+        url: 'https://maliactu.net/digitalisation-des-pme-africaines-un-guide-pratique-pour-10-employes-et-budget-limite-en-zone-uemoa/',
+      },
+      {
+        label:
+          'Cleo ERP — SYSCOHADA révisé : ce que votre ERP doit savoir faire',
+        url: 'https://cleoerp.com/fr/blog/syscohada-revise-ce-qui-a-change-et-ce-que-votre-erp-doit-savoir-faire',
+      },
+    ],
+    markdown: `Une PME peut survivre des années sans ERP. Elle ne peut pas croître sans visibilité. Entre les deux, il y a un moment précis où le tableur cesse de suffire — et où l’improvisation comptable devient un risque.
+
+## Le poids des PME, l’angle mort du numérique
+
+Les PME ne sont pas un segment de l’économie africaine : elles **sont** l’économie. Elles représentent **plus de 90 % des entreprises** et **70 % des emplois** du continent. Pourtant, leur outillage de gestion reste artisanal.
+
+Le chiffre qui résume tout : en 2025, **seules 38 % des PME de la zone UEMOA** avaient une stratégie digitale définie. Autrement dit, près de deux PME sur trois pilotent sans système d’information structuré — à coups de fichiers Excel dispersés, de cahiers, et de mémoire humaine.
+
+## SYSCOHADA : une obligation, pas une option
+
+Dans les **17 pays de l’espace OHADA**, le référentiel comptable **SYSCOHADA** s’impose à toutes les entreprises. Ce n’est pas une bonne pratique recommandée : c’est la loi. Et depuis 2024, le référentiel **SYCEBNL** encadre spécifiquement les entités à but non lucratif (ONG, associations, fondations).
+
+Le problème n’est donc pas de savoir *s’il faut* se conformer, mais *comment* le faire sans y consacrer un temps disproportionné. Une PME qui tient sa comptabilité à la main reconstitue, chaque clôture, ce qu’un système ferait en continu.
+
+## Ce qu’un tableur ne peut pas faire
+
+Excel est un outil formidable — pour un usage individuel et ponctuel. À l’échelle d’une entreprise qui grandit, il atteint vite ses limites :
+
+- **Pas de source unique de vérité** : ventes, stock, achats et compta vivent dans des fichiers séparés, souvent contradictoires.
+- **Pas de contrôle SYSCOHADA natif** : le plan comptable, les états financiers normalisés, la TVA UEMOA se ressaisissent à la main.
+- **Pas de multi-devises fiable** : FCFA, EUR, USD se mélangent sans taux tracé.
+- **Pas de piste d’audit** : impossible de dire qui a modifié quoi, ni quand.
+
+Chaque limite est un risque : erreur de déclaration, redressement fiscal, décision prise sur un chiffre faux.
+
+## L’ERP comme colonne vertébrale de la donnée
+
+> La data est votre pétrole. Un ERP, c’est le pipeline qui l’achemine sans fuite.
+
+Un ERP de nouvelle génération ne « fait pas la compta ». Il fait converger toute la donnée de l’entreprise vers un référentiel unique, et applique automatiquement les règles métier :
+
+- comptabilité **SYSCOHADA** native, états financiers normalisés générés à la demande ;
+- modules ventes, achats, stock, RH et projets **reliés** — une vente met à jour le stock et la compta ;
+- **multi-devises** (FCFA, EUR, USD) avec taux tracés ;
+- tableaux de bord financiers temps réel, par société et consolidés.
+
+La conformité devient un sous-produit du fonctionnement normal, pas une corvée de fin d’exercice.
+
+## Commencer sans tout casser
+
+L’objection classique : « un ERP, c’est un projet d’un an et un budget de multinationale ». C’est faux pour une PME bien accompagnée. La bonne méthode est progressive : démarrer par le cœur (compta + ventes + stock), prouver la valeur en quelques semaines, puis étendre aux RH, aux projets, à la consolidation multi-sociétés.
+
+L’erreur n’est pas de déployer un ERP trop tôt. C’est d’attendre que le désordre soit ingérable pour s’y mettre.
+
+## Un enjeu de souveraineté, aussi
+
+Un ERP héberge les données les plus sensibles d’une entreprise : sa comptabilité, ses clients, ses salaires. Les confier à une solution dont on ne maîtrise ni l’hébergement ni les règles, c’est un pari. Un ERP pensé pour l’UEMOA, conforme SYSCOHADA par construction et opéré sous gouvernance maîtrisée, transforme une contrainte réglementaire en avantage de pilotage. Voyez tout, contrôlez tout — à commencer par vos propres chiffres.`,
+  },
+
+  // ───────────────────────────────────── 9. AgroSense / cacao (MLOps)
+  {
+    slug: 'agriculture-precision-cacao-ia-cote-divoire',
+    title:
+      'Cacao : 44 % de l’offre mondiale, des rendements de 150 à 2 500 kg/ha — l’IA peut combler l’écart',
+    excerpt:
+      'La Côte d’Ivoire produit 44 % du cacao mondial, mais la récolte 2023/24 a chuté de 24 %. L’agriculture de précision, c’est la donnée au service du sol.',
+    category: 'mlops',
+    author: 'Laboratoire OpenLab',
+    publishedAt: '2026-05-18',
+    keywords: [
+      'agriculture précision',
+      'cacao',
+      'Côte d’Ivoire',
+      'IoT',
+      'MLOps',
+      'AgroSense',
+    ],
+    summary: [
+      'La Côte d’Ivoire produit 44 % du cacao mondial ; le cacao pèse 15 % du PIB, 40 % des exportations et fait vivre ~8 millions de personnes.',
+      'La récolte 2023/24 a chuté de 24 % par rapport à 2022/23 (de 2,3 à 1,76 million de tonnes), sous l’effet du climat.',
+      'Les rendements vont de 150 à 2 500 kg/ha : l’écart se comble par la donnée, pas par plus d’intrants.',
+    ],
+    sources: [
+      {
+        label:
+          'USDA FAS — Côte d’Ivoire Cocoa Sector Overview 2025 (production 2024/25 ~1,8 Mt)',
+        url: 'https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Cote+d%27Ivoire+-+Cocoa+Sector+Overview+-+2025_Accra_Cote+d%27Ivoire_IV2025-0001.pdf',
+      },
+      {
+        label: 'CIRAD — Cacao : contexte et enjeux',
+        url: 'https://www.cirad.fr/nos-activites-notre-impact/filieres-agricoles-tropicales/cacao/contexte-et-enjeux',
+      },
+      {
+        label:
+          'Wikipédia — Production de cacao en Côte d’Ivoire (15 % du PIB, 40 % des exports)',
+        url: 'https://fr.wikipedia.org/wiki/Production_de_cacao_en_C%C3%B4te_d%27Ivoire',
+      },
+    ],
+    markdown: `Le cacao ivoirien nourrit le monde et fait vivre le pays. Mais il pilote sa production avec les outils du siècle dernier. La prochaine récolte ne se jouera pas seulement au champ — elle se jouera dans la donnée.
+
+## Un poids mondial, une dépendance nationale
+
+La Côte d’Ivoire produit **44 % du cacao mondial**. À l’intérieur du pays, la filière pèse **15 % du PIB**, **40 % des exportations**, et fait vivre **près de huit millions de personnes**. Quand le cacao tousse, c’est tout le pays qui s’enrhume.
+
+Or le cacao a toussé. La récolte **2023/24 a chuté d’environ 24 %** par rapport à 2022/23 — passant d’environ 2,3 millions à 1,76 million de tonnes — sous l’effet d’un climat défavorable. La campagne 2024/25 se redresse péniblement vers 1,8 million de tonnes. Une filière de cette importance ne peut pas dépendre uniquement de la pluie et de la chance.
+
+## L’écart de rendement, ce gisement invisible
+
+Le chiffre le plus parlant n’est pas la production totale, c’est la dispersion : les rendements vont de **150 à 2 500 kg par hectare et par an**. Un facteur **seize** entre la pire et la meilleure parcelle. Cet écart ne s’explique pas par la fertilité naturelle seule — il tient aux pratiques, au moment des interventions, à la santé des arbres, à l’ombrage.
+
+Combler ne serait-ce qu’une fraction de cet écart, à surface égale, représente des centaines de milliers de tonnes. C’est le gisement le plus rentable de la filière, et il est invisible tant qu’on ne mesure pas.
+
+## De l’intuition à la décision mesurée
+
+L’agriculture de précision ne consiste pas à « mettre des capteurs ». Elle consiste à transformer des signaux du terrain en décisions au bon moment :
+
+- **Anticiper le stress hydrique** en croisant météo (SODEXAM, ERA5, CHIRPS) et humidité du sol, pour irriguer ou ombrager avant que l’arbre ne souffre.
+- **Détecter tôt** les maladies (swollen shoot, pourriture brune) à partir d’images et de relevés, avant la propagation.
+- **Calibrer les intrants** parcelle par parcelle, au lieu d’un traitement uniforme coûteux et imprécis.
+- **Tracer** la production de la parcelle à l’export — un atout face aux nouvelles exigences de traçabilité européennes.
+
+## Pourquoi c’est un problème de MLOps, pas de gadget
+
+Un modèle qui prédit le stress hydrique en laboratoire ne vaut rien s’il ne tourne pas, chaque jour, sur des données fraîches, dans une zone à connectivité intermittente. C’est là que tout se joue :
+
+- des modèles **ré-entraînés** au fil des saisons et des relevés ;
+- une **collecte robuste** malgré les coupures réseau (synchronisation différée) ;
+- un **suivi de la dérive** (un modèle de 2024 ne prédit pas la saison 2026) ;
+- une **restitution simple** pour l’exploitant, en langue locale, sur mobile.
+
+C’est exactement la discipline d’industrialisation que décrit le capstone AgroSense CI du livre OpenLab : l’IA utile n’est pas celle qui impressionne en démo, c’est celle qui tourne en production, au champ.
+
+## La donnée au service du sol
+
+La filière cacao n’a pas besoin de plus d’intrants ni de plus de surface. Elle a besoin de **savoir où, quand et combien** — parcelle par parcelle. Transformer huit millions de vies suspendues à la météo en une filière pilotée par la donnée, c’est le sens d’une IA ancrée dans les réalités africaines.`,
+  },
+
+  // ───────────────────────────────────── 10. QualitOS / non-qualité (étude de cas)
+  {
+    slug: 'cout-non-qualite-qms-ia-industrie',
+    title:
+      'La non-qualité vous coûte 5 à 15 % de votre chiffre d’affaires. Et vous ne la voyez pas.',
+    excerpt:
+      'La non-qualité ronge 5 à 15 % du chiffre d’affaires des entreprises non certifiées. Un QMS bien outillé transforme ce gisement en marge.',
+    category: 'etude-de-cas',
+    author: 'Équipe QualitOS',
+    publishedAt: '2026-05-02',
+    keywords: [
+      'non-qualité',
+      'QMS',
+      'ISO 9001',
+      'qualité',
+      'industrie',
+      'QualitOS',
+    ],
+    summary: [
+      'Le coût de la non-qualité est estimé entre 5 % et 15 % du chiffre d’affaires des entreprises non certifiées.',
+      'Les entreprises certifiées ISO 9001 augmentent en moyenne leur CA de 4 % (et de 7 % à l’export).',
+      '84 % des entreprises certifiées constatent une amélioration de la satisfaction client dans les deux ans.',
+    ],
+    sources: [
+      {
+        label:
+          'Cabinet Qualité — Qu’est-ce que le coût de non-qualité (5 à 15 % du CA)',
+        url: 'https://cabinet-qualite.com/qu-est-ce-que-le-cout-de-non-qualite/',
+      },
+      {
+        label:
+          'AFNOR — La non-qualité dans l’industrie, une mine d’or à exploiter',
+        url: 'https://www.afnor.org/actualites/qualite/non-qualite-industrie-mine-or/',
+      },
+      {
+        label:
+          'Sami — ISO 9001 : guide complet du système de management de la qualité',
+        url: 'https://www.sami.eco/blog/iso-9001',
+      },
+    ],
+    markdown: `Personne n’inscrit « non-qualité » dans son compte de résultat. C’est précisément pour ça qu’elle coûte si cher : elle est partout, et nulle part dans les chiffres officiels.
+
+## Un coût caché à deux chiffres
+
+Les estimations convergent : le coût de la non-qualité représente **entre 5 % et 15 % du chiffre d’affaires** des entreprises non certifiées. Pour une PME industrielle, c’est souvent la différence entre une année rentable et une année blanche.
+
+Ce coût ne se voit pas, parce qu’il est éclaté : rebuts, retouches, retards, retours clients, garanties, litiges, temps passé à éteindre des incendies. Chaque incident pris isolément paraît mineur. Additionnés sur un an, ils forment le poste de dépense le plus important que l’entreprise ne mesure pas.
+
+## Pourquoi on ne la voit pas
+
+La non-qualité échappe au radar pour trois raisons :
+
+- **Elle est diffuse** : répartie sur des centaines de petits événements, jamais consolidée.
+- **Elle est normalisée** : « on a toujours fait comme ça », « c’est le métier qui veut ça ».
+- **Elle est non tracée** : sans système, un défaut corrigé ne laisse aucune trace exploitable.
+
+Ce qu’on ne mesure pas, on ne le pilote pas. Et ce qu’on ne pilote pas, on le paie.
+
+## Le QMS : rendre la qualité visible et pilotable
+
+Un système de management de la qualité (QMS) ne « fait pas la qualité » à la place des équipes. Il **rend visible** ce qui était invisible, et structure l’amélioration continue autour des méthodes éprouvées :
+
+- **PDCA, 5S, DMAIC** pour cadrer les démarches d’amélioration ;
+- **CAPA** (actions correctives et préventives) pour que chaque incident produise un apprentissage ;
+- **gestion des audits et des risques** pour anticiper au lieu de subir ;
+- **traçabilité complète** : chaque non-conformité documentée, analysée, soldée.
+
+> La non-qualité est une mine d’or — mais seulement pour qui sait la mesurer.
+
+## L’IA comme accélérateur d’analyse
+
+Là où l’IA change la donne, c’est dans l’analyse des causes. Un diagramme d’Ishikawa, une analyse de Pareto, un regroupement de non-conformités récurrentes : ce travail, fastidieux à la main, devient instantané quand un système suggère les causes probables et les regroupements pertinents. L’expert qualité garde la décision ; l’IA lui fait gagner les heures d’analyse.
+
+## Le retour sur investissement est documenté
+
+Investir dans la qualité n’est pas un coût, c’est un placement mesurable. Les entreprises certifiées **ISO 9001** augmentent en moyenne leur chiffre d’affaires de **4 %** — et de **7 % à l’export**. Surtout, **84 %** d’entre elles constatent une **amélioration de la satisfaction client** dans les deux ans suivant la certification.
+
+Autrement dit : réduire la non-qualité fait gagner deux fois — en économies internes, et en confiance externe.
+
+## Transformer le gisement en marge
+
+Pour un industriel ivoirien ou ouest-africain, viser une certification et s’outiller d’un QMS, ce n’est pas se conformer à une norme étrangère. C’est récupérer 5 à 15 points de chiffre d’affaires aujourd’hui dilapidés, et bâtir la confiance qui ouvre les marchés export. La qualité ne coûte pas cher. C’est la non-qualité qui ruine — silencieusement.`,
+  },
 ] as const;
