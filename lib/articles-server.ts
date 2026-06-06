@@ -12,6 +12,21 @@ import {
 } from './articles';
 
 /**
+ * Champs chargés pour les listes/cartes (sans le corps Lexical ni les
+ * sources, réservés au détail). Factorisé pour toutes les requêtes liste.
+ */
+const LIST_SELECT = {
+  slug: true,
+  title: true,
+  excerpt: true,
+  category: true,
+  author: true,
+  publishedAt: true,
+  cover: true,
+  summary: true,
+} as const;
+
+/**
  * Server-only : fetch des articles publiés depuis Payload, triés
  * desc par `publishedAt`. Retombe sur le fallback en cas d'erreur.
  *
@@ -31,18 +46,7 @@ export async function getPublishedArticles(
       sort: '-publishedAt',
       limit,
       depth: 1,
-      // Perf : la liste n'affiche pas le corps. On ne charge donc ni
-      // `content` (Lexical volumineux) ni `sources` — réservés au détail.
-      select: {
-        slug: true,
-        title: true,
-        excerpt: true,
-        category: true,
-        author: true,
-        publishedAt: true,
-        cover: true,
-        summary: true,
-      },
+      select: LIST_SELECT,
     });
     const articles = docs
       .map((d) => toArticle(d as RawPayloadArticle))
@@ -58,6 +62,97 @@ export async function getPublishedArticles(
     }
     return FALLBACK_ARTICLES.slice(0, limit);
   }
+}
+
+/**
+ * Articles liés : même catégorie, hors article courant, publiés.
+ * Sert le bloc « À lire aussi » de /insights/[slug] (anti cul-de-sac §4.9).
+ * Fallback : filtre les FALLBACK_ARTICLES.
+ */
+export async function getRelatedArticles(
+  category: ArticleCategory,
+  excludeSlug: string,
+  limit = 3,
+): Promise<readonly Article[]> {
+  try {
+    const { getPayload } = await import('payload');
+    const config = (await import('@payload-config')).default;
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: 'articles',
+      where: {
+        and: [
+          { _status: { equals: 'published' } },
+          { category: { equals: category } },
+          { slug: { not_equals: excludeSlug } },
+        ],
+      },
+      sort: '-publishedAt',
+      limit,
+      depth: 1,
+      select: LIST_SELECT,
+    });
+    const articles = docs
+      .map((d) => toArticle(d as RawPayloadArticle))
+      .filter((a): a is Article => a !== null);
+    if (articles.length > 0) return articles;
+  } catch {
+    // fallthrough vers le fallback
+  }
+  return FALLBACK_ARTICLES.filter(
+    (a) => a.category === category && a.slug !== excludeSlug,
+  ).slice(0, limit);
+}
+
+export interface PagedArticles {
+  articles: readonly Article[];
+  /** Page courante (1-indexée). */
+  page: number;
+  totalPages: number;
+}
+
+/**
+ * Pagination SSR du hub /insights (pas de JS client, bon pour le SEO).
+ * `page` 1-indexée ; `perPage` = taille de page (grille 3×N).
+ */
+export async function getPagedArticles(
+  page = 1,
+  perPage = 9,
+): Promise<PagedArticles> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  try {
+    const { getPayload } = await import('payload');
+    const config = (await import('@payload-config')).default;
+    const payload = await getPayload({ config });
+    const res = await payload.find({
+      collection: 'articles',
+      where: { _status: { equals: 'published' } },
+      sort: '-publishedAt',
+      page: safePage,
+      limit: perPage,
+      depth: 1,
+      select: LIST_SELECT,
+    });
+    const articles = res.docs
+      .map((d) => toArticle(d as RawPayloadArticle))
+      .filter((a): a is Article => a !== null);
+    if (articles.length > 0) {
+      return {
+        articles,
+        page: safePage,
+        totalPages: typeof res.totalPages === 'number' ? res.totalPages : 1,
+      };
+    }
+  } catch {
+    // fallthrough vers le fallback
+  }
+  const totalPages = Math.max(1, Math.ceil(FALLBACK_ARTICLES.length / perPage));
+  const start = (safePage - 1) * perPage;
+  return {
+    articles: FALLBACK_ARTICLES.slice(start, start + perPage),
+    page: safePage,
+    totalPages,
+  };
 }
 
 /**

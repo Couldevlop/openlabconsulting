@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
   getArticleBySlug,
   getPublishedArticles,
+  getRelatedArticles,
+  getPagedArticles,
   toArticle,
   type RawPayloadArticle,
 } from '@/lib/articles-server';
@@ -134,5 +136,38 @@ describe('lib/articles-server — fallback', () => {
       draft: true,
     });
     expect(a).toBeNull();
+  });
+
+  it('getRelatedArticles (fallback) filtre par catégorie et exclut le slug courant', async () => {
+    const related = await getRelatedArticles('souverainete', 'autre-slug', 3);
+    expect(related.every((a) => a.category === 'souverainete')).toBe(true);
+    expect(related.some((a) => a.slug === 'autre-slug')).toBe(false);
+  });
+
+  it('getRelatedArticles (fallback) exclut bien l’article courant', async () => {
+    const related = await getRelatedArticles(
+      'souverainete',
+      'migration-ia-souveraine-k3s-hetzner',
+      3,
+    );
+    expect(
+      related.some((a) => a.slug === 'migration-ia-souveraine-k3s-hetzner'),
+    ).toBe(false);
+  });
+
+  it('getPagedArticles (fallback) pagine le tableau hard-codé', async () => {
+    const p1 = await getPagedArticles(1, 9);
+    expect(p1.page).toBe(1);
+    expect(p1.totalPages).toBe(1);
+    expect(p1.articles.length).toBe(FALLBACK_ARTICLES.length);
+
+    const p2 = await getPagedArticles(2, 2);
+    expect(p2.page).toBe(2);
+    expect(p2.totalPages).toBe(Math.ceil(FALLBACK_ARTICLES.length / 2));
+  });
+
+  it('getPagedArticles (fallback) normalise une page invalide en 1', async () => {
+    const p = await getPagedArticles(0, 9);
+    expect(p.page).toBe(1);
   });
 });
