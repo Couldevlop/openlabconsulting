@@ -92,6 +92,47 @@ describe('getPublishedProducts — Payload disponible', () => {
     const products = await getPublishedProducts();
     expect(products).toEqual(FALLBACK_PRODUCTS);
   });
+
+  it('mappe heroImage (média peuplé) en URL relative + alt', async () => {
+    findMock.mockResolvedValue({
+      docs: [
+        rawDoc({
+          slug: 'qualitos',
+          heroImage: {
+            url: 'http://localhost:3000/api/media/file/qualitos.png',
+            alt: 'Tableau de bord QualitOS',
+          },
+        }),
+      ],
+    });
+    const products = await getPublishedProducts();
+    expect(products[0]?.heroImage).toEqual({
+      src: '/api/media/file/qualitos.png',
+      alt: 'Tableau de bord QualitOS',
+    });
+  });
+
+  it('heroImage absent ou non peuplé → pas de heroImage (cascade mockup)', async () => {
+    findMock.mockResolvedValue({
+      docs: [rawDoc({ slug: 'qualitos', heroImage: null })],
+    });
+    const [product] = await getPublishedProducts();
+    expect(product?.heroImage).toBeUndefined();
+  });
+
+  it('heroImage : alt vide → alt de repli dérivé du nom', async () => {
+    findMock.mockResolvedValue({
+      docs: [
+        rawDoc({
+          slug: 'qualitos',
+          name: 'QualitOS',
+          heroImage: { url: '/api/media/file/q.png', alt: '' },
+        }),
+      ],
+    });
+    const [product] = await getPublishedProducts();
+    expect(product?.heroImage?.alt).toBe('Visuel du produit QualitOS');
+  });
 });
 
 describe('getProductBySlug — Payload disponible', () => {

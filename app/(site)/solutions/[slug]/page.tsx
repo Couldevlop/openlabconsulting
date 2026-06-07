@@ -168,8 +168,19 @@ export default async function SolutionDetailPage({
               </div>
             </div>
 
-            {screenshot ? (
-              // Capture d'écran réelle (ex. NexusRH) — la plus convaincante.
+            {product.heroImage ? (
+              // Visuel piloté depuis l'admin (médiathèque) — prioritaire.
+              <Mockup
+                variant="dashboard"
+                tone="orange"
+                aspect="16/9"
+                label={name}
+                src={product.heroImage.src}
+                alt={product.heroImage.alt}
+                className="shadow-xl"
+              />
+            ) : screenshot ? (
+              // Capture d'écran réelle codée (ex. NexusRH).
               <Mockup
                 variant="dashboard"
                 tone="orange"

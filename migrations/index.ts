@@ -7,6 +7,7 @@ import * as migration_20260530_083756_add_reassurance_settings from './20260530_
 import * as migration_20260603_132552_add_about_settings from './20260603_132552_add_about_settings';
 import * as migration_20260605_095433_products_slug_text from './20260605_095433_products_slug_text';
 import * as migration_20260606_234139_add_insights_hub_methodologie from './20260606_234139_add_insights_hub_methodologie';
+import * as migration_20260607_192832_add_product_hero_image from './20260607_192832_add_product_hero_image';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260606_234139_add_insights_hub_methodologie.up,
     down: migration_20260606_234139_add_insights_hub_methodologie.down,
     name: '20260606_234139_add_insights_hub_methodologie',
+  },
+  {
+    up: migration_20260607_192832_add_product_hero_image.up,
+    down: migration_20260607_192832_add_product_hero_image.down,
+    name: '20260607_192832_add_product_hero_image',
   },
 ];
