@@ -82,6 +82,36 @@ open http://localhost:3000/admin
   # committer le fichier généré dans migrations/
   ```
 
+## Créer un nouveau produit depuis l'admin (slug libre)
+
+Depuis la migration `products_slug_text` (2026-06), le slug produit est un
+**texte libre kebab-case** : un nouveau produit (ex. `sentinelbtp`) est
+créable depuis `/admin` → Produits sans déploiement de code. Sa page
+`/solutions/<slug>` est servie immédiatement (ISR ~60 s).
+
+**Pièges connus — lire avant de créer :**
+
+1. **Collection vide = fallback.** Dès qu'AU MOINS un produit publié existe
+   en base, le site n'affiche QUE les produits CMS (le fallback hard-codé
+   des 7 fondateurs disparaît). Avant de créer un 8ᵉ produit sur un
+   environnement vierge, seeder d'abord les fondateurs :
+   `pnpm cms:seed:products` (idempotent, upsert par slug). En prod : fait
+   le 2026-06-07 (8 produits publiés).
+2. **Validations strictes du formulaire** — l'enregistrement échoue tant
+   que tout n'est pas rempli : `features` (4 à 6, icône+titre+corps),
+   `stack` (3 à 8 lignes), `proofs` (2 à 4, **source obligatoire**, §4.10),
+   `pricing.headline` + au moins 1 détail. Les messages d'erreur
+   s'affichent champ par champ en haut du formulaire.
+3. **Publier ≠ enregistrer.** La collection utilise les drafts natifs :
+   « Enregistrer le brouillon » ne rend rien visible côté public — il faut
+   cliquer **Publier** (`_status: published`).
+4. **Icônes** : clé du registre `lib/icon-map.ts` (select borné). Pour une
+   nouvelle icône Lucide, l'ajouter au registre (déploiement de code).
+5. **Ce qui reste en code (par design, §9)** : la démo interactive
+   (`components/demos/ProductDemo.tsx`) et le mockup SVG du hero — pour un
+   slug inconnu de ces registres, la page masque la section démo et affiche
+   un placeholder. Pas de crash.
+
 ## Stockage des médias (dev vs prod)
 
 Le stockage des uploads (couvertures d'articles, médiathèque) est piloté
