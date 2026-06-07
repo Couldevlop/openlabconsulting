@@ -25,13 +25,17 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage(): Promise<React.ReactElement> {
-  const [heroContent, manifestoContent, methodologieContent, reassuranceContent] =
-    await Promise.all([
-      getHeroContent(),
-      getManifestoContent(),
-      getMethodologieContent(),
-      getReassuranceContent(),
-    ]);
+  const [
+    heroContent,
+    manifestoContent,
+    methodologieContent,
+    reassuranceContent,
+  ] = await Promise.all([
+    getHeroContent(),
+    getManifestoContent(),
+    getMethodologieContent(),
+    getReassuranceContent(),
+  ]);
   return (
     <main id="main">
       <Hero background={<HeroBackground />} content={heroContent} />
