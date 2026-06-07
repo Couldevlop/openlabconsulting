@@ -25,7 +25,7 @@ describe('Page /livres-blancs/[slug]', () => {
     });
     expect(form).toBeInTheDocument();
     const submit = screen.getByRole('button', {
-      name: /Recevoir le livre blanc/i,
+      name: /Réserver le PDF dès la sortie|Recevoir le livre blanc/i,
     });
     expect(submit.getAttribute('type')).toBe('submit');
   });

@@ -1,14 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import type { vi } from 'vitest';
 import WhitepaperThanksPage, {
   generateMetadata,
   generateStaticParams,
 } from '@/app/(site)/livres-blancs/[slug]/merci/page';
 
-// `notFound()` est mocké globalement dans vitest.setup.ts en `vi.fn()` —
-// l'exécution continue après appel. Pour le test « slug inconnu » on
-// vérifie juste que la fonction est invoquée (pas l'effet runtime Next).
+// `notFound()` est mocké globalement dans vitest.setup.ts en *levant*
+// une erreur (digest NEXT_NOT_FOUND), fidèle à la sémantique Next : le
+// rendu s'interrompt. Le test « slug inconnu » asserte donc le rejet.
 
 describe('Page /livres-blancs/[slug]/merci', () => {
   it('rend la page de remerciement pour le slug connu', async () => {
@@ -57,14 +56,12 @@ describe('Page /livres-blancs/[slug]/merci', () => {
     ).toHaveAttribute('href', '/laboratoire/publications');
   });
 
-  it('appelle notFound() pour un slug inconnu', async () => {
-    const { notFound } = await import('next/navigation');
-    const mock = notFound as unknown as ReturnType<typeof vi.fn>;
-    mock.mockClear();
-    await WhitepaperThanksPage({
-      params: Promise.resolve({ slug: 'inexistant' }),
-    }).catch(() => undefined);
-    expect(mock).toHaveBeenCalled();
+  it('throw notFound() pour un slug inconnu', async () => {
+    await expect(
+      WhitepaperThanksPage({
+        params: Promise.resolve({ slug: 'inexistant' }),
+      }),
+    ).rejects.toThrow();
   });
 
   it('generateStaticParams retourne le slug whitelisté', () => {
