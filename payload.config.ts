@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 // Imports sans extension : compatibles webpack Next (build) ET tsx CLI
 // (scripts payload-migrate / cms-seed). Le binaire payload direct
 // nécessiterait `.js` mais on ne l'utilise plus — tout passe par tsx.
+import { zeptomailAdapter } from './lib/email-adapter';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
@@ -139,6 +140,11 @@ export default buildConfig({
   serverURL,
   cors: trustedOrigins,
   csrf: trustedOrigins,
+  // Email adapter ZeptoMail — rend fonctionnel le « mot de passe oublié »
+  // de /admin (§11). Enregistré uniquement si le token est présent : en
+  // dev/CI sans token, Payload garde son comportement par défaut (log
+  // console), et l'adapter lui-même est fail-soft (lib/email-adapter.ts).
+  ...(process.env.ZEPTOMAIL_TOKEN ? { email: zeptomailAdapter() } : {}),
   // Borne la taille des uploads (busboy) — évite le DoS disque MinIO par un
   // compte éditeur uploadant des fichiers énormes. 20 Mo couvre largement
   // les couvertures (~2 Mo) et PDF de livres blancs.
