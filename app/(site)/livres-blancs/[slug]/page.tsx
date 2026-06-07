@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Download, Mail } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { WhitepaperRequestForm } from '@/components/forms/WhitepaperRequestForm';
 import { cn } from '@/lib/cn';
 
 interface Whitepaper {
@@ -230,22 +230,11 @@ export default async function WhitepaperPage({
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4">
-                <Button
-                  as="a"
-                  href={`/contact?sujet=livre-blanc-${wp.slug}`}
-                  variant="primary"
-                  size="lg"
-                  aria-label="Être prévenu de la sortie du livre blanc"
-                >
-                  <Mail width={20} height={20} aria-hidden />
-                  Être prévenu·e à la sortie
-                </Button>
-                <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/70">
-                  <Download width={14} height={14} aria-hidden />
-                  PDF · ~{wp.pageCount} pages · français · gratuit
-                </p>
-              </div>
+              <WhitepaperRequestForm
+                slug={wp.slug}
+                pageCount={wp.pageCount}
+                draft={wp.status === 'draft'}
+              />
             </div>
           </Card>
         </Container>
