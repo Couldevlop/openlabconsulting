@@ -6,6 +6,7 @@ import * as migration_20260528_223718_add_team from './20260528_223718_add_team'
 import * as migration_20260530_083756_add_reassurance_settings from './20260530_083756_add_reassurance_settings';
 import * as migration_20260603_132552_add_about_settings from './20260603_132552_add_about_settings';
 import * as migration_20260605_095433_products_slug_text from './20260605_095433_products_slug_text';
+import * as migration_20260606_234139_add_insights_hub_methodologie from './20260606_234139_add_insights_hub_methodologie';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260605_095433_products_slug_text.up,
     down: migration_20260605_095433_products_slug_text.down,
-    name: '20260605_095433_products_slug_text'
+    name: '20260605_095433_products_slug_text',
+  },
+  {
+    up: migration_20260606_234139_add_insights_hub_methodologie.up,
+    down: migration_20260606_234139_add_insights_hub_methodologie.down,
+    name: '20260606_234139_add_insights_hub_methodologie',
   },
 ];
