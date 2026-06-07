@@ -17,13 +17,17 @@ describe('Page /livres-blancs/[slug]', () => {
     expect(back.getAttribute('href')).toBe('/audit-ia');
   });
 
-  it('expose un CTA « être prévenu » vers le contact (livre blanc à paraître)', async () => {
+  it('expose le formulaire lead magnet (email + envoi du livre blanc)', async () => {
     const params = Promise.resolve({ slug: 'ia-souveraine-ci-2026' });
     render(await WhitepaperPage({ params }));
-    const cta = screen.getByRole('link', { name: /Être prévenu.*sortie/i });
-    expect(cta.getAttribute('href')).toBe(
-      '/contact?sujet=livre-blanc-ia-souveraine-ci-2026',
-    );
+    const form = screen.getByRole('form', {
+      name: /Recevoir le livre blanc par e-mail/i,
+    });
+    expect(form).toBeInTheDocument();
+    const submit = screen.getByRole('button', {
+      name: /Recevoir le livre blanc/i,
+    });
+    expect(submit.getAttribute('type')).toBe('submit');
   });
 
   it('throw notFound() pour un slug inconnu', async () => {
