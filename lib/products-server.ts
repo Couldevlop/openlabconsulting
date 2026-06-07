@@ -116,6 +116,11 @@ interface RawPayloadExpertise {
   title?: unknown;
 }
 
+interface RawPayloadMedia {
+  url?: unknown;
+  alt?: unknown;
+}
+
 interface RawPayloadProduct {
   id?: string | number;
   slug?: unknown;
@@ -125,6 +130,7 @@ interface RawPayloadProduct {
   target?: unknown;
   maturity?: unknown;
   statusLabel?: unknown;
+  heroImage?: RawPayloadMedia | string | number | null;
   eyebrow?: unknown;
   intro?: unknown;
   problem?: unknown;
@@ -142,6 +148,41 @@ interface RawPayloadProduct {
  */
 function isProductSlug(value: unknown): value is string {
   return typeof value === 'string' && PRODUCT_SLUG_PATTERN.test(value);
+}
+
+/**
+ * Rend une URL média relative à l'origine — `next/image` l'accepte sans
+ * whitelister chaque domaine (dev/preprod/prod). Aligné sur
+ * `lib/articles-server.ts` (`toRelativeMediaUrl`).
+ */
+function toRelativeMediaUrl(url: string): string {
+  try {
+    return /^https?:\/\//i.test(url) ? new URL(url).pathname : url;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Champ upload Payload (média peuplé par `depth >= 1`) → image hero
+ * relativisée. Renvoie `undefined` si non défini ou non peuplé : la page
+ * retombe alors sur la capture codée puis le mockup.
+ */
+function toHeroImage(
+  raw: RawPayloadProduct['heroImage'],
+  fallbackAlt: string,
+): { src: string; alt: string } | undefined {
+  if (raw && typeof raw === 'object' && 'url' in raw) {
+    const url = (raw as RawPayloadMedia).url;
+    if (typeof url === 'string' && url.length > 0) {
+      const alt = (raw as RawPayloadMedia).alt;
+      return {
+        src: toRelativeMediaUrl(url),
+        alt: typeof alt === 'string' && alt.length > 0 ? alt : fallbackAlt,
+      };
+    }
+  }
+  return undefined;
 }
 
 function isProductStatus(value: unknown): value is ProductStatus {
@@ -246,6 +287,7 @@ function toProduct(raw: RawPayloadProduct): Product | null {
   }
   const pricing = toPricing(raw.pricing);
   if (!pricing) return null;
+  const heroImage = toHeroImage(raw.heroImage, `Visuel du produit ${raw.name}`);
   return {
     slug: raw.slug,
     iconKey: raw.iconKey,
@@ -254,6 +296,7 @@ function toProduct(raw: RawPayloadProduct): Product | null {
     target: raw.target,
     status: raw.maturity,
     statusLabel: raw.statusLabel,
+    ...(heroImage ? { heroImage } : {}),
     eyebrow: raw.eyebrow,
     intro: raw.intro,
     problem: raw.problem,
