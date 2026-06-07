@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   articleSchema,
+  blogSchema,
   bookSchema,
   breadcrumbSchema,
   faqPageSchema,
@@ -8,6 +9,7 @@ import {
   localBusinessSchema,
   organizationSchema,
   personSchema,
+  publicationsSchema,
   sectorPageSchema,
   serviceSchema,
   softwareApplicationSchema,
@@ -16,6 +18,7 @@ import {
 import { EXPERTISES } from '@/lib/data/expertises';
 import { PRODUCTS } from '@/lib/data/products';
 import { SECTORS } from '@/lib/data/sectors';
+import { PUBLICATIONS } from '@/lib/data/laboratoire';
 
 describe('lib/seo/schema — JSON-LD helpers', () => {
   it('organizationSchema : type Organization avec address Abidjan', () => {
@@ -24,6 +27,27 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(s.name).toMatch(/OpenLab/);
     const addr = s.address as { addressLocality?: string };
     expect(addr.addressLocality).toBe('Cocody');
+  });
+
+  it('publicationsSchema : ItemList typant chaque publication', () => {
+    const s = publicationsSchema(PUBLICATIONS);
+    expect(s['@type']).toBe('ItemList');
+    const items = s.itemListElement as {
+      position: number;
+      item: { '@type': string; name: string };
+    }[];
+    expect(items).toHaveLength(PUBLICATIONS.length);
+    expect(items[0]?.position).toBe(1);
+    // Le livre est typé Book, la conférence Event.
+    const types = items.map((it) => it.item['@type']);
+    expect(types).toContain('Book');
+    expect(types).toContain('Event');
+  });
+
+  it('blogSchema : type Blog pointant /insights', () => {
+    const s = blogSchema();
+    expect(s['@type']).toBe('Blog');
+    expect(String(s.url)).toMatch(/\/insights$/);
   });
 
   it('localBusinessSchema : type ProfessionalService', () => {

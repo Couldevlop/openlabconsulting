@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 // Imports sans extension : compatibles webpack Next (build) ET tsx CLI
 // (scripts payload-migrate / cms-seed). Le binaire payload direct
 // nécessiterait `.js` mais on ne l'utilise plus — tout passe par tsx.
+import { zeptomailAdapter } from './lib/email-adapter';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
 import { CaseStudies } from './collections/CaseStudies';
@@ -33,8 +34,10 @@ import { Users } from './collections/Users';
 import { Whitepapers } from './collections/Whitepapers';
 import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
+import { InsightsHubSettings } from './globals/InsightsHubSettings';
 import { ManifestoSettings } from './globals/ManifestoSettings';
 import { ReassuranceSettings } from './globals/ReassuranceSettings';
+import { MethodologieSettings } from './globals/MethodologieSettings';
 import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
@@ -137,6 +140,11 @@ export default buildConfig({
   serverURL,
   cors: trustedOrigins,
   csrf: trustedOrigins,
+  // Email adapter ZeptoMail — rend fonctionnel le « mot de passe oublié »
+  // de /admin (§11). Enregistré uniquement si le token est présent : en
+  // dev/CI sans token, Payload garde son comportement par défaut (log
+  // console), et l'adapter lui-même est fail-soft (lib/email-adapter.ts).
+  ...(process.env.ZEPTOMAIL_TOKEN ? { email: zeptomailAdapter() } : {}),
   // Borne la taille des uploads (busboy) — évite le DoS disque MinIO par un
   // compte éditeur uploadant des fichiers énormes. 20 Mo couvre largement
   // les couvertures (~2 Mo) et PDF de livres blancs.
@@ -176,8 +184,12 @@ export default buildConfig({
   ],
   globals: [
     HeroSettings,
+    InsightsHubSettings,
     ManifestoSettings,
     ReassuranceSettings,
+    // Section « Notre méthodologie d'accompagnement IA » (3 axes), affichée
+    // sur la homepage et le hub /expertises (lue via getMethodologieContent).
+    MethodologieSettings,
     AuditIaCtaSettings,
     FooterSettings,
     SeoDefaults,

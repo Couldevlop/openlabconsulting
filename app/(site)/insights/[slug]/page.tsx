@@ -1,24 +1,22 @@
 import type { Metadata } from 'next';
-import { draftMode } from 'next/headers';
+import { draftMode, headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { ArticleBody } from '@/components/insights/ArticleBody';
+import { ArticleCard } from '@/components/insights/ArticleCard';
 import { Badge } from '@/components/atoms/Badge';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { extractHeadings } from '@/lib/articles';
-import { getArticleBySlug } from '@/lib/articles-server';
+import { getArticleBySlug, getRelatedArticles } from '@/lib/articles-server';
 import { createCodeRenderer } from '@/lib/insights/code-highlighter';
-import {
-  articleSchema,
-  breadcrumbSchema,
-  jsonLdString,
-} from '@/lib/seo/schema';
+import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
 
 interface PageParams {
   params: Promise<{ slug: string }>;
@@ -56,34 +54,37 @@ export default async function InsightArticlePage({
   if (!article) notFound();
 
   const headings = extractHeadings(article.content);
-
-  const jsonLd = jsonLdString([
-    articleSchema({
-      slug: article.slug,
-      headline: article.title,
-      description: article.excerpt,
-      author: article.author,
-      isoDatePublished: article.isoDate,
-      imageUrl: article.cover.src ?? undefined,
-      category: article.categoryLabel,
-    }),
-    breadcrumbSchema([
-      { name: 'Accueil', url: '/' },
-      { name: 'Insights', url: '/insights' },
-      {
-        name: article.categoryLabel,
-        url: `/insights/categorie/${article.category}`,
-      },
-      { name: article.title, url: `/insights/${article.slug}` },
-    ]),
-  ]);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const related = await getRelatedArticles(article.category, article.slug, 3);
 
   return (
     <main id="main">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd }}
-      />
+      {/* SEO structuré : Article + fil d'Ariane (pas sur un brouillon noindex). */}
+      {!isDraft && (
+        <JsonLd
+          nonce={nonce}
+          data={[
+            articleSchema({
+              slug: article.slug,
+              headline: article.title,
+              description: article.excerpt,
+              author: article.author,
+              isoDatePublished: article.isoDate,
+              imageUrl: article.cover.src ?? undefined,
+              category: article.categoryLabel,
+            }),
+            breadcrumbSchema([
+              { name: 'Accueil', url: '/' },
+              { name: 'Insights', url: '/insights' },
+              {
+                name: article.categoryLabel,
+                url: `/insights/categorie/${article.category}`,
+              },
+              { name: article.title, url: `/insights/${article.slug}` },
+            ]),
+          ]}
+        />
+      )}
       {isDraft && (
         <div className="bg-[var(--color-ol-night)] px-4 py-2 text-center text-sm text-white">
           Mode prévisualisation — brouillon non publié.{' '}
@@ -275,6 +276,27 @@ export default async function InsightArticlePage({
           </div>
         </Container>
       </section>
+
+      {/* À lire aussi — articles de la même catégorie (anti cul-de-sac §4.9) */}
+      {related.length > 0 && (
+        <section
+          aria-labelledby="related-title"
+          className="bg-[var(--color-ol-ivory)] py-16 sm:py-20"
+        >
+          <Container width="wide">
+            <Heading id="related-title" level={2} visualLevel={3}>
+              À lire aussi
+            </Heading>
+            <ul className="mt-8 grid gap-8 md:grid-cols-3">
+              {related.map((a) => (
+                <li key={a.slug}>
+                  <ArticleCard article={a} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      )}
 
       <AuditIaCtaServer />
     </main>

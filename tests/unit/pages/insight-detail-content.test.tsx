@@ -76,12 +76,13 @@ const fullArticle: Article = {
 
 vi.mock('@/lib/articles-server', () => ({
   getArticleBySlug: vi.fn(async () => fullArticle),
+  getRelatedArticles: vi.fn(async () => []),
 }));
 
 import InsightArticlePage, {
   generateMetadata,
 } from '@/app/(site)/insights/[slug]/page';
-import { getArticleBySlug } from '@/lib/articles-server';
+import { getArticleBySlug, getRelatedArticles } from '@/lib/articles-server';
 
 async function renderPage(): Promise<void> {
   const params = Promise.resolve({ slug: 'article-complet' });
@@ -129,6 +130,35 @@ describe('Page /insights/[slug] — article avec contenu', () => {
     const link = screen.getByRole('link', { name: 'Source X' });
     expect(link.getAttribute('href')).toBe('https://x.example');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer nofollow');
+  });
+
+  it('affiche le bloc « À lire aussi » quand des articles liés existent', async () => {
+    vi.mocked(getRelatedArticles).mockResolvedValueOnce([
+      { ...fullArticle, slug: 'autre-article', title: 'Autre article' },
+    ]);
+    render(
+      await InsightArticlePage({
+        params: Promise.resolve({ slug: 'article-complet' }),
+      }),
+    );
+    expect(
+      screen.getByRole('heading', { name: 'À lire aussi' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Autre article')).toBeInTheDocument();
+  });
+
+  it('émet un JSON-LD Article', async () => {
+    const { container } = render(
+      await InsightArticlePage({
+        params: Promise.resolve({ slug: 'article-complet' }),
+      }),
+    );
+    const scripts = Array.from(
+      container.querySelectorAll('script[type="application/ld+json"]'),
+    );
+    expect(scripts.some((s) => s.textContent?.includes('"Article"'))).toBe(
+      true,
+    );
   });
 });
 

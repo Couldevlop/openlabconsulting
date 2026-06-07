@@ -72,3 +72,36 @@ Toutes les CVE proviennent de la **couche Debian 12.13** du distroless `gcr.io/d
 ### Si une CVE n'a pas (encore) de fix amont
 
 Trivy est lancé avec `ignore-unfixed: true` : les CVE sans fix disponible **ne bloquent pas**. Elles sont quand même visibles en Code Scanning. C'est la seule sortie tolérée : on n'ajoute pas de `.trivyignore` pour bypasser une CVE avec fix existant.
+
+## 3. WAF ModSecurity — moteur désactivé sur /admin (openlabconsulting.com)
+
+**Quoi (2026-06-07)** : dans le ConfigMap `ingress-nginx-controller`
+(ns `ingress-nginx`, ressource cluster partagée, hors chart applicatif),
+le `modsecurity-snippet` contient une règle scopée :
+
+```
+SecRule REQUEST_HEADERS:Host "@rx ^(www\.)?openlabconsulting\.com$" "id:10100,phase:1,pass,nolog,chain"
+SecRule REQUEST_URI "@beginsWith /admin" "ctl:ruleEngine=Off"
+```
+
+**Pourquoi** : le back-office Payload v3 fonctionne par server functions
+React — chaque interaction de formulaire (ajout d'une ligne de tableau,
+auto-save…) est un POST vers `/admin/*` dont le contenu (état de
+formulaire JSON, HTML riche, extraits de code des articles) dépasse le
+seuil d'anomalie OWASP CRS (règle 949110, score ≥ 5) → 403 systématique,
+admin inutilisable (constaté le 2026-06-07 : « Add Point clé » en spinner
+infini sur /admin/collections/articles/create).
+
+**Compensations** : `/admin` reste protégé par l'applicatif — auth
+Payload, 2FA TOTP obligatoire (`ENFORCE_ADMIN_2FA`), lockout 10 échecs /
+30 min, politique mot de passe 12+, audit log. Le WAF reste actif sur
+tout le reste (site public, `/api`, hôtes NexusRH).
+
+**Limites connues** : un POST authentifié de l'admin qui passe par
+`/api/*` (REST Payload) reste derrière le WAF — si un faux positif
+apparaît à l'enregistrement d'un contenu, ajouter une exclusion CRS
+ciblée (pas un `ruleEngine=Off` global sur /api).
+
+**Réversibilité** : retirer les 2 lignes du snippet du ConfigMap
+(`kubectl edit configmap ingress-nginx-controller -n ingress-nginx`) —
+nginx recharge automatiquement.

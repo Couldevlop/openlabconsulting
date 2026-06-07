@@ -1,31 +1,31 @@
 import type { Metadata } from 'next';
-import { AuditIaCta } from '@/components/sections/AuditIaCta';
+import { AuditIaQuizWizard } from '@/components/forms/AuditIaQuizWizard';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 
 export const metadata: Metadata = {
-  title: 'Audit IA gratuit — Cartographie cas d’usage + ROI estimé',
+  title: 'Audit IA gratuit — Questionnaire interactif + recommandation',
   description:
-    'Trente minutes avec un consultant senior pour cadrer vos cas d’usage IA prioritaires, leur ROI estimé et trois prochaines étapes activables.',
+    'Cinq questions pour cadrer votre besoin IA, une recommandation adaptée (atelier, audit éclair, cadrage stratégique ou programme), un consultant senior sous 48 h.',
   alternates: { canonical: '/audit-ia' },
 };
 
 const STEPS = [
   {
     step: '01',
-    title: 'Cadrage initial · 30 min',
-    body: 'Vous remplissez le formulaire (3 questions). On planifie un appel sous 24 h ouvrées.',
+    title: 'Questionnaire · 3 min',
+    body: 'Cinq questions séquentielles pour qualifier votre maturité IA, votre secteur, votre périmètre et votre urgence.',
   },
   {
     step: '02',
-    title: 'Audit terrain · 5 jours',
-    body: 'Un consultant senior cartographie vos workflows, votre data disponible, vos contraintes réglementaires.',
+    title: 'Recommandation instantanée',
+    body: 'Un format d’audit adapté (atelier, audit éclair, cadrage stratégique, programme) avec durée et livrable annoncés.',
   },
   {
     step: '03',
-    title: 'Livrable PDF · 10 jours',
-    body: 'Trois cas d’usage chiffrés (impact × faisabilité), une roadmap 6-18 mois, des outils opérables dès lundi.',
+    title: 'Consultant senior · 48 h',
+    body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris — pas de questions répétées.',
   },
 ];
 
@@ -35,31 +35,42 @@ export default function AuditIaPage(): React.ReactElement {
       {/* Hero éditorial */}
       <section
         aria-labelledby="audit-ia-page-title"
-        className="bg-[var(--color-ol-ivory)] py-24 sm:py-32"
+        className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
       >
         <Container width="wide">
           <div className="max-w-3xl">
             <Eyebrow tone="orange">Audit IA gratuit</Eyebrow>
             <Heading id="audit-ia-page-title" level={1} className="mt-4">
-              Trente minutes pour savoir si l’IA{' '}
+              Cinq questions pour savoir si l’IA{' '}
               <span className="text-[var(--color-ol-orange-text)]">
                 vous fera gagner du temps
               </span>
               .
             </Heading>
             <p className="mt-6 font-[family-name:var(--font-editorial)] text-xl leading-relaxed text-[var(--color-ol-graphite)]/85 italic sm:text-2xl">
-              Pas un appel commercial déguisé. Un cadrage opérationnel mené par
-              un consultant senior, débouchant sur une cartographie de cas
-              d’usage IA priorisés par ROI mesurable.
+              Pas un appel commercial déguisé. Un cadrage opérationnel qui
+              commence par un questionnaire interactif, débouche sur une
+              recommandation contextuelle, et finit avec un consultant senior
+              qui connaît déjà votre contexte.
             </p>
           </div>
         </Container>
       </section>
 
-      {/* Process en 3 étapes */}
+      {/* Questionnaire interactif (cœur de la page) */}
+      <section aria-labelledby="quiz-title" className="bg-white py-16 sm:py-24">
+        <Container width="narrow">
+          <span id="quiz-title" className="sr-only">
+            Questionnaire interactif d’audit IA
+          </span>
+          <AuditIaQuizWizard />
+        </Container>
+      </section>
+
+      {/* Process en 3 étapes (reste sous le quiz pour la pédagogie) */}
       <section
         aria-labelledby="process-title"
-        className="bg-white py-20 sm:py-28"
+        className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
       >
         <Container width="wide">
           <div className="max-w-2xl">
@@ -92,9 +103,6 @@ export default function AuditIaPage(): React.ReactElement {
           </ol>
         </Container>
       </section>
-
-      {/* Réutilisation du CTA homepage (qui contient le formulaire + livre blanc) */}
-      <AuditIaCta />
     </main>
   );
 }
