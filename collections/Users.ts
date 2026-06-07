@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload';
 // Imports sans extension : compatibles webpack Next + tsx CLI.
 import { logAudit } from '../lib/audit-log';
+import { esc, shell } from '../lib/email-core';
 import { validatePasswordStrength } from '../lib/password-policy';
 import { isSuperAdmin } from '../lib/auth/roles';
 
@@ -34,6 +35,31 @@ export const Users: CollectionConfig = {
     tokenExpiration: 28800, // 8 h absolu
     maxLoginAttempts: 10,
     lockTime: 1800 * 1000, // 30 min
+    // « Mot de passe oublié » — email FR charte OpenLab, envoyé via
+    // l'email adapter ZeptoMail (payload.config.ts). Le lien pointe vers
+    // l'écran natif /admin/reset/<token> de Payload.
+    forgotPassword: {
+      generateEmailSubject: () =>
+        'Réinitialisation de votre mot de passe — Admin OpenLab',
+      generateEmailHTML: (args) => {
+        const token = args?.token ?? '';
+        const user = args?.user as
+          | { email?: string; fullName?: string }
+          | undefined;
+        const serverURL =
+          process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000';
+        const resetUrl = `${serverURL}/admin/reset/${token}`;
+        const greeting = user?.fullName
+          ? `Bonjour ${user.fullName},`
+          : 'Bonjour,';
+        const inner = `
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">${esc(greeting)}</p>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">Une réinitialisation du mot de passe de votre compte admin OpenLab a été demandée. Ce lien est valable une heure.</p>
+<a href="${esc(resetUrl)}" style="display:inline-block;background:#ff5a00;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Choisir un nouveau mot de passe</a>
+<p style="margin:24px 0 0;font-size:13px;color:#5b6170;">Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : votre mot de passe reste inchangé. Pensez à signaler l'incident à l'équipe.</p>`;
+        return shell('Réinitialisation de votre mot de passe', inner);
+      },
+    },
   },
   admin: {
     useAsTitle: 'email',
