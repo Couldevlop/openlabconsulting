@@ -11,6 +11,7 @@ import {
   UserCog,
   ImageIcon,
   Globe,
+  Eye,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -51,6 +52,14 @@ export default async function OpenLabAdminDashboard(
   ).toISOString();
   const oneDayAgo = new Date(now.getTime() - 86_400_000).toISOString();
 
+  // Fenêtre analytics « visites » : jours (UTC, format AAAA-MM-JJ) alignés
+  // sur le champ `visits.day`. Comparaison texte = lexicographique = OK pour
+  // l'ISO. 14 jours glissants pour le graphe.
+  const todayKey = now.toISOString().slice(0, 10);
+  const window14Key = new Date(now.getTime() - 13 * 86_400_000)
+    .toISOString()
+    .slice(0, 10);
+
   // ---- helpers fail-soft ----
   const safeCount = async (
     p: Promise<{ totalDocs: number }>,
@@ -80,6 +89,9 @@ export default async function OpenLabAdminDashboard(
     leadsByStageRaw,
     recentLeads,
     recentAudit,
+    visitsTotal,
+    visitsToday,
+    visitsWindow,
   ] = await Promise.all([
     safeCount(payload.count({ collection: 'leads' })),
     safeCount(
@@ -140,7 +152,27 @@ export default async function OpenLabAdminDashboard(
         depth: 0,
       }) as unknown as Promise<{ docs: RecentAudit[] }>,
     ),
+    safeCount(payload.count({ collection: 'visits' })),
+    safeCount(
+      payload.count({
+        collection: 'visits',
+        where: { day: { equals: todayKey } },
+      }),
+    ),
+    safeFind<VisitRaw>(
+      payload.find({
+        collection: 'visits',
+        where: { day: { greater_than_equal: window14Key } },
+        limit: 5000,
+        depth: 0,
+      }) as unknown as Promise<{ docs: VisitRaw[] }>,
+    ),
   ]);
+
+  // Agrégats visites (depuis la fenêtre 14j déjà chargée).
+  const visitsByDay = aggregateByDay(visitsWindow, todayKey);
+  const visitsByCountry = topCountries(visitsWindow, 5);
+  const visits7d = visitsByDay.slice(-7).reduce((sum, d) => sum + d.value, 0);
 
   // Distribution par stage (depuis le dataset déjà chargé).
   const stagesOrder: readonly LeadStage[] = [
@@ -189,6 +221,15 @@ export default async function OpenLabAdminDashboard(
       delta: null,
       accent: 'orange',
       href: '/admin/collections/articles?where[status][equals]=draft',
+    },
+    {
+      icon: Eye,
+      label: 'Visiteurs aujourd’hui',
+      value: visitsToday,
+      hint: `${visits7d.toLocaleString('fr-FR')} sur 7j · ${visitsTotal.toLocaleString('fr-FR')} au total`,
+      delta: null,
+      accent: 'orange',
+      href: '/admin/collections/visits',
     },
     {
       icon: ShieldCheck,
@@ -325,6 +366,44 @@ export default async function OpenLabAdminDashboard(
               accent: '#0B1B3D',
             }))}
           />
+        </Panel>
+      </section>
+
+      {/* -------- Visites -------- */}
+      <section aria-label="Fréquentation" style={dashboardStyles.grid2Wide}>
+        <Panel
+          title="Visiteurs uniques par jour"
+          hint="14 derniers jours · 1 visiteur compté 1×/jour"
+          href="/admin/collections/visits"
+        >
+          {visitsByDay.every((d) => d.value === 0) ? (
+            <EmptyState message="Aucune visite enregistrée pour l'instant. Les visiteurs du site public apparaîtront ici." />
+          ) : (
+            <BarChart
+              data={visitsByDay.map((d) => ({
+                label: d.label,
+                value: d.value,
+                accent: '#FF5A00',
+              }))}
+            />
+          )}
+        </Panel>
+        <Panel
+          title="Top pays"
+          hint="Répartition géographique (14j)"
+          href="/admin/collections/visits"
+        >
+          {visitsByCountry.length === 0 ? (
+            <EmptyState message="Pas encore de données géographiques." />
+          ) : (
+            <BarChart
+              data={visitsByCountry.map((c) => ({
+                label: countryLabel(c.code),
+                value: c.value,
+                accent: '#0B1B3D',
+              }))}
+            />
+          )}
         </Panel>
       </section>
 
@@ -606,6 +685,12 @@ interface RecentAudit {
   resource?: string;
   userEmail?: string;
 }
+interface VisitRaw {
+  id: string | number;
+  day?: string;
+  hour?: number;
+  country?: string;
+}
 type LeadStage =
   | 'nouveau'
   | 'qualifie'
@@ -632,6 +717,76 @@ function countBy<T extends object>(
     }
   }
   return out;
+}
+
+/**
+ * Visites par jour sur 14 jours glissants (séries complètes, jours sans
+ * visite à 0). Label court « JJ/MM ». `todayKey` = AAAA-MM-JJ UTC.
+ */
+function aggregateByDay(
+  visits: readonly VisitRaw[],
+  todayKey: string,
+): { label: string; value: number }[] {
+  const counts: Record<string, number> = {};
+  for (const v of visits) {
+    if (typeof v.day === 'string') counts[v.day] = (counts[v.day] ?? 0) + 1;
+  }
+  const end = new Date(`${todayKey}T00:00:00Z`).getTime();
+  const out: { label: string; value: number }[] = [];
+  for (let i = 13; i >= 0; i--) {
+    const key = new Date(end - i * 86_400_000).toISOString().slice(0, 10);
+    const [, mm, dd] = key.split('-');
+    out.push({ label: `${dd}/${mm}`, value: counts[key] ?? 0 });
+  }
+  return out;
+}
+
+/** Top N pays par nombre de visites (décroissant). */
+function topCountries(
+  visits: readonly VisitRaw[],
+  limit: number,
+): { code: string; value: number }[] {
+  const counts: Record<string, number> = {};
+  for (const v of visits) {
+    const code =
+      typeof v.country === 'string' && v.country.length > 0 ? v.country : 'XX';
+    counts[code] = (counts[code] ?? 0) + 1;
+  }
+  return Object.entries(counts)
+    .map(([code, value]) => ({ code, value }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, limit);
+}
+
+/** Code ISO pays → libellé FR (avec drapeau emoji) ; repli sur le code. */
+function countryLabel(code: string): string {
+  if (code === 'XX') return 'Inconnu';
+  const names: Record<string, string> = {
+    CI: 'Côte d’Ivoire',
+    FR: 'France',
+    US: 'États-Unis',
+    SN: 'Sénégal',
+    MA: 'Maroc',
+    CM: 'Cameroun',
+    BF: 'Burkina Faso',
+    BJ: 'Bénin',
+    TG: 'Togo',
+    ML: 'Mali',
+    GB: 'Royaume-Uni',
+    CA: 'Canada',
+    BE: 'Belgique',
+    DE: 'Allemagne',
+    CD: 'RD Congo',
+    GN: 'Guinée',
+  };
+  // Drapeau emoji depuis le code ISO (offset Regional Indicator).
+  const flag = /^[A-Z]{2}$/.test(code)
+    ? String.fromCodePoint(
+        ...[...code].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65),
+      )
+    : '';
+  const name = names[code] ?? code;
+  return flag ? `${flag} ${name}` : name;
 }
 
 function formatHeroDate(d: Date): string {
