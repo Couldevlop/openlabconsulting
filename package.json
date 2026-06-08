@@ -34,6 +34,7 @@
     "cms:seed:sectors": "tsx --env-file=.env scripts/seed-sectors.ts",
     "cms:seed:team": "tsx --env-file=.env scripts/seed-team.ts",
     "cms:seed:covers": "tsx --env-file=.env scripts/seed-article-covers.ts",
+    "cms:seed:reassurance": "tsx --env-file=.env scripts/seed-reassurance.ts",
     "db:migrate": "tsx --env-file=.env scripts/payload-migrate.ts",
     "db:migrate:create": "payload migrate:create",
     "db:migrate:create:tsx": "tsx --env-file=.env scripts/payload-migrate-create.ts",
