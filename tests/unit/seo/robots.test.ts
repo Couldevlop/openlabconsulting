@@ -29,6 +29,25 @@ describe('app/robots', () => {
     }
   });
 
+  it('refuse les crawlers commerciaux agressifs sur tout le site', () => {
+    const rules = Array.isArray(result.rules) ? result.rules : [result.rules];
+    for (const bot of ['AhrefsBot', 'SemrushBot', 'MJ12bot', 'Bytespider']) {
+      const rule = rules.find((r) => r.userAgent === bot);
+      expect(rule, `règle attendue pour ${bot}`).toBeDefined();
+      expect(rule?.disallow).toBe('/');
+      // Ne doit surtout pas leur ouvrir l’accès par ailleurs.
+      expect(rule?.allow).toBeUndefined();
+    }
+  });
+
+  it('n’interdit PAS les moteurs/crawlers IA gardés pour le GEO', () => {
+    const rules = Array.isArray(result.rules) ? result.rules : [result.rules];
+    for (const bot of ['GPTBot', 'ClaudeBot', 'PerplexityBot']) {
+      const rule = rules.find((r) => r.userAgent === bot);
+      expect(rule?.disallow).not.toBe('/');
+    }
+  });
+
   it('expose le sitemap absolu', () => {
     expect(result.sitemap).toMatch(/^https?:\/\//);
     expect(result.sitemap).toContain('/sitemap.xml');
