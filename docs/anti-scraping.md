@@ -10,7 +10,10 @@
 > **Décisions actées (2026-06-08)** :
 >
 > - Crawlers IA (GPTBot, ClaudeBot, PerplexityBot, Google-Extended) → **gardés**.
-> - Niveau Cloudflare → **équilibré** (Super Bot Fight Mode, pas de full lockdown).
+> - Niveau Cloudflare → **équilibré** (pas de full lockdown).
+> - Plan Cloudflare → **Free** (les 9 € payés = le domaine via Registrar, pas
+>   le plan). Couche 1 adaptée au Free : Bot Fight Mode + WAF Custom Rules +
+>   1 rate-limiting rule. Super Bot Fight Mode = upgrade Pro optionnel.
 
 Les couches sont **ordonnées par impact**. La couche 0 est le prérequis :
 sans elle, toutes les autres se contournent en tapant l'origine en direct.
@@ -96,47 +99,104 @@ data:
 
 Dashboard Cloudflare → zone `openlabconsulting.com`.
 
-### 1.a — Super Bot Fight Mode
+> **Plan Free (cas actuel).** Super Bot Fight Mode et le WAF Managed Ruleset
+> complet sont réservés au **Pro** (~20 $/mois). Sur Free, on combine :
+> **Bot Fight Mode basique + 3 règles WAF Custom + 1 règle de rate limiting**.
+> C'est largement suffisant pour un site vitrine. Le levier critique (verrou
+> origine, couche 0) est lui **dispo sur Free**.
 
-**Security → Bots** (nécessite le plan Pro ou supérieur ; en Free, seul
-« Bot Fight Mode » basique est dispo) :
+### 1.a — Bot Fight Mode (Free)
 
-| Catégorie            | Action                |
-| -------------------- | --------------------- |
-| Definitely automated | **Block**             |
-| Likely automated     | **Managed Challenge** |
-| Verified bots        | **Allow**             |
+**Security → Bots** → activer **Bot Fight Mode**. Bloque les bots
+automatisés grossiers. Les bots vérifiés (Googlebot, Bingbot, GPTBot,
+ClaudeBot…) sont reconnus et passent → SEO + GEO préservés.
 
-- _Verified bots = Allow_ laisse passer **Googlebot, Bingbot et les crawlers
-  IA** (GPTBot, ClaudeBot… sont dans la liste « verified » de Cloudflare) →
-  SEO + GEO préservés.
-- **NE PAS** activer le toggle **« Block AI Scrapers and Crawlers »** : il
-  bloquerait GPTBot/ClaudeBot (contraire à la décision GEO).
-- Optionnel : cocher **« Block AI bots on... »** uniquement si tu changes
-  d'avis et veux exclure l'IA — laisser **décoché** pour l'instant.
+- **NE PAS** activer **« Block AI Scrapers and Crawlers »** : bloquerait
+  GPTBot/ClaudeBot (contraire à la décision GEO). Laisser **décoché**.
 
-### 1.b — Règle de rate limiting
+### 1.b — 3 règles WAF Custom (Free, jusqu'à 5)
+
+**Security → WAF → Custom rules → Create rule**. Le champ d'expression
+accepte la syntaxe ci-dessous (mode « Edit expression »). `cf.client.bot`
+vaut `true` pour les bots **vérifiés** par Cloudflare (Google/Bing/IA) →
+on les épargne systématiquement.
+
+**Règle 1 — Outils de scraping connus (User-Agent)** → Action : **Block**
+
+```
+(not cf.client.bot) and (
+  http.user_agent contains "python-requests" or
+  http.user_agent contains "scrapy" or
+  http.user_agent contains "Go-http-client" or
+  http.user_agent contains "curl" or
+  http.user_agent contains "wget" or
+  http.user_agent contains "node-fetch" or
+  http.user_agent contains "axios" or
+  http.user_agent contains "HeadlessChrome" or
+  http.user_agent contains "PhantomJS"
+)
+```
+
+**Règle 2 — User-Agent vide ou absent** → Action : **Managed Challenge**
+
+```
+(not cf.client.bot) and (http.user_agent eq "" or not http.request.headers["user-agent"][0] ne "")
+```
+
+> Si la 2ᵉ condition pose souci dans l'éditeur, garde simplement
+> `(not cf.client.bot) and http.user_agent eq ""`.
+
+**Règle 3 — Harvesters commerciaux agressifs (ceux du robots.txt)** →
+Action : **Block**
+
+```
+(not cf.client.bot) and (
+  http.user_agent contains "AhrefsBot" or
+  http.user_agent contains "SemrushBot" or
+  http.user_agent contains "MJ12bot" or
+  http.user_agent contains "DotBot" or
+  http.user_agent contains "DataForSeoBot" or
+  http.user_agent contains "BLEXBot" or
+  http.user_agent contains "PetalBot" or
+  http.user_agent contains "Bytespider" or
+  http.user_agent contains "serpstatbot"
+)
+```
+
+> Double les `Disallow` de `app/robots.ts` : robots = politesse, ces règles
+> = blocage réel même si le bot ignore robots.txt.
+
+### 1.c — Règle de rate limiting (Free : 1 règle)
 
 **Security → WAF → Rate limiting rules → Create** :
 
-- **If** : `URI Path` ne commence pas par `/_next/` ni `/icon` (exclure les
-  assets) — ou plus simple : appliquer à tout puis exclure les statiques.
-- **Rate** : `100 requests / 1 minute` par `IP`.
-- **Then** : **Managed Challenge** (ou Block si tu préfères dur).
+- **Si** l'URI ne commence pas par `/_next/` ni `/icon` (exclure assets).
+- **Rate** : `100 requests / 1 minute` par **IP**.
+- **Then** : **Managed Challenge** (ou Block).
 
-> Complète le rate-limit Redis applicatif (`lib/rate-limit.ts`,
-> `RATE_LIMITS.globalGet/globalAll`) qui, lui, ne voit que l'app derrière CF.
+> Le plan Free n'autorise qu'**une** règle de rate limiting — la viser sur
+> tout le trafic hors assets. Complète le rate-limit Redis applicatif
+> (`lib/rate-limit.ts`, `RATE_LIMITS.globalGet/globalAll`), qui ne voit que
+> l'app derrière CF.
 
-### 1.c — WAF Managed Rules
+### 1.d — Managed Ruleset (Free auto)
 
-**Security → WAF → Managed rules** → activer **Cloudflare Managed Ruleset**
-(en plus de ton ModSecurity origine). Mode _Block_ sur les signatures
-critiques.
+Sur Free, le **Cloudflare Free Managed Ruleset** est déployé
+automatiquement (protections critiques contre les vulnérabilités connues).
+Rien à activer. Le ruleset complet (OWASP Core) nécessite le Pro.
 
-### 1.d — Surveiller avant de durcir
+### 1.e — Surveiller
 
-**Security → Bots → Bot Analytics** la 1ʳᵉ semaine : vérifier qu'aucun vrai
-visiteur n'est challengé en masse (VPN, mobiles partagés). Ajuster si besoin.
+**Security → Events** : suivre les blocages/challenges la 1ʳᵉ semaine pour
+vérifier qu'aucun vrai visiteur n'est pris à tort (VPN, mobiles partagés).
+Ajuster les règles 1–3 au besoin. (Bot Analytics détaillé = Pro.)
+
+### Upgrade Pro (optionnel, ~20 $/mois)
+
+Si le scraping persiste malgré tout, le Pro ajoute : **Super Bot Fight
+Mode** (classification ML, bien plus fin que les règles UA), **WAF Managed
+Rules** complet, et **Bot Analytics**. À envisager seulement si les règles
+Free ne suffisent pas — pour un site vitrine, commencer par le Free durci.
 
 ---
 
@@ -197,9 +257,9 @@ avant `x-real-ip`. Voir couche 0.c pour rendre cet en-tête non-spoofable.
 1. [ ] 🧑 Couche 0.a — Authenticated Origin Pulls (mTLS) **← prioritaire**
 2. [ ] 🧑 Couche 0.b — Firewall réseau plages CF (selon topologie)
 3. [ ] 🧑 Couche 0.c — ingress-nginx real-ip Cloudflare (ConfigMap partagé)
-4. [ ] 🧑 Couche 1.a — Super Bot Fight Mode (équilibré)
-5. [ ] 🧑 Couche 1.b — Règle de rate limiting
-6. [ ] 🧑 Couche 1.c — WAF Managed Rules
+4. [ ] 🧑 Couche 1.a — Bot Fight Mode (Free)
+5. [ ] 🧑 Couche 1.b — 3 règles WAF Custom (UA scrapers / UA vide / harvesters)
+6. [ ] 🧑 Couche 1.c — 1 règle de rate limiting (100/min/IP → challenge)
 7. [x] ✅ Couche 2 — robots.txt durci
 8. [x] ✅ Couche 3 — cf-connecting-ip prioritaire
 9. [ ] 🧑 Couche 4 — honeypot + contenu premium derrière auth
