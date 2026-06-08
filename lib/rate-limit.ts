@@ -206,6 +206,7 @@ export const RATE_LIMITS = {
   auditIa: { limit: 3, windowSec: 60 * 60, failClosed: true }, // 3 / 1 h / IP
   whitepaper: { limit: 3, windowSec: 24 * 60 * 60, failClosed: true }, // 3 / jour / IP (collections/Whitepapers.ts spec)
   chat: { limit: 20, windowSec: 60 }, // 20 / 1 min / session
+  track: { limit: 60, windowSec: 60 }, // 60 / 1 min / IP (analytics — fail-open)
   login: { limit: 5, windowSec: 15 * 60, failClosed: true }, // 5 / 15 min / IP
   globalGet: { limit: 200, windowSec: 60 }, // 200 / 1 min / IP (GET)
   globalAll: { limit: 1000, windowSec: 60 }, // 1000 / 1 min / IP (toutes méthodes)

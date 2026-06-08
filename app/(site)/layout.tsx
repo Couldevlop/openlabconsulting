@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/atoms/ScrollProgress';
+import { VisitTracker } from '@/components/analytics/VisitTracker';
 import { getFooterContent } from '@/lib/cms/site-settings-server';
 import {
   jsonLdString,
@@ -61,6 +62,7 @@ export default async function SiteLayout({
           Aller au contenu principal
         </a>
         <ScrollProgress />
+        <VisitTracker />
         <Navbar />
         <div className="flex-1">{children}</div>
         <Footer content={footerContent} />
