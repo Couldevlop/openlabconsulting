@@ -73,6 +73,13 @@ export interface Product {
   target: string;
   status: ProductStatus;
   statusLabel: string;
+  /**
+   * Image hero optionnelle, pilotée depuis l'admin (champ `heroImage`
+   * relié à la médiathèque). Si absente, la page retombe sur la capture
+   * codée (`SOLUTION_SCREENSHOTS`), puis le mockup SVG, puis le
+   * placeholder. Les produits fondateurs (fallback) n'en définissent pas.
+   */
+  heroImage?: { src: string; alt: string };
   /** Eyebrow + sous-titre Fraunces affichés en page détail. */
   eyebrow: string;
   /** Pitch hero page détail — 2-3 phrases. */

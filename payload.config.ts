@@ -31,6 +31,7 @@ import { Sectors } from './collections/Sectors';
 import { TeamMembers } from './collections/TeamMembers';
 import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
+import { Visits } from './collections/Visits';
 import { Whitepapers } from './collections/Whitepapers';
 import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
@@ -181,6 +182,7 @@ export default buildConfig({
     Users,
     Leads,
     AuditLog,
+    Visits,
   ],
   globals: [
     HeroSettings,

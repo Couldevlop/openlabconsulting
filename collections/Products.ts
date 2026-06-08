@@ -142,6 +142,20 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      // Image hero optionnelle pilotée depuis l'admin (médiathèque). Si
+      // définie, elle prime sur la capture codée et le mockup SVG dans le
+      // hero de /solutions/<slug>. Sinon, cascade inchangée (screenshot →
+      // mockup → placeholder). AVIF/WebP générés automatiquement.
+      name: 'heroImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      admin: {
+        description:
+          'Visuel du hero produit (optionnel). Prioritaire sur le mockup. AVIF/WebP générés automatiquement.',
+      },
+    },
+    {
       name: 'eyebrow',
       type: 'text',
       required: true,
