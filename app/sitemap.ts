@@ -150,6 +150,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.7,
     })),
+    // Landings livres blancs (lead magnets) — fort mot-clé + intention.
+    // À garder en phase avec la page /livres-blancs/[slug] (placeholder en
+    // attendant la collection Whitepapers).
+    {
+      url: absoluteUrl('/livres-blancs/ia-souveraine-ci-2026'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     {
       url: absoluteUrl('/mentions-legales'),
       lastModified: now,

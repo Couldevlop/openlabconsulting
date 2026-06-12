@@ -120,11 +120,13 @@ export const PUBLICATIONS: readonly Publication[] = [
       'Comment les dirigeants ivoiriens peuvent déployer une IA hébergée en UE conforme RGPD + loi 2013-450, sans dépendre des hyperscalers.',
   },
   {
+    // Lien repointé vers l'article réel (la landing /livres-blancs/
+    // conformite-paie-ci-2026 n'existe pas → 404). Même sujet, contenu publié.
     type: 'livre-blanc',
     title: 'Conformité CNPS, ITS, FDFP : guide SIRH 2024-2026',
     authors: ['Équipe NexusRH'],
     year: 2025,
-    href: '/livres-blancs/conformite-paie-ci-2026',
+    href: '/insights/cnps-its-fdfp-conformite-sirh-ivoirien',
     summary:
       'Tous les barèmes 2024 commentés, les pièges classiques d’un audit DGI, les obligations Mobile Money en paie.',
   },
