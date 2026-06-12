@@ -20,7 +20,7 @@ import type { ProductSlug } from '@/lib/data/products';
  * sans mockup dédié, le composant rend `null` : l'appelant retombe alors
  * sur une capture réelle ou un `MediaPlaceholder`.
  */
-const MOCKUPS: Record<ProductSlug, () => ReactElement> = {
+const MOCKUPS: Partial<Record<ProductSlug, () => ReactElement>> = {
   nexusrh: NexusRhMockup,
   nexuserp: NexusErpMockup,
   sygescom: SygescomMockup,
@@ -28,6 +28,8 @@ const MOCKUPS: Record<ProductSlug, () => ReactElement> = {
   qualitos: QualitOsMockup,
   'fraud-shield': FraudShieldMockup,
   'smart-city': SmartCityMockup,
+  // SentinelBTP s'appuie sur une capture réelle (SOLUTION_SCREENSHOTS) :
+  // pas de mockup SVG dédié → ProductMockup retombe sur null.
 };
 
 /** Vrai si un mockup SVG dédié existe pour ce slug (slug libre toléré). */
@@ -36,7 +38,7 @@ export function hasProductMockup(slug: string): slug is ProductSlug {
 }
 
 export function ProductMockup({ slug }: { slug: string }): ReactElement | null {
-  if (!hasProductMockup(slug)) return null;
-  const Component = MOCKUPS[slug];
+  const Component = hasProductMockup(slug) ? MOCKUPS[slug] : undefined;
+  if (!Component) return null;
   return <Component />;
 }

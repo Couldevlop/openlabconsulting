@@ -43,6 +43,12 @@ import { AuditIaCtaSettings } from './globals/AuditIaCtaSettings';
 import { FooterSettings } from './globals/FooterSettings';
 import { SeoDefaults } from './globals/SeoDefaults';
 import { AboutSettings } from './globals/AboutSettings';
+import { SiteSettings } from './globals/SiteSettings';
+import {
+  SolutionsHubSettings,
+  ExpertisesHubSettings,
+  SecteursHubSettings,
+} from './globals/HubHeroSettings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -196,6 +202,10 @@ export default buildConfig({
     FooterSettings,
     SeoDefaults,
     AboutSettings,
+    SiteSettings,
+    SolutionsHubSettings,
+    ExpertisesHubSettings,
+    SecteursHubSettings,
   ],
   // Éditeur richText premium pour la mise en forme professionnelle des
   // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,

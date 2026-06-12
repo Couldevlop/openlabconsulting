@@ -4,7 +4,7 @@ import LaboratoireAxesPage from '@/app/(site)/laboratoire/axes/page';
 import { RD_AXES } from '@/lib/data/laboratoire';
 
 describe('Page /laboratoire/axes', () => {
-  it('rend un h1 « Six pistes, sept produits »', () => {
+  it('rend un h1 « Six pistes, huit produits »', () => {
     render(<LaboratoireAxesPage />);
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1.textContent).toMatch(/Six pistes/i);

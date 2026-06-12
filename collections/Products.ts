@@ -7,14 +7,14 @@ import {
 } from '../lib/auth/roles';
 
 /**
- * Products — les 7 logiciels propriétaires OpenLab (CLAUDE.md §1.3, §7).
+ * Products — les 8 logiciels propriétaires OpenLab (CLAUDE.md §1.3, §7).
  *
  * Source de vérité éditable depuis l'admin Payload, consommée par :
  *   - `components/sections/Solutions.tsx` (showcase homepage §6.6)
  *   - `app/(site)/solutions/page.tsx` (hub)
  *   - `app/(site)/solutions/[slug]/page.tsx` (pages détaillées §7.1)
  *
- * Quand la collection est vide en base, les pages retombent sur les 7
+ * Quand la collection est vide en base, les pages retombent sur les 8
  * produits hard-codés — cf. `lib/products-server.ts` (helpers
  * `getPublishedProducts` / `getProductBySlug`) et `FALLBACK_PRODUCTS`.
  *
@@ -43,7 +43,7 @@ export const Products: CollectionConfig = {
     defaultColumns: ['name', 'slug', 'status', '_status', 'order'],
     listSearchableFields: ['name', 'tagline', 'target'],
     description:
-      'Les 7 logiciels propriétaires OpenLab (§1.3, §7). Trie par `order` ascendant. Vide = fallback hard-codé.',
+      'Les 8 logiciels propriétaires OpenLab (§1.3, §7). Trie par `order` ascendant. Vide = fallback hard-codé.',
   },
   versions: {
     drafts: true,

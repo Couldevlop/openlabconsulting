@@ -8,6 +8,7 @@ import {
   Compass,
   Database,
   Fuel,
+  HardHat,
   HeartPulse,
   Landmark,
   Radar,
@@ -43,6 +44,7 @@ export const ICON_MAP = {
   fuel: Fuel,
   sprout: Sprout,
   radar: Radar,
+  'hard-hat': HardHat,
   // Expertises (lib/data/expertises.ts).
   compass: Compass,
   bot: Bot,

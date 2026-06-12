@@ -58,6 +58,7 @@ export async function generateMetadata({
 // disponibles (clé = slug produit).
 const SOLUTION_SCREENSHOTS: Record<string, string> = {
   nexusrh: '/solutions/nexusrh.png',
+  sentinelbtp: '/solutions/sentinelbtp.png',
 };
 
 export default async function SolutionDetailPage({

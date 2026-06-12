@@ -15,6 +15,11 @@
 import { PRODUCTS } from '@/lib/data/products';
 import { EXPERTISES } from '@/lib/data/expertises';
 import { CHAPTERS } from '@/lib/data/book';
+import { spellFrenchCount } from '@/lib/format/product-count';
+
+const PRODUCT_WORD = spellFrenchCount(PRODUCTS.length);
+const PRODUCT_WORD_CAP =
+  PRODUCT_WORD.charAt(0).toUpperCase() + PRODUCT_WORD.slice(1);
 
 export interface NavLink {
   href: string;
@@ -84,7 +89,7 @@ const SOLUTIONS_MENU: MegaMenuConfig = {
   overview: {
     href: '/solutions',
     label: 'Vue d’ensemble',
-    description: 'Sept logiciels propriétaires, un seul laboratoire.',
+    description: `${PRODUCT_WORD_CAP} logiciels propriétaires, un seul laboratoire.`,
   },
   sections: [
     {

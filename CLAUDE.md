@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > **Projet** : Site web premium d'OpenLab Consulting + back-office d'administration, déployable sur cluster K3s Hetzner en moins de 10 minutes.
-> **Mission de Claude Code** : construire un site qui dépasse les meilleurs cabinets africains et internationaux, assume une identité ivoirienne premium, expose l'écosystème produits OpenLab (NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City) et le livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ».
+> **Mission de Claude Code** : construire un site qui dépasse les meilleurs cabinets africains et internationaux, assume une identité ivoirienne premium, expose l'écosystème produits OpenLab (NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City, SentinelBTP) et le livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes ».
 > **Règle d'or** : _Aucun visiteur ne doit pouvoir confondre ce site avec un autre cabinet de conseil dans le monde._
 > **Règle de Claude Code** : _ne jamais refactoriser ou modifier ce qui n'a pas été explicitement demandé. Toute migration de stack, tout changement architectural non sollicité doit être proposé avant d'être exécuté._
 
@@ -16,6 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Phase courante : P2 en cours.** P0 (scaffold) et P1 (design system + shell + middleware sécurité) terminées et fusionnées. P2 démarre avec la décomposition Homepage §6 en features Git Flow (`feat/p2-hero-layout`, `feat/p2-hero-canvas`, `feat/p2-reassurance`, `feat/p2-expertises-cards`, `feat/p2-laboratoire`, `feat/p2-cas-client`, `feat/p2-products-showcase`, `feat/p2-manifesto`, `feat/p2-livre`, `feat/p2-insights`, `feat/p2-audit-ia-cta`).
 - **Repère de qualité acquis en P1** : 51 tests verts · coverage 93.68 % · First Load JS 103 kB · headers de sécurité au middleware.
 - **Feature `feat/p2-articles-fondateurs` (en cours)** : pipeline éditorial Insights complet — éditeur richText premium (H2-H4 + toolbar fixe + upload inline), champs `summary` (GEO §12.4) + `sources` (§17.9), rendu Lexical `ArticleBody` (ancres SEO + liens assainis OWASP A03), accès collection durci (anonyme = versions publiées `_status` only, A01), **prévisualisation des brouillons** via draft mode Next gardé par auth (`/api/preview`) + versioning natif Payload (`versions.drafts`, plus de champ `status` custom — collision enum corrigée), seed idempotent `pnpm cms:seed:articles` (**7 articles** fondateurs sourcés, chiffres réels). **Migration prod générée et validée** : `migrations/20260524_135927_initial.ts` (baseline complète, appliquée en mode prod ; `pnpm db:migrate:create:tsx` pour régénérer). Repère : **620 tests verts · coverage 96.74 %**.
+- **Feature `feat/p6-parametrage-total` (en cours)** : passage à **8 produits** (ajout SentinelBTP — surveillance structurelle par IA / SHM pour le BTP). Le **compteur de produits est dynamique et paramétrable** : dérivé du nombre de produits publiés + override admin via le global `SiteSettings`, avec tokens `{productsWord}`/`{Products}` interpolés côté serveur (`lib/format/product-count.ts`, `lib/cms/product-count-server.ts`). Plus de « sept/7 » figé. **Hubs Solutions/Expertises/Secteurs pilotables** depuis l'admin (3 globals `HubHeroSettings`). Repère : **1009 tests verts**. ⚠️ Migration Payload des nouveaux globals **à générer** contre la vraie DB openlab avant déploiement (host 5433 occupé par sygescom au moment du dev) — globals fail-soft en attendant.
 - Mettre à jour cette ligne dès qu'on franchit une nouvelle phase ou une feature majeure.
 
 ### Workflow Git Flow (depuis P2)
@@ -150,20 +151,21 @@ Tout est servi par **un seul `Deployment` K8s** (cf. §14.3), derrière Traefik.
 Trois piliers :
 
 1. **Conseil & Intégration IA** — diagnostiquer, déployer, gouverner
-2. **R&D OpenLab** — laboratoire qui produit 7 logiciels propriétaires (différenciateur majeur)
+2. **R&D OpenLab** — laboratoire qui produit 8 logiciels propriétaires (différenciateur majeur)
 3. **Édition & Acculturation** — livre IA, formations, conférences, livres blancs
 
 ### 1.3 Écosystème produits propriétaires
 
-| Produit                  | Domaine                                                   | Marché cible                        | Statut                           |
-| ------------------------ | --------------------------------------------------------- | ----------------------------------- | -------------------------------- |
-| **NexusRH CI**           | SIRH IA (paie, CNPS, ITS, FDFP, Mobile Money)             | PME & grandes entreprises CI        | Production — déployé K3s Hetzner |
-| **NexusERP**             | ERP nouvelle génération (SYSCOHADA, Java 21 + Angular 18) | PME multi-secteurs FR/UEMOA         | Production                       |
-| **SYGESCOM v2.0**        | Gestion réseaux stations hydrocarbures                    | Afrique de l'Ouest                  | Production                       |
-| **AgroSense CI**         | IoT précision agriculture (cacao, anacarde, coton)        | Coopératives & exploitants CI       | MVP avancé                       |
-| **QualitOS**             | QMS multi-méthodes (PDCA, 5S, DMAIC, ISO)                 | Industrie, santé, services          | En développement                 |
-| **OpenLab Fraud Shield** | Détection fraude documentaire par IA                      | Banques, assurances, administration | Production                       |
-| **OpenLab Smart City**   | IA sécurité urbaine (anticiper, modéliser, protéger)      | Collectivités, ministères           | Pilote                           |
+| Produit                  | Domaine                                                              | Marché cible                        | Statut                           |
+| ------------------------ | -------------------------------------------------------------------- | ----------------------------------- | -------------------------------- |
+| **NexusRH CI**           | SIRH IA (paie, CNPS, ITS, FDFP, Mobile Money)                        | PME & grandes entreprises CI        | Production — déployé K3s Hetzner |
+| **NexusERP**             | ERP nouvelle génération (SYSCOHADA, Java 21 + Angular 18)            | PME multi-secteurs FR/UEMOA         | Production                       |
+| **SYGESCOM v2.0**        | Gestion réseaux stations hydrocarbures                               | Afrique de l'Ouest                  | Production                       |
+| **AgroSense CI**         | IoT précision agriculture (cacao, anacarde, coton)                   | Coopératives & exploitants CI       | MVP avancé                       |
+| **QualitOS**             | QMS multi-méthodes (PDCA, 5S, DMAIC, ISO)                            | Industrie, santé, services          | En développement                 |
+| **OpenLab Fraud Shield** | Détection fraude documentaire par IA                                 | Banques, assurances, administration | Production                       |
+| **OpenLab Smart City**   | IA sécurité urbaine (anticiper, modéliser, protéger)                 | Collectivités, ministères           | Pilote                           |
+| **SentinelBTP**          | Surveillance structurelle par IA (SHM) — anticiper les effondrements | BTP, bureaux de contrôle, assureurs | Pilote                           |
 
 ### 1.4 Publication phare
 
@@ -417,7 +419,7 @@ Total : ~40 routes publiques + back-office.
 3. **« Ce que nous transformons »** — 4 expertises en cards
 4. **Laboratoire OpenLab** (signature, fond noir, soin maximal)
 5. **Cas client narré** (SYGESCOM avant/après recommandé)
-6. **Showcase produits** — les 7 produits propriétaires en carrousel
+6. **Showcase produits** — les 8 produits propriétaires en carrousel
 7. **Manifeste** « Cette fois, l'Afrique n'a plus d'excuse »
 8. **Encart livre IA** — promo couverture + extrait gratuit
 9. **Insights** — 3 derniers articles

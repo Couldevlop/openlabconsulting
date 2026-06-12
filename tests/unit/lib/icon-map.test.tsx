@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { ICON_KEYS, ICON_MAP, DynamicIcon, isIconKey } from '@/lib/icon-map';
 
 describe('lib/icon-map', () => {
-  it('ICON_KEYS couvre les 7 clés produits + les 9 clés expertises/secteurs', () => {
+  it('ICON_KEYS couvre les 8 clés produits + les 9 clés expertises/secteurs', () => {
     expect([...ICON_KEYS].sort()).toEqual(
       [
         // Produits (lib/data/products.ts).
@@ -14,6 +14,7 @@ describe('lib/icon-map', () => {
         'fuel',
         'sprout',
         'radar',
+        'hard-hat',
         // Expertises (lib/data/expertises.ts).
         'compass',
         'bot',

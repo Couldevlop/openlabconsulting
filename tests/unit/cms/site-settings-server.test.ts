@@ -27,15 +27,22 @@ import {
  * résilience DB-down et c'est précisément ce qu'on valide ici.
  */
 describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () => {
-  it('getHeroContent retourne HERO_FALLBACK quand Payload absent', async () => {
+  it('getHeroContent retourne le fallback avec compteur interpolé', async () => {
     const content = await getHeroContent();
-    expect(content).toEqual(HERO_FALLBACK);
+    expect(content.eyebrow).toBe(HERO_FALLBACK.eyebrow);
+    expect(content.primaryCta).toEqual(HERO_FALLBACK.primaryCta);
+    // Compteur dérivé du fallback produits (8) : token remplacé par « huit ».
+    expect(content.subtitle).toContain('huit logiciels propriétaires');
+    expect(content.subtitle).not.toContain('{productsWord}');
   });
 
-  it('getManifestoContent retourne MANIFESTO_FALLBACK', async () => {
+  it('getManifestoContent retourne MANIFESTO_FALLBACK (compteur interpolé)', async () => {
     const content = await getManifestoContent();
     expect(content.headline).toBe(MANIFESTO_FALLBACK.headline);
-    expect(content.stances).toEqual(MANIFESTO_FALLBACK.stances);
+    expect(content.stances).toHaveLength(MANIFESTO_FALLBACK.stances.length);
+    expect(content.stances[0]?.fact).toContain('Huit logiciels propriétaires');
+    expect(content.stances[0]?.fact).not.toContain('{ProductsWord}');
+    expect(content.intro).not.toContain('{productsWord}');
   });
 
   it('getMethodologieContent retourne METHODOLOGIE_FALLBACK', async () => {

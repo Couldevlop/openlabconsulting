@@ -158,7 +158,7 @@ describe('Payload collections', () => {
       expect(fieldNames).not.toContain('status');
     });
 
-    it('productSlug expose les 7 produits OpenLab', () => {
+    it('productSlug expose les 8 produits OpenLab', () => {
       const field = (CaseStudies.fields ?? []).find(
         (f) => 'name' in f && f.name === 'productSlug',
       );
@@ -172,6 +172,7 @@ describe('Payload collections', () => {
           'qualitos',
           'fraud-shield',
           'smart-city',
+          'sentinelbtp',
         ].sort(),
       );
     });

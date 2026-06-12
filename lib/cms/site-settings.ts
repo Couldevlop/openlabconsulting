@@ -95,6 +95,42 @@ export interface ReassuranceContent {
   partners: readonly ReassurancePartner[];
 }
 
+/**
+ * Hero éditorial d'une page hub (Solutions, Expertises, Secteurs).
+ * Le titre est scindé lead + highlight (segment orange). `headlineLead` et
+ * `description` peuvent contenir les tokens de compteur (cf. product-count).
+ */
+export interface HubHeroContent {
+  eyebrow: string;
+  headlineLead: string;
+  headlineHighlight: string;
+  description: string;
+}
+
+export const SOLUTIONS_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Solutions',
+  headlineLead: '{ProductsWord} logiciels propriétaires.',
+  headlineHighlight: 'Une suite cohérente',
+  description:
+    'Pas une collection d’outils achetés ailleurs : chacun de nos produits est conçu et opéré par la même équipe, déployé sur le même cluster K3s, gouverné par les mêmes principes de sécurité et de souveraineté.',
+};
+
+export const EXPERTISES_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Expertises',
+  headlineLead: 'Quatre expertises.',
+  headlineHighlight: 'Une seule logique',
+  description:
+    'Pas un menu de prestations indépendantes : chaque mission s’adosse aux trois autres et à nos {productsWord} produits propriétaires. C’est ce qui rend la transformation IA exécutable, pas juste prévue.',
+};
+
+export const SECTEURS_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Secteurs',
+  headlineLead: 'Cinq secteurs.',
+  headlineHighlight: 'Une exigence commune',
+  description:
+    'L’IA n’a pas la même tête dans une banque, une coopérative cacao ou un hôpital. On adapte le déploiement à votre cadre réglementaire, à vos régulateurs, à vos systèmes existants — jamais l’inverse.',
+};
+
 export interface InsightsHubContent {
   eyebrow: string;
   headlineLead: string;
@@ -113,7 +149,7 @@ export const HERO_FALLBACK: HeroContent = {
   headlineLead: 'L’IA, au service',
   headlineHighlight: 'des réalités africaines.',
   subtitle:
-    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Conseil, intégration, sept logiciels propriétaires et un livre de référence — sous le même toit.',
+    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Conseil, intégration, {productsWord} logiciels propriétaires et un livre de référence — sous le même toit.',
   primaryCta: { label: 'Demander un audit IA gratuit', href: '/audit-ia' },
   secondaryCta: {
     label: 'Découvrir l’écosystème produits',
@@ -127,11 +163,11 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
   headline: 'Cette fois,',
   headlineHighlight: 'l’Afrique n’a plus d’excuse.',
   intro:
-    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec sept produits, un livre blanc préfacé par un ministre, et un cluster Kubernetes souverain.',
+    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec {productsWord} produits, un livre blanc préfacé par un ministre, et un cluster Kubernetes souverain.',
   stances: [
     {
       excuse: '« On n’a pas les outils. »',
-      fact: 'Sept logiciels propriétaires produits à Abidjan. SYSCOHADA, CNPS, Mobile Money — natifs.',
+      fact: '{ProductsWord} logiciels propriétaires produits à Abidjan. SYSCOHADA, CNPS, Mobile Money — natifs.',
     },
     {
       excuse: '« On n’a pas la recherche. »',
@@ -311,7 +347,7 @@ export const ABOUT_FALLBACK: AboutContent = {
     },
     {
       title: 'R&D Produits',
-      body: 'Sept logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City.',
+      body: '{ProductsWord} logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP.',
     },
     {
       title: 'Édition académique',

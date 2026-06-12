@@ -4,7 +4,7 @@
 
 ## À propos
 
-OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya Lauriers 8, Côte d'Ivoire). Trois piliers : conseil & intégration IA, R&D logicielle (7 produits propriétaires), édition académique (livre IA).
+OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya Lauriers 8, Côte d'Ivoire). Trois piliers : conseil & intégration IA, R&D logicielle (8 produits propriétaires), édition académique (livre IA).
 
 - Site officiel : https://openlabconsulting.com
 - Email : infos@openlabconsulting.com
@@ -28,6 +28,7 @@ OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya La
 - QualitOS — QMS multi-méthodes (PDCA, 5S, DMAIC, ISO) — https://openlabconsulting.com/solutions/qualitos
 - OpenLab Fraud Shield — Détection fraude documentaire par IA — https://openlabconsulting.com/solutions/fraud-shield
 - OpenLab Smart City — IA sécurité urbaine — https://openlabconsulting.com/solutions/smart-city
+- SentinelBTP — Surveillance structurelle par IA (SHM) pour le BTP : anticiper les effondrements de bâtiments — https://openlabconsulting.com/solutions/sentinelbtp
 
 ## Secteurs cibles
 

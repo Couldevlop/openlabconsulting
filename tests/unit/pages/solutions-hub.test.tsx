@@ -10,15 +10,15 @@ describe('Page /solutions (hub)', () => {
     render(await SolutionsHubPage());
     const h1s = screen.getAllByRole('heading', { level: 1 });
     expect(h1s).toHaveLength(1);
-    expect(h1s[0]?.textContent).toMatch(/Sept logiciels propriétaires/);
+    expect(h1s[0]?.textContent).toMatch(/Huit logiciels propriétaires/);
   });
 
-  it('liste les 7 produits avec lien vers la page détail', async () => {
+  it('liste les 8 produits avec lien vers la page détail', async () => {
     render(await SolutionsHubPage());
     const productLinks = screen
       .getAllByRole('link')
       .filter((l) => l.getAttribute('href')?.startsWith('/solutions/'));
-    expect(productLinks).toHaveLength(7);
+    expect(productLinks).toHaveLength(8);
 
     const hrefs = productLinks.map((l) => l.getAttribute('href'));
     for (const p of PRODUCTS) {
@@ -29,7 +29,7 @@ describe('Page /solutions (hub)', () => {
   it('chaque card affiche son badge de statut', async () => {
     render(await SolutionsHubPage());
     const articles = screen.getAllByRole('article');
-    expect(articles).toHaveLength(7);
+    expect(articles).toHaveLength(8);
     for (const p of PRODUCTS) {
       const article = articles.find((a) => a.textContent?.includes(p.name));
       expect(article).toBeDefined();

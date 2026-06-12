@@ -9,7 +9,10 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedExpertises } from '@/lib/expertises-server';
-import { getMethodologieContent } from '@/lib/cms/site-settings-server';
+import {
+  getMethodologieContent,
+  getExpertisesHubContent,
+} from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'Expertises — Conseil, agents, data, cybersécurité IA',
@@ -21,9 +24,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
-  const [expertises, methodologieContent] = await Promise.all([
+  const [expertises, methodologieContent, hub] = await Promise.all([
     getPublishedExpertises(),
     getMethodologieContent(),
+    getExpertisesHubContent(),
   ]);
   return (
     <main id="main">
@@ -34,18 +38,16 @@ export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="mx-auto max-w-3xl text-center">
-            <Eyebrow tone="orange">Hub Expertises</Eyebrow>
+            <Eyebrow tone="orange">{hub.eyebrow}</Eyebrow>
             <Heading id="hub-expertises-title" level={1} className="mt-4">
-              Quatre expertises.{' '}
+              {hub.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                Une seule logique
+                {hub.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              Pas un menu de prestations indépendantes : chaque mission s’adosse
-              aux trois autres et à nos sept produits propriétaires. C’est ce
-              qui rend la transformation IA exécutable, pas juste prévue.
+              {hub.description}
             </p>
           </div>
 
