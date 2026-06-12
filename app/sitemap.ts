@@ -4,6 +4,7 @@ import { getPublishedArticles } from '@/lib/articles-server';
 import { EXPERTISES } from '@/lib/data/expertises';
 import { LOCATIONS } from '@/lib/data/locations';
 import { getPublishedProducts } from '@/lib/products-server';
+import { getPublications } from '@/lib/laboratoire-server';
 import { SECTORS } from '@/lib/data/sectors';
 import { absoluteUrl } from '@/lib/seo/site';
 
@@ -197,6 +198,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Pages détail des publications du laboratoire (celles ayant un slug).
+  const publications = await getPublications();
+  const publicationPages: MetadataRoute.Sitemap = publications
+    .filter((p) => p.slug)
+    .map((p) => ({
+      url: absoluteUrl(`/laboratoire/publications/${p.slug}`),
+      lastModified: now,
+      changeFrequency: 'yearly' as const,
+      priority: 0.7,
+    }));
+
   // Catégories Insights — 7 archives prédictibles.
   const categoryPages: MetadataRoute.Sitemap = Object.keys(CATEGORY_LABELS).map(
     (cat) => ({
@@ -222,6 +234,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...expertisePages,
     ...solutionPages,
     ...sectorPages,
+    ...publicationPages,
     ...categoryPages,
     ...articlePages,
   ];

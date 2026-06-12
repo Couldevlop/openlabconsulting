@@ -74,6 +74,8 @@ async function main(): Promise<void> {
           year: p.year,
           href: p.href,
           summary: p.summary,
+          ...(p.slug ? { slug: p.slug } : {}),
+          ...(p.abstract ? { abstract: p.abstract } : {}),
           order: (i + 1) * 10,
         },
       ),

@@ -13,6 +13,7 @@ import * as migration_20260612_103000_add_site_hub_settings from './20260612_103
 import * as migration_20260612_110000_add_audit_ia_process from './20260612_110000_add_audit_ia_process';
 import * as migration_20260612_120000_add_laboratoire_collections from './20260612_120000_add_laboratoire_collections';
 import * as migration_20260612_130000_add_book_settings from './20260612_130000_add_book_settings';
+import * as migration_20260612_140000_add_publication_detail from './20260612_140000_add_publication_detail';
 
 export const migrations = [
   {
@@ -89,5 +90,10 @@ export const migrations = [
     up: migration_20260612_130000_add_book_settings.up,
     down: migration_20260612_130000_add_book_settings.down,
     name: '20260612_130000_add_book_settings',
+  },
+  {
+    up: migration_20260612_140000_add_publication_detail.up,
+    down: migration_20260612_140000_add_publication_detail.down,
+    name: '20260612_140000_add_publication_detail',
   },
 ];
