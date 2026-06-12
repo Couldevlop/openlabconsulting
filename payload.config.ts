@@ -33,6 +33,9 @@ import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
 import { Visits } from './collections/Visits';
 import { Whitepapers } from './collections/Whitepapers';
+import { RdAxes } from './collections/RdAxes';
+import { Publications } from './collections/Publications';
+import { Partnerships } from './collections/Partnerships';
 import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
 import { InsightsHubSettings } from './globals/InsightsHubSettings';
@@ -49,6 +52,7 @@ import {
   ExpertisesHubSettings,
   SecteursHubSettings,
 } from './globals/HubHeroSettings';
+import { AuditIaProcessSettings } from './globals/AuditIaProcessSettings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -59,7 +63,7 @@ const dirname = path.dirname(filename);
  * Collections actives :
  *   - articles    : insights longs format (homepage §6.9)
  *   - caseStudies : cas clients du carrousel homepage (§6.5)
- *   - products    : 7 logiciels propriétaires (§1.3, §7)
+ *   - products    : 8 logiciels propriétaires (§1.3, §7)
  *   - expertises  : 4 axes de conseil (§5, §6.3)
  *   - sectors     : 5 secteurs cibles (§5)
  *   - teamMembers : équipe dirigeante (page /a-propos/equipe)
@@ -189,6 +193,9 @@ export default buildConfig({
     Leads,
     AuditLog,
     Visits,
+    RdAxes,
+    Publications,
+    Partnerships,
   ],
   globals: [
     HeroSettings,
@@ -206,6 +213,7 @@ export default buildConfig({
     SolutionsHubSettings,
     ExpertisesHubSettings,
     SecteursHubSettings,
+    AuditIaProcessSettings,
   ],
   // Éditeur richText premium pour la mise en forme professionnelle des
   // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,
