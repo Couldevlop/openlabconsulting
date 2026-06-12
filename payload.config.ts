@@ -63,7 +63,7 @@ const dirname = path.dirname(filename);
  * Collections actives :
  *   - articles    : insights longs format (homepage §6.9)
  *   - caseStudies : cas clients du carrousel homepage (§6.5)
- *   - products    : 7 logiciels propriétaires (§1.3, §7)
+ *   - products    : 8 logiciels propriétaires (§1.3, §7)
  *   - expertises  : 4 axes de conseil (§5, §6.3)
  *   - sectors     : 5 secteurs cibles (§5)
  *   - teamMembers : équipe dirigeante (page /a-propos/equipe)

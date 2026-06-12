@@ -70,7 +70,7 @@ export const COMMAND_INDEX: readonly CommandEntry[] = [
     keywords: ['security', 'cyber', 'prompt injection', 'owasp'],
   },
 
-  // --- Solutions (7 produits) ---
+  // --- Solutions (8 produits) ---
   {
     title: 'Solutions — vue d’ensemble',
     href: '/solutions',
@@ -124,6 +124,21 @@ export const COMMAND_INDEX: readonly CommandEntry[] = [
     section: 'Solutions',
     keywords: ['smart city', 'collectivites', 'securite urbaine'],
     badge: 'SC',
+  },
+  {
+    title: 'SentinelBTP',
+    href: '/solutions/sentinelbtp',
+    section: 'Solutions',
+    keywords: [
+      'btp',
+      'shm',
+      'structure',
+      'batiment',
+      'effondrement',
+      'capteurs',
+      'iot',
+    ],
+    badge: 'BTP',
   },
 
   // --- Secteurs ---
