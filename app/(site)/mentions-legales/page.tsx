@@ -79,9 +79,9 @@ export default function MentionsLegalesPage(): React.ReactElement {
               <p className="mt-3">
                 Les noms de produits propriétaires <em>NexusRH</em>,{' '}
                 <em>NexusERP</em>, <em>SYGESCOM</em>, <em>AgroSense</em>,{' '}
-                <em>QualitOS</em>, <em>OpenLab Fraud Shield</em> et{' '}
-                <em>OpenLab Smart City</em> sont des marques d’OpenLab
-                Consulting.
+                <em>QualitOS</em>, <em>OpenLab Fraud Shield</em>,{' '}
+                <em>OpenLab Smart City</em> et <em>SentinelBTP</em> sont des
+                marques d’OpenLab Consulting.
               </p>
             </section>
 

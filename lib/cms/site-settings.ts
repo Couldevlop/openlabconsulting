@@ -95,6 +95,42 @@ export interface ReassuranceContent {
   partners: readonly ReassurancePartner[];
 }
 
+/**
+ * Hero éditorial d'une page hub (Solutions, Expertises, Secteurs).
+ * Le titre est scindé lead + highlight (segment orange). `headlineLead` et
+ * `description` peuvent contenir les tokens de compteur (cf. product-count).
+ */
+export interface HubHeroContent {
+  eyebrow: string;
+  headlineLead: string;
+  headlineHighlight: string;
+  description: string;
+}
+
+export const SOLUTIONS_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Solutions',
+  headlineLead: '{ProductsWord} logiciels propriétaires.',
+  headlineHighlight: 'Une suite cohérente',
+  description:
+    'Pas une collection d’outils achetés ailleurs : chacun de nos produits est conçu et opéré par la même équipe, déployé sur le même cluster K3s, gouverné par les mêmes principes de sécurité et de souveraineté.',
+};
+
+export const EXPERTISES_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Expertises',
+  headlineLead: 'Quatre expertises.',
+  headlineHighlight: 'Une seule logique',
+  description:
+    'Pas un menu de prestations indépendantes : chaque mission s’adosse aux trois autres et à nos {productsWord} produits propriétaires. C’est ce qui rend la transformation IA exécutable, pas juste prévue.',
+};
+
+export const SECTEURS_HUB_FALLBACK: HubHeroContent = {
+  eyebrow: 'Hub Secteurs',
+  headlineLead: 'Cinq secteurs.',
+  headlineHighlight: 'Une exigence commune',
+  description:
+    'L’IA n’a pas la même tête dans une banque, une coopérative cacao ou un hôpital. On adapte le déploiement à votre cadre réglementaire, à vos régulateurs, à vos systèmes existants — jamais l’inverse.',
+};
+
 export interface InsightsHubContent {
   eyebrow: string;
   headlineLead: string;

@@ -8,10 +8,14 @@ import {
   MANIFESTO_FALLBACK,
   METHODOLOGIE_FALLBACK,
   REASSURANCE_FALLBACK,
+  SOLUTIONS_HUB_FALLBACK,
+  EXPERTISES_HUB_FALLBACK,
+  SECTEURS_HUB_FALLBACK,
   type AboutContent,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
+  type HubHeroContent,
   type InsightsHubContent,
   type ManifestoContent,
   type MethodologieAxis,
@@ -304,4 +308,33 @@ export async function getReassuranceContent(): Promise<ReassuranceContent> {
 
 export async function getInsightsHubContent(): Promise<InsightsHubContent> {
   return readGlobal('insights-hub-settings', INSIGHTS_HUB_FALLBACK);
+}
+
+/**
+ * Hero éditorial d'une page hub (Solutions/Expertises/Secteurs). Interpole
+ * les tokens de compteur dans `headlineLead` + `description`.
+ */
+async function getHubHero(
+  slug: string,
+  fallback: HubHeroContent,
+): Promise<HubHeroContent> {
+  const raw = await readGlobal(slug, fallback);
+  const count = await getProductCount();
+  return {
+    ...raw,
+    headlineLead: interpolateCounts(raw.headlineLead, count),
+    description: interpolateCounts(raw.description, count),
+  };
+}
+
+export async function getSolutionsHubContent(): Promise<HubHeroContent> {
+  return getHubHero('solutions-hub-settings', SOLUTIONS_HUB_FALLBACK);
+}
+
+export async function getExpertisesHubContent(): Promise<HubHeroContent> {
+  return getHubHero('expertises-hub-settings', EXPERTISES_HUB_FALLBACK);
+}
+
+export async function getSecteursHubContent(): Promise<HubHeroContent> {
+  return getHubHero('secteurs-hub-settings', SECTEURS_HUB_FALLBACK);
 }
