@@ -12,6 +12,7 @@ import * as migration_20260607_201500_add_visits from './20260607_201500_add_vis
 import * as migration_20260612_103000_add_site_hub_settings from './20260612_103000_add_site_hub_settings';
 import * as migration_20260612_110000_add_audit_ia_process from './20260612_110000_add_audit_ia_process';
 import * as migration_20260612_120000_add_laboratoire_collections from './20260612_120000_add_laboratoire_collections';
+import * as migration_20260612_130000_add_book_settings from './20260612_130000_add_book_settings';
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20260612_120000_add_laboratoire_collections.up,
     down: migration_20260612_120000_add_laboratoire_collections.down,
     name: '20260612_120000_add_laboratoire_collections',
+  },
+  {
+    up: migration_20260612_130000_add_book_settings.up,
+    down: migration_20260612_130000_add_book_settings.down,
+    name: '20260612_130000_add_book_settings',
   },
 ];
