@@ -11,6 +11,7 @@ import * as migration_20260607_192832_add_product_hero_image from './20260607_19
 import * as migration_20260607_201500_add_visits from './20260607_201500_add_visits';
 import * as migration_20260612_103000_add_site_hub_settings from './20260612_103000_add_site_hub_settings';
 import * as migration_20260612_110000_add_audit_ia_process from './20260612_110000_add_audit_ia_process';
+import * as migration_20260612_120000_add_laboratoire_collections from './20260612_120000_add_laboratoire_collections';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260612_110000_add_audit_ia_process.up,
     down: migration_20260612_110000_add_audit_ia_process.down,
     name: '20260612_110000_add_audit_ia_process',
+  },
+  {
+    up: migration_20260612_120000_add_laboratoire_collections.up,
+    down: migration_20260612_120000_add_laboratoire_collections.down,
+    name: '20260612_120000_add_laboratoire_collections',
   },
 ];

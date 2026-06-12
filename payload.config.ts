@@ -33,6 +33,9 @@ import { TeamPublications } from './collections/TeamPublications';
 import { Users } from './collections/Users';
 import { Visits } from './collections/Visits';
 import { Whitepapers } from './collections/Whitepapers';
+import { RdAxes } from './collections/RdAxes';
+import { Publications } from './collections/Publications';
+import { Partnerships } from './collections/Partnerships';
 import { Callout } from './blocks/Callout';
 import { HeroSettings } from './globals/HeroSettings';
 import { InsightsHubSettings } from './globals/InsightsHubSettings';
@@ -190,6 +193,9 @@ export default buildConfig({
     Leads,
     AuditLog,
     Visits,
+    RdAxes,
+    Publications,
+    Partnerships,
   ],
   globals: [
     HeroSettings,
