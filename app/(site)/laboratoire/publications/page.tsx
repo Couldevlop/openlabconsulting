@@ -10,7 +10,8 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { breadcrumbSchema, publicationsSchema } from '@/lib/seo/schema';
-import { PUBLICATIONS, type Publication } from '@/lib/data/laboratoire';
+import { type Publication } from '@/lib/data/laboratoire';
+import { getPublications } from '@/lib/laboratoire-server';
 
 export const metadata: Metadata = {
   title: 'Publications — Laboratoire OpenLab',
@@ -35,7 +36,7 @@ const TYPE_ICON: Record<Publication['type'], typeof BookOpen> = {
 
 export default async function LaboratoirePublicationsPage(): Promise<React.ReactElement> {
   // Groupé par année descendante.
-  const byYear = [...PUBLICATIONS].sort((a, b) => b.year - a.year);
+  const byYear = [...(await getPublications())].sort((a, b) => b.year - a.year);
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (

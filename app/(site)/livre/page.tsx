@@ -13,6 +13,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { BOOK, CHAPTERS } from '@/lib/data/book';
+import { getBook } from '@/lib/cms/book-server';
 import { bookSchema, breadcrumbSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
@@ -26,26 +27,26 @@ export const metadata: Metadata = {
   },
 };
 
-const HIGHLIGHTS = [
-  {
-    Icon: BookOpen,
-    label: `${CHAPTERS.length} chapitres`,
-    value: 'Du ML supervisé aux agents autonomes',
-  },
-  {
-    Icon: FileText,
-    label: `${BOOK.pageCount} pages estimées`,
-    value: 'Capstone AgroSense CI intégral',
-  },
-  {
-    Icon: Users,
-    label: '4 publics ciblés',
-    value: 'Étudiants, data scientists, dirigeants, enseignants',
-  },
-];
-
 export default async function LivreLandingPage(): Promise<React.ReactElement> {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const book = await getBook();
+  const HIGHLIGHTS = [
+    {
+      Icon: BookOpen,
+      label: `${CHAPTERS.length} chapitres`,
+      value: 'Du ML supervisé aux agents autonomes',
+    },
+    {
+      Icon: FileText,
+      label: `${book.pageCount} pages estimées`,
+      value: 'Capstone AgroSense CI intégral',
+    },
+    {
+      Icon: Users,
+      label: `${book.audiences.length} publics ciblés`,
+      value: 'Étudiants, data scientists, dirigeants, enseignants',
+    },
+  ];
   return (
     <main id="main">
       <JsonLd
@@ -85,12 +86,12 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
         <Container width="wide">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
             <div className="mx-auto w-full max-w-[20rem] lg:mx-0">
-              {BOOK.cover.src ? (
+              {book.cover.src ? (
                 <Image
-                  src={BOOK.cover.src}
-                  alt={BOOK.cover.alt}
-                  width={BOOK.cover.width}
-                  height={BOOK.cover.height}
+                  src={book.cover.src}
+                  alt={book.cover.alt}
+                  width={book.cover.width}
+                  height={book.cover.height}
                   priority
                   sizes="(min-width: 1024px) 22rem, (min-width: 640px) 20rem, 80vw"
                   className="h-auto w-full rotate-1 rounded-lg shadow-2xl transition-transform duration-500 ease-[var(--ease-ol)] hover:rotate-0"
@@ -98,7 +99,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
               ) : (
                 <MediaPlaceholder
                   src={null}
-                  alt={BOOK.cover.alt}
+                  alt={book.cover.alt}
                   tone="warm"
                   aspect="3/2"
                   placeholderLabel="Couverture du livre"
@@ -114,17 +115,17 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
                 level={1}
                 className="mt-4 text-[var(--color-ol-ivory)]"
               >
-                {BOOK.title}
+                {book.title}
               </Heading>
               <p className="mt-3 font-[family-name:var(--font-editorial)] text-2xl text-[var(--color-ol-orange-text)] italic sm:text-3xl">
-                {BOOK.subtitle}
+                {book.subtitle}
               </p>
               <p className="mt-4 text-sm tracking-widest text-[var(--color-ol-ivory)]/60 uppercase">
-                {BOOK.edition}
+                {book.edition}
               </p>
 
               <div className="mt-8 space-y-5 text-lg leading-relaxed text-[var(--color-ol-ivory)]/85">
-                {BOOK.longPitch.map((p, i) => (
+                {book.longPitch.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
               </div>
@@ -195,7 +196,7 @@ export default async function LivreLandingPage(): Promise<React.ReactElement> {
           </div>
 
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">
-            {BOOK.audiences.map((a) => (
+            {book.audiences.map((a) => (
               <li key={a.label}>
                 <Card className="flex h-full flex-col gap-3 p-7">
                   <Badge tone="orange">{a.label}</Badge>

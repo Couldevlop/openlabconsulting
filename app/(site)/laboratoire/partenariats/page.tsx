@@ -7,7 +7,8 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { PARTENARIATS, type Partenariat } from '@/lib/data/laboratoire';
+import { type Partenariat } from '@/lib/data/laboratoire';
+import { getPartnerships } from '@/lib/laboratoire-server';
 import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
@@ -39,7 +40,8 @@ const TYPE_ICON: Record<Partenariat['type'], typeof Building2> = {
   ong: Handshake,
 };
 
-export default function LaboratoirePartenariatsPage(): React.ReactElement {
+export default async function LaboratoirePartenariatsPage(): Promise<React.ReactElement> {
+  const partenariats = await getPartnerships();
   // Regroupé par type pour structuration claire.
   const grouped = (
     ['universitaire', 'public', 'prive', 'ong'] as Partenariat['type'][]
@@ -47,7 +49,7 @@ export default function LaboratoirePartenariatsPage(): React.ReactElement {
     .map((type) => ({
       type,
       label: TYPE_LABEL[type],
-      items: PARTENARIATS.filter((p) => p.type === type),
+      items: partenariats.filter((p) => p.type === type),
     }))
     .filter((g) => g.items.length > 0);
 

@@ -11,7 +11,10 @@ import {
   SOLUTIONS_HUB_FALLBACK,
   EXPERTISES_HUB_FALLBACK,
   SECTEURS_HUB_FALLBACK,
+  AUDIT_IA_PROCESS_FALLBACK,
   type AboutContent,
+  type AuditIaProcessContent,
+  type AuditIaProcessStep,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
@@ -337,4 +340,29 @@ export async function getExpertisesHubContent(): Promise<HubHeroContent> {
 
 export async function getSecteursHubContent(): Promise<HubHeroContent> {
   return getHubHero('secteurs-hub-settings', SECTEURS_HUB_FALLBACK);
+}
+
+export async function getAuditIaProcessContent(): Promise<AuditIaProcessContent> {
+  const raw = await readGlobal(
+    'audit-ia-process-settings',
+    AUDIT_IA_PROCESS_FALLBACK,
+  );
+  // Normalise les étapes : Payload renvoie {id?, step, title, body} ; on ne
+  // garde que les entrées complètes, sinon le fallback.
+  const steps = Array.isArray(raw.steps)
+    ? raw.steps
+        .filter(
+          (s): s is AuditIaProcessStep =>
+            typeof s === 'object' &&
+            s !== null &&
+            typeof (s as { step?: unknown }).step === 'string' &&
+            typeof (s as { title?: unknown }).title === 'string' &&
+            typeof (s as { body?: unknown }).body === 'string',
+        )
+        .map((s) => ({ step: s.step, title: s.title, body: s.body }))
+    : [];
+  return {
+    ...raw,
+    steps: steps.length > 0 ? steps : AUDIT_IA_PROCESS_FALLBACK.steps,
+  };
 }
