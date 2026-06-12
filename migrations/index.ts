@@ -10,6 +10,7 @@ import * as migration_20260606_234139_add_insights_hub_methodologie from './2026
 import * as migration_20260607_192832_add_product_hero_image from './20260607_192832_add_product_hero_image';
 import * as migration_20260607_201500_add_visits from './20260607_201500_add_visits';
 import * as migration_20260612_103000_add_site_hub_settings from './20260612_103000_add_site_hub_settings';
+import * as migration_20260612_110000_add_audit_ia_process from './20260612_110000_add_audit_ia_process';
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20260612_103000_add_site_hub_settings.up,
     down: migration_20260612_103000_add_site_hub_settings.down,
     name: '20260612_103000_add_site_hub_settings',
+  },
+  {
+    up: migration_20260612_110000_add_audit_ia_process.up,
+    down: migration_20260612_110000_add_audit_ia_process.down,
+    name: '20260612_110000_add_audit_ia_process',
   },
 ];

@@ -3,6 +3,7 @@ import { AuditIaQuizWizard } from '@/components/forms/AuditIaQuizWizard';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { getAuditIaProcessContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'Audit IA gratuit — Questionnaire interactif + recommandation',
@@ -11,25 +12,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/audit-ia' },
 };
 
-const STEPS = [
-  {
-    step: '01',
-    title: 'Questionnaire · 3 min',
-    body: 'Cinq questions séquentielles pour qualifier votre maturité IA, votre secteur, votre périmètre et votre urgence.',
-  },
-  {
-    step: '02',
-    title: 'Recommandation instantanée',
-    body: 'Un format d’audit adapté (atelier, audit éclair, cadrage stratégique, programme) avec durée et livrable annoncés.',
-  },
-  {
-    step: '03',
-    title: 'Consultant senior · 48 h',
-    body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris — pas de questions répétées.',
-  },
-];
-
-export default function AuditIaPage(): React.ReactElement {
+export default async function AuditIaPage(): Promise<React.ReactElement> {
+  const content = await getAuditIaProcessContent();
   return (
     <main id="main">
       {/* Hero éditorial */}
@@ -39,19 +23,16 @@ export default function AuditIaPage(): React.ReactElement {
       >
         <Container width="wide">
           <div className="max-w-3xl">
-            <Eyebrow tone="orange">Audit IA gratuit</Eyebrow>
+            <Eyebrow tone="orange">{content.heroEyebrow}</Eyebrow>
             <Heading id="audit-ia-page-title" level={1} className="mt-4">
-              Cinq questions pour savoir si l’IA{' '}
+              {content.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                vous fera gagner du temps
+                {content.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 font-[family-name:var(--font-editorial)] text-xl leading-relaxed text-[var(--color-ol-graphite)]/85 italic sm:text-2xl">
-              Pas un appel commercial déguisé. Un cadrage opérationnel qui
-              commence par un questionnaire interactif, débouche sur une
-              recommandation contextuelle, et finit avec un consultant senior
-              qui connaît déjà votre contexte.
+              {content.lead}
             </p>
           </div>
         </Container>
@@ -74,14 +55,14 @@ export default function AuditIaPage(): React.ReactElement {
       >
         <Container width="wide">
           <div className="max-w-2xl">
-            <Eyebrow tone="orange">Comment ça se passe</Eyebrow>
+            <Eyebrow tone="orange">{content.processEyebrow}</Eyebrow>
             <Heading id="process-title" level={2} className="mt-4">
-              Trois étapes. Aucune surprise.
+              {content.processHeadline}
             </Heading>
           </div>
 
           <ol className="mt-12 grid gap-x-12 gap-y-10 lg:grid-cols-3">
-            {STEPS.map(({ step, title, body }) => (
+            {content.steps.map(({ step, title, body }) => (
               <li
                 key={step}
                 className="border-t-2 border-[var(--color-ol-orange)] pt-6"

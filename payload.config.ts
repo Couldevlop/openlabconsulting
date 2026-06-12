@@ -49,6 +49,7 @@ import {
   ExpertisesHubSettings,
   SecteursHubSettings,
 } from './globals/HubHeroSettings';
+import { AuditIaProcessSettings } from './globals/AuditIaProcessSettings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -206,6 +207,7 @@ export default buildConfig({
     SolutionsHubSettings,
     ExpertisesHubSettings,
     SecteursHubSettings,
+    AuditIaProcessSettings,
   ],
   // Éditeur richText premium pour la mise en forme professionnelle des
   // articles (§9.5, §12.5). On conserve tout le jeu par défaut (gras,

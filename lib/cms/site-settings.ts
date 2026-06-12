@@ -131,6 +131,49 @@ export const SECTEURS_HUB_FALLBACK: HubHeroContent = {
     'L’IA n’a pas la même tête dans une banque, une coopérative cacao ou un hôpital. On adapte le déploiement à votre cadre réglementaire, à vos régulateurs, à vos systèmes existants — jamais l’inverse.',
 };
 
+export interface AuditIaProcessStep {
+  step: string;
+  title: string;
+  body: string;
+}
+
+/** Contenu éditable de la page /audit-ia (hero + section process). */
+export interface AuditIaProcessContent {
+  heroEyebrow: string;
+  headlineLead: string;
+  headlineHighlight: string;
+  lead: string;
+  processEyebrow: string;
+  processHeadline: string;
+  steps: readonly AuditIaProcessStep[];
+}
+
+export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
+  heroEyebrow: 'Audit IA gratuit',
+  headlineLead: 'Cinq questions pour savoir si l’IA',
+  headlineHighlight: 'vous fera gagner du temps',
+  lead: 'Pas un appel commercial déguisé. Un cadrage opérationnel qui commence par un questionnaire interactif, débouche sur une recommandation contextuelle, et finit avec un consultant senior qui connaît déjà votre contexte.',
+  processEyebrow: 'Comment ça se passe',
+  processHeadline: 'Trois étapes. Aucune surprise.',
+  steps: [
+    {
+      step: '01',
+      title: 'Questionnaire · 3 min',
+      body: 'Cinq questions séquentielles pour qualifier votre maturité IA, votre secteur, votre périmètre et votre urgence.',
+    },
+    {
+      step: '02',
+      title: 'Recommandation instantanée',
+      body: 'Un format d’audit adapté (atelier, audit éclair, cadrage stratégique, programme) avec durée et livrable annoncés.',
+    },
+    {
+      step: '03',
+      title: 'Consultant senior · 48 h',
+      body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris — pas de questions répétées.',
+    },
+  ],
+};
+
 export interface InsightsHubContent {
   eyebrow: string;
   headlineLead: string;
