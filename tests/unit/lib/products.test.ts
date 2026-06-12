@@ -7,13 +7,13 @@ import {
 import { ICON_KEYS } from '@/lib/icon-map';
 
 describe('lib/data/products', () => {
-  it('expose exactement 7 produits (CLAUDE.md §1.3)', () => {
-    expect(PRODUCTS).toHaveLength(7);
+  it('expose exactement 8 produits (CLAUDE.md §1.3)', () => {
+    expect(PRODUCTS).toHaveLength(8);
   });
 
   it('chaque produit a un slug unique attendu', () => {
     const slugs = PRODUCTS.map((p) => p.slug);
-    expect(new Set(slugs).size).toBe(7);
+    expect(new Set(slugs).size).toBe(8);
     expect(slugs.sort()).toEqual(
       [
         'agrosense',
@@ -21,6 +21,7 @@ describe('lib/data/products', () => {
         'nexuserp',
         'nexusrh',
         'qualitos',
+        'sentinelbtp',
         'smart-city',
         'sygescom',
       ].sort(),

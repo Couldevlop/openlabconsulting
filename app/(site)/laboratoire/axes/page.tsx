@@ -8,7 +8,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { RD_AXES } from '@/lib/data/laboratoire';
+import { PRODUCTS } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
 import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
+
+const AXES_WORD = spellFrenchCount(RD_AXES.length);
+const AXES_WORD_CAP = AXES_WORD.charAt(0).toUpperCase() + AXES_WORD.slice(1);
+const PRODUCTS_WORD = spellFrenchCount(PRODUCTS.length);
 
 export const metadata: Metadata = {
   title: 'Axes R&D — Laboratoire OpenLab',
@@ -52,7 +58,7 @@ export default function LaboratoireAxesPage(): React.ReactElement {
               level={1}
               className="mt-4 text-[var(--color-ol-ivory)]"
             >
-              Six pistes, sept produits, un terrain.
+              {AXES_WORD_CAP} pistes, {PRODUCTS_WORD} produits, un terrain.
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-ivory)]/80">
               Nos axes de recherche appliquée ne sortent pas d&rsquo;une slide

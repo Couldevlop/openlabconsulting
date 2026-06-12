@@ -7,11 +7,12 @@ import {
 import { PRODUCTS } from '@/lib/data/products';
 
 /**
- * Couvre le dispatcher ProductMockup + les 7 mockups SVG (dont les 3
- * nouveaux : NexusERP, QualitOS, Smart City).
+ * Couvre le dispatcher ProductMockup + les mockups SVG dédiés. Les produits
+ * disposant d'une capture réelle (ex. SentinelBTP) n'ont pas de mockup SVG :
+ * le dispatcher retombe alors sur `null` (cf. SOLUTION_SCREENSHOTS).
  */
 describe('ProductMockup', () => {
-  it.each(PRODUCTS.map((p) => p.slug))(
+  it.each(PRODUCTS.filter((p) => hasProductMockup(p.slug)).map((p) => p.slug))(
     'rend un mockup SVG accessible pour « %s »',
     (slug) => {
       const { container } = render(<ProductMockup slug={slug} />);
@@ -21,9 +22,9 @@ describe('ProductMockup', () => {
     },
   );
 
-  it('ne rend rien pour un slug libre sans mockup dédié', () => {
-    expect(hasProductMockup('sentinelbtp')).toBe(false);
-    const { container } = render(<ProductMockup slug="sentinelbtp" />);
+  it('ne rend rien pour un slug sans mockup dédié', () => {
+    expect(hasProductMockup('produit-sans-mockup')).toBe(false);
+    const { container } = render(<ProductMockup slug="produit-sans-mockup" />);
     expect(container.firstChild).toBeNull();
   });
 });

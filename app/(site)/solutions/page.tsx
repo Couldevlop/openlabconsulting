@@ -9,18 +9,23 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedProducts } from '@/lib/products-server';
+import { getSolutionsHubContent } from '@/lib/cms/site-settings-server';
+import { PRODUCTS } from '@/lib/data/products';
 
 export const metadata: Metadata = {
-  title: 'Solutions — 7 logiciels propriétaires OpenLab',
+  title: `Solutions — ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
-    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
+    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
   alternates: {
     canonical: '/solutions',
   },
 };
 
 export default async function SolutionsHubPage(): Promise<React.ReactElement> {
-  const products = await getPublishedProducts();
+  const [products, hub] = await Promise.all([
+    getPublishedProducts(),
+    getSolutionsHubContent(),
+  ]);
   return (
     <main id="main">
       {/* Hero */}
@@ -30,19 +35,16 @@ export default async function SolutionsHubPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="mx-auto max-w-3xl text-center">
-            <Eyebrow tone="orange">Hub Solutions</Eyebrow>
+            <Eyebrow tone="orange">{hub.eyebrow}</Eyebrow>
             <Heading id="hub-solutions-title" level={1} className="mt-4">
-              Sept logiciels propriétaires.{' '}
+              {hub.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                Une suite cohérente
+                {hub.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              Pas une collection d’outils achetés ailleurs : chacun de nos
-              produits est conçu et opéré par la même équipe, déployé sur le
-              même cluster K3s, gouverné par les mêmes principes de sécurité et
-              de souveraineté.
+              {hub.description}
             </p>
           </div>
 

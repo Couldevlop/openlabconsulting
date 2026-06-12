@@ -14,9 +14,9 @@ import SolutionDetailPage, {
 import { PRODUCTS } from '@/lib/data/products';
 
 describe('Page /solutions/[slug] (détail)', () => {
-  it('generateStaticParams retourne les 7 slugs', () => {
+  it('generateStaticParams retourne les 8 slugs', () => {
     const params = generateStaticParams();
-    expect(params).toHaveLength(7);
+    expect(params).toHaveLength(8);
     const slugs = params.map((p) => p.slug);
     for (const p of PRODUCTS) {
       expect(slugs).toContain(p.slug);

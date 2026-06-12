@@ -8,10 +8,14 @@ import {
   MANIFESTO_FALLBACK,
   METHODOLOGIE_FALLBACK,
   REASSURANCE_FALLBACK,
+  SOLUTIONS_HUB_FALLBACK,
+  EXPERTISES_HUB_FALLBACK,
+  SECTEURS_HUB_FALLBACK,
   type AboutContent,
   type AuditIaCtaContent,
   type FooterContent,
   type HeroContent,
+  type HubHeroContent,
   type InsightsHubContent,
   type ManifestoContent,
   type MethodologieAxis,
@@ -19,6 +23,8 @@ import {
   type ReassuranceContent,
   type ReassurancePartner,
 } from './site-settings';
+import { interpolateCounts } from '@/lib/format/product-count';
+import { getProductCount } from './product-count-server';
 
 /**
  * Server-only : helpers de lecture des Globals Payload (CLAUDE.md §9).
@@ -108,7 +114,9 @@ function normalizeTextArray(
 }
 
 export async function getHeroContent(): Promise<HeroContent> {
-  return readGlobal('hero-settings', HERO_FALLBACK);
+  const raw = await readGlobal('hero-settings', HERO_FALLBACK);
+  const count = await getProductCount();
+  return { ...raw, subtitle: interpolateCounts(raw.subtitle, count) };
 }
 
 export async function getManifestoContent(): Promise<ManifestoContent> {
@@ -130,9 +138,15 @@ export async function getManifestoContent(): Promise<ManifestoContent> {
         )
         .map((s) => ({ excuse: s.excuse, fact: s.fact }))
     : [];
+  const count = await getProductCount();
+  const resolved = stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances;
   return {
     ...raw,
-    stances: stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances,
+    intro: interpolateCounts(raw.intro, count),
+    stances: resolved.map((s) => ({
+      excuse: s.excuse,
+      fact: interpolateCounts(s.fact, count),
+    })),
   };
 }
 
@@ -200,9 +214,14 @@ export async function getAboutContent(): Promise<AboutContent> {
         )
         .map((p) => ({ title: p.title, body: p.body }))
     : [];
+  const count = await getProductCount();
+  const resolved = pillars.length > 0 ? pillars : ABOUT_FALLBACK.pillars;
   return {
     ...raw,
-    pillars: pillars.length > 0 ? pillars : ABOUT_FALLBACK.pillars,
+    pillars: resolved.map((p) => ({
+      title: p.title,
+      body: interpolateCounts(p.body, count),
+    })),
   };
 }
 
@@ -289,4 +308,33 @@ export async function getReassuranceContent(): Promise<ReassuranceContent> {
 
 export async function getInsightsHubContent(): Promise<InsightsHubContent> {
   return readGlobal('insights-hub-settings', INSIGHTS_HUB_FALLBACK);
+}
+
+/**
+ * Hero éditorial d'une page hub (Solutions/Expertises/Secteurs). Interpole
+ * les tokens de compteur dans `headlineLead` + `description`.
+ */
+async function getHubHero(
+  slug: string,
+  fallback: HubHeroContent,
+): Promise<HubHeroContent> {
+  const raw = await readGlobal(slug, fallback);
+  const count = await getProductCount();
+  return {
+    ...raw,
+    headlineLead: interpolateCounts(raw.headlineLead, count),
+    description: interpolateCounts(raw.description, count),
+  };
+}
+
+export async function getSolutionsHubContent(): Promise<HubHeroContent> {
+  return getHubHero('solutions-hub-settings', SOLUTIONS_HUB_FALLBACK);
+}
+
+export async function getExpertisesHubContent(): Promise<HubHeroContent> {
+  return getHubHero('expertises-hub-settings', EXPERTISES_HUB_FALLBACK);
+}
+
+export async function getSecteursHubContent(): Promise<HubHeroContent> {
+  return getHubHero('secteurs-hub-settings', SECTEURS_HUB_FALLBACK);
 }

@@ -26,7 +26,10 @@ describe('lib/cms/site-settings — fallbacks', () => {
     expect(MANIFESTO_FALLBACK.signature.name).toBe('Debora Ahouma');
     expect(MANIFESTO_FALLBACK.headlineHighlight).toMatch(/Afrique/i);
     expect(MANIFESTO_FALLBACK.stances[0]?.excuse).toMatch(/outils/i);
-    expect(MANIFESTO_FALLBACK.stances[0]?.fact).toMatch(/Sept logiciels/i);
+    // Le compteur est tokenisé (interpolé au rendu serveur, cf. product-count).
+    expect(MANIFESTO_FALLBACK.stances[0]?.fact).toMatch(
+      /\{ProductsWord\} logiciels/,
+    );
     expect(MANIFESTO_FALLBACK.signature.locationDate).toContain('Abidjan');
   });
 

@@ -8,6 +8,7 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedSectors } from '@/lib/sectors-server';
+import { getSecteursHubContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'Secteurs — IA appliquée par industrie',
@@ -19,7 +20,10 @@ export const metadata: Metadata = {
 };
 
 export default async function SecteursHubPage(): Promise<React.ReactElement> {
-  const sectors = await getPublishedSectors();
+  const [sectors, hub] = await Promise.all([
+    getPublishedSectors(),
+    getSecteursHubContent(),
+  ]);
   return (
     <main id="main">
       {/* Hero */}
@@ -29,19 +33,16 @@ export default async function SecteursHubPage(): Promise<React.ReactElement> {
       >
         <Container width="wide">
           <div className="mx-auto max-w-3xl text-center">
-            <Eyebrow tone="orange">Hub Secteurs</Eyebrow>
+            <Eyebrow tone="orange">{hub.eyebrow}</Eyebrow>
             <Heading id="hub-secteurs-title" level={1} className="mt-4">
-              Cinq secteurs.{' '}
+              {hub.headlineLead}{' '}
               <span className="text-[var(--color-ol-orange-text)]">
-                Une exigence commune
+                {hub.headlineHighlight}
               </span>
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              L’IA n’a pas la même tête dans une banque, une coopérative cacao
-              ou un hôpital. On adapte le déploiement à votre cadre
-              réglementaire, à vos régulateurs, à vos systèmes existants —
-              jamais l’inverse.
+              {hub.description}
             </p>
           </div>
 

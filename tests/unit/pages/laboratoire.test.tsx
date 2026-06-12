@@ -12,7 +12,7 @@ describe('Page /laboratoire', () => {
   it('expose les 3 axes (Solutions, Livre, Recherche appliquée)', () => {
     render(<LaboratoirePage />);
     expect(
-      screen.getByText(/Sept logiciels propriétaires/i),
+      screen.getByText(/Huit logiciels propriétaires/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/Édition académique/i)).toBeInTheDocument();
     expect(screen.getByText(/Recherche appliquée/i)).toBeInTheDocument();

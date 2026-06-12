@@ -9,11 +9,17 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { PRODUCTS, type Product } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
+
+/** Capitalise la première lettre (début de titre). */
+function capitalize(word: string): string {
+  return word.length === 0 ? word : word[0]!.toUpperCase() + word.slice(1);
+}
 
 /**
  * Solutions — Section 6 de la homepage (CLAUDE.md §6, §7).
  *
- * Grid responsive (1/2/3/4 cols), 7 produits propriétaires.
+ * Grid responsive (1/2/3/4 cols), 8 produits propriétaires.
  * Carrousel non retenu : a11y/SEO/perf supérieurs en grid statique.
  * Décision validée 2026-05-19.
  *
@@ -39,7 +45,8 @@ export function Solutions({
         <div className="mx-auto max-w-3xl text-center">
           <Eyebrow tone="orange">L’écosystème OpenLab</Eyebrow>
           <Heading id="solutions-title" level={2} className="mt-4">
-            Sept logiciels propriétaires.{' '}
+            {capitalize(spellFrenchCount(products.length))} logiciels
+            propriétaires.{' '}
             <span className="text-[var(--color-ol-orange-text)]">
               Un seul laboratoire
             </span>

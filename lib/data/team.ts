@@ -45,7 +45,7 @@ export const DEBORA: TeamMember = {
     'Fondatrice d’OpenLab Consulting (Abidjan), auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel » (édition OpenLab 2026).',
   bio: [
     'Debora Ahouma fonde OpenLab Consulting en 2022 à Abidjan pour répondre à une équation simple : comment rendre l’intelligence artificielle réellement utile dans un contexte africain francophone, sans renoncer à la rigueur scientifique ni à la souveraineté des données.',
-    'Elle pilote depuis la stratégie produit du cabinet — aujourd’hui sept logiciels propriétaires (NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City) déployés sur K3s — la R&D (recherche appliquée, partenariats universitaires) et l’édition (livre IA de référence, livres blancs trimestriels).',
+    'Elle pilote depuis la stratégie produit du cabinet — aujourd’hui huit logiciels propriétaires (NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City, SentinelBTP) déployés sur K3s — la R&D (recherche appliquée, partenariats universitaires) et l’édition (livre IA de référence, livres blancs trimestriels).',
     'Elle est l’auteure de « Intégration de l’Intelligence Artificielle dans le développement logiciel » (édition OpenLab, 2026), ouvrage de référence en français pour étudiants ingénieurs, data scientists et dirigeants.',
   ],
   imagePath: '/team/debora-ahouma.jpg',

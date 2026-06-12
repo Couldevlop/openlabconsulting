@@ -30,13 +30,18 @@ const EXPECTED_PRODUCTS = [
     href: '/solutions/smart-city',
     status: /En pilote/i,
   },
+  {
+    name: /SentinelBTP/i,
+    href: '/solutions/sentinelbtp',
+    status: /En pilote/i,
+  },
 ];
 
-describe('Solutions (homepage §6.6 — showcase 7 produits)', () => {
+describe('Solutions (homepage §6.6 — showcase 8 produits)', () => {
   it('rend la section labellée par son h2', () => {
     render(<Solutions />);
     const section = screen.getByRole('region', {
-      name: /Sept logiciels propriétaires.*Un seul laboratoire/i,
+      name: /Huit logiciels propriétaires.*Un seul laboratoire/i,
     });
     expect(section.getAttribute('data-testid')).toBe('solutions');
   });
@@ -47,13 +52,13 @@ describe('Solutions (homepage §6.6 — showcase 7 produits)', () => {
     expect(screen.getByText(/Pas un catalogue/i)).toBeInTheDocument();
   });
 
-  it('expose exactement 7 cards produit dans une <ul>', () => {
+  it('expose exactement 8 cards produit dans une <ul>', () => {
     render(<Solutions />);
     const section = screen.getByTestId('solutions');
     // Premier <ul> direct = la liste des produits ; on l'isole via role+name parent.
     const lists = within(section).getAllByRole('list');
     const productList = lists[0]!;
-    expect(within(productList).getAllByRole('listitem')).toHaveLength(7);
+    expect(within(productList).getAllByRole('listitem')).toHaveLength(8);
   });
 
   it.each(EXPECTED_PRODUCTS)(
@@ -73,7 +78,7 @@ describe('Solutions (homepage §6.6 — showcase 7 produits)', () => {
     render(<Solutions />);
     const section = screen.getByTestId('solutions');
     const articles = within(section).getAllByRole('article');
-    expect(articles).toHaveLength(7);
+    expect(articles).toHaveLength(8);
     for (const article of articles) {
       expect(article.querySelector('svg')).not.toBeNull();
     }
@@ -90,7 +95,7 @@ describe('Solutions (homepage §6.6 — showcase 7 produits)', () => {
   it('ne contient aucun chiffre rond non sourcé (§4.10)', () => {
     render(<Solutions />);
     const text = screen.getByTestId('solutions').textContent ?? '';
-    // Seul chiffre attendu : "v2.0" (version SYGESCOM) et "Sept" en lettres.
+    // Seul chiffre attendu : "v2.0" (version SYGESCOM) et "Huit" en lettres.
     expect(text).not.toMatch(/\b\d{2,}\s*%|\d{3,}\+|\b1\d{3,}\b/);
   });
 });

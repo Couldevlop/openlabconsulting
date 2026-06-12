@@ -120,6 +120,7 @@ export const CaseStudies: CollectionConfig = {
         { label: 'QualitOS', value: 'qualitos' },
         { label: 'Fraud Shield', value: 'fraud-shield' },
         { label: 'Smart City', value: 'smart-city' },
+        { label: 'SentinelBTP', value: 'sentinelbtp' },
       ],
       admin: {
         description:

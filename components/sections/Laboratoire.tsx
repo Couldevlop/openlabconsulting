@@ -5,6 +5,12 @@ import { Button } from '@/components/atoms/Button';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { PRODUCTS } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
+
+const PRODUCT_WORD = spellFrenchCount(PRODUCTS.length);
+const PRODUCT_WORD_CAP =
+  PRODUCT_WORD.charAt(0).toUpperCase() + PRODUCT_WORD.slice(1);
 
 interface Axis {
   Icon: typeof Atom;
@@ -23,8 +29,8 @@ const AXES: readonly Axis[] = [
   {
     Icon: Boxes,
     label: 'Produits propriétaires',
-    headline: 'Sept logiciels en production ou en pilote.',
-    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City — chaque produit est issu d’un terrain client, déployé sur K3s, audité par notre équipe.',
+    headline: `${PRODUCT_WORD_CAP} logiciels en production ou en pilote.`,
+    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City, SentinelBTP — chaque produit est issu d’un terrain client, déployé sur K3s, audité par notre équipe.',
     href: '/solutions',
     ctaLabel: 'Voir l’écosystème',
   },
