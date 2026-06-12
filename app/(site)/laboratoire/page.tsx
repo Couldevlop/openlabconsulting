@@ -16,19 +16,24 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
+import { PRODUCTS } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
+
+const PRODUCT_WORD = spellFrenchCount(PRODUCTS.length);
+const PRODUCT_WORD_CAP =
+  PRODUCT_WORD.charAt(0).toUpperCase() + PRODUCT_WORD.slice(1);
 
 export const metadata: Metadata = {
   title: 'Laboratoire — R&D, publications, partenariats',
-  description:
-    'OpenLab Consulting est un cabinet qui code, qui édite, qui publie. Sept logiciels propriétaires, un livre IA de référence, des partenariats universitaires francophones.',
+  description: `OpenLab Consulting est un cabinet qui code, qui édite, qui publie. ${PRODUCT_WORD_CAP} logiciels propriétaires, un livre IA de référence, des partenariats universitaires francophones.`,
   alternates: { canonical: '/laboratoire' },
 };
 
 const AXES = [
   {
     Icon: Boxes,
-    title: 'Sept logiciels propriétaires',
-    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City. Chaque produit naît d’un terrain client réel, déployé sur K3s, audité en interne.',
+    title: `${PRODUCT_WORD_CAP} logiciels propriétaires`,
+    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City, SentinelBTP. Chaque produit naît d’un terrain client réel, déployé sur K3s, audité en interne.',
     href: '/solutions',
     cta: 'Voir l’écosystème',
   },

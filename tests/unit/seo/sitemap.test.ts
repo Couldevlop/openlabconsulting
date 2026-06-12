@@ -39,7 +39,7 @@ describe('app/sitemap', () => {
     }
   });
 
-  it('inclut les 7 pages détail /solutions/<slug>', () => {
+  it('inclut les 8 pages détail /solutions/<slug>', () => {
     for (const p of PRODUCTS) {
       expect(
         entries.find((entry) => entry.url.endsWith(`/solutions/${p.slug}`)),

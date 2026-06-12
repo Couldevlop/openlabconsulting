@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { PRODUCTS } from '@/lib/data/products';
 
 export const runtime = 'edge';
 export const alt =
@@ -78,8 +79,8 @@ export default function OpenGraphImage(): Response {
             maxWidth: 900,
           }}
         >
-          Cabinet ivoirien d’IA appliquée · 7 produits propriétaires · Livre de
-          référence · Abidjan
+          Cabinet ivoirien d’IA appliquée · {PRODUCTS.length} produits
+          propriétaires · Livre de référence · Abidjan
         </div>
       </div>
 

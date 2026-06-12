@@ -1,6 +1,6 @@
 /* eslint-disable */
 /**
- * Seed des 7 produits propriétaires (CLAUDE.md §1.3) dans Payload.
+ * Seed des 8 produits propriétaires (CLAUDE.md §1.3) dans Payload.
  *
  * Upsert idempotent par `slug` (update si le slug existe, create sinon).
  * Les produits sont créés **publiés** via le `_status` natif des drafts

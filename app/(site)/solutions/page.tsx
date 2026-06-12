@@ -9,11 +9,13 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedProducts } from '@/lib/products-server';
+import { PRODUCTS } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
 
 export const metadata: Metadata = {
-  title: 'Solutions — 7 logiciels propriétaires OpenLab',
+  title: `Solutions — ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
-    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
+    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
   alternates: {
     canonical: '/solutions',
   },
@@ -21,6 +23,8 @@ export const metadata: Metadata = {
 
 export default async function SolutionsHubPage(): Promise<React.ReactElement> {
   const products = await getPublishedProducts();
+  const word = spellFrenchCount(products.length);
+  const wordCap = word.charAt(0).toUpperCase() + word.slice(1);
   return (
     <main id="main">
       {/* Hero */}
@@ -32,7 +36,7 @@ export default async function SolutionsHubPage(): Promise<React.ReactElement> {
           <div className="mx-auto max-w-3xl text-center">
             <Eyebrow tone="orange">Hub Solutions</Eyebrow>
             <Heading id="hub-solutions-title" level={1} className="mt-4">
-              Sept logiciels propriétaires.{' '}
+              {wordCap} logiciels propriétaires.{' '}
               <span className="text-[var(--color-ol-orange-text)]">
                 Une suite cohérente
               </span>

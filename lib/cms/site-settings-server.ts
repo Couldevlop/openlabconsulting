@@ -19,6 +19,8 @@ import {
   type ReassuranceContent,
   type ReassurancePartner,
 } from './site-settings';
+import { interpolateCounts } from '@/lib/format/product-count';
+import { getProductCount } from './product-count-server';
 
 /**
  * Server-only : helpers de lecture des Globals Payload (CLAUDE.md §9).
@@ -108,7 +110,9 @@ function normalizeTextArray(
 }
 
 export async function getHeroContent(): Promise<HeroContent> {
-  return readGlobal('hero-settings', HERO_FALLBACK);
+  const raw = await readGlobal('hero-settings', HERO_FALLBACK);
+  const count = await getProductCount();
+  return { ...raw, subtitle: interpolateCounts(raw.subtitle, count) };
 }
 
 export async function getManifestoContent(): Promise<ManifestoContent> {
@@ -130,9 +134,15 @@ export async function getManifestoContent(): Promise<ManifestoContent> {
         )
         .map((s) => ({ excuse: s.excuse, fact: s.fact }))
     : [];
+  const count = await getProductCount();
+  const resolved = stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances;
   return {
     ...raw,
-    stances: stances.length > 0 ? stances : MANIFESTO_FALLBACK.stances,
+    intro: interpolateCounts(raw.intro, count),
+    stances: resolved.map((s) => ({
+      excuse: s.excuse,
+      fact: interpolateCounts(s.fact, count),
+    })),
   };
 }
 
@@ -200,9 +210,14 @@ export async function getAboutContent(): Promise<AboutContent> {
         )
         .map((p) => ({ title: p.title, body: p.body }))
     : [];
+  const count = await getProductCount();
+  const resolved = pillars.length > 0 ? pillars : ABOUT_FALLBACK.pillars;
   return {
     ...raw,
-    pillars: pillars.length > 0 ? pillars : ABOUT_FALLBACK.pillars,
+    pillars: resolved.map((p) => ({
+      title: p.title,
+      body: interpolateCounts(p.body, count),
+    })),
   };
 }
 

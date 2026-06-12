@@ -11,7 +11,8 @@ export type ProductSlug =
   | 'agrosense'
   | 'qualitos'
   | 'fraud-shield'
-  | 'smart-city';
+  | 'smart-city'
+  | 'sentinelbtp';
 
 /**
  * Format de slug produit : minuscules/chiffres séparés par des tirets
@@ -101,7 +102,7 @@ export interface Product {
 }
 
 /**
- * Source unique de vérité pour les 7 produits propriétaires (CLAUDE.md §1.3).
+ * Source unique de vérité pour les 8 produits propriétaires (CLAUDE.md §1.3).
  * Consommée par :
  *   - `components/sections/Solutions.tsx` (homepage §6.6)
  *   - `app/solutions/page.tsx` (hub)
@@ -794,6 +795,109 @@ export const PRODUCTS: readonly Product[] = [
         question: 'Peut-on intégrer un système CCTV existant ?',
         answer:
           'Oui via les protocoles ONVIF / RTSP standard. L’anonymisation est appliquée en bordure (edge), avant toute remontée vers le data center central.',
+      },
+    ],
+    expertisesLies: [
+      { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
+      { slug: 'data-gouvernance', title: 'Data & gouvernance' },
+    ],
+  },
+  {
+    slug: 'sentinelbtp',
+    iconKey: 'hard-hat',
+    name: 'SentinelBTP',
+    tagline: 'Voir le danger avant l’effondrement.',
+    target: 'BTP, bureaux de contrôle, assureurs · Côte d’Ivoire & Afrique',
+    status: 'pilot',
+    statusLabel: 'En pilote',
+    eyebrow: 'Surveillance structurelle par IA · SHM',
+    intro:
+      'SentinelBTP instrumente les bâtiments et ouvrages avec des capteurs edge (inclinaison, fissuration, tassement, vibrations) et compare chaque mesure à la trajectoire historique de la structure. Le résultat n’est pas un seuil fixe mais un score de risque évolutif — du suivi de chantier à l’exploitation.',
+    problem:
+      'À Abidjan, un immeuble qui s’effondre a presque toujours prévenu : le béton fissure, la structure s’incline de quelques millimètres, les vibrations changent de signature. Le problème n’est pas l’absence de signaux — c’est que personne ne les mesure en continu. Les inspections restent humaines, ponctuelles et tardives.',
+    features: [
+      {
+        iconKey: 'antenna',
+        title: 'Captation edge multi-capteurs',
+        body: 'Inclinomètres, accéléromètres, jauges de fissuration, sondes de tassement, température et hygrométrie mesurent en continu le comportement physique de l’ouvrage.',
+      },
+      {
+        iconKey: 'radar',
+        title: 'Connectivité frugale & hors-ligne',
+        body: 'LoRaWAN et NB-IoT longue portée basse consommation, avec mode dégradé hors-ligne. Les mesures sont historisées sur une plateforme souveraine.',
+      },
+      {
+        iconKey: 'scan-search',
+        title: 'Score de risque sur séries temporelles',
+        body: 'Des modèles d’IA comparent chaque mesure à l’historique de l’ouvrage et calculent un risque évolutif, au lieu de simples seuils — le cœur de la valeur.',
+      },
+      {
+        iconKey: 'badge-check',
+        title: 'Alertes graduées & preuve opposable',
+        body: 'Alertes multicanal vigilance · alerte · danger, et dossier de preuve numérique horodaté, infalsifiable, adossé à l’article 37 du Code de la Construction.',
+      },
+    ],
+    stack: [
+      'Capteurs IoT terrain (inclinomètres, accéléromètres, jauges)',
+      'Connectivité LoRaWAN / NB-IoT · passerelle mode dégradé',
+      'PostgreSQL 17 + TimescaleDB pour les séries temporelles',
+      'Worker Python · détection d’anomalies sur séries temporelles',
+      'Cloud souverain Hetzner ou on-premise · K3s',
+    ],
+    proofs: [
+      {
+        value: '≥ 72 h',
+        label: 'préavis avant seuil de danger',
+        source: 'objectif opérationnel SentinelBTP (couche intelligence)',
+      },
+      {
+        value: '< 60 s',
+        label: 'délai d’alerte après détection',
+        source: 'objectif opérationnel SentinelBTP (couche restitution)',
+      },
+      {
+        value: '< 8 %',
+        label: 'taux de faux positifs ciblé',
+        source: 'cible modèle séries temporelles vs seuils fixes',
+      },
+      {
+        value: '10,5 Md$',
+        label: 'marché SHM mondial visé en 2030',
+        source: 'Grand View Research — Structural Health Monitoring 2024',
+      },
+    ],
+    pricing: {
+      model: 'quote',
+      headline: 'Programme de surveillance sur devis',
+      details: [
+        'Audit terrain + dimensionnement capteurs par ouvrage',
+        'POC sur immeuble ou chantier pilote avant déploiement parc',
+        'Licence + hébergement souverain (Hetzner Allemagne ou on-prem)',
+        'Dossier de preuve conformité article 37 inclus',
+        'Formation des bureaux de contrôle et exploitants',
+      ],
+      note: 'Tarif fonction du nombre d’ouvrages et de capteurs. Montage de dossier bailleurs (assureurs, collectivités) accompagné.',
+    },
+    faq: [
+      {
+        question: 'Où sont hébergées des données aussi sensibles ?',
+        answer:
+          'Par construction, SentinelBTP privilégie le traitement en périphérie (edge) et un hébergement sous contrôle national : Hetzner Allemagne (RGPD UE) ou cluster on-premise. Les données décrivant la vulnérabilité d’ouvrages habités ne sont pas confiées à des plateformes étrangères.',
+      },
+      {
+        question: 'Que se passe-t-il en cas de coupure réseau ?',
+        answer:
+          'Les capteurs utilisent LoRaWAN / NB-IoT et une passerelle qui historise localement en mode dégradé. Les mesures remontent dès reconnexion : aucune perte de signal, même après plusieurs heures hors-ligne.',
+      },
+      {
+        question: 'Peut-on instrumenter un bâtiment déjà construit ?',
+        answer:
+          'Oui. SentinelBTP s’installe aussi bien pendant le chantier que sur un ouvrage en exploitation. La phase d’apprentissage établit la trajectoire de référence propre à chaque structure avant de produire des alertes.',
+      },
+      {
+        question: 'En quoi cela aide-t-il juridiquement le maître d’ouvrage ?',
+        answer:
+          'L’article 37 du Code de la Construction et de l’Habitat rend le maître d’ouvrage responsable de la stabilité du bâtiment. Le dossier de preuve horodaté et infalsifiable transforme cette obligation en diligence démontrable et opposable.',
       },
     ],
     expertisesLies: [

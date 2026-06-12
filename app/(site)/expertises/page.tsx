@@ -10,6 +10,10 @@ import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedExpertises } from '@/lib/expertises-server';
 import { getMethodologieContent } from '@/lib/cms/site-settings-server';
+import { PRODUCTS } from '@/lib/data/products';
+import { spellFrenchCount } from '@/lib/format/product-count';
+
+const PRODUCT_WORD = spellFrenchCount(PRODUCTS.length);
 
 export const metadata: Metadata = {
   title: 'Expertises — Conseil, agents, data, cybersécurité IA',
@@ -44,8 +48,9 @@ export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
               Pas un menu de prestations indépendantes : chaque mission s’adosse
-              aux trois autres et à nos sept produits propriétaires. C’est ce
-              qui rend la transformation IA exécutable, pas juste prévue.
+              aux trois autres et à nos {PRODUCT_WORD} produits propriétaires.
+              C’est ce qui rend la transformation IA exécutable, pas juste
+              prévue.
             </p>
           </div>
 
