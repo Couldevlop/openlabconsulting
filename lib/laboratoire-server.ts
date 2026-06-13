@@ -100,6 +100,12 @@ function toPublication(raw: Record<string, unknown>): Publication | null {
     year: raw.year,
     href: raw.href,
     summary: raw.summary,
+    ...(typeof raw.slug === 'string' && raw.slug.length > 0
+      ? { slug: raw.slug }
+      : {}),
+    ...(typeof raw.abstract === 'string' && raw.abstract.length > 0
+      ? { abstract: raw.abstract }
+      : {}),
   };
 }
 
@@ -135,6 +141,14 @@ export async function getPublications(): Promise<readonly Publication[]> {
     .map(toPublication)
     .filter((p): p is Publication => p !== null);
   return mapped.length > 0 ? mapped : PUBLICATIONS;
+}
+
+/** Publication unique par slug (page détail /laboratoire/publications/<slug>). */
+export async function getPublicationBySlug(
+  slug: string,
+): Promise<Publication | null> {
+  const pubs = await getPublications();
+  return pubs.find((p) => p.slug === slug) ?? null;
 }
 
 export async function getPartnerships(): Promise<readonly Partenariat[]> {

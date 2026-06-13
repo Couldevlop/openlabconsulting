@@ -87,7 +87,11 @@ export default async function LaboratoirePublicationsPage(): Promise<React.React
           <ul className="grid gap-6 md:grid-cols-2">
             {byYear.map((p) => {
               const Icon = TYPE_ICON[p.type];
-              const isExternal = p.href.startsWith('http');
+              // Publication avec slug → page de détail interne ; sinon href.
+              const destination = p.slug
+                ? `/laboratoire/publications/${p.slug}`
+                : p.href;
+              const isExternal = destination.startsWith('http');
               return (
                 <li key={`${p.year}-${p.title}`}>
                   <Card className="flex h-full flex-col gap-4 p-6 sm:p-8">
@@ -115,12 +119,16 @@ export default async function LaboratoirePublicationsPage(): Promise<React.React
 
                     <div className="mt-auto">
                       <Link
-                        href={p.href}
+                        href={destination}
                         target={isExternal ? '_blank' : undefined}
                         rel={isExternal ? 'noopener noreferrer' : undefined}
                         className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
                       >
-                        {isExternal ? 'Ouvrir' : 'Lire'}
+                        {p.slug
+                          ? 'Lire le résumé'
+                          : isExternal
+                            ? 'Ouvrir'
+                            : 'Lire'}
                         <ArrowUpRight width={14} height={14} aria-hidden />
                       </Link>
                     </div>

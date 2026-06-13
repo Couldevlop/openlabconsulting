@@ -60,6 +60,25 @@ export const Publications: CollectionConfig = {
     },
     { name: 'summary', type: 'textarea', required: true, maxLength: 500 },
     {
+      name: 'slug',
+      type: 'text',
+      maxLength: 80,
+      index: true,
+      admin: {
+        description:
+          'Optionnel. Si renseigné, crée une page de détail /laboratoire/publications/<slug> (résumé long). Sinon la carte pointe sur le lien.',
+      },
+    },
+    {
+      name: 'abstract',
+      type: 'textarea',
+      maxLength: 2000,
+      admin: {
+        description:
+          'Résumé long (page de détail). Honnêteté : vraie publication/analyse, pas d’article académique inventé.',
+      },
+    },
+    {
       name: 'order',
       type: 'number',
       required: true,

@@ -95,8 +95,20 @@ export interface Publication {
   year: number;
   /** Lien externe ou interne (PDF, page produit, etc.). */
   href: string;
-  /** Pitch en 2-3 phrases. */
+  /** Pitch en 2-3 phrases (carte liste). */
   summary: string;
+  /**
+   * Slug optionnel : si présent, la publication a une page de détail
+   * `/laboratoire/publications/<slug>` (résumé long + schema Article).
+   * Absent (livre, conférence externe) → la carte pointe sur `href`.
+   */
+  slug?: string;
+  /**
+   * Résumé long (page de détail). Honnêteté : ce sont de vraies
+   * publications/analyses OpenLab (livre blanc, analyse sectorielle) — pas
+   * des articles académiques à comité de lecture ; pas de DOI inventé.
+   */
+  abstract?: string;
 }
 
 export const PUBLICATIONS: readonly Publication[] = [
@@ -118,6 +130,9 @@ export const PUBLICATIONS: readonly Publication[] = [
     href: '/livres-blancs/ia-souveraine-ci-2026',
     summary:
       'Comment les dirigeants ivoiriens peuvent déployer une IA hébergée en UE conforme RGPD + loi 2013-450, sans dépendre des hyperscalers.',
+    slug: 'ia-souveraine-feuille-de-route-2026',
+    abstract:
+      'Feuille de route pour une IA souveraine en Côte d’Ivoire à l’horizon de la Stratégie Nationale de l’Intelligence Artificielle (SNIA 2030). L’analyse identifie sept verrous structurels — énergie, puissance de calcul, datacenters, données, compétences, cadre réglementaire et fonctionnement en silos — et propose une trajectoire progressive et réaliste : digitaliser via le RAG, spécialiser des modèles open source sur des données nationales, puis bâtir une IA pleinement souveraine. Hébergement en Union européenne conforme RGPD et loi ivoirienne 2013-450, sans dépendance aux hyperscalers.',
   },
   {
     // Lien repointé vers l'article réel (la landing /livres-blancs/
@@ -129,6 +144,9 @@ export const PUBLICATIONS: readonly Publication[] = [
     href: '/insights/cnps-its-fdfp-conformite-sirh-ivoirien',
     summary:
       'Tous les barèmes 2024 commentés, les pièges classiques d’un audit DGI, les obligations Mobile Money en paie.',
+    slug: 'conformite-cnps-its-fdfp-sirh-2026',
+    abstract:
+      'Guide praticien des obligations de paie ivoiriennes (CNPS, ITS, FDFP) attendues d’un SIRH moderne. Barèmes 2024 commentés, pièges classiques d’un audit DGI, obligations de diffusion par Mobile Money, et exigences d’auditabilité (fiches de paie horodatées et immuables). Document issu des déploiements NexusRH en production.',
   },
   {
     type: 'conference',
