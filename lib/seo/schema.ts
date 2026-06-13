@@ -377,6 +377,38 @@ export function publicationsSchema(
   };
 }
 
+/**
+ * Schema d'une publication unique (page détail
+ * `/laboratoire/publications/<slug>`). Type honnête selon la nature
+ * (Report pour un livre blanc, etc.) — pas de DOI ni ScholarlyArticle
+ * inventé : le laboratoire est en structuration, pas un centre académique
+ * formel.
+ */
+export function publicationSchema(pub: Publication): Thing {
+  const detailUrl = pub.slug
+    ? absoluteUrl(`/laboratoire/publications/${pub.slug}`)
+    : /^https?:\/\//i.test(pub.href)
+      ? pub.href
+      : absoluteUrl(pub.href);
+  return {
+    '@context': 'https://schema.org',
+    '@type': PUBLICATION_SCHEMA_TYPE[pub.type],
+    name: pub.title,
+    headline: pub.title,
+    author: pub.authors.map((name) =>
+      /^(équipe|equipe|laboratoire)/i.test(name)
+        ? { '@type': 'Organization', name }
+        : { '@type': 'Person', name },
+    ),
+    datePublished: String(pub.year),
+    description: pub.abstract ?? pub.summary,
+    url: detailUrl,
+    inLanguage: SITE.language,
+    publisher: { '@id': absoluteUrl('/#organization') },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': detailUrl },
+  };
+}
+
 /** Blog schema pour le hub `/insights`. */
 export function blogSchema(): Thing {
   return {
