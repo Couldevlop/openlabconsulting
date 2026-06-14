@@ -160,6 +160,14 @@ async function main(): Promise<void> {
     _status: 'published',
   };
 
+  // Mode DUMP : imprime le `data` complet (content Lexical inclus) en JSON,
+  // sans DB. Sert au transfert hors-ligne vers la prod (INSERT SQL) quand
+  // Docker local est indisponible.
+  if (process.env.SEED_DUMP === '1') {
+    process.stdout.write(JSON.stringify(data));
+    process.exit(0);
+  }
+
   if (DRY) {
     console.log('— Structure du corps —');
     content.forEach((n: any, i: number) => {
