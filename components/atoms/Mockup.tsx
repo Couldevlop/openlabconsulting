@@ -15,6 +15,9 @@ interface MockupProps {
    *  Sinon → on rend `children` comme contenu illustratif. */
   src?: string | null;
   alt?: string;
+  /** Attribut `sizes` de next/image quand `src` est fourni (perf LCP). Défaut
+   *  `100vw` ; à régler selon la largeur d'affichage réelle. */
+  sizes?: string;
   children?: ReactNode;
   className?: string;
 }
@@ -50,6 +53,7 @@ export function Mockup({
   tone = 'dark',
   src,
   alt,
+  sizes = '100vw',
   children,
   className,
 }: MockupProps): ReactElement {
@@ -101,6 +105,7 @@ export function Mockup({
             src={src}
             alt={alt ?? label ?? 'Capture produit'}
             fill
+            sizes={sizes}
             className="object-cover"
           />
         ) : (

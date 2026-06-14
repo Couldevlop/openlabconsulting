@@ -32,6 +32,7 @@ export function ArticleCard({ article: a }: ArticleCardProps): ReactElement {
           tone="cold"
           aspect="16/9"
           placeholderLabel="Couverture article"
+          sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
           className="rounded-b-none border-0 border-b border-dashed border-[var(--color-ol-graphite)]/15"
         />
         <div className="flex flex-1 flex-col gap-4 px-6 pb-6 sm:px-8 sm:pb-8">

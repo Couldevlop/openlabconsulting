@@ -183,6 +183,7 @@ export default async function SolutionDetailPage({
                 label={name}
                 src={product.heroImage.src}
                 alt={product.heroImage.alt}
+                sizes="(min-width: 1024px) 45vw, 100vw"
                 className="shadow-xl"
               />
             ) : screenshot ? (
@@ -194,6 +195,7 @@ export default async function SolutionDetailPage({
                 label={name}
                 src={screenshot}
                 alt={`Capture d’écran ${name}`}
+                sizes="(min-width: 1024px) 45vw, 100vw"
                 className="shadow-xl"
               />
             ) : hasProductMockup(product.slug) ? (
