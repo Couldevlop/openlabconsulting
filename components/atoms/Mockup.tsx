@@ -18,6 +18,9 @@ interface MockupProps {
   /** Attribut `sizes` de next/image quand `src` est fourni (perf LCP). Défaut
    *  `100vw` ; à régler selon la largeur d'affichage réelle. */
   sizes?: string;
+  /** next/image `priority` (précharge l'image LCP au-dessus de la ligne de
+   *  flottaison). À réserver au hero. */
+  priority?: boolean;
   children?: ReactNode;
   className?: string;
 }
@@ -54,6 +57,7 @@ export function Mockup({
   src,
   alt,
   sizes = '100vw',
+  priority = false,
   children,
   className,
 }: MockupProps): ReactElement {
@@ -106,6 +110,7 @@ export function Mockup({
             alt={alt ?? label ?? 'Capture produit'}
             fill
             sizes={sizes}
+            priority={priority}
             className="object-cover"
           />
         ) : (

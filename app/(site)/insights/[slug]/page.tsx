@@ -170,6 +170,7 @@ export default async function InsightArticlePage({
             aspect="16/9"
             placeholderLabel="Couverture article"
             sizes="(min-width: 768px) 768px, 100vw"
+            priority
             className="-mt-12 shadow-2xl"
           />
         </Container>

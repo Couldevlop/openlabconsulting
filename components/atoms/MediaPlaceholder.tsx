@@ -23,6 +23,10 @@ interface MediaPlaceholderProps {
    *  selon la largeur réelle d'affichage (ex grille 3 cols : "(min-width:
    *  768px) 33vw, 100vw"). Défaut `100vw`. */
   sizes?: string;
+  /** Marque l'image comme prioritaire (next/image `priority`) : précharge +
+   *  désactive le lazy-load. À réserver à l'image LCP au-dessus de la ligne
+   *  de flottaison (une seule par page). */
+  priority?: boolean;
   className?: string;
 }
 
@@ -60,6 +64,7 @@ export function MediaPlaceholder({
   tone = 'neutral',
   aspect = '4/3',
   sizes = '100vw',
+  priority = false,
   className,
 }: MediaPlaceholderProps): ReactElement {
   if (src) {
@@ -76,6 +81,7 @@ export function MediaPlaceholder({
           alt={alt}
           fill
           sizes={sizes}
+          priority={priority}
           className="object-cover"
         />
       </div>

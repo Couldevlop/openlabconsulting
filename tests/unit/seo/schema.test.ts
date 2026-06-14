@@ -4,6 +4,7 @@ import {
   blogSchema,
   bookSchema,
   breadcrumbSchema,
+  collectionPageSchema,
   faqPageSchema,
   jsonLdString,
   localBusinessSchema,
@@ -69,6 +70,33 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(s.description).toBe(conf.summary);
     const authors = s.author as { '@type': string }[];
     expect(authors[0]?.['@type']).toBe('Person');
+  });
+
+  it('collectionPageSchema : CollectionPage + ItemList absolu et positionné', () => {
+    const s = collectionPageSchema({
+      name: 'Solutions OpenLab',
+      description: 'Les logiciels propriétaires.',
+      url: '/solutions',
+      items: [
+        { name: 'NexusRH CI', url: '/solutions/nexusrh' },
+        { name: 'SentinelBTP', url: '/solutions/sentinelbtp' },
+      ],
+    });
+    expect(s['@type']).toBe('CollectionPage');
+    expect(String(s.url)).toMatch(/\/solutions$/);
+    const list = s.mainEntity as {
+      '@type': string;
+      numberOfItems: number;
+      itemListElement: { position: number; name: string; url: string }[];
+    };
+    expect(list['@type']).toBe('ItemList');
+    expect(list.numberOfItems).toBe(2);
+    expect(list.itemListElement[0]?.position).toBe(1);
+    expect(list.itemListElement[1]?.name).toBe('SentinelBTP');
+    // URLs absolues.
+    expect(list.itemListElement[0]?.url).toMatch(
+      /^https?:\/\/.*\/solutions\/nexusrh$/,
+    );
   });
 
   it('blogSchema : type Blog pointant /insights', () => {

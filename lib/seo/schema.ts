@@ -213,6 +213,38 @@ export function sectorPageSchema(sector: Sector): Thing {
   };
 }
 
+/**
+ * CollectionPage + ItemList pour les pages hub (liste de produits,
+ * expertises, secteurs). Signale à Google une page-liste structurée
+ * (éligible aux résultats enrichis « carrousel/liste »). §12.3.
+ */
+export function collectionPageSchema(input: {
+  name: string;
+  description: string;
+  url: string;
+  items: { name: string; url: string }[];
+}): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.url),
+    isPartOf: { '@id': absoluteUrl('/#website') },
+    inLanguage: SITE.language,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: input.items.length,
+      itemListElement: input.items.map((it, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: it.name,
+        url: absoluteUrl(it.url),
+      })),
+    },
+  };
+}
+
 /** Book schema pour /livre et l'encart homepage. */
 export function bookSchema(): Thing {
   return {

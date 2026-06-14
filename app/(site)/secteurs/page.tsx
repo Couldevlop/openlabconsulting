@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -6,10 +7,12 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedSectors } from '@/lib/sectors-server';
 import { getSecteursHubContent } from '@/lib/cms/site-settings-server';
 import { alternatesFor } from '@/lib/seo/site';
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Secteurs — IA appliquée par industrie',
@@ -23,8 +26,27 @@ export default async function SecteursHubPage(): Promise<React.ReactElement> {
     getPublishedSectors(),
     getSecteursHubContent(),
   ]);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   return (
     <main id="main">
+      <JsonLd
+        nonce={nonce}
+        data={[
+          collectionPageSchema({
+            name: 'Secteurs — IA appliquée par industrie',
+            description: hub.description,
+            url: '/secteurs',
+            items: sectors.map((s) => ({
+              name: s.name,
+              url: `/secteurs/${s.slug}`,
+            })),
+          }),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Secteurs', url: '/secteurs' },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="hub-secteurs-title"
