@@ -15,14 +15,14 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { personSchema } from '@/lib/seo/schema';
-import { SITE } from '@/lib/seo/site';
+import { SITE, alternatesFor } from '@/lib/seo/site';
 import { getAboutContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
   title: 'À propos — OpenLab Consulting',
   description:
     'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Trois piliers : conseil, produits, édition.',
-  alternates: { canonical: '/a-propos' },
+  alternates: alternatesFor('/a-propos'),
 };
 
 export default async function AProposPage(): Promise<React.ReactElement> {

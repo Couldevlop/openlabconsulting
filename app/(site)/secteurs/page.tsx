@@ -9,14 +9,13 @@ import { Heading } from '@/components/atoms/Heading';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedSectors } from '@/lib/sectors-server';
 import { getSecteursHubContent } from '@/lib/cms/site-settings-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Secteurs — IA appliquée par industrie',
   description:
     'Public, banque & assurance, agro-industrie, santé, télécoms & énergie : nos déploiements IA adaptés aux contraintes de chaque secteur africain francophone.',
-  alternates: {
-    canonical: '/secteurs',
-  },
+  alternates: alternatesFor('/secteurs'),
 };
 
 export default async function SecteursHubPage(): Promise<React.ReactElement> {

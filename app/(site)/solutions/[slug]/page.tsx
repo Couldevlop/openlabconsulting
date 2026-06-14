@@ -31,6 +31,7 @@ import {
   faqPageSchema,
   softwareApplicationSchema,
 } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -51,7 +52,7 @@ export async function generateMetadata({
   return {
     title: `${product.name} — Solution OpenLab`,
     description: product.tagline,
-    alternates: { canonical: `/solutions/${product.slug}` },
+    alternates: alternatesFor(`/solutions/${product.slug}`),
   };
 }
 

@@ -70,3 +70,20 @@ export function hreflangMap(path: string): Record<HreflangLocale, string> {
     'x-default': clean,
   };
 }
+
+/**
+ * Bloc `alternates` complet pour le metadata d'une page : `canonical`
+ * + `languages` (hreflang fr-CI / fr-FR / x-default).
+ *
+ * À utiliser à la place de `alternates: { canonical: '...' }` : sinon
+ * une page enfant qui ne déclare que `canonical` **écrase** le bloc
+ * `alternates` (donc le hreflang) hérité de `app/layout.tsx` — Next 15
+ * remplace `alternates` champ par champ au niveau de l'objet entier.
+ */
+export function alternatesFor(path: string): {
+  canonical: string;
+  languages: Record<HreflangLocale, string>;
+} {
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  return { canonical: clean, languages: hreflangMap(clean) };
+}

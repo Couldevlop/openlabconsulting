@@ -20,6 +20,7 @@ import { getProductBySlug } from '@/lib/products-server';
 import { DynamicIcon } from '@/lib/icon-map';
 import { createCodeRenderer } from '@/lib/insights/code-highlighter';
 import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface PageParams {
   params: Promise<{ slug: string }>;
@@ -35,7 +36,7 @@ export async function generateMetadata({
   return {
     title: `${article.title} — Insights OpenLab`,
     description: article.excerpt,
-    alternates: { canonical: `/insights/${article.slug}` },
+    alternates: alternatesFor(`/insights/${article.slug}`),
     // Une prévisualisation de brouillon ne doit jamais être indexée.
     ...(isDraft ? { robots: { index: false, follow: false } } : {}),
     openGraph: {

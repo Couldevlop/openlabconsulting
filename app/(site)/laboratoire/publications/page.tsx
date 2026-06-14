@@ -12,12 +12,13 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { breadcrumbSchema, publicationsSchema } from '@/lib/seo/schema';
 import { type Publication } from '@/lib/data/laboratoire';
 import { getPublications } from '@/lib/laboratoire-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Publications — Laboratoire OpenLab',
   description:
     'Livre IA & Agents Autonomes, livres blancs souveraineté + paie, conférences. Toutes les sorties publiques de la R&D OpenLab.',
-  alternates: { canonical: '/laboratoire/publications' },
+  alternates: alternatesFor('/laboratoire/publications'),
 };
 
 const TYPE_LABEL: Record<Publication['type'], string> = {

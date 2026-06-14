@@ -15,12 +15,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { BOOK, COMPANION_RESOURCES } from '@/lib/data/book';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: `Companion lecteurs — ${BOOK.title}`,
   description:
     'Ressources lecteurs : code source GitHub des exemples, datasets ouverts CHIRPS/ERA5/SODEXAM, errata public, forum Discourse francophone.',
-  alternates: { canonical: '/livre/companion' },
+  alternates: alternatesFor('/livre/companion'),
 };
 
 const CATEGORY_ICONS = {

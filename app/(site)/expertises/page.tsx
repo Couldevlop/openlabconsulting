@@ -13,14 +13,13 @@ import {
   getMethodologieContent,
   getExpertisesHubContent,
 } from '@/lib/cms/site-settings-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Expertises — Conseil, agents, data, cybersécurité IA',
   description:
     'Quatre expertises OpenLab pour transformer l’IA en levier mesurable : conseil stratégique, agents & automatisation, data & gouvernance, cybersécurité augmentée.',
-  alternates: {
-    canonical: '/expertises',
-  },
+  alternates: alternatesFor('/expertises'),
 };
 
 export default async function ExpertisesHubPage(): Promise<React.ReactElement> {

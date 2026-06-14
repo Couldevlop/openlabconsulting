@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { SITE } from '@/lib/seo/site';
+import { SITE, alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
   description:
     'Politique de confidentialité d’OpenLab Consulting — RGPD, loi ivoirienne 2013-450, droits utilisateurs, conservation, sous-traitants.',
-  alternates: { canonical: '/politique-confidentialite' },
+  alternates: alternatesFor('/politique-confidentialite'),
   robots: { index: true, follow: true },
 };
 

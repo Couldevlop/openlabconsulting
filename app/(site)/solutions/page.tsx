@@ -11,14 +11,13 @@ import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedProducts } from '@/lib/products-server';
 import { getSolutionsHubContent } from '@/lib/cms/site-settings-server';
 import { PRODUCTS } from '@/lib/data/products';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: `Solutions — ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
     'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
-  alternates: {
-    canonical: '/solutions',
-  },
+  alternates: alternatesFor('/solutions'),
 };
 
 export default async function SolutionsHubPage(): Promise<React.ReactElement> {

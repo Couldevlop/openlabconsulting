@@ -13,13 +13,14 @@ import { blogSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPagedArticles } from '@/lib/articles-server';
 import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Insights — Articles, études et retours de terrain',
   description:
     'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
   alternates: {
-    canonical: '/insights',
+    ...alternatesFor('/insights'),
     types: { 'application/rss+xml': '/feed.xml' },
   },
 };

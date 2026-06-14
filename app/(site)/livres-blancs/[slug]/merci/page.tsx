@@ -9,6 +9,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { WHITEPAPER_SLUGS } from '@/lib/validation';
+import { alternatesFor } from '@/lib/seo/site';
 
 /**
  * Page de remerciement après soumission du formulaire de capture
@@ -42,7 +43,7 @@ export async function generateMetadata({
   return {
     title: `Merci — ${title}`,
     description: `Votre PDF est prêt à télécharger.`,
-    alternates: { canonical: `/livres-blancs/${slug}/merci` },
+    alternates: alternatesFor(`/livres-blancs/${slug}/merci`),
     robots: { index: false, follow: false },
   };
 }

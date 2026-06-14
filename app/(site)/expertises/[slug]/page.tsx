@@ -18,6 +18,7 @@ import {
   getExpertiseBySlug,
 } from '@/lib/expertises-server';
 import { breadcrumbSchema, serviceSchema } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -39,7 +40,7 @@ export async function generateMetadata({
   return {
     title: `${expertise.title} — Expertise OpenLab`,
     description: expertise.punchline,
-    alternates: { canonical: `/expertises/${expertise.slug}` },
+    alternates: alternatesFor(`/expertises/${expertise.slug}`),
   };
 }
 

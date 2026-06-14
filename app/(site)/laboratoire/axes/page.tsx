@@ -11,6 +11,7 @@ import { getRdAxes } from '@/lib/laboratoire-server';
 import { PRODUCTS } from '@/lib/data/products';
 import { spellFrenchCount } from '@/lib/format/product-count';
 import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 const PRODUCTS_WORD = spellFrenchCount(PRODUCTS.length);
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   title: 'Axes R&D — Laboratoire OpenLab',
   description:
     'Six axes de recherche appliquée derrière les produits OpenLab : paie ouest-africaine, fraude documentaire, agro-précision, supervision temps réel, QMS multi-norme, Smart City respectueuse de la vie privée.',
-  alternates: { canonical: '/laboratoire/axes' },
+  alternates: alternatesFor('/laboratoire/axes'),
 };
 
 const breadcrumbJsonLd = jsonLdString(

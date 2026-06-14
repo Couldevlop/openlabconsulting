@@ -10,6 +10,7 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { WhitepaperRequestForm } from '@/components/forms/WhitepaperRequestForm';
 import { cn } from '@/lib/cn';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface Whitepaper {
   slug: string;
@@ -76,7 +77,7 @@ export async function generateMetadata({
   return {
     title: `${wp.title} — ${wp.subtitle}`,
     description: wp.pitch[0],
-    alternates: { canonical: `/livres-blancs/${wp.slug}` },
+    alternates: alternatesFor(`/livres-blancs/${wp.slug}`),
     openGraph: {
       title: `${wp.title} · ${wp.subtitle}`,
       description: wp.pitch[0],

@@ -15,11 +15,12 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { BOOK, CHAPTERS } from '@/lib/data/book';
 import { getBook } from '@/lib/cms/book-server';
 import { bookSchema, breadcrumbSchema } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: `${BOOK.title} — ${BOOK.subtitle}`,
   description: BOOK.longPitch[0],
-  alternates: { canonical: '/livre' },
+  alternates: alternatesFor('/livre'),
   openGraph: {
     title: `${BOOK.title} · ${BOOK.subtitle}`,
     description: BOOK.longPitch[0],
