@@ -18,6 +18,7 @@ import {
   getArticleBySlug,
   getRelatedArticles,
   getPagedArticles,
+  getArticlesForProduct,
 } from '@/lib/articles-server';
 import { FALLBACK_ARTICLES } from '@/lib/articles';
 
@@ -95,6 +96,27 @@ describe('getRelatedArticles — Payload disponible', () => {
     expect(findMock).toHaveBeenCalledWith(
       expect.objectContaining({ collection: 'articles', limit: 3 }),
     );
+  });
+});
+
+describe('getArticlesForProduct — Payload disponible', () => {
+  it('interroge les slugs liés (where in) et mappe les articles publiés', async () => {
+    findMock.mockResolvedValue({
+      docs: [rawDoc({ slug: 'cnps-its-fdfp-conformite-sirh-ivoirien' })],
+    });
+    const r = await getArticlesForProduct('nexusrh', 3);
+    expect(r[0]?.slug).toBe('cnps-its-fdfp-conformite-sirh-ivoirien');
+    const arg = findMock.mock.calls[0]?.[0] as
+      | { where: { and: { slug?: { in: string[] } }[] } }
+      | undefined;
+    const inClause = arg?.where.and.find((c) => 'slug' in c)?.slug?.in;
+    expect(inClause).toContain('cnps-its-fdfp-conformite-sirh-ivoirien');
+  });
+
+  it('ne fait aucune requête pour un produit sans article lié', async () => {
+    const r = await getArticlesForProduct('smart-city', 3);
+    expect(r).toEqual([]);
+    expect(findMock).not.toHaveBeenCalled();
   });
 });
 

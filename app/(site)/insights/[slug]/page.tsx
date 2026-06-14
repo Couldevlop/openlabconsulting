@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { draftMode, headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Clock } from 'lucide-react';
 import { AuditIaCtaServer } from '@/components/sections/AuditIaCtaServer';
 import { ArticleBody } from '@/components/insights/ArticleBody';
 import { ArticleCard } from '@/components/insights/ArticleCard';
@@ -15,6 +15,9 @@ import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { extractHeadings } from '@/lib/articles';
 import { getArticleBySlug, getRelatedArticles } from '@/lib/articles-server';
+import { productSlugForArticle } from '@/lib/data/product-article-links';
+import { getProductBySlug } from '@/lib/products-server';
+import { DynamicIcon } from '@/lib/icon-map';
 import { createCodeRenderer } from '@/lib/insights/code-highlighter';
 import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
 
@@ -56,6 +59,11 @@ export default async function InsightArticlePage({
   const headings = extractHeadings(article.content);
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const related = await getRelatedArticles(article.category, article.slug, 3);
+  // Maillage interne : produit OpenLab associé à cet article (§12.5).
+  const relatedProductSlug = productSlugForArticle(article.slug);
+  const relatedProduct = relatedProductSlug
+    ? await getProductBySlug(relatedProductSlug)
+    : null;
 
   return (
     <main id="main">
@@ -276,6 +284,61 @@ export default async function InsightArticlePage({
           </div>
         </Container>
       </section>
+
+      {/* Solution liée — maillage interne article → produit (§12.5) */}
+      {relatedProduct && (
+        <section
+          aria-labelledby="related-product-title"
+          data-testid="article-related-product"
+          className="bg-white py-16 sm:py-20"
+        >
+          <Container width="narrow">
+            <Link
+              href={`/solutions/${relatedProduct.slug}`}
+              className="group block rounded-2xl border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-8 transition-all hover:-translate-y-0.5 hover:border-[var(--color-ol-orange)]/40 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 sm:p-10"
+            >
+              <div className="flex items-start gap-5">
+                <span
+                  aria-hidden
+                  className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--color-ol-orange)]/10 text-[var(--color-ol-orange-text)] ring-1 ring-[var(--color-ol-orange)]/20"
+                >
+                  <DynamicIcon
+                    name={relatedProduct.iconKey}
+                    width={24}
+                    height={24}
+                    aria-hidden
+                  />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold tracking-wider text-[var(--color-ol-orange-text)] uppercase">
+                    La solution OpenLab citée
+                  </p>
+                  <Heading
+                    id="related-product-title"
+                    level={2}
+                    visualLevel={3}
+                    className="mt-2"
+                  >
+                    {relatedProduct.name}
+                  </Heading>
+                  <p className="mt-3 text-[var(--color-ol-graphite)]/80">
+                    {relatedProduct.tagline}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-orange-text)]">
+                    Découvrir {relatedProduct.name}
+                    <ArrowUpRight
+                      width={15}
+                      height={15}
+                      aria-hidden
+                      className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </Container>
+        </section>
+      )}
 
       {/* À lire aussi — articles de la même catégorie (anti cul-de-sac §4.9) */}
       {related.length > 0 && (

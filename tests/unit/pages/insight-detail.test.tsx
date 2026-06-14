@@ -47,4 +47,26 @@ describe('Page /insights/[slug]', () => {
     render(await InsightArticlePage({ params }));
     expect(screen.getByTestId('audit-ia-cta')).toBeInTheDocument();
   });
+
+  it('affiche le bloc « solution liée » pour un article rattaché à un produit', async () => {
+    // L'article CNPS est mappé vers le produit nexusrh (maillage interne §12.5).
+    const params = Promise.resolve({
+      slug: 'cnps-its-fdfp-conformite-sirh-ivoirien',
+    });
+    render(await InsightArticlePage({ params }));
+    const block = screen.getByTestId('article-related-product');
+    expect(block).toBeInTheDocument();
+    const link = block.querySelector('a');
+    expect(link?.getAttribute('href')).toBe('/solutions/nexusrh');
+  });
+
+  it('n’affiche pas de bloc « solution liée » pour un article sans produit', async () => {
+    const params = Promise.resolve({
+      slug: 'migration-ia-souveraine-k3s-hetzner',
+    });
+    render(await InsightArticlePage({ params }));
+    expect(
+      screen.queryByTestId('article-related-product'),
+    ).not.toBeInTheDocument();
+  });
 });

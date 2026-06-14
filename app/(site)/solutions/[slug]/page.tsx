@@ -19,10 +19,12 @@ import {
   ProductMockup,
   hasProductMockup,
 } from '@/components/mockups/ProductMockup';
+import { ArticleCard } from '@/components/insights/ArticleCard';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { PRODUCTS } from '@/lib/data/products';
 import { getProductBySlug } from '@/lib/products-server';
+import { getArticlesForProduct } from '@/lib/articles-server';
 import { getCaseStudyForProduct } from '@/lib/case-studies-server';
 import {
   breadcrumbSchema,
@@ -89,6 +91,8 @@ export default async function SolutionDetailPage({
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const caseStudy = await getCaseStudyForProduct(product.slug);
   const screenshot = SOLUTION_SCREENSHOTS[product.slug] ?? null;
+  // Maillage interne : analyses Insights liées à ce produit (§12.5).
+  const relatedArticles = await getArticlesForProduct(product.slug, 3);
 
   return (
     <main id="main">
@@ -583,6 +587,41 @@ export default async function SolutionDetailPage({
                       className="text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      ) : null}
+
+      {/* Analyses liées — maillage interne produit → article (§12.5) */}
+      {relatedArticles.length > 0 ? (
+        <section
+          aria-labelledby="analyses-liees-title"
+          data-testid="solution-related-articles"
+          className="bg-[var(--color-ol-ivory)] py-20 sm:py-28"
+        >
+          <Container width="wide">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-xl">
+                <Eyebrow tone="orange">À lire</Eyebrow>
+                <Heading id="analyses-liees-title" level={2} className="mt-4">
+                  {name} dans nos analyses.
+                </Heading>
+              </div>
+              <Link
+                href="/insights"
+                className="inline-flex items-center gap-1 text-sm font-medium text-[var(--color-ol-orange-text)] hover:text-[var(--color-ol-orange-dark)]"
+              >
+                Tous les insights
+                <ArrowUpRight width={16} height={16} aria-hidden />
+              </Link>
+            </div>
+
+            <ul className="mt-10 grid gap-8 md:grid-cols-3">
+              {relatedArticles.map((a) => (
+                <li key={a.slug}>
+                  <ArticleCard article={a} />
                 </li>
               ))}
             </ul>

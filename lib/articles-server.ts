@@ -10,6 +10,7 @@ import {
   type ArticleContent,
   type ArticleSource,
 } from './articles';
+import { articleSlugsForProduct } from './data/product-article-links';
 
 /**
  * Champs chargés pour les listes/cartes (sans le corps Lexical ni les
@@ -102,6 +103,44 @@ export async function getRelatedArticles(
   return FALLBACK_ARTICLES.filter(
     (a) => a.category === category && a.slug !== excludeSlug,
   ).slice(0, limit);
+}
+
+/**
+ * Articles liés à un produit (maillage interne SEO §12.5). Lit la relation
+ * curée `product-article-links`, ne remonte que les articles publiés, et
+ * préserve l'ordre de priorité du référentiel. Fail-soft : filtre les
+ * FALLBACK_ARTICLES si Payload est indisponible.
+ */
+export async function getArticlesForProduct(
+  productSlug: string,
+  limit = 3,
+): Promise<readonly Article[]> {
+  const slugs = articleSlugsForProduct(productSlug).slice(0, limit);
+  if (slugs.length === 0) return [];
+  const order = (a: Article, b: Article) =>
+    slugs.indexOf(a.slug) - slugs.indexOf(b.slug);
+  try {
+    const { getPayload } = await import('payload');
+    const config = (await import('@payload-config')).default;
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: 'articles',
+      where: {
+        and: [{ _status: { equals: 'published' } }, { slug: { in: slugs } }],
+      },
+      limit,
+      depth: 1,
+      select: LIST_SELECT,
+    });
+    const articles = docs
+      .map((d) => toArticle(d as RawPayloadArticle))
+      .filter((a): a is Article => a !== null)
+      .sort(order);
+    if (articles.length > 0) return articles;
+  } catch {
+    // fallthrough vers le fallback
+  }
+  return FALLBACK_ARTICLES.filter((a) => slugs.includes(a.slug)).sort(order);
 }
 
 export interface PagedArticles {
