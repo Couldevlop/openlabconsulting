@@ -10,6 +10,7 @@ import {
   organizationSchema,
   personSchema,
   publicationsSchema,
+  publicationSchema,
   sectorPageSchema,
   serviceSchema,
   softwareApplicationSchema,
@@ -42,6 +43,32 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     const types = items.map((it) => it.item['@type']);
     expect(types).toContain('Book');
     expect(types).toContain('Event');
+  });
+
+  it('publicationSchema : page détail (slug) — type Report + abstract + auteur Org', () => {
+    const wp = PUBLICATIONS.find((p) => p.slug && p.type === 'livre-blanc')!;
+    const s = publicationSchema(wp);
+    expect(s['@type']).toBe('Report');
+    expect(s.name).toBe(wp.title);
+    expect(s.url).toMatch(new RegExp(`/laboratoire/publications/${wp.slug}$`));
+    expect(s.description).toBe(wp.abstract);
+    const authors = s.author as { '@type': string; name: string }[];
+    // « Équipe OpenLab » → Organization.
+    expect(authors[0]?.['@type']).toBe('Organization');
+    expect((s.mainEntityOfPage as { '@id': string })['@id']).toMatch(
+      new RegExp(`/laboratoire/publications/${wp.slug}$`),
+    );
+  });
+
+  it('publicationSchema : sans slug (conférence) — url = href, auteur Person', () => {
+    const conf = PUBLICATIONS.find((p) => p.type === 'conference')!;
+    const s = publicationSchema(conf);
+    expect(s['@type']).toBe('Event');
+    expect(s.url).toBe(conf.href);
+    // Description retombe sur le summary quand pas d'abstract.
+    expect(s.description).toBe(conf.summary);
+    const authors = s.author as { '@type': string }[];
+    expect(authors[0]?.['@type']).toBe('Person');
   });
 
   it('blogSchema : type Blog pointant /insights', () => {
