@@ -7,15 +7,14 @@ import {
   breadcrumbSchema,
   localBusinessSchemaForLocation,
 } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 const LOCATION = getLocation('abidjan');
 
 export const metadata: Metadata = {
   title: `${LOCATION.h1.replace(/[.:].*$/, '')} — OpenLab Consulting`,
   description: LOCATION.metaDescription,
-  alternates: {
-    canonical: `/${LOCATION.slug}`,
-  },
+  alternates: alternatesFor(`/${LOCATION.slug}`),
 };
 
 export default async function AbidjanPage(): Promise<React.ReactElement> {

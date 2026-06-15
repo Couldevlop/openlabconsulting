@@ -13,22 +13,39 @@ import { blogSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { CATEGORY_LABELS } from '@/lib/articles';
 import { getPagedArticles } from '@/lib/articles-server';
 import { getInsightsHubContent } from '@/lib/cms/site-settings-server';
-
-export const metadata: Metadata = {
-  title: 'Insights — Articles, études et retours de terrain',
-  description:
-    'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
-  alternates: {
-    canonical: '/insights',
-    types: { 'application/rss+xml': '/feed.xml' },
-  },
-};
+import { alternatesFor } from '@/lib/seo/site';
 
 const CATEGORY_LIST = Object.values(CATEGORY_LABELS);
 const PER_PAGE = 9;
 
 interface HubPageProps {
   searchParams: Promise<{ page?: string }>;
+}
+
+/**
+ * Metadata dynamique : chaque page de pagination se canonicalise vers
+ * elle-même (`/insights?page=N`) plutôt que vers `/insights`. Sinon Google
+ * considère les pages 2+ comme des doublons et n'indexe pas les articles
+ * qui n'apparaissent qu'au-delà de la 1re page (SEO §12.3).
+ */
+export async function generateMetadata({
+  searchParams,
+}: HubPageProps): Promise<Metadata> {
+  const { page } = await searchParams;
+  const n = Number.parseInt(page ?? '1', 10);
+  const isPaged = Number.isFinite(n) && n > 1;
+  const path = isPaged ? `/insights?page=${n}` : '/insights';
+  return {
+    title: isPaged
+      ? `Insights (page ${n}) — Articles, études et retours de terrain`
+      : 'Insights — Articles, études et retours de terrain',
+    description:
+      'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
+    alternates: {
+      ...alternatesFor(path),
+      types: { 'application/rss+xml': '/feed.xml' },
+    },
+  };
 }
 
 export default async function InsightsHubPage({

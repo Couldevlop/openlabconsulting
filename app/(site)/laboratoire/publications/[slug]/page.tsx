@@ -12,6 +12,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { PUBLICATIONS } from '@/lib/data/laboratoire';
 import { getPublicationBySlug } from '@/lib/laboratoire-server';
 import { breadcrumbSchema, publicationSchema } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -38,7 +39,7 @@ export async function generateMetadata({
   return {
     title: `${pub.title} — Publications OpenLab`,
     description: (pub.abstract ?? pub.summary).slice(0, 155),
-    alternates: { canonical: `/laboratoire/publications/${slug}` },
+    alternates: alternatesFor(`/laboratoire/publications/${slug}`),
   };
 }
 

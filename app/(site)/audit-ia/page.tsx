@@ -4,12 +4,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { getAuditIaProcessContent } from '@/lib/cms/site-settings-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Audit IA gratuit — Questionnaire interactif + recommandation',
   description:
     'Cinq questions pour cadrer votre besoin IA, une recommandation adaptée (atelier, audit éclair, cadrage stratégique ou programme), un consultant senior sous 48 h.',
-  alternates: { canonical: '/audit-ia' },
+  alternates: alternatesFor('/audit-ia'),
 };
 
 export default async function AuditIaPage(): Promise<React.ReactElement> {

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -7,18 +8,19 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedProducts } from '@/lib/products-server';
 import { getSolutionsHubContent } from '@/lib/cms/site-settings-server';
 import { PRODUCTS } from '@/lib/data/products';
+import { alternatesFor } from '@/lib/seo/site';
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: `Solutions — ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
     'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
-  alternates: {
-    canonical: '/solutions',
-  },
+  alternates: alternatesFor('/solutions'),
 };
 
 export default async function SolutionsHubPage(): Promise<React.ReactElement> {
@@ -26,8 +28,27 @@ export default async function SolutionsHubPage(): Promise<React.ReactElement> {
     getPublishedProducts(),
     getSolutionsHubContent(),
   ]);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   return (
     <main id="main">
+      <JsonLd
+        nonce={nonce}
+        data={[
+          collectionPageSchema({
+            name: 'Solutions — logiciels propriétaires OpenLab',
+            description: hub.description,
+            url: '/solutions',
+            items: products.map((p) => ({
+              name: p.name,
+              url: `/solutions/${p.slug}`,
+            })),
+          }),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Solutions', url: '/solutions' },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="hub-solutions-title"

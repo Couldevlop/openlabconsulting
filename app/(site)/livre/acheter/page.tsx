@@ -9,6 +9,7 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { BOOK, PURCHASE_CHANNELS } from '@/lib/data/book';
+import { alternatesFor } from '@/lib/seo/site';
 
 const NOTIFY_HREF = '/contact?sujet=notification-livre';
 
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   title: `À paraître — ${BOOK.title}`,
   description:
     'Le livre paraît en 2026. Découvrez les canaux de diffusion prévus (PDF + ePub direct OpenLab, Amazon, Lulu, librairies de Côte d’Ivoire) et faites-vous prévenir dès sa sortie.',
-  alternates: { canonical: '/livre/acheter' },
+  alternates: alternatesFor('/livre/acheter'),
 };
 
 // Ce que l'édition numérique inclura à la sortie.

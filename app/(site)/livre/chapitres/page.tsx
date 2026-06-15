@@ -8,11 +8,12 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { BOOK, CHAPTERS } from '@/lib/data/book';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: `Chapitres — ${BOOK.title}`,
   description: `Les ${CHAPTERS.length} chapitres du livre OpenLab sur l’IA : du machine learning aux agents autonomes, en passant par MLOps, sécurité et capstone AgroSense.`,
-  alternates: { canonical: '/livre/chapitres' },
+  alternates: alternatesFor('/livre/chapitres'),
 };
 
 export default function LivreChapitresPage(): React.ReactElement {

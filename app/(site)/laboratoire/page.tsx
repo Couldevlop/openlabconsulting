@@ -19,6 +19,7 @@ import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
 import { PRODUCTS } from '@/lib/data/products';
 import { RD_AXES, PARTENARIATS } from '@/lib/data/laboratoire';
 import { spellFrenchCount } from '@/lib/format/product-count';
+import { alternatesFor } from '@/lib/seo/site';
 
 const PRODUCT_WORD = spellFrenchCount(PRODUCTS.length);
 const PRODUCT_WORD_CAP =
@@ -61,7 +62,7 @@ const RD_DEMARCHE: readonly { title: string; body: string }[] = [
 export const metadata: Metadata = {
   title: 'Laboratoire — R&D, publications, partenariats',
   description: `OpenLab Consulting est un cabinet qui code, qui édite, qui publie. ${PRODUCT_WORD_CAP} logiciels propriétaires, un livre IA de référence, des partenariats universitaires francophones.`,
-  alternates: { canonical: '/laboratoire' },
+  alternates: alternatesFor('/laboratoire'),
 };
 
 const AXES = [

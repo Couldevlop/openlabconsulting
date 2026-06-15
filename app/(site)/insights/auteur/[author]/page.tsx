@@ -9,6 +9,7 @@ import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { getPublishedArticles } from '@/lib/articles-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ author: string }>;
@@ -26,7 +27,7 @@ export async function generateMetadata({
   return {
     title: `Insights · ${name}`,
     description: `Tous les articles signés par ${name} sur le blog OpenLab Consulting.`,
-    alternates: { canonical: `/insights/auteur/${author}` },
+    alternates: alternatesFor(`/insights/auteur/${author}`),
   };
 }
 

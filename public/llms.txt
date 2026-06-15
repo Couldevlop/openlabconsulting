@@ -19,7 +19,7 @@ OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya La
 - Data & gouvernance : https://openlabconsulting.com/expertises/data-gouvernance
 - Cybersécurité augmentée : https://openlabconsulting.com/expertises/cybersecurite-ia
 
-## Produits propriétaires (7)
+## Produits propriétaires (8)
 
 - NexusRH CI — SIRH conforme CNPS, ITS, FDFP, Mobile Money — https://openlabconsulting.com/solutions/nexusrh
 - NexusERP — ERP SYSCOHADA multi-devises FCFA/EUR/USD — https://openlabconsulting.com/solutions/nexuserp

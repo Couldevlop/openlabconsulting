@@ -4,13 +4,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { ContactForm } from '@/components/forms/ContactForm';
-import { SITE } from '@/lib/seo/site';
+import { SITE, alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Contact',
   description:
     'Joindre OpenLab Consulting : bureau Abidjan Cocody, email, téléphone CI + FR, formulaire de contact.',
-  alternates: { canonical: '/contact' },
+  alternates: alternatesFor('/contact'),
 };
 
 export default function ContactPage(): React.ReactElement {

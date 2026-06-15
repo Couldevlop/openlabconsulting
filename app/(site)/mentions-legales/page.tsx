@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
-import { SITE } from '@/lib/seo/site';
+import { SITE, alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
   description: `Mentions légales du site ${SITE.url} édité par ${SITE.legalName}.`,
-  alternates: { canonical: '/mentions-legales' },
+  alternates: alternatesFor('/mentions-legales'),
   robots: { index: true, follow: true },
 };
 

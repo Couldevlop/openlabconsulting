@@ -9,6 +9,17 @@ import { SECTORS } from '@/lib/data/sectors';
 import { absoluteUrl } from '@/lib/seo/site';
 
 /**
+ * Extension image-sitemap (Google Images) : déclare l'illustration d'une
+ * page quand un média existe (URL rendue absolue), sinon rien — l'entrée
+ * sitemap reste alors sans clé `images`. Pur et testable.
+ */
+export function mediaImages(
+  src: string | null | undefined,
+): { images: string[] } | Record<string, never> {
+  return src ? { images: [absoluteUrl(src)] } : {};
+}
+
+/**
  * Sitemap dynamique généré au build — CLAUDE.md §12.3.
  *
  * Inclut :
@@ -189,6 +200,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
+    ...mediaImages(p.heroImage?.src),
   }));
 
   const sectorPages: MetadataRoute.Sitemap = SECTORS.map((s) => ({
@@ -227,6 +239,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(a.isoDate),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
+    ...mediaImages(a.cover.src),
   }));
 
   return [

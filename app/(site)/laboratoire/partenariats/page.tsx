@@ -10,12 +10,13 @@ import { Heading } from '@/components/atoms/Heading';
 import { type Partenariat } from '@/lib/data/laboratoire';
 import { getPartnerships } from '@/lib/laboratoire-server';
 import { breadcrumbSchema, jsonLdString } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: 'Partenariats — Laboratoire OpenLab',
   description:
     'Partenaires universitaires (Université Félix Houphouët-Boigny, ESATIC), publics (SODEXAM, Conseil Café-Cacao) et éditoriaux (Jeune Afrique Business+). Notre R&D ne marche jamais seule.',
-  alternates: { canonical: '/laboratoire/partenariats' },
+  alternates: alternatesFor('/laboratoire/partenariats'),
 };
 
 const breadcrumbJsonLd = jsonLdString(

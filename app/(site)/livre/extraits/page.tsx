@@ -9,12 +9,13 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { BOOK, CHAPTERS } from '@/lib/data/book';
+import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
   title: `Extraits gratuits — ${BOOK.title}`,
   description:
     'Préface intégrale + chapitre 06 (RAG souverain) en accès libre. Téléchargement PDF gratuit contre simple email professionnel.',
-  alternates: { canonical: '/livre/extraits' },
+  alternates: alternatesFor('/livre/extraits'),
 };
 
 const FEATURED_CHAPTER =

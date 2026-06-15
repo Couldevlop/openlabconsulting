@@ -15,6 +15,7 @@ import { DynamicIcon } from '@/lib/icon-map';
 import { FALLBACK_SECTORS } from '@/lib/data/sectors';
 import { getPublishedSectors, getSectorBySlug } from '@/lib/sectors-server';
 import { breadcrumbSchema, sectorPageSchema } from '@/lib/seo/schema';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -36,7 +37,7 @@ export async function generateMetadata({
   return {
     title: `${sector.name} — Secteurs OpenLab`,
     description: sector.tagline,
-    alternates: { canonical: `/secteurs/${sector.slug}` },
+    alternates: alternatesFor(`/secteurs/${sector.slug}`),
   };
 }
 

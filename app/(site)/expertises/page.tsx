@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { AuditIaCta } from '@/components/sections/AuditIaCta';
@@ -7,20 +8,21 @@ import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { getPublishedExpertises } from '@/lib/expertises-server';
 import {
   getMethodologieContent,
   getExpertisesHubContent,
 } from '@/lib/cms/site-settings-server';
+import { alternatesFor } from '@/lib/seo/site';
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Expertises — Conseil, agents, data, cybersécurité IA',
   description:
     'Quatre expertises OpenLab pour transformer l’IA en levier mesurable : conseil stratégique, agents & automatisation, data & gouvernance, cybersécurité augmentée.',
-  alternates: {
-    canonical: '/expertises',
-  },
+  alternates: alternatesFor('/expertises'),
 };
 
 export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
@@ -29,8 +31,27 @@ export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
     getMethodologieContent(),
     getExpertisesHubContent(),
   ]);
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   return (
     <main id="main">
+      <JsonLd
+        nonce={nonce}
+        data={[
+          collectionPageSchema({
+            name: 'Expertises OpenLab',
+            description: hub.description,
+            url: '/expertises',
+            items: expertises.map((e) => ({
+              name: e.title,
+              url: `/expertises/${e.slug}`,
+            })),
+          }),
+          breadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'Expertises', url: '/expertises' },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section
         aria-labelledby="hub-expertises-title"

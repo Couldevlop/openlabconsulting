@@ -11,6 +11,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { MediaPlaceholder } from '@/components/atoms/MediaPlaceholder';
 import { CATEGORY_LABELS, type ArticleCategory } from '@/lib/articles';
 import { getPublishedArticles } from '@/lib/articles-server';
+import { alternatesFor } from '@/lib/seo/site';
 
 interface RouteParams {
   params: Promise<{ cat: string }>;
@@ -31,7 +32,7 @@ export async function generateMetadata({
   return {
     title: `Insights · ${label}`,
     description: `Tous les articles OpenLab dans la catégorie « ${label} » — retours de terrain et analyses opérables.`,
-    alternates: { canonical: `/insights/categorie/${cat}` },
+    alternates: alternatesFor(`/insights/categorie/${cat}`),
   };
 }
 

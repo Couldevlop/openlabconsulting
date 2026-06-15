@@ -20,7 +20,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { DEBORA } from '@/lib/data/team';
 import { getTeamMembers, getSignaturePublications } from '@/lib/team-server';
 import { breadcrumbSchema, jsonLdString, personSchema } from '@/lib/seo/schema';
-import { SITE } from '@/lib/seo/site';
+import { SITE, alternatesFor } from '@/lib/seo/site';
 
 /**
  * /a-propos/equipe — page E-E-A-T premium pour Debora Ahouma (audit P2 §7 #6).
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   title: 'Équipe — OpenLab Consulting',
   description:
     'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
-  alternates: { canonical: '/a-propos/equipe' },
+  alternates: alternatesFor('/a-propos/equipe'),
 };
 
 /** Mapping type de publication → icône lucide. */

@@ -18,6 +18,15 @@ interface MediaPlaceholderProps {
   tone?: 'cold' | 'warm' | 'neutral';
   /** Ratio largeur/hauteur, ex `16/9`, `4/3`, `1/1`. Défaut `4/3`. */
   aspect?: '16/9' | '4/3' | '1/1' | '3/2';
+  /** Attribut `sizes` de next/image (perf LCP / Core Web Vitals). Sans lui,
+   *  une image `fill` télécharge la plus grande variante (≈100vw). À régler
+   *  selon la largeur réelle d'affichage (ex grille 3 cols : "(min-width:
+   *  768px) 33vw, 100vw"). Défaut `100vw`. */
+  sizes?: string;
+  /** Marque l'image comme prioritaire (next/image `priority`) : précharge +
+   *  désactive le lazy-load. À réserver à l'image LCP au-dessus de la ligne
+   *  de flottaison (une seule par page). */
+  priority?: boolean;
   className?: string;
 }
 
@@ -54,6 +63,8 @@ export function MediaPlaceholder({
   placeholderLabel,
   tone = 'neutral',
   aspect = '4/3',
+  sizes = '100vw',
+  priority = false,
   className,
 }: MediaPlaceholderProps): ReactElement {
   if (src) {
@@ -65,7 +76,14 @@ export function MediaPlaceholder({
           className,
         )}
       >
-        <Image src={src} alt={alt} fill className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover"
+        />
       </div>
     );
   }
