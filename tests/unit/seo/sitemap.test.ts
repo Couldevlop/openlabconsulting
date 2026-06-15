@@ -1,9 +1,26 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { MetadataRoute } from 'next';
-import sitemap from '@/app/sitemap';
+import sitemap, { mediaImages } from '@/app/sitemap';
 import { EXPERTISES } from '@/lib/data/expertises';
 import { PRODUCTS } from '@/lib/data/products';
 import { SECTORS } from '@/lib/data/sectors';
+
+describe('app/sitemap — mediaImages (extension Google Images)', () => {
+  it('rend une URL absolue quand un média existe', () => {
+    const out = mediaImages('/api/media/file/cover.png') as {
+      images: string[];
+    };
+    expect(out.images).toHaveLength(1);
+    expect(out.images[0]).toMatch(
+      /^https?:\/\/.*\/api\/media\/file\/cover\.png$/,
+    );
+  });
+
+  it('ne déclare aucune image quand le média est absent', () => {
+    expect(mediaImages(null)).toEqual({});
+    expect(mediaImages(undefined)).toEqual({});
+  });
+});
 
 describe('app/sitemap', () => {
   // Sitemap est async (fetch articles + catégories Payload) — on
