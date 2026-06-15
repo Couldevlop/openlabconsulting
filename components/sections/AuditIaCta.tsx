@@ -111,12 +111,16 @@ export function AuditIaCta({
               <label className="sr-only" htmlFor="audit-sector">
                 Votre secteur
               </label>
+              {/* La liste d'options est rendue par l'OS sur fond blanc : on
+                  force un texte sombre sur les <option> (sinon ivoire ≈
+                  blanc sur blanc = illisible), tout en gardant le contrôle
+                  en ivoire sur le fond sombre. */}
               <select
                 id="audit-sector"
                 name="secteur"
                 defaultValue=""
                 required
-                className="min-h-12 rounded-md border border-[var(--color-ol-ivory)]/20 bg-[var(--color-ol-ivory)]/10 px-4 text-base text-[var(--color-ol-ivory)] focus:border-[var(--color-ol-orange)] focus:bg-[var(--color-ol-ivory)]/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)]"
+                className="min-h-12 rounded-md border border-[var(--color-ol-ivory)]/20 bg-[var(--color-ol-ivory)]/10 px-4 text-base text-[var(--color-ol-ivory)] focus:border-[var(--color-ol-orange)] focus:bg-[var(--color-ol-ivory)]/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ol-night)] [&>option]:bg-white [&>option]:text-[var(--color-ol-night)]"
               >
                 <option value="" disabled>
                   Votre secteur…
