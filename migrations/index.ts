@@ -14,6 +14,7 @@ import * as migration_20260612_110000_add_audit_ia_process from './20260612_1100
 import * as migration_20260612_120000_add_laboratoire_collections from './20260612_120000_add_laboratoire_collections';
 import * as migration_20260612_130000_add_book_settings from './20260612_130000_add_book_settings';
 import * as migration_20260612_140000_add_publication_detail from './20260612_140000_add_publication_detail';
+import * as migration_20260616_090000_add_laboratoire_locked_rels from './20260616_090000_add_laboratoire_locked_rels';
 
 export const migrations = [
   {
@@ -95,5 +96,10 @@ export const migrations = [
     up: migration_20260612_140000_add_publication_detail.up,
     down: migration_20260612_140000_add_publication_detail.down,
     name: '20260612_140000_add_publication_detail',
+  },
+  {
+    up: migration_20260616_090000_add_laboratoire_locked_rels.up,
+    down: migration_20260616_090000_add_laboratoire_locked_rels.down,
+    name: '20260616_090000_add_laboratoire_locked_rels',
   },
 ];

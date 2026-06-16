@@ -6,6 +6,7 @@ import {
   breadcrumbSchema,
   collectionPageSchema,
   faqPageSchema,
+  howToSchema,
   jsonLdString,
   localBusinessSchema,
   organizationSchema,
@@ -97,6 +98,29 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     expect(list.itemListElement[0]?.url).toMatch(
       /^https?:\/\/.*\/solutions\/nexusrh$/,
     );
+  });
+
+  it('howToSchema : HowTo avec étapes positionnées', () => {
+    const s = howToSchema({
+      name: 'Réaliser un audit IA',
+      description: 'En trois étapes.',
+      steps: [
+        { title: 'Répondre au questionnaire', body: 'Cinq questions.' },
+        { title: 'Recevoir la recommandation', body: 'Adaptée au besoin.' },
+        { title: 'Échanger avec un senior', body: 'Sous 48 h.' },
+      ],
+    });
+    expect(s['@type']).toBe('HowTo');
+    const steps = s.step as {
+      '@type': string;
+      position: number;
+      name: string;
+      text: string;
+    }[];
+    expect(steps).toHaveLength(3);
+    expect(steps[0]?.['@type']).toBe('HowToStep');
+    expect(steps[0]?.position).toBe(1);
+    expect(steps[2]?.name).toBe('Échanger avec un senior');
   });
 
   it('blogSchema : type Blog pointant /insights', () => {

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" role="img" aria-label="Valeur annuelle potentielle de l'IA générative en Afrique par secteur : commerce de détail jusqu'à 10,4 milliards de dollars, télécommunications jusqu'à 9,6 milliards, biens de grande consommation jusqu'à 8,9 milliards (McKinsey, 2025).">
+  <title>Valeur annuelle potentielle de la gen IA par secteur (Afrique)</title>
+  <rect width="480" height="280" fill="#faf8f5"/>
+  <text x="24" y="30" font-family="Geist, sans-serif" font-size="15" font-weight="700" fill="#0a0e1a">Valeur annuelle potentielle de la gen IA, par secteur</text>
+  <text x="24" y="50" font-family="Geist, sans-serif" font-size="12" fill="#1a1d24" opacity="0.7">Afrique — fourchette haute, en milliards $</text>
+
+  <!-- Row 1 : Commerce de détail 10,4 -->
+  <text x="192" y="96" text-anchor="end" font-family="Geist, sans-serif" font-size="12" fill="#1a1d24">Commerce de détail</text>
+  <rect x="200" y="78" width="250" height="32" rx="4" fill="#ff5a00"/>
+  <text x="442" y="99" text-anchor="end" font-family="'Bricolage Grotesque', sans-serif" font-size="16" font-weight="800" fill="#ffffff">10,4</text>
+
+  <!-- Row 2 : Télécoms 9,6 -->
+  <text x="192" y="156" text-anchor="end" font-family="Geist, sans-serif" font-size="12" fill="#1a1d24">Télécommunications</text>
+  <rect x="200" y="138" width="231" height="32" rx="4" fill="#ff7a33"/>
+  <text x="423" y="159" text-anchor="end" font-family="'Bricolage Grotesque', sans-serif" font-size="16" font-weight="800" fill="#ffffff">9,6</text>
+
+  <!-- Row 3 : Biens de grande conso 8,9 -->
+  <text x="192" y="216" text-anchor="end" font-family="Geist, sans-serif" font-size="12" fill="#1a1d24">Biens de grande conso.</text>
+  <rect x="200" y="198" width="214" height="32" rx="4" fill="#142654"/>
+  <text x="406" y="219" text-anchor="end" font-family="'Bricolage Grotesque', sans-serif" font-size="16" font-weight="800" fill="#ffffff">8,9</text>
+
+  <text x="24" y="266" font-family="Geist, sans-serif" font-size="11" fill="#1a1d24" opacity="0.65">Source : McKinsey, 2025 — estimation haute de la valeur annuelle.</text>
+</svg>

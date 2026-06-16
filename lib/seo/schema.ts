@@ -245,6 +245,30 @@ export function collectionPageSchema(input: {
   };
 }
 
+/**
+ * HowTo schema — pour une procédure en étapes (ex. l'audit IA en 3 temps
+ * sur /audit-ia). Aide Google à comprendre/afficher la marche à suivre.
+ * §12.3. Les étapes sont fournies par un helper server (Clean Archi).
+ */
+export function howToSchema(input: {
+  name: string;
+  description: string;
+  steps: { title: string; body: string }[];
+}): Thing {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: input.name,
+    description: input.description,
+    step: input.steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+    })),
+  };
+}
+
 /** Book schema pour /livre et l'encart homepage. */
 export function bookSchema(): Thing {
   return {
