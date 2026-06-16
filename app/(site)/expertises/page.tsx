@@ -7,6 +7,7 @@ import { Methodologie } from '@/components/sections/Methodologie';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
@@ -52,6 +53,7 @@ export default async function ExpertisesHubPage(): Promise<React.ReactElement> {
           ]),
         ]}
       />
+      <Breadcrumbs items={[{ label: 'Expertises' }]} />
       {/* Hero */}
       <section
         aria-labelledby="hub-expertises-title"

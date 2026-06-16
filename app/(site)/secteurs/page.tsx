@@ -6,6 +6,7 @@ import { AuditIaCta } from '@/components/sections/AuditIaCta';
 import { Card } from '@/components/atoms/Card';
 import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 import { Heading } from '@/components/atoms/Heading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
@@ -47,6 +48,7 @@ export default async function SecteursHubPage(): Promise<React.ReactElement> {
           ]),
         ]}
       />
+      <Breadcrumbs items={[{ label: 'Secteurs' }]} />
       {/* Hero */}
       <section
         aria-labelledby="hub-secteurs-title"
