@@ -20,8 +20,11 @@
 
 const TIMEOUT_MS = 10_000;
 
-// EU par défaut (compte Zoho créé en zone UE — cf. doc migration Zoho).
-const DEFAULT_API_URL = 'https://api.zeptomail.eu/v1.1/email';
+// Région GLOBALE (.com) : le compte ZeptoMail est sur smtp.zeptomail.com
+// (cf. capture console ZeptoMail). Le token est lié à la région — l'envoyer à
+// l'endpoint .eu renvoie 401 et l'email échoue en silence (fail-soft).
+// Override via ZEPTOMAIL_API_URL si le compte change de data center.
+const DEFAULT_API_URL = 'https://api.zeptomail.com/v1.1/email';
 
 export interface ZeptoAddress {
   address: string;

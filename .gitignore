@@ -82,3 +82,6 @@ deploy/helm/*/charts/
 # Convention : tout fichier `.local.md` est ignoré par git.
 *.local.md
 .dev-credentials.md
+
+# Captures/docs Office pouvant contenir des secrets (ex. tokens ZeptoMail)
+docs/*.docx

@@ -242,7 +242,8 @@ describe('lib/email — envoi ZeptoMail', () => {
       email: 'def@example.com',
     });
     const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe('https://api.zeptomail.eu/v1.1/email');
+    // Défaut = région globale .com (le compte ZeptoMail est sur smtp.zeptomail.com).
+    expect(url).toBe('https://api.zeptomail.com/v1.1/email');
     const body = JSON.parse(init.body as string);
     expect(body.from.address).toBe('noreply@openlabconsulting.com');
     expect(body.from.name).toBe('OpenLab Consulting');
