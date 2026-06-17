@@ -49,8 +49,20 @@ spec:
           port: 9000
         - protocol: TCP
           port: 7700
+    # HTTPS sortant : services internes (cluster) ET internet externe.
+    # L'externe est requis pour ZeptoMail (emails), l'API Anthropic (Claude)
+    # et la vérification Turnstile (challenges.cloudflare.com). Les plages
+    # privées + lien-local (métadonnées) sont exclues → egress safe-SSRF
+    # (CLAUDE.md §10.2 A10 ; NetworkPolicy ne filtre pas par domaine).
     - to:
         - namespaceSelector: {}
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
       ports:
         - protocol: TCP
           port: 443

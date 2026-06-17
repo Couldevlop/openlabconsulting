@@ -57,8 +57,17 @@ spec:
           port: 7700
     # Sorties HTTPS autorisées : Anthropic, Cloudflare Turnstile, Resend,
     # Let's Encrypt (cert-manager utilise son propre namespace).
+    # HTTPS sortant : cluster ET internet externe (ZeptoMail, Anthropic,
+    # Turnstile). Plages privées + lien-local exclues → egress safe-SSRF.
     - to:
         - namespaceSelector: {}
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
       ports:
         - protocol: TCP
           port: 443
