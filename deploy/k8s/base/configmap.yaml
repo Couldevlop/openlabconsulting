@@ -26,7 +26,7 @@ data:
 
   # Email transactionnel ZeptoMail — variables NON sensibles
   # (le token vit dans le SealedSecret). Égress port 443 déjà autorisé.
-  ZEPTOMAIL_API_URL: 'https://api.zeptomail.eu/v1.1/email'
+  ZEPTOMAIL_API_URL: 'https://api.zeptomail.com/v1.1/email'
   EMAIL_FROM: 'noreply@openlabconsulting.com'
   EMAIL_FROM_NAME: 'OpenLab Consulting'
   EMAIL_TEAM: 'waopron@openlabconsulting.com'
