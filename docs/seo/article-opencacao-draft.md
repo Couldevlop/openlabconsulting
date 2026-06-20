@@ -89,6 +89,16 @@ Toute organisation — **privée comme publique** — qui veut s'inscrire résol
 
 Si l'on sait le faire pour la filière la plus stratégique du pays, on sait le faire pour la vôtre.
 
+## De vos documents à votre IA : la méthode en 3 temps
+
+C'est précisément ce que documente le livre **« Donnez la parole à vos données »**. La démarche est claire et reproductible :
+
+1. **Rassembler vos documents.** Récupération automatique ou dépôt de fichiers — pages web (HTML), textes, PDF, notes internes. Toutes vos sources, dans tous les formats.
+2. **Constituer le corpus.** Le savoir métier est nettoyé, structuré et indexé (**RAG**) — pour que rien ne se perde et que tout soit retrouvable.
+3. **Affiner le modèle.** Un **fine-tuning** (LoRA) spécialise un modèle ouvert sur _votre_ corpus. Résultat : une IA verticale, qui parle votre métier, hébergée chez vous.
+
+Trois étapes. Vos données entrent ; votre IA souveraine sort. C'est la méthode qui a donné OpenCacao — et qui peut donner la vôtre.
+
 ## Conclusion
 
 La souveraineté numérique africaine n'est plus un colloque. C'est une IA qui répond, aujourd'hui, sur opencacao.openlabconsulting.com — conçue à Abidjan, entraînée sur des données ivoiriennes, hébergée en local.

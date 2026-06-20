@@ -59,7 +59,7 @@ Alors que le gouvernement ivoirien a affiché en mai 2026 son ambition d'une int
 
 **Une amélioration continue, sous contrôle humain.** Le système s'améliore en continu à partir de son usage réel, mais chaque apprentissage est validé par un relecteur humain avant d'entrer dans le modèle — une approche pensée pour la sûreté et la souveraineté, sans dérive ni fuite de données.
 
-**Une méthode réplicable.** Au-delà du cacao, OpenLab Consulting fait la démonstration d'une méthode applicable à tout secteur — agro-industrie, banque, assurance, santé, administration publique. Cette approche est documentée dans le livre **« Donnez la parole à vos données »** [À CONFIRMER : auteur, format, disponibilité].
+**Une méthode réplicable.** Au-delà du cacao, OpenLab Consulting fait la démonstration d'une méthode applicable à tout secteur — agro-industrie, banque, assurance, santé, administration publique. La démarche tient en trois temps : rassembler les documents d'une organisation (collecte automatique ou dépôt de fichiers), en constituer un corpus indexé (RAG), puis affiner un modèle ouvert sur ce corpus (fine-tuning). Cette approche est documentée dans le livre **« Donnez la parole à vos données »** [À CONFIRMER : auteur, format, disponibilité].
 
 > « Nous l'avons fait avec des moyens modestes, et honnêtement. La leçon dépasse le cacao : toute organisation, privée comme publique, peut donner une voix à ses données et bâtir son IA souveraine. » — **Debora Ahouma, CEO d'OpenLab Consulting**
 
