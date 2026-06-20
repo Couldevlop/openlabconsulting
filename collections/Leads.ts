@@ -21,6 +21,7 @@ export const Leads: CollectionConfig = {
     defaultColumns: [
       'createdAt',
       'email',
+      'subject',
       'organization',
       'source',
       'stage',
@@ -54,6 +55,19 @@ export const Leads: CollectionConfig = {
     drafts: false,
   },
   fields: [
+    // Bouton « Répondre par email » (mailto pré-rempli) — composant client
+    // résolu via l'importMap (cf. cms:generate-importmap). UI pure, aucune
+    // donnée stockée. La suppression d'un lead reste l'action native Payload
+    // (réservée au super-admin, cf. access.delete + RGPD §10.6).
+    {
+      name: 'reply',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '/components/admin/LeadReplyButton.tsx#default',
+        },
+      },
+    },
     {
       name: 'source',
       type: 'select',
