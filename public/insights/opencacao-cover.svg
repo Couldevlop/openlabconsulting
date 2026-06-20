@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="OpenCacao — l'intelligence artificielle souveraine du cacao, conçue et hébergée en Côte d'Ivoire.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0e1a"/>
+      <stop offset="0.55" stop-color="#0b1b3d"/>
+      <stop offset="1" stop-color="#142654"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.22" r="0.62">
+      <stop offset="0" stop-color="#ff5a00" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ff5a00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="podShade" cx="0.38" cy="0.30" r="0.85">
+      <stop offset="0" stop-color="#ff7a33"/>
+      <stop offset="0.5" stop-color="#cc4800"/>
+      <stop offset="1" stop-color="#7a2a00"/>
+    </radialGradient>
+    <linearGradient id="beanG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4c98a"/>
+      <stop offset="1" stop-color="#b9763a"/>
+    </linearGradient>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#ffffff" opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <!-- fond -->
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#dots)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+
+  <!-- ====== VISUEL : cabosse de cacao + réseau de neurones ====== -->
+  <g transform="translate(1185 455)">
+    <!-- liens du réseau (IA entraînée sur le cacao) -->
+    <g stroke="#ff7a33" stroke-width="2" opacity="0.55" fill="none">
+      <path d="M-40 -150 L120 -250"/>
+      <path d="M-40 -150 L210 -120"/>
+      <path d="M120 -250 L210 -120"/>
+      <path d="M120 -250 L250 -300"/>
+      <path d="M210 -120 L300 -40"/>
+      <path d="M-40 -150 L-120 -270"/>
+      <path d="M-120 -270 L120 -250"/>
+      <path d="M300 -40 L210 -120"/>
+    </g>
+    <g fill="#ffd9b8">
+      <circle cx="120" cy="-250" r="9"/>
+      <circle cx="210" cy="-120" r="7"/>
+      <circle cx="250" cy="-300" r="6"/>
+      <circle cx="-120" cy="-270" r="7"/>
+      <circle cx="300" cy="-40" r="8" fill="#ff7a33"/>
+      <circle cx="-40" cy="-150" r="6" fill="#ff7a33"/>
+    </g>
+
+    <!-- cabosse fermée (arrière) -->
+    <g transform="rotate(-14)">
+      <ellipse cx="40" cy="60" rx="120" ry="200" fill="url(#podShade)" opacity="0.45"/>
+    </g>
+
+    <!-- cabosse ouverte (avant) montrant les fèves -->
+    <g transform="rotate(8)">
+      <ellipse cx="0" cy="0" rx="135" ry="220" fill="url(#podShade)"/>
+      <ellipse cx="0" cy="0" rx="135" ry="220" fill="none" stroke="#ff9d5c" stroke-width="5" opacity="0.8"/>
+      <!-- nervures -->
+      <path d="M0 -205 V205 M-70 -190 V190 M70 -190 V190" stroke="#7a2a00" stroke-width="5" opacity="0.55" fill="none"/>
+      <!-- ouverture / pulpe -->
+      <ellipse cx="6" cy="-6" rx="70" ry="150" fill="#1a0f08" opacity="0.55"/>
+      <!-- fèves -->
+      <g fill="url(#beanG)" stroke="#7a2a00" stroke-width="2">
+        <ellipse cx="0" cy="-95" rx="26" ry="34"/>
+        <ellipse cx="-6" cy="-30" rx="27" ry="35"/>
+        <ellipse cx="6" cy="35" rx="27" ry="35"/>
+        <ellipse cx="-4" cy="100" rx="25" ry="33"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ====== TEXTE ====== -->
+  <!-- accent tricolore (Côte d'Ivoire) -->
+  <g transform="translate(110 150)">
+    <rect x="0" y="0" width="40" height="8" rx="2" fill="#ff5a00"/>
+    <rect x="48" y="0" width="40" height="8" rx="2" fill="#ffffff" opacity="0.85"/>
+    <rect x="96" y="0" width="40" height="8" rx="2" fill="#1aa05a"/>
+  </g>
+
+  <text x="110" y="205" font-family="Geist, 'Segoe UI', sans-serif" font-size="28" font-weight="700" letter-spacing="4" fill="#ff7a33">IA SOUVERAINE · CÔTE D'IVOIRE</text>
+
+  <text x="106" y="360" font-family="'Bricolage Grotesque', Geist, sans-serif" font-size="150" font-weight="800" fill="#faf8f5">OpenCacao</text>
+
+  <text x="110" y="445" font-family="Geist, 'Segoe UI', sans-serif" font-size="44" font-weight="600" fill="#faf8f5">L'intelligence artificielle du cacao</text>
+  <text x="110" y="505" font-family="Geist, 'Segoe UI', sans-serif" font-size="34" fill="#faf8f5" opacity="0.82">conçue, entraînée et hébergée en Côte d'Ivoire</text>
+
+  <!-- puces clés -->
+  <g font-family="Geist, 'Segoe UI', sans-serif" font-size="27" fill="#faf8f5" opacity="0.92">
+    <circle cx="120" cy="592" r="5" fill="#ff7a33"/>
+    <text x="140" y="600">Modèle ouvert · fine-tuning sur la filière ivoirienne</text>
+    <circle cx="120" cy="642" r="5" fill="#ff7a33"/>
+    <text x="140" y="650">Hébergement local · aucune dépendance étrangère</text>
+    <circle cx="120" cy="692" r="5" fill="#ff7a33"/>
+    <text x="140" y="700">Amélioration continue sous contrôle humain</text>
+  </g>
+
+  <!-- pied -->
+  <rect x="110" y="770" width="1380" height="1" fill="#faf8f5" opacity="0.18"/>
+  <text x="110" y="822" font-family="Geist, 'Segoe UI', sans-serif" font-size="30" font-weight="700" fill="#ff7a33">opencacao.openlabconsulting.com</text>
+  <text x="1490" y="822" text-anchor="end" font-family="Geist, 'Segoe UI', sans-serif" font-size="26" fill="#faf8f5" opacity="0.7">OpenLab Consulting · Made in CI</text>
+</svg>
