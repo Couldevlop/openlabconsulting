@@ -83,3 +83,31 @@ EXPOSE 3000
 
 # Chainguard Node a `node` comme entrypoint → CMD passe le script directement.
 CMD ["server.js"]
+
+# -----------------------------------------------------------------------------
+# Stage 4 : migrator (image INTERNE — applique les migrations Payload)
+# -----------------------------------------------------------------------------
+# Pourquoi un stage dédié et pas le runner Chainguard :
+#  - Le runner standalone n'embarque ni la CLI Payload, ni payload.config,
+#    ni migrations/ (Next standalone élague tout ce que l'app n'importe pas
+#    au runtime) → `payload migrate` y est impossible.
+#  - Gonfler le runner avec le toolchain casserait l'objectif zéro-CVE.
+#  → On publie une image migrator séparée (`…/website-migrate:X.Y.Z`),
+#    utilisée UNIQUEMENT par le Job Helm `migrate` (post-upgrade). Jamais
+#    exposée à Internet.
+#
+# On passe par `tsx scripts/payload-migrate.ts` (API JS directe) et NON par
+# le binaire `payload` : ce dernier casse sous Node 22 + ESM strict (cf. note
+# en tête de payload.config.ts). node:22-alpine fournit /bin/sh + node + le
+# node_modules complet (tsx, payload, db-postgres). HOME/TMPDIR=/tmp pour
+# rester compatible avec readOnlyRootFilesystem (cache esbuild/tsx → /tmp).
+FROM node:22-alpine AS migrator
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOME=/tmp
+ENV TMPDIR=/tmp
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+# Le Job surcharge command/args ; CMD = défaut pratique (run local de l'image).
+CMD ["node_modules/.bin/tsx", "scripts/payload-migrate.ts"]

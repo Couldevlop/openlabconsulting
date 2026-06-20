@@ -102,7 +102,14 @@ secretRef:
 # ────────────────────────────────────────────────────────────
 migrate:
   enabled: true
-  # Image identique à l'app — réutilise les migrations embarquées.
+  # Image migrator dédiée (cf. Dockerfile stage `migrator`) : toolchain
+  # complet capable de lancer `tsx scripts/payload-migrate.ts`. Le runner
+  # applicatif (Chainguard standalone) ne peut PAS migrer. Le tag suit
+  # image.tag (laisser migrate.image.tag vide) — release.yml publie
+  # `…/website-migrate:X.Y.Z` en même temps que `…/website:X.Y.Z`.
+  image:
+    repository: ghcr.io/couldevlop/website-migrate
+    tag: '' # vide → hérite de .Values.image.tag (piloté par Image Updater)
   resources:
     requests:
       cpu: 100m
