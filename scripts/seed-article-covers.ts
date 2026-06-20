@@ -63,6 +63,11 @@ const COVERS: readonly CoverMapping[] = [
     image: '1001294771.png',
     alt: 'L’IA ivoirienne, notre futur — manifeste souveraineté',
   },
+  {
+    slug: 'opencacao-ia-souveraine-cacao-cote-divoire',
+    image: 'opencacao-cover.png',
+    alt: 'OpenCacao — l’IA souveraine du cacao conçue et hébergée en Côte d’Ivoire',
+  },
 ];
 
 async function main(): Promise<void> {
