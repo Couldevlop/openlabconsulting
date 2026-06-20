@@ -42,10 +42,12 @@ config:
   # `UPDATE users SET totp_enabled=false WHERE email='...'` en base.
   ENFORCE_ADMIN_2FA: 'true'
 
-# Job de migration Payload désactivé : l'image runner est distroless (pas de
-# /bin/sh) et le standalone Next n'embarque pas le CLI payload + migrations/,
-# donc le hook échoue et bloque la synchro ArgoCD. Les migrations sont
-# appliquées manuellement via tunnel (cf. deploy/argocd/README.md) jusqu'à un
-# fix Dockerfile dédié. NE PAS réactiver sans une image capable de migrer.
+# Job de migration Payload ACTIVÉ : utilise l'image migrator dédiée
+# (Dockerfile stage `migrator` — toolchain complet + /bin/sh) qui lance
+# `tsx scripts/payload-migrate.ts`. Idempotent (Payload skip les migrations
+# déjà appliquées → no-op si rien de nouveau). Le runner applicatif reste
+# Chainguard standalone (incapable de migrer) — ne PAS pointer le Job dessus.
+# release.yml publie `…/website-migrate:X.Y.Z` à chaque release ; le tag suit
+# image.tag (piloté par ArgoCD Image Updater).
 migrate:
-  enabled: false
+  enabled: true

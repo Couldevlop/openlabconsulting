@@ -52,13 +52,20 @@ spec:
               drop: ['ALL']
       containers:
         - name: migrate
-          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
+          # Image migrator dédiée (toolchain complet). Tag = celui de l'app
+          # (piloté par ArgoCD Image Updater sur image.tag) sauf override
+          # explicite migrate.image.tag. release.yml publie …/website-migrate
+          # avec le même X.Y.Z que …/website → toujours synchro.
+          image: '{{ .Values.migrate.image.repository }}:{{ .Values.migrate.image.tag | default .Values.image.tag }}'
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ['/bin/sh', '-c']
           args:
             - |
-              set -euo pipefail
-              node node_modules/payload/bin.js migrate
+              set -eu
+              # Migrations Payload via l'API JS (tsx) — le binaire `payload`
+              # casse sous Node 22 + ESM strict. Idempotent : Payload skip les
+              # migrations déjà appliquées (no-op si rien de nouveau).
+              node_modules/.bin/tsx scripts/payload-migrate.ts
           envFrom:
             - configMapRef:
                 name: {{ include "openlab-website.fullname" . }}-config
