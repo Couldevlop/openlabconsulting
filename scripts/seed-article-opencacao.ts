@@ -276,7 +276,20 @@ WITH art AS (
   VALUES
     (${q(TITLE)}, ${q(SLUG)}, ${q(EXCERPT)}, $j$${contentJson}$j$::jsonb,
      'souverainete', ${q(AUTHOR)}, now(), now(), now(), 'published')
-  RETURNING id
+  RETURNING id, title, slug, excerpt, content, category, author, published_at, created_at, updated_at, _status
+),
+ver AS (
+  -- Collection en mode drafts : l'admin liste depuis _articles_v. Sans cette
+  -- ligne « latest », l'article est public mais INVISIBLE dans l'admin.
+  INSERT INTO _articles_v
+    (parent_id, version_title, version_slug, version_excerpt, version_content,
+     version_category, version_author, version_published_at, version_created_at,
+     version_updated_at, version__status, created_at, updated_at, latest)
+  SELECT id, title, slug, excerpt, content,
+     category::text::enum__articles_v_version_category, author, published_at, created_at,
+     updated_at, _status::text::enum__articles_v_version_status, now(), now(), true
+  FROM art
+  RETURNING 1
 ),
 s AS (
   INSERT INTO articles_summary (id,_order,_parent_id,point)
@@ -303,6 +316,7 @@ src AS (
   RETURNING 1
 )
 SELECT (SELECT id FROM art) AS article_id,
+       (SELECT count(*) FROM ver) AS version_row,
        (SELECT count(*) FROM s) AS summary,
        (SELECT count(*) FROM k) AS keywords,
        (SELECT count(*) FROM src) AS sources;
