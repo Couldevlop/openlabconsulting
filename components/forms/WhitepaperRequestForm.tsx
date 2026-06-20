@@ -15,8 +15,8 @@ type Status =
 interface Props {
   /** Slug du livre blanc (whitelisté côté serveur via Zod). */
   slug: string;
-  /** Nombre de pages estimé du PDF, affiché sous le bouton. */
-  pageCount: number;
+  /** Nombre de pages estimé du PDF, affiché sous le bouton (0 = masqué). */
+  pageCount?: number;
   /** Si `true`, montre la note « bientôt disponible » (statut draft). */
   draft?: boolean;
 }
@@ -33,7 +33,7 @@ interface Props {
  */
 export function WhitepaperRequestForm({
   slug,
-  pageCount,
+  pageCount = 0,
   draft = false,
 }: Props): ReactElement {
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -203,6 +203,20 @@ export function WhitepaperRequestForm({
         </span>
       ) : null}
 
+      <label className="flex items-start gap-3 text-sm text-[var(--color-ol-graphite)]/80">
+        <input
+          name="newsletter"
+          type="checkbox"
+          value="on"
+          className="mt-0.5 h-4 w-4 rounded border-[var(--color-ol-mist)] text-[var(--color-ol-orange)] focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+        />
+        <span>
+          Je souhaite m&apos;abonner au fil d&apos;actualité OpenLab — sorties
+          de livres, nouveaux articles, solutions, formations et webinaires.
+          (Facultatif, désabonnement en un clic.)
+        </span>
+      </label>
+
       <Turnstile action="whitepaper" />
 
       <div aria-live="polite" aria-atomic="true" className="min-h-6 text-sm">
@@ -234,7 +248,9 @@ export function WhitepaperRequestForm({
 
       <p className="flex items-center gap-2 text-xs text-[var(--color-ol-graphite)]/55">
         <Download width={14} height={14} aria-hidden />
-        PDF · ~{pageCount} pages · français
+        {pageCount > 0
+          ? `PDF · ~${pageCount} pages · français`
+          : 'PDF · français'}
       </p>
     </form>
   );

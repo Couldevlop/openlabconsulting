@@ -5,6 +5,7 @@ import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
 import { getRequestIp } from '@/lib/request-ip';
 import { verifyTurnstile } from '@/lib/turnstile';
 import { flattenZodErrors, whitepaperRequestSchema } from '@/lib/validation';
+import { downloadReleaseAt, isDownloadOpen } from '@/lib/whitepapers';
 
 /**
  * POST /api/whitepapers/request — gate email pour téléchargement d'un
@@ -86,6 +87,20 @@ export async function POST(req: Request): Promise<NextResponse> {
     );
   }
 
+  // Garde serveur : le téléchargement de certains ouvrages n'ouvre qu'à une
+  // date donnée. On refuse avant l'heure (le compteur côté client n'est qu'un
+  // confort UX, jamais la sécurité).
+  if (!isDownloadOpen(parsed.data.slug, Date.now())) {
+    METRICS.whitepaperRequest(parsed.data.slug, 'invalid');
+    return NextResponse.json(
+      {
+        error: 'download_not_open',
+        opensAt: downloadReleaseAt(parsed.data.slug),
+      },
+      { status: 403 },
+    );
+  }
+
   const turnstile = await verifyTurnstile(
     parsed.data['cf-turnstile-response'],
     ip,
@@ -107,7 +122,10 @@ export async function POST(req: Request): Promise<NextResponse> {
     email: parsed.data.email,
     organization: parsed.data.organization || undefined,
     message: `Demande livre blanc : ${parsed.data.slug}`,
-    metadata: { whitepaperSlug: parsed.data.slug },
+    metadata: {
+      whitepaperSlug: parsed.data.slug,
+      newsletter: parsed.data.newsletter === true,
+    },
     consentRgpd: parsed.data.consentRgpd,
     ipAddress: ip,
     userAgent: req.headers.get('user-agent'),
