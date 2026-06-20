@@ -59,6 +59,12 @@ OpenCacao est un **outil d'aide à la décision**. Il **ne remplace pas** l'agro
 
 C'est un choix assumé : une IA utile est une IA qui **connaît ses limites** et cite ses sources. Pas une boîte noire qui sur-promet.
 
+## Une IA qui s'améliore — sous contrôle humain
+
+OpenCacao **s'améliore en continu à partir de son usage réel** : les questions de terrain nourrissent son corpus. Mais — et c'est décisif — **chaque apprentissage passe par une validation humaine** (relecteur agronome de référence) avant d'entrer dans le modèle.
+
+Amélioration continue, jamais en roue libre. C'est ce qui la rend à la fois **plus pertinente avec le temps**, **sûre** et **souveraine** : ni dérive, ni fuite, ni dépendance.
+
 ## Pourquoi la souveraineté change tout
 
 Confier ses données métier à une IA hébergée à l'étranger, c'est trois renoncements : la **conformité** (loi ivoirienne 2013-450, RGPD), le **contrôle** (vos données entraînent le modèle d'un autre) et la **valeur** (captée ailleurs). Une IA souveraine garde les trois sur le continent. Ce n'est pas un slogan : c'est de la gestion de risque sur l'actif le plus précieux d'une organisation — ses données.
@@ -110,4 +116,4 @@ Cette fois, l'Afrique n'a plus d'excuse. Et votre organisation non plus.
 
 ## Note de fidélité au projet
 
-Stack et cadrage alignés sur `CLAUDE_OpenCacao.md` : Ministral 3 8B + LoRA 4-bit, vLLM/llama.cpp, FastAPI + garde-fous + Redis (cache/rate-limit). « auto-apprentissage » **retiré** (absent de la spec), « produit » remplacé par « démonstration », « premier » remplacé par l'angle « l'État annonce / OpenLab livre » (benchmark : l'État + d'autres LLM africains existent). Disclaimer ANADER conservé.
+Stack et cadrage alignés sur `CLAUDE_OpenCacao.md` : Ministral 3 8B + LoRA 4-bit, vLLM/llama.cpp, FastAPI + garde-fous + Redis (cache/rate-limit). « auto-apprentissage » reformulé en **amélioration continue supervisée** (human-in-the-loop : usage réel → validation par un relecteur agronome → corpus/modèle ; conforme à la spec §5.2/§11.2). « produit » remplacé par « démonstration », « premier » remplacé par l'angle « l'État annonce / OpenLab livre » (benchmark : l'État + d'autres LLM africains existent). Disclaimer ANADER conservé.

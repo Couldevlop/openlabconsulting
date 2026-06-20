@@ -13,6 +13,8 @@ mets en ligne séparément à ton feu vert.
 
 Nous mettons en ligne **OpenCacao** : un assistant de conseil agronomique sur la filière cacao, **conçu, entraîné et hébergé en Côte d'Ivoire**. Souverain de bout en bout. Aucune donnée qui part chez un tiers étranger.
 
+Et il **s'améliore en continu à partir de l'usage réel** — mais chaque apprentissage est **validé par un humain**. Jamais en roue libre : sûr et souverain.
+
 Pendant que l'État annonce 1 milliard $ sur 30 ans pour une IA souveraine du cacao, nous en livrons **une démonstration fonctionnelle — aujourd'hui, en ligne.**
 
 👉 Testez-le : opencacao.openlabconsulting.com
@@ -54,6 +56,8 @@ Alors que le gouvernement ivoirien a affiché en mai 2026 son ambition d'une int
 **Une souveraineté de bout en bout.** OpenCacao repose sur un modèle ouvert (Ministral 3 8B Instruct, sous licence Apache 2.0), spécialisé par affinage (fine-tuning LoRA) sur un corpus de la filière cacao bâti à partir de sources de référence (CNRA, ANADER, Conseil du Café-Cacao, FAO). L'ensemble fonctionne sur une infrastructure contrôlée localement, sans dépendance à un service propriétaire étranger.
 
 **Un outil honnête.** OpenCacao est un outil d'aide à la décision. Il ne remplace ni l'agronome, ni l'encadrement de terrain de l'ANADER, ni les recommandations officielles du Conseil du Café-Cacao — une mention rappelée dans chaque réponse du modèle.
+
+**Une amélioration continue, sous contrôle humain.** Le système s'améliore en continu à partir de son usage réel, mais chaque apprentissage est validé par un relecteur humain avant d'entrer dans le modèle — une approche pensée pour la sûreté et la souveraineté, sans dérive ni fuite de données.
 
 **Une méthode réplicable.** Au-delà du cacao, OpenLab Consulting fait la démonstration d'une méthode applicable à tout secteur — agro-industrie, banque, assurance, santé, administration publique. Cette approche est documentée dans le livre **« Donnez la parole à vos données »** [À CONFIRMER : auteur, format, disponibilité].
 
