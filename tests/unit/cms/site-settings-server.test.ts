@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  getAnnouncementBanner,
   getAuditIaCtaContent,
   getFooterContent,
   getHeroContent,
@@ -9,6 +10,7 @@ import {
   getReassuranceContent,
 } from '@/lib/cms/site-settings-server';
 import {
+  ANNOUNCEMENT_BANNER_FALLBACK,
   AUDIT_IA_CTA_FALLBACK,
   FOOTER_FALLBACK,
   HERO_FALLBACK,
@@ -34,6 +36,12 @@ describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () =>
     // Compteur dérivé du fallback produits (8) : token remplacé par « huit ».
     expect(content.subtitle).toContain('huit logiciels propriétaires');
     expect(content.subtitle).not.toContain('{productsWord}');
+  });
+
+  it('getAnnouncementBanner retourne le fallback (désactivé par défaut)', async () => {
+    const content = await getAnnouncementBanner();
+    expect(content).toEqual(ANNOUNCEMENT_BANNER_FALLBACK);
+    expect(content.enabled).toBe(false);
   });
 
   it('getManifestoContent retourne MANIFESTO_FALLBACK (compteur interpolé)', async () => {

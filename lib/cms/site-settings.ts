@@ -412,3 +412,31 @@ export const INSIGHTS_HUB_FALLBACK: InsightsHubContent = {
     ctaHref: '/audit-ia',
   },
 };
+
+// ────────────────────────────────────────────────────────────
+// Bandeau d'annonce (flash info) — global AnnouncementBanner
+// ────────────────────────────────────────────────────────────
+
+export interface AnnouncementBannerContent {
+  /** Affiche le bandeau sur tout le site quand true. */
+  enabled: boolean;
+  /** Message court et percutant (capter en 5 s). */
+  message: string;
+  /** Libellé du lien (vide = pas de lien). */
+  linkLabel: string;
+  /** Cible du lien : chemin interne `/...` ou URL https. */
+  linkHref: string;
+}
+
+/**
+ * Fallback du bandeau : pré-rempli avec le flash OpenCacao mais
+ * `enabled: false` → rien ne s'affiche tant qu'on n'active pas (admin,
+ * ou en basculant ce défaut). Permet de publier l'annonce en un geste.
+ */
+export const ANNOUNCEMENT_BANNER_FALLBACK: AnnouncementBannerContent = {
+  enabled: false,
+  message:
+    '⚡ Flash info — OpenCacao : l’IA souveraine du cacao, conçue et hébergée en Côte d’Ivoire, est en ligne.',
+  linkLabel: 'Découvrir',
+  linkHref: '/insights/opencacao-ia-souveraine-cacao-cote-divoire',
+};

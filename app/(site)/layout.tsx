@@ -1,9 +1,13 @@
 import { headers } from 'next/headers';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 import { ScrollProgress } from '@/components/atoms/ScrollProgress';
 import { VisitTracker } from '@/components/analytics/VisitTracker';
-import { getFooterContent } from '@/lib/cms/site-settings-server';
+import {
+  getFooterContent,
+  getAnnouncementBanner,
+} from '@/lib/cms/site-settings-server';
 import {
   jsonLdString,
   localBusinessSchema,
@@ -43,9 +47,10 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }): Promise<React.ReactElement> {
-  const [headersList, footerContent] = await Promise.all([
+  const [headersList, footerContent, announcement] = await Promise.all([
     headers(),
     getFooterContent(),
+    getAnnouncementBanner(),
   ]);
   const nonce = headersList.get('x-nonce') ?? '';
 
@@ -63,6 +68,7 @@ export default async function SiteLayout({
         </a>
         <ScrollProgress />
         <VisitTracker />
+        <AnnouncementBanner content={announcement} />
         <Navbar />
         <div className="flex-1">{children}</div>
         <Footer content={footerContent} />
