@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="OpenCacao — l'IA souveraine du cacao, conçue et hébergée en Côte d'Ivoire.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0e1a"/>
+      <stop offset="1" stop-color="#142654"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.6">
+      <stop offset="0" stop-color="#ff5a00" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ff5a00" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- barre accent -->
+  <rect x="80" y="150" width="64" height="6" rx="3" fill="#ff5a00"/>
+
+  <!-- eyebrow -->
+  <text x="80" y="135" font-family="Geist, sans-serif" font-size="24" font-weight="700" letter-spacing="3" fill="#ff7a33">FLASH INFO · OPENLAB CONSULTING</text>
+
+  <!-- titre -->
+  <text x="78" y="290" font-family="'Bricolage Grotesque', sans-serif" font-size="132" font-weight="800" fill="#faf8f5">OpenCacao</text>
+
+  <!-- sous-titre -->
+  <text x="80" y="360" font-family="Geist, sans-serif" font-size="38" font-weight="600" fill="#faf8f5">L'IA souveraine du cacao</text>
+  <text x="80" y="410" font-family="Geist, sans-serif" font-size="30" fill="#faf8f5" opacity="0.82">conçue, entraînée et hébergée en Côte d'Ivoire</text>
+
+  <!-- cabosse de cacao stylisée -->
+  <g transform="translate(1000 380)">
+    <ellipse cx="0" cy="0" rx="86" ry="130" fill="#cc4800"/>
+    <ellipse cx="0" cy="0" rx="86" ry="130" fill="none" stroke="#ff7a33" stroke-width="4"/>
+    <path d="M0 -120 V120 M-44 -110 V110 M44 -110 V110" stroke="#ff7a33" stroke-width="4" opacity="0.7"/>
+  </g>
+
+  <!-- pied -->
+  <rect x="80" y="500" width="1040" height="1" fill="#faf8f5" opacity="0.18"/>
+  <text x="80" y="552" font-family="Geist, sans-serif" font-size="30" font-weight="700" fill="#ff7a33">opencacao.openlabconsulting.com</text>
+  <text x="1120" y="552" text-anchor="end" font-family="Geist, sans-serif" font-size="24" fill="#faf8f5" opacity="0.7">Démonstration souveraine · Made in CI</text>
+</svg>

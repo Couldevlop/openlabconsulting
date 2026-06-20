@@ -23,7 +23,7 @@ describe('WhitepaperRequestForm', () => {
     fireEvent.change(screen.getByLabelText(/Email professionnel/i), {
       target: { value: 'cto@banque-atlantique.ci' },
     });
-    fireEvent.click(screen.getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('checkbox', { name: /accepte/i }));
   }
 
   it('rend tous les champs requis + bouton « Recevoir le livre blanc »', () => {
@@ -33,7 +33,12 @@ describe('WhitepaperRequestForm', () => {
     expect(screen.getByLabelText(/Email professionnel/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^Nom/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Organisation/i)).toBeInTheDocument();
-    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: /accepte/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: /abonner/i }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /Recevoir le livre blanc/i }),
     ).toBeInTheDocument();

@@ -90,7 +90,10 @@ export type DemoRequestInput = z.infer<typeof demoRequestSchema>;
  * `app/(site)/livres-blancs/[slug]/page.tsx` (hardcoded en attendant
  * le binding Payload P6+).
  */
-export const WHITEPAPER_SLUGS = ['ia-souveraine-ci-2026'] as const;
+export const WHITEPAPER_SLUGS = [
+  'ia-souveraine-ci-2026',
+  'donnez-la-parole-a-vos-donnees',
+] as const;
 
 export const whitepaperRequestSchema = z.object({
   email: z.email().max(180),
@@ -99,6 +102,12 @@ export const whitepaperRequestSchema = z.object({
   slug: z.enum(WHITEPAPER_SLUGS),
   consentRgpd: z
     .union([z.literal('on'), z.literal('true'), z.boolean()])
+    .transform((v) => v === true || v === 'on' || v === 'true'),
+  // Abonnement (optionnel) au fil d'actualité OpenLab — opt-in distinct du
+  // consentement RGPD de téléchargement.
+  newsletter: z
+    .union([z.literal('on'), z.literal('true'), z.boolean()])
+    .optional()
     .transform((v) => v === true || v === 'on' || v === 'true'),
   website: honeypot,
   'cf-turnstile-response': z.string().min(1).max(2048).optional(),

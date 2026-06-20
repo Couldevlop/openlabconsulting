@@ -12,7 +12,9 @@ import {
   EXPERTISES_HUB_FALLBACK,
   SECTEURS_HUB_FALLBACK,
   AUDIT_IA_PROCESS_FALLBACK,
+  ANNOUNCEMENT_BANNER_FALLBACK,
   type AboutContent,
+  type AnnouncementBannerContent,
   type AuditIaProcessContent,
   type AuditIaProcessStep,
   type AuditIaCtaContent,
@@ -199,6 +201,10 @@ export async function getAuditIaCtaContent(): Promise<AuditIaCtaContent> {
 
 export async function getFooterContent(): Promise<FooterContent> {
   return readGlobal('footer-settings', FOOTER_FALLBACK);
+}
+
+export async function getAnnouncementBanner(): Promise<AnnouncementBannerContent> {
+  return readGlobal('announcement-banner', ANNOUNCEMENT_BANNER_FALLBACK);
 }
 
 export async function getAboutContent(): Promise<AboutContent> {

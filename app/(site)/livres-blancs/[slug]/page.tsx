@@ -9,8 +9,10 @@ import { Container } from '@/components/atoms/Container';
 import { Eyebrow } from '@/components/atoms/Eyebrow';
 import { Heading } from '@/components/atoms/Heading';
 import { WhitepaperRequestForm } from '@/components/forms/WhitepaperRequestForm';
+import { WhitepaperDownloadGate } from '@/components/forms/WhitepaperDownloadGate';
 import { cn } from '@/lib/cn';
 import { alternatesFor } from '@/lib/seo/site';
+import { downloadReleaseAt } from '@/lib/whitepapers';
 
 interface Whitepaper {
   slug: string;
@@ -56,6 +58,34 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
       src: '/livres-blancs/ia-souveraine-couverture.png',
       width: 1023,
       height: 1537,
+    },
+  },
+  'donnez-la-parole-a-vos-donnees': {
+    slug: 'donnez-la-parole-a-vos-donnees',
+    title: 'Donnez la parole à vos données',
+    subtitle:
+      'Bâtir une IA souveraine et verticale à partir de vos propres données',
+    audience:
+      'Dirigeants, DSI, décideurs publics & privés · Côte d’Ivoire et UEMOA',
+    pageCount: 0,
+    pillars: [
+      'Du document au corpus : collecte (auto ou dépôt) de vos sources — HTML, TXT, PDF, notes internes',
+      'Constitution et indexation du savoir métier (RAG) — rien ne se perd, tout est retrouvable',
+      'Spécialisation par fine-tuning (LoRA) d’un modèle ouvert sur votre corpus',
+      'Déploiement souverain et amélioration continue, sous validation humaine',
+    ],
+    pitch: [
+      'La méthode qui a donné OpenCacao — appliquée à votre métier, public ou privé.',
+      'Vos données ont une voix. Ce livre explique comment la leur donner, étape par étape, sans dépendre d’un cloud étranger.',
+      'De la souveraineté concrète, pas un slogan : vos données entrent, votre IA souveraine sort.',
+    ],
+    status: 'published',
+    publicationLabel:
+      'Disponible — téléchargement ouvert lundi 22 juin à 12h (heure de Paris)',
+    cover: {
+      src: '/livres-blancs/donnez-la-parole-couverture.png',
+      width: 1024,
+      height: 1536,
     },
   },
 };
@@ -231,11 +261,18 @@ export default async function WhitepaperPage({
                 </p>
               </div>
 
-              <WhitepaperRequestForm
-                slug={wp.slug}
-                pageCount={wp.pageCount}
-                draft={wp.status === 'draft'}
-              />
+              {downloadReleaseAt(wp.slug) ? (
+                <WhitepaperDownloadGate
+                  slug={wp.slug}
+                  releaseAt={downloadReleaseAt(wp.slug)}
+                />
+              ) : (
+                <WhitepaperRequestForm
+                  slug={wp.slug}
+                  pageCount={wp.pageCount}
+                  draft={wp.status === 'draft'}
+                />
+              )}
             </div>
           </Card>
         </Container>
