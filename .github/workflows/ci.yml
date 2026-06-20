@@ -111,6 +111,10 @@ jobs:
           context: .
           load: true
           pull: true # force pull des base images (Chainguard runner, node:22-alpine builder) à chaque run
+          # Cibler le stage runner (Chainguard) : sinon Docker build le DERNIER
+          # stage = `migrator` (alpine + devDeps), et Trivy scanne la mauvaise
+          # image (plus de CVE → gate rouge à tort). Cf. Dockerfile / release.yml.
+          target: runner
           tags: openlab-website:ci
           # Cache GHA des LAYERS de l'app (deps, build) — invalidé naturellement
           # quand le package-lock change. NE cache PAS les base images grâce à pull:true.

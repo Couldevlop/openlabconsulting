@@ -161,6 +161,12 @@ jobs:
           push: true
           pull: true # force pull base images à chaque run (anti-CVE drift)
           platforms: linux/amd64
+          # CRITIQUE : cibler explicitement le stage `runner` (Chainguard).
+          # Sans `target`, Docker build le DERNIER stage du Dockerfile — or
+          # le stage `migrator` (toolchain tsx pour les migrations) a été
+          # ajouté en dernier → l'image `website` devenait l'image migrator
+          # (Node 22 + CMD tsx) qui crashe en pod web. Voir Dockerfile.
+          target: runner
           # Clé SITE Turnstile = publique par conception (data-sitekey dans le
           # HTML). Inlinée au build car NEXT_PUBLIC_* (client). Le secret
           # correspondant (TURNSTILE_SECRET_KEY) reste côté serveur via le
