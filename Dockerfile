@@ -22,6 +22,10 @@ FROM node:22-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
+# `patches/` est requis par pnpm AVANT l'install : package.json déclare
+# `pnpm.patchedDependencies` (patch payload loadEnv/@next/env). Sans ce COPY,
+# `pnpm install --frozen-lockfile` échoue (patch introuvable, exit 254).
+COPY patches ./patches
 RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
