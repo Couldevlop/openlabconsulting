@@ -59,33 +59,7 @@ WORKDIR /sharp
 RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.34.5
 
 # -----------------------------------------------------------------------------
-# Stage 3 : runner (Chainguard Node, non-root par défaut)
-# -----------------------------------------------------------------------------
-FROM cgr.dev/chainguard/node:latest AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
-
-# Chainguard Node tourne en UID 65532 (`nonroot`) par défaut.
-COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
-COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
-COPY --from=builder --chown=nonroot:nonroot /app/public ./public
-
-# Écrase le sharp musl (issu du standalone Alpine) par la build glibc.
-# `sharp` (JS) + `@img/*` (binaires natifs linux-x64 glibc) — cf. stage sharp-glibc.
-COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/sharp ./node_modules/sharp
-COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/@img ./node_modules/@img
-
-USER nonroot
-EXPOSE 3000
-
-# Chainguard Node a `node` comme entrypoint → CMD passe le script directement.
-CMD ["server.js"]
-
-# -----------------------------------------------------------------------------
-# Stage 4 : migrator (image INTERNE — applique les migrations Payload)
+# Stage 3 : migrator (image INTERNE — applique les migrations Payload)
 # -----------------------------------------------------------------------------
 # Pourquoi un stage dédié et pas le runner Chainguard :
 #  - Le runner standalone n'embarque ni la CLI Payload, ni payload.config,
@@ -111,3 +85,32 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Le Job surcharge command/args ; CMD = défaut pratique (run local de l'image).
 CMD ["node_modules/.bin/tsx", "scripts/payload-migrate.ts"]
+
+# -----------------------------------------------------------------------------
+# Stage 4 : runner (Chainguard Node, non-root par défaut) — IMAGE FINALE.
+# DOIT rester le DERNIER stage : un `docker build` sans `--target` construit
+# le dernier stage. release.yml/ci.yml ciblent `runner` explicitement, mais
+# garder runner en dernier protège les builds locaux (`docker build .`).
+# -----------------------------------------------------------------------------
+FROM cgr.dev/chainguard/node:latest AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# Chainguard Node tourne en UID 65532 (`nonroot`) par défaut.
+COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
+COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
+COPY --from=builder --chown=nonroot:nonroot /app/public ./public
+
+# Écrase le sharp musl (issu du standalone Alpine) par la build glibc.
+# `sharp` (JS) + `@img/*` (binaires natifs linux-x64 glibc) — cf. stage sharp-glibc.
+COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/sharp ./node_modules/sharp
+COPY --from=sharp-glibc --chown=nonroot:nonroot /sharp/node_modules/@img ./node_modules/@img
+
+USER nonroot
+EXPOSE 3000
+
+# Chainguard Node a `node` comme entrypoint → CMD passe le script directement.
+CMD ["server.js"]
