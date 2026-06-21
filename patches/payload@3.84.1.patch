@@ -1,0 +1,14 @@
+diff --git a/dist/bin/loadEnv.js b/dist/bin/loadEnv.js
+index b61ecc1684f0b686fa8bbcefa68b5ed825c09420..356f9768b4544a9ff4f940ad757fadbcec21cb86 100644
+--- a/dist/bin/loadEnv.js
++++ b/dist/bin/loadEnv.js
+@@ -1,4 +1,8 @@
+-import nextEnvImport from '@next/env';
++// PATCH OpenLab (Node 22 + tsx CJS interop) : `import default` cassait car
++// @next/env est CJS pur sans `.default` (→ « Cannot destructure loadEnvConfig
++// of import_env.default »). `import * as` récupère l'objet exports complet
++// dans tous les modes (CJS via tsx ET ESM bundlé). Persiste via pnpm patch.
++import * as nextEnvImport from '@next/env';
+ import { findUpSync } from '../utilities/findUp.js';
+ const { loadEnvConfig } = nextEnvImport;
+ /**
