@@ -7,7 +7,11 @@
  * l'API siteverify avec la clé secrète.
  *
  * Variables d'env :
- *   - NEXT_PUBLIC_TURNSTILE_SITE_KEY : clé publique (injectée client)
+ *   - TURNSTILE_SITE_KEY             : clé publique, lue au RUNTIME côté
+ *     serveur (ConfigMap K8s) puis propagée au widget client via contexte.
+ *     Modifiable sans rebuild ni dépendance GitHub.
+ *   - NEXT_PUBLIC_TURNSTILE_SITE_KEY : ancienne clé publique inlinée au BUILD
+ *     (fallback dev / rétro-compat ; cf. resolveTurnstileSiteKey).
  *   - TURNSTILE_SECRET_KEY           : clé privée (server-only)
  *
  * Mode dev : si la clé secrète est absente, `verifyTurnstile` renvoie
@@ -44,6 +48,23 @@ interface CloudflareResponse {
 }
 
 /**
+ * Résout la clé SITE publique au runtime.
+ *
+ * Priorité à `TURNSTILE_SITE_KEY` (non-public → lue au runtime, ex. depuis la
+ * ConfigMap K8s, modifiable sans rebuild), puis fallback sur l'ancienne
+ * `NEXT_PUBLIC_TURNSTILE_SITE_KEY` inlinée au build (dev / rétro-compat).
+ * Source unique de vérité partagée entre le rendu serveur (qui propage la clé
+ * au widget client) et `verifyTurnstile` (qui décide d'exiger un token).
+ */
+export function resolveTurnstileSiteKey(): string | null {
+  return (
+    process.env.TURNSTILE_SITE_KEY ||
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+    null
+  );
+}
+
+/**
  * Vérifie un token Turnstile auprès de Cloudflare.
  *
  * @param token   Valeur du champ `cf-turnstile-response` reçu du widget
@@ -54,14 +75,15 @@ export async function verifyTurnstile(
   remoteIp?: string,
 ): Promise<TurnstileVerifyResult> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const siteKey = resolveTurnstileSiteKey();
   const isProd = process.env.NODE_ENV === 'production';
 
-  // Parité client/serveur : sans clé publique, le widget ne se rend jamais
-  // (components/atoms/Turnstile.tsx) et aucun token ne peut être produit.
-  // Exiger un token reviendrait à bloquer 100 % des soumissions légitimes.
-  // On bypass jusqu'à ce que la site key soit fournie au build → l'enforcement
-  // strict se réactive de lui-même. Le honeypot + rate-limit restent actifs.
+  // Parité client/serveur : sans clé publique configurée (ni TURNSTILE_SITE_KEY
+  // runtime, ni NEXT_PUBLIC_* build), le widget ne se rend jamais et aucun token
+  // ne peut être produit. Exiger un token reviendrait à bloquer 100 % des
+  // soumissions légitimes. On bypass jusqu'à ce qu'une site key soit fournie →
+  // l'enforcement strict se réactive de lui-même. Honeypot + rate-limit restent
+  // actifs. Même source (resolveTurnstileSiteKey) que la clé propagée au widget.
   if (!siteKey) {
     return { ok: true, mode: 'bypass' };
   }

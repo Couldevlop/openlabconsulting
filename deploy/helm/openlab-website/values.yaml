@@ -86,6 +86,10 @@ config:
   PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
   BETTER_AUTH_URL: 'https://openlabconsulting.com'
   OPENLAB_TIER: 'production'
+  # Clé SITE Turnstile (PUBLIQUE) — lue au runtime, propagée au widget client.
+  # Changer la clé = éditer cette valeur + rollout, sans rebuild ni GitHub.
+  # La clé SECRÈTE correspondante vit dans le SealedSecret (TURNSTILE_SECRET_KEY).
+  TURNSTILE_SITE_KEY: '0x4AAAAAADYMb5YX1caTT8cP'
   # Email transactionnel ZeptoMail (le token vit dans le SealedSecret).
   ZEPTOMAIL_API_URL: 'https://api.zeptomail.com/v1.1/email'
   EMAIL_FROM: 'noreply@openlabconsulting.com'
