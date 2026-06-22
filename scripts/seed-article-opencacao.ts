@@ -24,6 +24,12 @@ const EXCERPT =
   'OpenLab Consulting met en ligne OpenCacao, une IA souveraine du cacao conçue et hébergée en Côte d’Ivoire. La preuve par l’exemple.';
 const CATEGORY = 'souverainete';
 const AUTHOR = 'OpenLab Consulting';
+// Couverture de l'article : nom de fichier du média à relier. On ne ré-uploade
+// PAS l'image (le mode SQL ne peut pas pousser de binaire ; en Local API le
+// média est déjà déposé via l'admin ou `cms:seed:covers`). On retrouve le média
+// existant par son `filename` et on pose juste la relation `cover`. NULL-safe :
+// si le média est absent, l'article est seedé sans couverture (pas d'échec).
+const COVER_FILENAME = 'opencacao-cover.png';
 
 const SUMMARY_POINTS = [
   'OpenLab Consulting met en ligne OpenCacao : une IA de conseil agronomique sur le cacao, conçue, entraînée et hébergée en Côte d’Ivoire — souveraine de bout en bout.',
@@ -270,24 +276,31 @@ function emitSql(): string {
   ).join(',\n      ');
   return `BEGIN;
 DELETE FROM articles WHERE slug = ${q(SLUG)};
-WITH art AS (
+WITH cov AS (
+  -- Couverture : on relie un média déjà présent (retrouvé par filename). 0 ligne
+  -- si absent → (SELECT cover_id FROM cov) vaut NULL (scalaire sans ligne) →
+  -- article seedé sans couverture, jamais d'échec.
+  SELECT id AS cover_id FROM media WHERE filename = ${q(COVER_FILENAME)} ORDER BY id LIMIT 1
+),
+art AS (
   INSERT INTO articles
-    (title, slug, excerpt, content, category, author, published_at, updated_at, created_at, _status)
+    (title, slug, excerpt, content, category, author, published_at, updated_at, created_at, _status, cover_id)
   VALUES
     (${q(TITLE)}, ${q(SLUG)}, ${q(EXCERPT)}, $j$${contentJson}$j$::jsonb,
-     'souverainete', ${q(AUTHOR)}, now(), now(), now(), 'published')
-  RETURNING id, title, slug, excerpt, content, category, author, published_at, created_at, updated_at, _status
+     'souverainete', ${q(AUTHOR)}, now(), now(), now(), 'published', (SELECT cover_id FROM cov))
+  RETURNING id, title, slug, excerpt, content, category, author, published_at, created_at, updated_at, _status, cover_id
 ),
 ver AS (
   -- Collection en mode drafts : l'admin liste depuis _articles_v. Sans cette
-  -- ligne « latest », l'article est public mais INVISIBLE dans l'admin.
+  -- ligne « latest », l'article est public mais INVISIBLE dans l'admin. On y
+  -- clone aussi la couverture (version_cover_id) pour cohérence avec l'admin.
   INSERT INTO _articles_v
     (parent_id, version_title, version_slug, version_excerpt, version_content,
      version_category, version_author, version_published_at, version_created_at,
-     version_updated_at, version__status, created_at, updated_at, latest)
+     version_updated_at, version__status, created_at, updated_at, latest, version_cover_id)
   SELECT id, title, slug, excerpt, content,
      category::text::enum__articles_v_version_category, author, published_at, created_at,
-     updated_at, _status::text::enum__articles_v_version_status, now(), now(), true
+     updated_at, _status::text::enum__articles_v_version_status, now(), now(), true, cover_id
   FROM art
   RETURNING 1
 ),
@@ -364,6 +377,16 @@ async function main(): Promise<void> {
     );
     process.exit(0);
   }
+
+  // Relie la couverture si le média a déjà été déposé (admin ou
+  // `cms:seed:covers`). Absent → on n'ajoute pas le champ (pas d'échec).
+  const { docs: covers } = await payload!.find({
+    collection: 'media',
+    where: { filename: { equals: COVER_FILENAME } },
+    limit: 1,
+    depth: 0,
+  });
+  if (covers[0]?.id != null) data.cover = covers[0].id;
 
   const existing = await payload!.find({
     collection: 'articles',
