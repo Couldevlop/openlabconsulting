@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type ReactElement } from 'react';
+import { useTurnstileSiteKey } from './TurnstileSiteKeyProvider';
 
 /**
  * Cloudflare Turnstile widget — CAPTCHA RGPD-friendly (§10.5).
@@ -10,8 +11,12 @@ import { useEffect, useRef, type ReactElement } from 'react';
  * placé dans un `<input hidden name="cf-turnstile-response">` que le
  * formulaire parent envoie automatiquement au server.
  *
- * Variables d'env :
- *   - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (clé publique)
+ * Source de la clé SITE :
+ *   - En priorité le contexte `TurnstileSiteKeyProvider`, alimenté au RUNTIME
+ *     côté serveur (`resolveTurnstileSiteKey` → `TURNSTILE_SITE_KEY`). Permet
+ *     de changer la clé sans rebuild ni dépendance GitHub.
+ *   - Fallback `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (build) si aucun provider n'est
+ *     monté (tests, Storybook).
  *
  * Si la clé publique est absente (dev local sans config) :
  *   - On rend un placeholder visuel indiquant "CAPTCHA désactivé (dev)"
@@ -83,7 +88,13 @@ export function Turnstile({
 }: TurnstileProps): ReactElement {
   const ref = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const contextKey = useTurnstileSiteKey();
+  // Provider monté → on suit sa valeur (string ou null) ; sinon (tests,
+  // Storybook) on retombe sur la variable build NEXT_PUBLIC_*.
+  const siteKey =
+    contextKey !== undefined
+      ? contextKey
+      : (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? null);
 
   useEffect(() => {
     if (!siteKey || !ref.current) return;

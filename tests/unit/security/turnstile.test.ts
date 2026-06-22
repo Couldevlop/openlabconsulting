@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import { verifyTurnstile } from '@/lib/turnstile';
+import { verifyTurnstile, resolveTurnstileSiteKey } from '@/lib/turnstile';
 
 describe('lib/turnstile — verifyTurnstile', () => {
   const originalEnv = { ...process.env };
@@ -8,7 +8,9 @@ describe('lib/turnstile — verifyTurnstile', () => {
     process.env = { ...originalEnv };
     // Par défaut la site key publique est configurée : on teste le chemin
     // strict de vérification. Les tests qui ciblent le bypass « site key
-    // absente » la suppriment explicitement.
+    // absente » la suppriment explicitement. La var runtime est neutralisée
+    // pour que le fallback NEXT_PUBLIC_* soit déterministe.
+    delete process.env.TURNSTILE_SITE_KEY;
     process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = '1x00000000000000000000AA';
   });
 
@@ -17,15 +19,28 @@ describe('lib/turnstile — verifyTurnstile', () => {
     process.env = { ...originalEnv };
   });
 
-  it('bypass quand la site key publique est absente (parité client/serveur)', async () => {
-    // Sans NEXT_PUBLIC_TURNSTILE_SITE_KEY, le widget client ne se rend pas et
-    // ne peut produire aucun token : exiger un token bloquerait 100 % des
-    // soumissions légitimes. On bypass même en prod, même secret configuré.
+  it('bypass quand aucune site key (runtime ni build) n’est configurée', async () => {
+    // Sans clé publique, le widget client ne se rend pas et ne peut produire
+    // aucun token : exiger un token bloquerait 100 % des soumissions légitimes.
+    // On bypass même en prod, même secret configuré.
     delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    delete process.env.TURNSTILE_SITE_KEY;
     process.env.TURNSTILE_SECRET_KEY = 'secret123';
     Object.assign(process.env, { NODE_ENV: 'production' });
     const r = await verifyTurnstile('');
     expect(r).toEqual({ ok: true, mode: 'bypass' });
+  });
+
+  it('enforce (pas de bypass) si seule la site key RUNTIME est définie', async () => {
+    // La clé runtime (ConfigMap) suffit à activer la vérification stricte,
+    // même sans NEXT_PUBLIC_* inlinée au build.
+    delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    process.env.TURNSTILE_SITE_KEY = '0x4AAAAAADYMb5YX1caTT8cP';
+    process.env.TURNSTILE_SECRET_KEY = 'secret123';
+    Object.assign(process.env, { NODE_ENV: 'production' });
+    const r = await verifyTurnstile('');
+    expect(r.ok).toBe(false);
+    expect(r.mode).toBe('invalid');
   });
 
   it('bypass en dev quand TURNSTILE_SECRET_KEY est absente', async () => {
@@ -83,5 +98,34 @@ describe('lib/turnstile — verifyTurnstile', () => {
     const r = await verifyTurnstile('token');
     expect(r.ok).toBe(false);
     expect(r.mode).toBe('network-error');
+  });
+});
+
+describe('lib/turnstile — resolveTurnstileSiteKey', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+    delete process.env.TURNSTILE_SITE_KEY;
+    delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  });
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  it('priorise la clé RUNTIME (TURNSTILE_SITE_KEY)', () => {
+    process.env.TURNSTILE_SITE_KEY = 'runtime-key';
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = 'build-key';
+    expect(resolveTurnstileSiteKey()).toBe('runtime-key');
+  });
+
+  it('retombe sur NEXT_PUBLIC_* (build) si pas de clé runtime', () => {
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = 'build-key';
+    expect(resolveTurnstileSiteKey()).toBe('build-key');
+  });
+
+  it('renvoie null si aucune clé n’est configurée', () => {
+    expect(resolveTurnstileSiteKey()).toBeNull();
   });
 });

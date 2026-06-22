@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { Turnstile } from '@/components/atoms/Turnstile';
+import { TurnstileSiteKeyProvider } from '@/components/atoms/TurnstileSiteKeyProvider';
 
 /**
  * Turnstile — dans jsdom, on teste les deux branches : sans sitekey
@@ -52,6 +53,34 @@ describe('Turnstile atom', () => {
     it('accepte les props action / theme / appearance sans throw', () => {
       render(<Turnstile action="audit-ia" theme="dark" appearance="execute" />);
       expect(screen.getByTestId('turnstile-widget')).toBeInTheDocument();
+    });
+  });
+
+  describe('Avec provider de contexte (clé runtime)', () => {
+    beforeEach(() => {
+      // Le contexte doit primer sur la variable build, dans les deux sens.
+      delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    });
+
+    it('rend le widget depuis la clé du provider (sans NEXT_PUBLIC_*)', () => {
+      render(
+        <TurnstileSiteKeyProvider siteKey="0x4AAAAAADYMb5YX1caTT8cP">
+          <Turnstile action="contact" />
+        </TurnstileSiteKeyProvider>,
+      );
+      expect(screen.getByTestId('turnstile-widget')).toBeInTheDocument();
+    });
+
+    it('provider à null → placeholder même si NEXT_PUBLIC_* est défini', () => {
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = 'build-key';
+      render(
+        <TurnstileSiteKeyProvider siteKey={null}>
+          <Turnstile action="contact" />
+        </TurnstileSiteKeyProvider>,
+      );
+      expect(
+        screen.getByTestId('turnstile-dev-placeholder'),
+      ).toBeInTheDocument();
     });
   });
 });
