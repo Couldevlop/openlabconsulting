@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
+import { sendLeadNotification, sendWhitepaperDelivery } from '@/lib/email';
 import { persistLead } from '@/lib/leads';
 import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
 import { getRequestIp } from '@/lib/request-ip';
 import { verifyTurnstile } from '@/lib/turnstile';
 import { flattenZodErrors, whitepaperRequestSchema } from '@/lib/validation';
-import { downloadReleaseAt, isDownloadOpen } from '@/lib/whitepapers';
+import {
+  downloadReleaseAt,
+  isDownloadOpen,
+  whitepaperTitle,
+} from '@/lib/whitepapers';
 
 /**
  * POST /api/whitepapers/request — gate email pour téléchargement d'un
@@ -113,12 +118,14 @@ export async function POST(req: Request): Promise<NextResponse> {
     );
   }
 
+  const leadName =
+    parsed.data.name && parsed.data.name.length > 0
+      ? parsed.data.name
+      : 'Téléchargement anonyme';
+
   await persistLead({
     source: 'whitepaper',
-    name:
-      parsed.data.name && parsed.data.name.length > 0
-        ? parsed.data.name
-        : 'Téléchargement anonyme',
+    name: leadName,
     email: parsed.data.email,
     organization: parsed.data.organization || undefined,
     message: `Demande livre blanc : ${parsed.data.slug}`,
@@ -130,6 +137,32 @@ export async function POST(req: Request): Promise<NextResponse> {
     ipAddress: ip,
     userAgent: req.headers.get('user-agent'),
   });
+
+  // Emails best-effort (fail-soft, jamais bloquants) : livraison du PDF au
+  // visiteur + notification de l'équipe. Skipés si ZeptoMail non configuré.
+  const title = whitepaperTitle(parsed.data.slug);
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://openlabconsulting.com';
+  const downloadUrl = `${siteUrl}${PDF_BASE_PATH}/${parsed.data.slug}.pdf`;
+  await Promise.allSettled([
+    sendWhitepaperDelivery({
+      name: leadName,
+      email: parsed.data.email,
+      title,
+      downloadUrl,
+    }),
+    sendLeadNotification({
+      source: 'whitepaper',
+      name: leadName,
+      email: parsed.data.email,
+      organization: parsed.data.organization || undefined,
+      message: `Demande de téléchargement : ${title}`,
+      details: {
+        'Livre blanc': title,
+        Newsletter: parsed.data.newsletter === true ? 'oui' : 'non',
+      },
+    }),
+  ]);
 
   METRICS.whitepaperRequest(parsed.data.slug, 'accepted');
 
