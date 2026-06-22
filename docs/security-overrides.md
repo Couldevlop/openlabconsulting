@@ -82,6 +82,12 @@ le `modsecurity-snippet` contient une règle scopée :
 ```
 SecRule REQUEST_HEADERS:Host "@rx ^(www\.)?openlabconsulting\.com$" "id:10100,phase:1,pass,nolog,chain"
 SecRule REQUEST_URI "@beginsWith /admin" "ctl:ruleEngine=Off"
+# API REST Payload (/api/<collection>) : moteur GARDE actif (logue + bloque les
+# scores eleves), seuil d'anomalie releve 5 -> 20 pour absorber les faux positifs
+# du contenu editorial. Endpoints publics custom restent au seuil strict (5).
+SecRule REQUEST_HEADERS:Host "@rx ^(www\.)?openlabconsulting\.com$" "id:10102,phase:1,t:none,nolog,pass,chain"
+SecRule REQUEST_URI "@rx ^/api/" "chain"
+SecRule REQUEST_URI "!@rx ^/api/(contact|audit-ia|demo|health|metrics|preview|track|whitepapers/request)(/|\?|$)" "setvar:tx.inbound_anomaly_score_threshold=20"
 ```
 
 **Pourquoi** : le back-office Payload v3 fonctionne par server functions
@@ -97,11 +103,26 @@ Payload, 2FA TOTP obligatoire (`ENFORCE_ADMIN_2FA`), lockout 10 échecs /
 30 min, politique mot de passe 12+, audit log. Le WAF reste actif sur
 tout le reste (site public, `/api`, hôtes NexusRH).
 
-**Limites connues** : un POST authentifié de l'admin qui passe par
-`/api/*` (REST Payload) reste derrière le WAF — si un faux positif
-apparaît à l'enregistrement d'un contenu, ajouter une exclusion CRS
-ciblée (pas un `ruleEngine=Off` global sur /api).
+**Faux positif /api REST résolu (2026-06-23, règle 10102)** : l'enregistrement
+d'un article (`PATCH /api/articles/<id>`) était bloqué par CRS 949110 (score 10
+puis 5 sur du français riche en apostrophes — faux positif confirmé sur du
+contenu 100 % légitime, sans aucune attaque). Conformément à la consigne
+ci-dessus (« exclusion ciblée, pas un `ruleEngine=Off` global »), on **garde le
+moteur actif** sur l'API REST Payload et on **relève seulement le seuil
+d'anomalie de 5 à 20** : les vraies attaques (score élevé) restent bloquées et
+journalisées, le contenu éditorial passe. Vérifié in-cluster (hors Cloudflare) :
+contenu FR légitime → 0 blocage ModSecurity (atteint Payload). Le retrait des
+règles 941/942 avait été tenté d'abord mais insuffisant (la règle marquant le
+score n'était pas dans ces familles) → seuil retenu car content-agnostic.
+Seuil ajustable si un article très technique (code/SQL en exemple) dépasse 20.
 
-**Réversibilité** : retirer les 2 lignes du snippet du ConfigMap
+> ⚠️ Piège opérationnel : **aucune apostrophe** dans le `modsecurity-snippet`.
+> nginx encapsule le snippet dans `modsecurity_rules '...'` ; une `'` (même dans
+> un commentaire) ferme la chaîne → `nginx: [emerg] unexpected "x"`, le nouveau
+> pod controller échoue son test de config. Appliquer via patch ConfigMap puis
+> vérifier le **reload à chaud** (le pod courant garde l'ancienne config si le
+> test échoue — pas d'outage) plutôt qu'un `rollout restart` à l'aveugle.
+
+**Réversibilité** : retirer les lignes ajoutées du snippet du ConfigMap
 (`kubectl edit configmap ingress-nginx-controller -n ingress-nginx`) —
 nginx recharge automatiquement.
