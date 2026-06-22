@@ -14,6 +14,15 @@
  * `{ ok: true, mode: 'bypass' }` pour ne pas bloquer le développement
  * local. En prod, l'absence de clé est traitée comme une erreur
  * (`{ ok: false, mode: 'misconfigured' }`).
+ *
+ * Parité client/serveur (auto-réparateur) : si la clé PUBLIQUE
+ * (`NEXT_PUBLIC_TURNSTILE_SITE_KEY`) n'est pas configurée, le widget
+ * client ne peut pas se rendre ni produire de token — il serait alors
+ * incohérent que le serveur exige un token qu'aucun utilisateur ne peut
+ * fournir (blocage total des soumissions légitimes). Dans ce cas on
+ * bypass. Dès que la site key réelle est fournie au build, la
+ * vérification stricte se réactive automatiquement (honeypot +
+ * rate-limit restent actifs en permanence).
  */
 
 const SITEVERIFY_URL =
@@ -45,7 +54,17 @@ export async function verifyTurnstile(
   remoteIp?: string,
 ): Promise<TurnstileVerifyResult> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const isProd = process.env.NODE_ENV === 'production';
+
+  // Parité client/serveur : sans clé publique, le widget ne se rend jamais
+  // (components/atoms/Turnstile.tsx) et aucun token ne peut être produit.
+  // Exiger un token reviendrait à bloquer 100 % des soumissions légitimes.
+  // On bypass jusqu'à ce que la site key soit fournie au build → l'enforcement
+  // strict se réactive de lui-même. Le honeypot + rate-limit restent actifs.
+  if (!siteKey) {
+    return { ok: true, mode: 'bypass' };
+  }
 
   if (!secret) {
     return isProd
