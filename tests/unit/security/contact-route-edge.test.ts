@@ -145,6 +145,9 @@ describe('Routes API — chemins edge', () => {
   describe('POST /api/audit-ia (captcha_failed)', () => {
     it('renvoie 400 captcha_failed si Turnstile rejette', async () => {
       process.env.TURNSTILE_SECRET_KEY = 'secret-test';
+      // Site key publique configurée → on exerce le chemin strict de vérif
+      // (sans elle, verifyTurnstile bypass par parité client/serveur).
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = '1x00000000000000000000AA';
       const originalFetch = globalThis.fetch;
       globalThis.fetch = vi.fn().mockResolvedValue({
         json: async () => ({ success: false }),
@@ -175,6 +178,7 @@ describe('Routes API — chemins edge', () => {
       } finally {
         globalThis.fetch = originalFetch;
         delete process.env.TURNSTILE_SECRET_KEY;
+        delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
       }
     });
   });
@@ -182,6 +186,8 @@ describe('Routes API — chemins edge', () => {
   describe('POST /api/contact (captcha_failed)', () => {
     it('renvoie 400 captcha_failed quand Turnstile rejette le token', async () => {
       process.env.TURNSTILE_SECRET_KEY = 'secret-test';
+      // Site key publique configurée → chemin strict (cf. bypass parité).
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = '1x00000000000000000000AA';
       // Mock global fetch pour simuler la réponse Cloudflare = invalid.
       const originalFetch = globalThis.fetch;
       globalThis.fetch = vi.fn().mockResolvedValue({
@@ -213,6 +219,7 @@ describe('Routes API — chemins edge', () => {
       } finally {
         globalThis.fetch = originalFetch;
         delete process.env.TURNSTILE_SECRET_KEY;
+        delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
       }
     });
   });
