@@ -3,7 +3,9 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 import { ScrollProgress } from '@/components/atoms/ScrollProgress';
+import { TurnstileSiteKeyProvider } from '@/components/atoms/TurnstileSiteKeyProvider';
 import { VisitTracker } from '@/components/analytics/VisitTracker';
+import { resolveTurnstileSiteKey } from '@/lib/turnstile';
 import {
   getFooterContent,
   getAnnouncementBanner,
@@ -53,6 +55,9 @@ export default async function SiteLayout({
     getAnnouncementBanner(),
   ]);
   const nonce = headersList.get('x-nonce') ?? '';
+  // Clé SITE Turnstile lue au runtime (ConfigMap K8s) et propagée au widget
+  // client via contexte — pas d'inlining build, modifiable sans rebuild.
+  const turnstileSiteKey = resolveTurnstileSiteKey();
 
   return (
     <html lang="fr-CI" className={fontVariables}>
@@ -70,7 +75,9 @@ export default async function SiteLayout({
         <VisitTracker />
         <AnnouncementBanner content={announcement} />
         <Navbar />
-        <div className="flex-1">{children}</div>
+        <TurnstileSiteKeyProvider siteKey={turnstileSiteKey}>
+          <div className="flex-1">{children}</div>
+        </TurnstileSiteKeyProvider>
         <Footer content={footerContent} />
       </body>
     </html>

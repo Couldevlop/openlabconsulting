@@ -15,6 +15,12 @@ data:
   NEXT_PUBLIC_PLAUSIBLE_DOMAIN: 'openlabconsulting.com'
   PAYLOAD_PUBLIC_SERVER_URL: 'https://openlabconsulting.com'
 
+  # Clé SITE Turnstile (PUBLIQUE — non sensible, finit dans le HTML/widget).
+  # Lue au runtime côté serveur (resolveTurnstileSiteKey) et propagée au widget
+  # client : modifiable ici sans rebuild ni dépendance GitHub. La clé SECRÈTE
+  # correspondante vit dans le SealedSecret (TURNSTILE_SECRET_KEY).
+  TURNSTILE_SITE_KEY: '0x4AAAAAADYMb5YX1caTT8cP'
+
   REDIS_URL: 'redis://redis.openlab.svc.cluster.local:6379'
   MINIO_ENDPOINT: 'minio.openlab.svc.cluster.local:9000'
   MINIO_BUCKET: 'openlab-media'
