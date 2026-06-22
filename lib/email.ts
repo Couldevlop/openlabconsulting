@@ -47,7 +47,7 @@ function subjectLabel(value: string | undefined): string {
 // ────────────────────────────────────────────────────────────
 
 export interface LeadNotificationInput {
-  source: 'contact' | 'audit-ia' | 'demo-produit';
+  source: 'contact' | 'audit-ia' | 'demo-produit' | 'whitepaper';
   name: string;
   email: string;
   organization?: string | null;
@@ -75,7 +75,9 @@ export async function sendLeadNotification(
       ? 'Audit IA'
       : input.source === 'demo-produit'
         ? 'Demande de démo'
-        : 'Formulaire de contact';
+        : input.source === 'whitepaper'
+          ? 'Téléchargement livre blanc'
+          : 'Formulaire de contact';
   const subjectLine = `Nouveau lead — ${sourceLabel} · ${input.name}`;
 
   const detailRows = Object.entries(input.details ?? {})
@@ -192,6 +194,56 @@ L'équipe OpenLab Consulting`;
     replyTo: cfg.team,
     subject: title,
     html: shell(title, inner),
+    text,
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// 3. Livraison d'un livre blanc (vers le visiteur)
+// ────────────────────────────────────────────────────────────
+
+export interface WhitepaperDeliveryInput {
+  name: string;
+  email: string;
+  /** Titre lisible du livre blanc (cf. lib/whitepapers.ts). */
+  title: string;
+  /** URL absolue du PDF (servi depuis /public/whitepapers). */
+  downloadUrl: string;
+}
+
+/**
+ * Envoie au visiteur le lien de téléchargement de son livre blanc. Le PDF
+ * est aussi accessible immédiatement côté site ; cet email matérialise la
+ * promesse « vous sera également envoyé par email » et garde une trace dans
+ * la boîte du prospect. Reply-To = boîte équipe.
+ */
+export async function sendWhitepaperDelivery(
+  input: WhitepaperDeliveryInput,
+): Promise<SendEmailResult> {
+  const cfg = readConfig();
+  if (!cfg) return { ok: false, skipped: true };
+
+  const firstName = input.name.split(' ')[0] || input.name;
+  const subject = `Votre livre blanc : ${input.title}`;
+
+  const inner = `
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">Bonjour ${esc(firstName)},</p>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">Merci de votre intérêt. Voici votre exemplaire de «&nbsp;${esc(input.title)}&nbsp;» à télécharger :</p>
+<a href="${esc(input.downloadUrl)}" style="display:inline-block;background:#ff5a00;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Télécharger le PDF</a>
+<p style="margin:20px 0 0;font-size:13px;color:#5b6170;">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br><span style="word-break:break-all;">${esc(input.downloadUrl)}</span></p>
+<p style="margin:24px 0 0;font-size:13px;color:#5b6170;">L’équipe OpenLab Consulting</p>`;
+
+  const text = `Bonjour ${firstName},
+
+Merci de votre intérêt. Téléchargez « ${input.title} » : ${input.downloadUrl}
+
+L'équipe OpenLab Consulting`;
+
+  return send(cfg, {
+    to: { address: input.email, name: input.name },
+    replyTo: cfg.team,
+    subject,
+    html: shell(subject, inner),
     text,
   });
 }

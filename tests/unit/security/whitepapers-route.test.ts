@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
+vi.mock('@/lib/email', () => ({
+  sendWhitepaperDelivery: vi.fn().mockResolvedValue({ ok: true }),
+  sendLeadNotification: vi.fn().mockResolvedValue({ ok: true }),
+}));
+
 import { POST as whitepaperPost } from '@/app/api/whitepapers/request/route';
+import { sendWhitepaperDelivery, sendLeadNotification } from '@/lib/email';
 import { __resetMemoryStore } from '@/lib/rate-limit';
 
 /**
@@ -10,6 +17,7 @@ import { __resetMemoryStore } from '@/lib/rate-limit';
 describe('POST /api/whitepapers/request', () => {
   beforeEach(() => {
     __resetMemoryStore();
+    vi.clearAllMocks();
     delete process.env.REDIS_URL;
     delete process.env.TURNSTILE_SECRET_KEY;
     Object.assign(process.env, { NODE_ENV: 'test' });
@@ -49,6 +57,24 @@ describe('POST /api/whitepapers/request', () => {
     expect(json.ok).toBe(true);
     expect(json.pdfUrl).toBe('/whitepapers/ia-souveraine-ci-2026.pdf');
     expect(json.redirectTo).toBe('/livres-blancs/ia-souveraine-ci-2026/merci');
+  });
+
+  it('déclenche la livraison email du PDF + notif équipe (best-effort)', async () => {
+    const res = await whitepaperPost(buildReq(validBody));
+    expect(res.status).toBe(200);
+    expect(sendWhitepaperDelivery).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email: 'dsi@banque-atlantique.ci',
+        name: 'Aminata Coulibaly',
+        title: 'L’IA souveraine en Côte d’Ivoire',
+        downloadUrl: expect.stringContaining(
+          '/whitepapers/ia-souveraine-ci-2026.pdf',
+        ),
+      }),
+    );
+    expect(sendLeadNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ source: 'whitepaper' }),
+    );
   });
 
   it('accepte un email sans nom ni organisation (champs optionnels)', async () => {

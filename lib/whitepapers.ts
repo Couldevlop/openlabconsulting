@@ -9,6 +9,17 @@
  * Client-safe (aucun import runtime serveur).
  */
 
+/** slug → titre lisible (emails, notifications…). Client-safe. */
+export const WHITEPAPER_TITLES: Readonly<Record<string, string>> = {
+  'ia-souveraine-ci-2026': 'L’IA souveraine en Côte d’Ivoire',
+  'donnez-la-parole-a-vos-donnees': 'Donnez la parole à vos données',
+};
+
+/** Titre lisible d'un livre blanc, avec repli neutre si slug inconnu. */
+export function whitepaperTitle(slug: string): string {
+  return WHITEPAPER_TITLES[slug] ?? 'Livre blanc OpenLab';
+}
+
 /** slug → date d'ouverture du téléchargement (ISO UTC). Absent = ouvert. */
 export const WHITEPAPER_RELEASE: Readonly<Record<string, string>> = {
   // « Donnez la parole à vos données » : lundi 22 juin 2026, 12:00 Europe/Paris
