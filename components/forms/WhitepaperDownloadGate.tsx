@@ -41,9 +41,12 @@ function Cell({ value, label }: { value: number | null; label: string }) {
 export function WhitepaperDownloadGate({
   slug,
   releaseAt,
+  pageCount = 0,
 }: {
   slug: string;
   releaseAt: string | null;
+  /** Nombre de pages du PDF, transmis au formulaire une fois l'accès ouvert. */
+  pageCount?: number;
 }) {
   const target = releaseAt ? Date.parse(releaseAt) : 0;
   const [now, setNow] = useState<number | null>(null);
@@ -56,10 +59,12 @@ export function WhitepaperDownloadGate({
   }, [releaseAt]);
 
   // Téléchargement libre → formulaire direct.
-  if (!releaseAt) return <WhitepaperRequestForm slug={slug} />;
+  if (!releaseAt)
+    return <WhitepaperRequestForm slug={slug} pageCount={pageCount} />;
 
   const r = now === null ? null : remaining(target, now);
-  if (r?.done) return <WhitepaperRequestForm slug={slug} />;
+  if (r?.done)
+    return <WhitepaperRequestForm slug={slug} pageCount={pageCount} />;
 
   return (
     <div
