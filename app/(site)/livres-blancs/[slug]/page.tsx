@@ -67,7 +67,7 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
       'Bâtir une IA souveraine et verticale à partir de vos propres données',
     audience:
       'Dirigeants, DSI, décideurs publics & privés · Côte d’Ivoire et UEMOA',
-    pageCount: 0,
+    pageCount: 93,
     pillars: [
       'Du document au corpus : collecte (auto ou dépôt) de vos sources — HTML, TXT, PDF, notes internes',
       'Constitution et indexation du savoir métier (RAG) — rien ne se perd, tout est retrouvable',
@@ -265,6 +265,7 @@ export default async function WhitepaperPage({
                 <WhitepaperDownloadGate
                   slug={wp.slug}
                   releaseAt={downloadReleaseAt(wp.slug)}
+                  pageCount={wp.pageCount}
                 />
               ) : (
                 <WhitepaperRequestForm
