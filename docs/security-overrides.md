@@ -126,3 +126,99 @@ Seuil ajustable si un article très technique (code/SQL en exemple) dépasse 20.
 **Réversibilité** : retirer les lignes ajoutées du snippet du ConfigMap
 (`kubectl edit configmap ingress-nginx-controller -n ingress-nginx`) —
 nginx recharge automatiquement.
+
+## 4. CSP host-aware — laisser l'app OpenLab poser sa CSP nonce (À APPLIQUER)
+
+**Constat (2026-06-24, vérifié en live `curl -I`)** : `openlabconsulting.com`
+**et** `nexusrh.openlabconsulting.com` servent des en-têtes byte-pour-byte
+identiques, incluant une CSP faible :
+
+```
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com; ... connect-src 'self' https://nexusrh.openlabconsulting.com https://challenges.cloudflare.com; ...
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+```
+
+Cette CSP provient du ConfigMap global `ingress-nginx/web-security-headers`
+(injecté par `add-headers` au niveau contrôleur), qui pose ces headers via
+`more_set_headers` sur **tous** les ingress. Conséquence : la CSP nonce +
+`strict-dynamic` posée par `middleware.ts` de l'app OpenLab est **écrasée à
+l'edge** et n'atteint jamais le navigateur (OWASP A05 — finding HAUT). Le
+`connect-src nexusrh.openlabconsulting.com` est une **contamination cross-app**
+(politique écrite pour NexusRH, forcée sur OpenLab).
+
+**Pourquoi ne pas juste supprimer la CSP du ConfigMap** : elle est partagée et
+NexusRH n'a aucune CSP applicative en dessous (headers identiques → NexusRH
+dépend du ConfigMap). La retirer sèchement laisserait NexusRH **sans CSP**.
+
+**Correctif — rendre la CSP host-aware** (NexusRH inchangé, OpenLab reçoit sa
+CSP forte) :
+
+1. **Retirer la clé `Content-Security-Policy`** du ConfigMap global
+   `web-security-headers` (les autres en-têtes — `X-Content-Type-Options`,
+   `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, HSTS — restent
+   globaux : identiques et sûrs pour les deux apps). Effet : le contrôleur
+   n'écrase plus la CSP → l'app OpenLab récupère sa CSP nonce sur le site
+   public, Payload garde la sienne sur `/admin`.
+
+2. **Re-poser la CSP uniquement pour l'hôte NexusRH** via un `map $host` au
+   niveau contrôleur (ConfigMap `ingress-nginx-controller`, `http-snippet` +
+   `server-snippet`) — c'est la seule voie compatible avec l'admission webhook
+   qui **refuse** les `configuration-snippet`/`more_set_headers` per-ingress
+   (« risky annotation », cf. §3 et historique HSTS) :
+
+```
+# data.http-snippet — la CSP n'est definie que pour l'hote NexusRH (sinon vide)
+map $host $nexusrh_csp {
+    default                                       "";
+    "~*^(www\.)?nexusrh\.openlabconsulting\.com$" "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://nexusrh.openlabconsulting.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com;";
+}
+
+# data.server-snippet — n'ecrit l'en-tete QUE s'il est non vide (sinon on
+# laisserait l'app OpenLab poser la sienne sans la clobber par un header vide)
+if ($nexusrh_csp != "") {
+    more_set_headers "Content-Security-Policy: $nexusrh_csp";
+}
+```
+
+> ✅ Contrairement au `modsecurity-snippet` (§3), les `http-snippet`/
+> `server-snippet` sont insérés **verbatim** dans `nginx.conf` (pas
+> d'encapsulation `'...'`) → les apostrophes des directives CSP (`'self'`)
+> **sont autorisées ici**. Le piège apostrophe du §3 ne s'applique PAS.
+
+**Application** (l'utilisateur a l'accès cluster ; ressource partagée hors
+ArgoCD) :
+
+```bash
+# 1. Sauvegarde des deux ConfigMaps avant toute modif
+kubectl get configmap web-security-headers -n ingress-nginx -o yaml > /tmp/web-security-headers.bak.yaml
+kubectl get configmap ingress-nginx-controller -n ingress-nginx -o yaml > /tmp/ingress-nginx-controller.bak.yaml
+
+# 2. Retirer la clé CSP du ConfigMap global
+kubectl edit configmap web-security-headers -n ingress-nginx     # supprimer la ligne Content-Security-Policy
+
+# 3. Ajouter map (http-snippet) + conditional (server-snippet)
+kubectl edit configmap ingress-nginx-controller -n ingress-nginx # fusionner les deux snippets ci-dessus
+
+# 4. Vérifier le reload À CHAUD (le pod garde l'ancienne config si nginx -t échoue → pas d'outage)
+kubectl logs -n ingress-nginx deploy/ingress-nginx-controller --tail=20 | grep -iE "reload|emerg"
+```
+
+**Vérification (recette)** :
+
+```bash
+curl -sI https://openlabconsulting.com/        | grep -i content-security-policy   # attendu : nonce + strict-dynamic, PAS de nexusrh/unsafe-eval
+curl -sI https://nexusrh.openlabconsulting.com/ | grep -i content-security-policy   # attendu : INCHANGÉ (CSP NexusRH d'origine)
+```
+
+Le `nonce` change à chaque requête (normal). Si OpenLab n'affiche aucune CSP,
+c'est que l'app ne tournait pas avec la dernière image (le middleware pose la
+CSP) → vérifier le déploiement.
+
+**Rollback** : `kubectl apply -f /tmp/web-security-headers.bak.yaml` et
+`kubectl apply -f /tmp/ingress-nginx-controller.bak.yaml` (reload auto).
+
+> ⚠️ NexusRH garde une CSP volontairement faible (`unsafe-inline`/`unsafe-eval`)
+> car son front Angular en dépend ; ce correctif ne la durcit pas — il
+> **rétablit seulement la séparation par hôte**. Durcir la CSP de NexusRH est
+> un chantier de son propre dépôt.
