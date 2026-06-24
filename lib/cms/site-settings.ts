@@ -206,7 +206,7 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
   headline: 'Cette fois,',
   headlineHighlight: 'l’Afrique n’a plus d’excuse.',
   intro:
-    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec {productsWord} produits, un livre blanc préfacé par un ministre, et un cluster Kubernetes souverain.',
+    'Pendant trente ans, on nous a expliqué que la technologie viendrait d’ailleurs. Que la recherche se ferait ailleurs. Que la décision se prendrait ailleurs. Nous arrivons avec {productsWord} produits, un livre blanc « IA souveraine », et un cluster Kubernetes souverain.',
   stances: [
     {
       excuse: '« On n’a pas les outils. »',
@@ -214,7 +214,7 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
     },
     {
       excuse: '« On n’a pas la recherche. »',
-      fact: 'Un livre blanc « IA souveraine » préfacé par le ministre de la Transformation numérique. Un ouvrage de référence à paraître, capstone terrain ivoirien.',
+      fact: 'Un livre blanc « IA souveraine », ouvrage de référence à paraître, capstone terrain ivoirien.',
     },
     {
       excuse: '« On n’a pas la souveraineté. »',
