@@ -24,6 +24,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "audit:prod": "pnpm audit --prod --audit-level high",
     "prepare": "husky",
     "cms:generate-types": "payload generate:types",
     "cms:generate-importmap": "tsx --env-file=.env scripts/payload-importmap.ts",

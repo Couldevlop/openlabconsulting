@@ -1,6 +1,6 @@
 # Politique de sécurité — overrides pnpm & scans Trivy
 
-Deux sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI.
+Sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI, (3) WAF ModSecurity, (4) `pnpm audit` en CI.
 
 ## 1. Overrides pnpm — packages forcés
 
@@ -126,3 +126,50 @@ Seuil ajustable si un article très technique (code/SQL en exemple) dépasse 20.
 **Réversibilité** : retirer les lignes ajoutées du snippet du ConfigMap
 (`kubectl edit configmap ingress-nginx-controller -n ingress-nginx`) —
 nginx recharge automatiquement.
+
+---
+
+## 4. `pnpm audit` en CI — OWASP A06 (Vulnerable Components)
+
+**Quoi (2026-06-24)** : job `audit` dans `.github/workflows/ci.yml`, en
+parallèle de `quality` et `trivy`. Couvre l'item « pnpm audit en CI » du
+CLAUDE.md §10.2 (A06). Deux passes :
+
+1. **Informative (non bloquante)** — `pnpm audit || true` : audit complet
+   dev + prod, toutes sévérités. Rend visibles dans les logs les CVE des
+   **devDependencies** (vitest, vite via `@vitejs/plugin-react`, form-data
+   via jsdom…) qui ne shippent jamais en prod.
+2. **Bloquante** — `pnpm audit --prod --audit-level high` (script
+   `audit:prod`). Échoue la CI **uniquement** sur une CVE HIGH/CRITICAL
+   atteignant le runtime de production. Aligné sur la politique Trivy
+   (HIGH+CRITICAL).
+
+### Pourquoi `--prod` et `--audit-level high`
+
+- **`--prod`** : l'image Docker est distroless et n'embarque que les deps
+  de production (+ standalone Next.js). Les CVE HIGH/CRITICAL en
+  devDependencies (test runner, bundler de test) ne sont pas exploitables
+  en prod → les bloquer ferait rougir la porte sans gain de sécurité réel.
+  Elles restent visibles via la passe informative et Trivy `fs`.
+- **`--audit-level high`** : cohérence avec le seuil bloquant Trivy. Les
+  CVE **moderate/low** (ex. `dompurify` tiré de `@payloadcms/ui` >
+  `monaco-editor`, présent côté admin) sont reportées mais ne bloquent
+  pas — sinon dette de blocage permanente sur des transitives non
+  patchables tant que Payload ne bump pas en amont.
+
+### État au moment de la mise en place (2026-06-24)
+
+- `pnpm audit --prod --audit-level high` → **exit 0** (0 HIGH/CRITICAL en
+  prod). La porte est **verte**.
+- Audit complet : 5 low / 19 moderate / 2 high / 1 critical — les 2 high
+  (`form-data` via jsdom, `vite`) et le critical (`vitest`) sont **tous en
+  devDependencies**, donc hors périmètre bloquant. À résorber par bump des
+  deps de test quand pratique (hors urgence sécurité prod).
+
+### Si une CVE prod HIGH/CRITICAL apparaît
+
+1. **Bumper la dep directe** si un fix amont existe (`pnpm update <pkg>`).
+2. Sinon, **ajouter un `pnpm.overrides`** (procédure §1) et documenter la
+   ligne avec sa condition de retrait.
+3. En dernier recours seulement, si aucun fix n'existe encore amont :
+   tracer la CVE ici et décider explicitement (pas de bypass silencieux).
