@@ -37,6 +37,7 @@
     "cms:seed:laboratoire": "tsx --env-file=.env scripts/seed-laboratoire.ts",
     "cms:seed:covers": "tsx --env-file=.env scripts/seed-article-covers.ts",
     "cms:seed:reassurance": "tsx --env-file=.env scripts/seed-reassurance.ts",
+    "cms:seed:content": "tsx --env-file=.env scripts/seed-content-globals.ts",
     "cms:seed:article:ia-souveraine": "tsx --env-file=.env scripts/seed-article-ia-souveraine.ts",
     "cms:seed:article:sentinelbtp": "tsx --env-file=.env scripts/seed-article-sentinelbtp.ts",
     "cms:seed:article:opencacao": "tsx --env-file=.env scripts/seed-article-opencacao.ts",
