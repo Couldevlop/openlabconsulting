@@ -27,6 +27,7 @@ describe('lib/whitepapers — ouverture du téléchargement', () => {
 describe('whitepaperRequestSchema — opt-in newsletter', () => {
   const base = {
     email: 'a@b.com',
+    organization: 'Service',
     slug: SLUG,
     consentRgpd: 'on',
   };
