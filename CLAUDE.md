@@ -69,19 +69,19 @@ bash deploy/scripts/rollback.sh
 
 ### Où chercher quoi
 
-| Question                              | Où                                          |
-| ------------------------------------- | ------------------------------------------- |
-| Quelle stack, quelles versions ?      | §2 (ci-dessous)                             |
-| Que doit contenir la homepage ?       | §3 (ci-dessous)                             |
-| Règles de collaboration / ordre ?     | §4 (ci-dessous)                             |
-| Ton de marque, formules à éviter ?    | §5 (ci-dessous)                             |
-| Couleurs, polices, tokens, UX/UI ?    | `docs/reference/brand-identity.md`          |
-| Routes / arborescence / pages prod / livre ? | `docs/reference/site-map-and-pages.md` |
-| Modules admin Payload ?               | `docs/reference/admin-backoffice.md`        |
-| Headers HTTP, rate limiting, RGPD, RBAC, 2FA ? | `docs/reference/security-owasp.md` |
-| SEO, schema.org, llms.txt ?           | `docs/reference/seo-strategy.md`            |
+| Question                                          | Où                                        |
+| ------------------------------------------------- | ----------------------------------------- |
+| Quelle stack, quelles versions ?                  | §2 (ci-dessous)                           |
+| Que doit contenir la homepage ?                   | §3 (ci-dessous)                           |
+| Règles de collaboration / ordre ?                 | §4 (ci-dessous)                           |
+| Ton de marque, formules à éviter ?                | §5 (ci-dessous)                           |
+| Couleurs, polices, tokens, UX/UI ?                | `docs/reference/brand-identity.md`        |
+| Routes / arborescence / pages prod / livre ?      | `docs/reference/site-map-and-pages.md`    |
+| Modules admin Payload ?                           | `docs/reference/admin-backoffice.md`      |
+| Headers HTTP, rate limiting, RGPD, RBAC, 2FA ?    | `docs/reference/security-owasp.md`        |
+| SEO, schema.org, llms.txt ?                       | `docs/reference/seo-strategy.md`          |
 | Dockerfile, K8s, deploy.sh, backups, monitoring ? | `docs/reference/infrastructure-deploy.md` |
-| Checklist avant mise en ligne ?       | `docs/reference/launch-checklist.md`        |
+| Checklist avant mise en ligne ?                   | `docs/reference/launch-checklist.md`      |
 
 ### Règles non négociables (rappel)
 
@@ -109,15 +109,15 @@ Tout est servi par **un seul `Deployment` K8s** (cf. `docs/reference/infrastruct
 
 Les spécifications détaillées sont externalisées pour garder ce noyau léger. **Lire le fichier concerné avant de travailler sur le domaine correspondant** :
 
-| Fichier                                      | Contenu                                                                 |
-| -------------------------------------------- | ----------------------------------------------------------------------- |
-| `docs/reference/brand-identity.md`           | Identité visuelle (palette, polices, logo) + principes UX/UI            |
-| `docs/reference/site-map-and-pages.md`       | Arborescence complète, template pages produits, espace livre            |
-| `docs/reference/admin-backoffice.md`         | Back-office Payload : modules, design, génération assistée IA           |
-| `docs/reference/security-owasp.md`           | OWASP Top 10, headers HTTP, rate limiting, RGPD, RBAC, 2FA, auth        |
-| `docs/reference/seo-strategy.md`             | Mots-clés, pages piliers, schema.org, GEO/llms.txt, contenu, backlinks  |
-| `docs/reference/infrastructure-deploy.md`    | Docker multi-stage, K3s Hetzner, manifests, CI/CD, monitoring, backups  |
-| `docs/reference/launch-checklist.md`         | Checklist qualité complète avant mise en ligne                          |
+| Fichier                                   | Contenu                                                                |
+| ----------------------------------------- | ---------------------------------------------------------------------- |
+| `docs/reference/brand-identity.md`        | Identité visuelle (palette, polices, logo) + principes UX/UI           |
+| `docs/reference/site-map-and-pages.md`    | Arborescence complète, template pages produits, espace livre           |
+| `docs/reference/admin-backoffice.md`      | Back-office Payload : modules, design, génération assistée IA          |
+| `docs/reference/security-owasp.md`        | OWASP Top 10, headers HTTP, rate limiting, RGPD, RBAC, 2FA, auth       |
+| `docs/reference/seo-strategy.md`          | Mots-clés, pages piliers, schema.org, GEO/llms.txt, contenu, backlinks |
+| `docs/reference/infrastructure-deploy.md` | Docker multi-stage, K3s Hetzner, manifests, CI/CD, monitoring, backups |
+| `docs/reference/launch-checklist.md`      | Checklist qualité complète avant mise en ligne                         |
 
 Autres docs utiles : `docs/admin-cms.md`, `docs/admin-creer-un-article.md`, `docs/release-procedure.md`, `docs/security-overrides.md`, `docs/anti-scraping.md`, `docs/seo/` (briefs articles).
 
@@ -125,28 +125,28 @@ Autres docs utiles : `docs/admin-cms.md`, `docs/admin-creer-un-article.md`, `doc
 
 Le code (commentaires, `payload.config.ts`, scripts, manifests…) référence l'ancienne numérotation `§N` de la v2.0. La table ci-dessous redirige vers le nouvel emplacement. **Les sous-numéros sont conservés** : ancien `§14.5` → `infrastructure-deploy.md` §2.5, ancien `§10.3` → `security-owasp.md` §1.3, etc. (_Note : certains `§N` du code visent une liste externe, ex. « OWASP §10 A02 » = catégorie OWASP Top 10, pas ce document._)
 
-| Ancien § (v2.0)           | Nouvel emplacement                                  |
-| ------------------------- | --------------------------------------------------- |
-| §1 Contexte stratégique   | §1 (ce fichier — inchangé)                           |
-| §2 Stack technique        | §2 (ce fichier — inchangé)                           |
-| §3 Identité visuelle      | `docs/reference/brand-identity.md` §1 (§3.x → §1.x)  |
-| §4 Principes UX/UI        | `docs/reference/brand-identity.md` §2 (§4.x → §2.x)  |
-| §5 Arborescence           | `docs/reference/site-map-and-pages.md` §1            |
-| §6 Homepage               | §3 (ce fichier — renuméroté)                         |
-| §7 Pages produits         | `docs/reference/site-map-and-pages.md` §2            |
-| §8 Livre                  | `docs/reference/site-map-and-pages.md` §3            |
-| §9 Back-office            | `docs/reference/admin-backoffice.md`                 |
-| §10 Sécurité OWASP        | `docs/reference/security-owasp.md` §1 (§10.x → §1.x) |
-| §11 Authentification      | `docs/reference/security-owasp.md` §2 (§11.x → §2.x) |
-| §12 SEO                   | `docs/reference/seo-strategy.md` (§12.x → §x)        |
-| §13 Docker                | `docs/reference/infrastructure-deploy.md` §1 (§13.x → §1.x) |
-| §14 Déploiement K3s       | `docs/reference/infrastructure-deploy.md` §2 (§14.x → §2.x) |
-| §15 Observabilité         | `docs/reference/infrastructure-deploy.md` §3 (§15.x → §3.x) |
-| §16 Workflow / ordre      | §4 (ce fichier — renuméroté ; §16.1 → §4.1)          |
-| §17 Checklist qualité     | `docs/reference/launch-checklist.md`                 |
-| §18 Ton de marque         | §5 (ce fichier — renuméroté)                         |
-| §19 Roadmap               | §6 (ce fichier — renuméroté)                          |
-| §20 Critère final         | §7 (ce fichier — renuméroté)                          |
+| Ancien § (v2.0)         | Nouvel emplacement                                          |
+| ----------------------- | ----------------------------------------------------------- |
+| §1 Contexte stratégique | §1 (ce fichier — inchangé)                                  |
+| §2 Stack technique      | §2 (ce fichier — inchangé)                                  |
+| §3 Identité visuelle    | `docs/reference/brand-identity.md` §1 (§3.x → §1.x)         |
+| §4 Principes UX/UI      | `docs/reference/brand-identity.md` §2 (§4.x → §2.x)         |
+| §5 Arborescence         | `docs/reference/site-map-and-pages.md` §1                   |
+| §6 Homepage             | §3 (ce fichier — renuméroté)                                |
+| §7 Pages produits       | `docs/reference/site-map-and-pages.md` §2                   |
+| §8 Livre                | `docs/reference/site-map-and-pages.md` §3                   |
+| §9 Back-office          | `docs/reference/admin-backoffice.md`                        |
+| §10 Sécurité OWASP      | `docs/reference/security-owasp.md` §1 (§10.x → §1.x)        |
+| §11 Authentification    | `docs/reference/security-owasp.md` §2 (§11.x → §2.x)        |
+| §12 SEO                 | `docs/reference/seo-strategy.md` (§12.x → §x)               |
+| §13 Docker              | `docs/reference/infrastructure-deploy.md` §1 (§13.x → §1.x) |
+| §14 Déploiement K3s     | `docs/reference/infrastructure-deploy.md` §2 (§14.x → §2.x) |
+| §15 Observabilité       | `docs/reference/infrastructure-deploy.md` §3 (§15.x → §3.x) |
+| §16 Workflow / ordre    | §4 (ce fichier — renuméroté ; §16.1 → §4.1)                 |
+| §17 Checklist qualité   | `docs/reference/launch-checklist.md`                        |
+| §18 Ton de marque       | §5 (ce fichier — renuméroté)                                |
+| §19 Roadmap             | §6 (ce fichier — renuméroté)                                |
+| §20 Critère final       | §7 (ce fichier — renuméroté)                                |
 
 ---
 
