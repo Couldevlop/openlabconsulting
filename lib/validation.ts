@@ -95,10 +95,31 @@ export const WHITEPAPER_SLUGS = [
   'donnez-la-parole-a-vos-donnees',
 ] as const;
 
+/**
+ * Domaines d'activité proposés dans le formulaire de téléchargement d'un
+ * livre blanc. Source unique partagée entre le `<select>` du formulaire
+ * (WhitepaperRequestForm) et la validation serveur ci-dessous — toute
+ * valeur hors liste est rejetée (OWASP A03 : pas d'entrée libre non bornée).
+ */
+export const WHITEPAPER_ORGANIZATION_OPTIONS = [
+  'Juridique',
+  'Informatique',
+  'Service',
+  'Communication',
+  'Ressources humaines',
+  'Commerce',
+  'Éducation',
+  'Santé',
+  'Entrepreneuriat',
+  'Autres',
+] as const;
+
 export const whitepaperRequestSchema = z.object({
   email: z.email().max(180),
   name: z.string().min(2).max(120).optional().or(z.literal('')),
-  organization: z.string().max(180).optional().or(z.literal('')),
+  organization: z.enum(WHITEPAPER_ORGANIZATION_OPTIONS, {
+    message: 'Sélectionnez un domaine d’activité.',
+  }),
   slug: z.enum(WHITEPAPER_SLUGS),
   consentRgpd: z
     .union([z.literal('on'), z.literal('true'), z.boolean()])

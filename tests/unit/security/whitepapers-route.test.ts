@@ -45,7 +45,7 @@ describe('POST /api/whitepapers/request', () => {
   const validBody = {
     email: 'dsi@banque-atlantique.ci',
     name: 'Aminata Coulibaly',
-    organization: 'Banque Atlantique',
+    organization: 'Commerce',
     slug: 'ia-souveraine-ci-2026',
     consentRgpd: 'on',
   };
@@ -77,15 +77,34 @@ describe('POST /api/whitepapers/request', () => {
     );
   });
 
-  it('accepte un email sans nom ni organisation (champs optionnels)', async () => {
+  it('accepte un email sans nom mais avec organisation (nom optionnel)', async () => {
     const res = await whitepaperPost(
       buildReq({
         email: 'curieux@example.ci',
+        organization: 'Autres',
         slug: 'ia-souveraine-ci-2026',
         consentRgpd: 'on',
       }),
     );
     expect(res.status).toBe(200);
+  });
+
+  it('renvoie 400 si organisation absente (champ obligatoire)', async () => {
+    const { organization: _omitted, ...rest } = validBody;
+    void _omitted;
+    const res = await whitepaperPost(buildReq(rest));
+    expect(res.status).toBe(400);
+    const json = await res.json();
+    expect(json.fields.organization).toBeDefined();
+  });
+
+  it('renvoie 400 si organisation hors liste (anti valeur libre)', async () => {
+    const res = await whitepaperPost(
+      buildReq({ ...validBody, organization: 'Banque Atlantique' }),
+    );
+    expect(res.status).toBe(400);
+    const json = await res.json();
+    expect(json.fields.organization).toBeDefined();
   });
 
   it('renvoie 400 sur slug non whitelisté (anti enumeration)', async () => {
@@ -152,6 +171,7 @@ describe('POST /api/whitepapers/request', () => {
   it('accepte aussi un body FormData (form HTML classique)', async () => {
     const form = new FormData();
     form.set('email', 'cto@example.ci');
+    form.set('organization', 'Service');
     form.set('slug', 'ia-souveraine-ci-2026');
     form.set('consentRgpd', 'on');
     const req = new Request('http://localhost:3000/api/whitepapers/request', {
