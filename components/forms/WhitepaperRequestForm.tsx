@@ -5,6 +5,7 @@ import { useState, type FormEvent, type ReactElement } from 'react';
 import { Download, Mail } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Turnstile } from '@/components/atoms/Turnstile';
+import { WHITEPAPER_ORGANIZATION_OPTIONS } from '@/lib/validation';
 
 type Status =
   | { kind: 'idle' }
@@ -168,18 +169,29 @@ export function WhitepaperRequestForm({
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium text-[var(--color-ol-night)]">
-          Organisation{' '}
-          <span className="text-[var(--color-ol-graphite)]/55">
-            (optionnel)
-          </span>
+          Organisation
         </span>
-        <input
+        <select
           name="organization"
-          type="text"
-          autoComplete="organization"
-          placeholder="Banque, ministère, PME…"
-          className="min-h-11 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
-        />
+          required
+          defaultValue=""
+          aria-invalid={fieldError('organization') ? true : undefined}
+          className="min-h-12 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-4 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+        >
+          <option value="" disabled>
+            Sélectionnez votre domaine…
+          </option>
+          {WHITEPAPER_ORGANIZATION_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {fieldError('organization') ? (
+          <span className="text-xs text-[var(--color-ol-danger)]">
+            {fieldError('organization')}
+          </span>
+        ) : null}
       </label>
 
       <label className="flex items-start gap-3 text-sm text-[var(--color-ol-graphite)]/80">
