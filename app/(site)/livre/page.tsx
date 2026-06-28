@@ -18,7 +18,7 @@ import { bookSchema, breadcrumbSchema } from '@/lib/seo/schema';
 import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
-  title: `${BOOK.title} — ${BOOK.subtitle}`,
+  title: `${BOOK.title} : ${BOOK.subtitle}`,
   description: BOOK.longPitch[0],
   alternates: alternatesFor('/livre'),
   openGraph: {

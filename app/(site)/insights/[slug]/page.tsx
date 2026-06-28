@@ -32,9 +32,9 @@ export async function generateMetadata({
   const { slug } = await params;
   const { isEnabled: isDraft } = await draftMode();
   const article = await getArticleBySlug(slug, { draft: isDraft });
-  if (!article) return { title: 'Article introuvable — Insights OpenLab' };
+  if (!article) return { title: 'Article introuvable : Insights OpenLab' };
   return {
-    title: `${article.title} — Insights OpenLab`,
+    title: `${article.title} : Insights OpenLab`,
     description: article.excerpt,
     alternates: alternatesFor(`/insights/${article.slug}`),
     // Une prévisualisation de brouillon ne doit jamais être indexée.
@@ -96,7 +96,7 @@ export default async function InsightArticlePage({
       )}
       {isDraft && (
         <div className="bg-[var(--color-ol-night)] px-4 py-2 text-center text-sm text-white">
-          Mode prévisualisation — brouillon non publié.{' '}
+          Mode prévisualisation : brouillon non publié.{' '}
           <Link
             href="/api/preview/exit"
             className="font-semibold text-[var(--color-ol-orange-light)] underline underline-offset-2"
@@ -218,7 +218,7 @@ export default async function InsightArticlePage({
                   <p className="mt-4 text-[var(--color-ol-graphite)]/75">
                     Le corps de cet article est servi depuis l’admin. S’il ne
                     s’affiche pas, le service de contenu est momentanément
-                    indisponible — réessaie dans quelques instants.
+                    indisponible, réessaie dans quelques instants.
                   </p>
                 </div>
               )}

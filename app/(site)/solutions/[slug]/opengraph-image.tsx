@@ -6,7 +6,7 @@ import {
 } from '@/lib/seo/og-image-template';
 
 export const runtime = 'nodejs';
-export const alt = 'Produit OpenLab — fiche solution';
+export const alt = 'Produit OpenLab : fiche solution';
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

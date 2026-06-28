@@ -35,7 +35,7 @@ export async function generateMetadata({
     return { title: 'Secteur introuvable' };
   }
   return {
-    title: `${sector.name} — Secteurs OpenLab`,
+    title: `${sector.name} : Secteurs OpenLab`,
     description: sector.tagline,
     alternates: alternatesFor(`/secteurs/${sector.slug}`),
   };

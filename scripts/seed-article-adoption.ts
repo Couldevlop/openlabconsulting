@@ -20,13 +20,13 @@ import config from '../payload.config';
 const SLUG = 'ia-ne-sinstalle-pas-elle-sadopte';
 const TITLE = 'L’IA ne s’installe pas. Elle s’adopte.';
 const EXCERPT =
-  'La souveraineté IA de la Côte d’Ivoire ne se décrétera pas : elle se construira par l’usage. Voici la couche où tout se joue — applications et données — et la preuve qu’elle tourne déjà, en production.';
+  'La souveraineté IA de la Côte d’Ivoire ne se décrétera pas : elle se construira par l’usage. Voici la couche où tout se joue, applications et données, et la preuve qu’elle tourne déjà, en production.';
 const COVER_FILENAME = 'SNIA5.png';
 
 const SUMMARY_POINTS = [
   'L’IA utile ne se gagne ni par la seule infrastructure, ni par l’expérimentation isolée, mais par la couche applicative et données.',
   'OpenCacao prouve la méthode : un modèle open source affiné sur un corpus ivoirien, auto-hébergé sur cluster souverain, accessible en ligne.',
-  'Huit produits propriétaires déployés ou en déploiement avancé — des systèmes en production, pas des démonstrations.',
+  'Huit produits propriétaires déployés ou en déploiement avancé, des systèmes en production, pas des démonstrations.',
   'Aux organisations qui se reconnaissent dans la SNIA 2030 et veulent passer à l’exécution : la couche d’adoption existe déjà.',
 ];
 
@@ -43,27 +43,27 @@ const KEYWORDS = [
 const SOURCES = [
   {
     label:
-      'Stratégie Nationale de l’IA (SNIA 2030) — Ministère de la Transition Numérique et de la Digitalisation',
+      'Stratégie Nationale de l’IA (SNIA 2030), Ministère de la Transition Numérique et de la Digitalisation',
     url: 'https://telecom.gouv.ci',
   },
   {
-    label: 'Conseil du Café-Cacao — filière et production',
+    label: 'Conseil du Café-Cacao : filière et production',
     url: 'https://www.conseilcafecacao.ci',
   },
   {
-    label: 'Banque mondiale — Côte d’Ivoire, économie du cacao',
+    label: 'Banque mondiale : Côte d’Ivoire, économie du cacao',
     url: 'https://www.banquemondiale.org/fr/country/cotedivoire',
   },
   {
-    label: 'CNRA — Centre National de Recherche Agronomique',
+    label: 'CNRA : Centre National de Recherche Agronomique',
     url: 'https://www.cnra.ci',
   },
   {
-    label: 'ANADER — Agence Nationale d’Appui au Développement Rural',
+    label: 'ANADER : Agence Nationale d’Appui au Développement Rural',
     url: 'https://www.anader.ci',
   },
   {
-    label: 'OpenCacao — IA souveraine de la filière cacao',
+    label: 'OpenCacao : IA souveraine de la filière cacao',
     url: 'https://opencacao.openlabconsulting.com',
   },
 ];
@@ -170,10 +170,10 @@ const trow = (cells: string[], header = false) =>
 // ── Corps de l'article ──────────────────────────────────────────
 const CONTENT: any[] = [
   p(
-    'L’intelligence artificielle ne souffre pas d’un déficit d’annonces. Elle souffre d’un déficit d’adoption. Entre le moment où une technologie devient disponible et celui où elle change réellement le quotidien d’une organisation, il y a un fossé — et c’est dans ce fossé que se perdent la plupart des ambitions numériques africaines.',
+    'L’intelligence artificielle ne souffre pas d’un déficit d’annonces. Elle souffre d’un déficit d’adoption. Entre le moment où une technologie devient disponible et celui où elle change réellement le quotidien d’une organisation, il y a un fossé, et c’est dans ce fossé que se perdent la plupart des ambitions numériques africaines.',
   ),
   p(
-    'Cette phrase résume notre approche depuis le premier jour : **l’IA ne s’installe pas, elle s’adopte.** C’est aussi, mot pour mot, ce que rend possible à l’échelle nationale la priorité portée par le ministre Djibril Ouattara — *accompagner l’innovation et favoriser l’adoption des technologies émergentes*. Accompagner. Favoriser l’adoption. Pas seulement financer des infrastructures, pas seulement multiplier les vitrines : créer les conditions pour que la technologie soit réellement absorbée par l’économie réelle.',
+    'Cette phrase résume notre approche depuis le premier jour : **l’IA ne s’installe pas, elle s’adopte.** C’est aussi, mot pour mot, ce que rend possible à l’échelle nationale la priorité portée par le ministre Djibril Ouattara, *accompagner l’innovation et favoriser l’adoption des technologies émergentes*. Accompagner. Favoriser l’adoption. Pas seulement financer des infrastructures, pas seulement multiplier les vitrines : créer les conditions pour que la technologie soit réellement absorbée par l’économie réelle.',
   ),
   p(
     'Cet article explique où se joue cette adoption, pourquoi nous avons décidé d’y jouer, et ce que nous avons déjà mis en production pour le prouver.',
@@ -188,7 +188,7 @@ const CONTENT: any[] = [
   ),
   h3('L’extrême de l’infrastructure'),
   p(
-    'Le premier, c’est la **promesse infrastructure**. Des data centers, des câbles, des GPU, des foundation models entraînés depuis zéro. Une vision noble — et nécessaire à terme — mais longue, capitalistique, qui se mesure en années et en milliards. Elle suppose que la souveraineté commence par posséder la totalité de la pile technologique, du silicium au modèle. C’est vrai sur le papier. C’est intenable comme point de départ pour une économie qui a besoin de résultats maintenant, pas dans une décennie.',
+    'Le premier, c’est la **promesse infrastructure**. Des data centers, des câbles, des GPU, des foundation models entraînés depuis zéro. Une vision noble, et nécessaire à terme, mais longue, capitalistique, qui se mesure en années et en milliards. Elle suppose que la souveraineté commence par posséder la totalité de la pile technologique, du silicium au modèle. C’est vrai sur le papier. C’est intenable comme point de départ pour une économie qui a besoin de résultats maintenant, pas dans une décennie.',
   ),
   p(
     'Le risque de cet extrême est connu : on attend l’infrastructure parfaite pour commencer, et pendant qu’on attend, l’usage ne progresse pas. La souveraineté reste un objet de discours, jamais un objet d’usage.',
@@ -247,13 +247,13 @@ const CONTENT: any[] = [
 
   h2('La priorité du ministre, traduite en exécution'),
   p(
-    'La Stratégie Nationale de l’Intelligence Artificielle à l’horizon 2030 — la SNIA 2030 — pose un cap clair : faire de l’IA un moteur de développement, en s’appuyant sur l’innovation et l’adoption des technologies émergentes. La priorité portée par le ministre Djibril Ouattara n’est pas un slogan administratif : c’est une commande politique qui appelle une réponse opérationnelle.',
+    'La Stratégie Nationale de l’Intelligence Artificielle à l’horizon 2030, la SNIA 2030, pose un cap clair : faire de l’IA un moteur de développement, en s’appuyant sur l’innovation et l’adoption des technologies émergentes. La priorité portée par le ministre Djibril Ouattara n’est pas un slogan administratif : c’est une commande politique qui appelle une réponse opérationnelle.',
   ),
   p(
     'Or une stratégie nationale ne se réalise pas par décret. Elle se réalise par une **chaîne d’exécution** : des acteurs capables de transformer une orientation en systèmes qui tournent. C’est exactement le rôle que nous revendiquons. Pas celui de commentateur de la stratégie, mais celui d’opérateur de son volet applicatif.',
   ),
   p(
-    'Accompagner l’innovation, côté État, c’est créer le cadre. Favoriser l’adoption, côté terrain, c’est livrer les outils que les organisations adoptent vraiment. Les deux mouvements sont complémentaires. L’un sans l’autre échoue : un cadre sans exécution reste une intention, une exécution sans cadre reste un îlot. La Côte d’Ivoire a aujourd’hui les deux — c’est ce qui rend le moment singulier.',
+    'Accompagner l’innovation, côté État, c’est créer le cadre. Favoriser l’adoption, côté terrain, c’est livrer les outils que les organisations adoptent vraiment. Les deux mouvements sont complémentaires. L’un sans l’autre échoue : un cadre sans exécution reste une intention, une exécution sans cadre reste un îlot. La Côte d’Ivoire a aujourd’hui les deux, c’est ce qui rend le moment singulier.',
   ),
 
   h2('OpenCacao : la preuve la plus mature'),
@@ -265,11 +265,11 @@ const CONTENT: any[] = [
     'Un modèle de langage **open source**, affiné sur un corpus ivoirien de référence : environ **5 Go de données** issues du CNRA (Centre National de Recherche Agronomique), de l’ANADER (Agence Nationale d’Appui au Développement Rural) et du Conseil du Café-Cacao. Auto-hébergé sur **cluster souverain**, sous notre seul contrôle opérationnel. Accessible publiquement à **opencacao.openlabconsulting.com**.',
   ),
   p(
-    'Notez ce que ce n’est *pas*. Ce n’est pas un foundation model construit depuis zéro, avec des mois de calcul et des budgets que peu d’acteurs africains peuvent aligner. C’est un modèle ouvert, déjà compétent, **adapté** à un domaine précis. La différence est stratégique : là où l’entraînement depuis zéro relève de l’extrême infrastructure, l’affinage d’un modèle ouvert sur un corpus métier relève de la couche applicative — rapide, maîtrisé, souverain dans ce qui compte vraiment : les données et l’opération.',
+    'Notez ce que ce n’est *pas*. Ce n’est pas un foundation model construit depuis zéro, avec des mois de calcul et des budgets que peu d’acteurs africains peuvent aligner. C’est un modèle ouvert, déjà compétent, **adapté** à un domaine précis. La différence est stratégique : là où l’entraînement depuis zéro relève de l’extrême infrastructure, l’affinage d’un modèle ouvert sur un corpus métier relève de la couche applicative, rapide, maîtrisé, souverain dans ce qui compte vraiment : les données et l’opération.',
   ),
   h3('Pourquoi le cacao'),
   p(
-    'Parce que le cacao n’est pas un sujet de niche en Côte d’Ivoire : c’est un pilier de l’économie. Le pays est le **premier producteur mondial** — de l’ordre de 45 % de l’offre mondiale — et la filière pèse une part majeure du PIB et des recettes d’exportation. Construire une IA verticale sur ce domaine, ce n’est pas un exercice de style. C’est viser le cœur de la valeur nationale.',
+    'Parce que le cacao n’est pas un sujet de niche en Côte d’Ivoire : c’est un pilier de l’économie. Le pays est le **premier producteur mondial**, de l’ordre de 45 % de l’offre mondiale, et la filière pèse une part majeure du PIB et des recettes d’exportation. Construire une IA verticale sur ce domaine, ce n’est pas un exercice de style. C’est viser le cœur de la valeur nationale.',
   ),
   p(
     'OpenCacao montre la méthode reproductible : partir des données d’un domaine, affiner un modèle ouvert, l’héberger localement, l’encadrer de garde-fous. Cette méthode n’a rien de réservé au cacao. Elle vaut pour l’anacarde, le coton, l’hévéa. Pour la banque, l’assurance, la santé. Pour les télécoms et l’énergie. Pour une administration, un ministère, une collectivité. Le cacao est la première démonstration, pas la dernière.',
@@ -323,7 +323,7 @@ const CONTENT: any[] = [
     ]),
   ]),
   p(
-    'Certains sont en production depuis des mois — NexusRH, NexusERP, SYGESCOM, Fraud Shield. D’autres sont en déploiement avancé ou en pilote terrain. Aucun n’est une diapositive. Ce sont des systèmes qui traitent des données réelles, pour des organisations réelles, avec des conséquences réelles.',
+    'Certains sont en production depuis des mois : NexusRH, NexusERP, SYGESCOM, Fraud Shield. D’autres sont en déploiement avancé ou en pilote terrain. Aucun n’est une diapositive. Ce sont des systèmes qui traitent des données réelles, pour des organisations réelles, avec des conséquences réelles.',
   ),
   p(
     'C’est la différence que nous revendiquons. On ne présente pas un *roadmap* d’intentions : on présente un parc en exploitation. La souveraineté ne se prouve pas par ce qu’on annonce pouvoir faire. Elle se prouve par ce qui tourne pendant qu’on en parle.',
@@ -342,7 +342,7 @@ const CONTENT: any[] = [
   ),
   h3('2. La maîtrise de l’opération'),
   p(
-    'Le modèle tourne sur une infrastructure que l’on administre — un cluster Kubernetes souverain — et non sur une API distante dont on ne connaît ni la localisation, ni la rétention, ni les conditions d’usage des requêtes. Contrôler l’exécution, c’est contrôler la dépendance.',
+    'Le modèle tourne sur une infrastructure que l’on administre, un cluster Kubernetes souverain, et non sur une API distante dont on ne connaît ni la localisation, ni la rétention, ni les conditions d’usage des requêtes. Contrôler l’exécution, c’est contrôler la dépendance.',
   ),
   h3('3. La vérifiabilité'),
   p(
@@ -354,19 +354,19 @@ const CONTENT: any[] = [
 
   h2('La méthode : par l’usage, dans l’ordre'),
   p(
-    'L’IA ne s’adopte pas par enthousiasme. Elle s’adopte par méthode. Et la méthode tient en trois étapes, dans l’ordre — jamais dans le désordre.',
+    'L’IA ne s’adopte pas par enthousiasme. Elle s’adopte par méthode. Et la méthode tient en trois étapes, dans l’ordre, jamais dans le désordre.',
   ),
   p(
     '**D’abord, mesurer.** Où en est vraiment une organisation : ses données, ses processus, ses compétences, son infrastructure. On ne déploie pas l’IA sur des fondations qu’on n’a pas évaluées.',
   ),
   p(
-    '**Ensuite, choisir.** Quelles données, quels processus confier à l’IA — et lesquels garder humains. La bonne IA, au bon endroit, sous gouvernance. C’est ici que se décide la différence entre un gadget et un levier.',
+    '**Ensuite, choisir.** Quelles données, quels processus confier à l’IA, et lesquels garder humains. La bonne IA, au bon endroit, sous gouvernance. C’est ici que se décide la différence entre un gadget et un levier.',
   ),
   p(
     '**Enfin, déployer pour de vrai.** Priorisation par ROI, conduite du changement, jalons concrets. Pas un pilote qui dort : une adoption qui change les résultats.',
   ),
   p(
-    'Cette discipline est l’exact opposé des deux extrêmes. Elle ne fantasme pas l’infrastructure totale, et elle ne se contente pas de la démonstration. Elle exécute. C’est lent à dire, rapide à produire — et c’est la seule façon de transformer une stratégie nationale en résultats mesurables.',
+    'Cette discipline est l’exact opposé des deux extrêmes. Elle ne fantasme pas l’infrastructure totale, et elle ne se contente pas de la démonstration. Elle exécute. C’est lent à dire, rapide à produire, et c’est la seule façon de transformer une stratégie nationale en résultats mesurables.',
   ),
 
   h2('Aux organisations qui veulent passer à l’exécution'),
@@ -374,7 +374,7 @@ const CONTENT: any[] = [
     'La SNIA 2030 trace une direction. La priorité du ministre Djibril Ouattara ouvre la voie. Mais une stratégie ne devient réalité que lorsque des institutions et des entreprises décident, concrètement, de **passer à l’exécution.**',
   ),
   p(
-    'Si vous êtes une banque, une compagnie d’assurance, une coopérative, une administration, une collectivité — et que vous vous reconnaissez dans l’ambition d’une Côte d’Ivoire qui adopte l’IA plutôt que de seulement la commenter — alors la couche dont parle cet article n’est pas une théorie. Elle est disponible. Elle tourne. Elle attend vos données et votre métier.',
+    'Si vous êtes une banque, une compagnie d’assurance, une coopérative, une administration, une collectivité, et que vous vous reconnaissez dans l’ambition d’une Côte d’Ivoire qui adopte l’IA plutôt que de seulement la commenter, alors la couche dont parle cet article n’est pas une théorie. Elle est disponible. Elle tourne. Elle attend vos données et votre métier.',
   ),
   p(
     'Nous ne vendons pas une promesse de souveraineté pour 2035. Nous proposons une adoption qui commence ce trimestre, sur un cas d’usage réel, avec un livrable mesurable. C’est ainsi qu’une nation devient souveraine en IA : non par une grande annonce, mais par mille usages qui, additionnés, déplacent l’économie.',
@@ -383,7 +383,7 @@ const CONTENT: any[] = [
     'L’IA ne s’installe pas. Elle s’adopte. Et l’adoption, elle, a déjà commencé.',
   ),
   p(
-    '*Envie de savoir où l’IA vous ferait gagner du temps ? Demandez un audit IA gratuit — trente minutes pour cartographier vos cas d’usage et repartir avec trois prochaines étapes activables.*',
+    '*Envie de savoir où l’IA vous ferait gagner du temps ? Demandez un audit IA gratuit, trente minutes pour cartographier vos cas d’usage et repartir avec trois prochaines étapes activables.*',
   ),
 ];
 

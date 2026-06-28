@@ -39,9 +39,9 @@ export async function generateMetadata({
 }: RouteParams): Promise<Metadata> {
   const { slug } = await params;
   const title = WHITEPAPER_TITLES[slug];
-  if (!title) return { title: 'Livre blanc — Merci' };
+  if (!title) return { title: 'Livre blanc : Merci' };
   return {
-    title: `Merci — ${title}`,
+    title: `Merci : ${title}`,
     description: `Votre PDF est prêt à télécharger.`,
     alternates: alternatesFor(`/livres-blancs/${slug}/merci`),
     robots: { index: false, follow: false },
@@ -81,8 +81,8 @@ export default async function WhitepaperThanksPage({
             <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/80">
               <span className="font-medium text-[var(--color-ol-night)]">
                 {title}
-              </span>{' '}
-              — vous pouvez le télécharger immédiatement ci-dessous. Une copie
+              </span>
+              , vous pouvez le télécharger immédiatement ci-dessous. Une copie
               vous sera également envoyée par email dans les prochaines heures
               ouvrées.
             </p>
@@ -93,7 +93,7 @@ export default async function WhitepaperThanksPage({
                 Accès direct au PDF.
               </Heading>
               <p className="mt-3 text-sm text-[var(--color-ol-graphite)]/70">
-                Conservez ce lien — il reste valide. Si le téléchargement ne
+                Conservez ce lien, il reste valide. Si le téléchargement ne
                 démarre pas automatiquement, cliquez sur le bouton ci-dessous.
               </p>
 
@@ -122,8 +122,8 @@ export default async function WhitepaperThanksPage({
                   className="font-medium text-[var(--color-ol-orange)] underline-offset-4 hover:underline"
                 >
                   → Demander un audit IA gratuit
-                </Link>{' '}
-                — 30 min avec un consultant senior, ROI estimé, prochaines
+                </Link>
+                , 30 min avec un consultant senior, ROI estimé, prochaines
                 étapes activables.
               </p>
               <p>

@@ -6,7 +6,7 @@ import {
 } from '@/lib/seo/og-image-template';
 
 export const runtime = 'edge';
-export const alt = 'Livre IA OpenLab — du ML aux agents autonomes';
+export const alt = 'Livre IA OpenLab : du ML aux agents autonomes';
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

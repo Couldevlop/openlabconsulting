@@ -11,7 +11,7 @@ import { accessEditorPlus } from '../lib/auth/roles';
  */
 export const ManifestoSettings: GlobalConfig = {
   slug: 'manifesto-settings',
-  label: 'Manifeste — Homepage',
+  label: 'Manifeste : Homepage',
   admin: {
     description:
       'Manifeste OpenLab (CLAUDE.md §6.7). Trois stances en antithèse + signature.',

@@ -37,8 +37,8 @@ export async function generateMetadata({
   const path = isPaged ? `/insights?page=${n}` : '/insights';
   return {
     title: isPaged
-      ? `Insights (page ${n}) — Articles, études et retours de terrain`
-      : 'Insights — Articles, études et retours de terrain',
+      ? `Insights (page ${n}) : Articles, études et retours de terrain`
+      : 'Insights : Articles, études et retours de terrain',
     description:
       'Retours de déploiements IA réels en Afrique francophone : souveraineté, conformité, fraude documentaire, agriculture précision, cybersécurité.',
     alternates: {

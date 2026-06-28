@@ -18,9 +18,9 @@ import { alternatesFor } from '@/lib/seo/site';
 import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
-  title: `Solutions — ${PRODUCTS.length} logiciels propriétaires OpenLab`,
+  title: `Solutions : ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
-    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP — l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
+    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP, l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
   alternates: alternatesFor('/solutions'),
 };
 
@@ -36,7 +36,7 @@ export default async function SolutionsHubPage(): Promise<React.ReactElement> {
         nonce={nonce}
         data={[
           collectionPageSchema({
-            name: 'Solutions — logiciels propriétaires OpenLab',
+            name: 'Solutions : logiciels propriétaires OpenLab',
             description: hub.description,
             url: '/solutions',
             items: products.map((p) => ({

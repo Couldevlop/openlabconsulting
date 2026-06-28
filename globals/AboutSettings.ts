@@ -13,7 +13,7 @@ import { accessEditorPlus } from '../lib/auth/roles';
  */
 export const AboutSettings: GlobalConfig = {
   slug: 'about-settings',
-  label: 'À propos — page',
+  label: 'À propos : page',
   admin: {
     description:
       'Hero et trois piliers de la page /a-propos (CLAUDE.md §1.2). Vide = textes par défaut codés.',

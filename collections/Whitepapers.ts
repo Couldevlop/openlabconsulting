@@ -62,7 +62,7 @@ export const Whitepapers: CollectionConfig = {
       index: true,
       admin: {
         description:
-          'Slug URL — ex : ia-souveraine-ci-2026. Sert dans /livres-blancs/<slug>.',
+          'Slug URL, ex : ia-souveraine-ci-2026. Sert dans /livres-blancs/<slug>.',
       },
     },
     {

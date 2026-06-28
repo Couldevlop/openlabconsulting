@@ -21,7 +21,7 @@ const EXCERPT =
   'À Abidjan, le mot « IA » est partout. Voici les six critères, les bonnes questions et les signaux d’alerte pour choisir un cabinet qui livre vraiment.';
 const SUMMARY_POINTS = [
   'Le marché de l’IA en Afrique passerait de 4,5 à 16,5 milliards $ entre 2025 et 2030 ; la Côte d’Ivoire a une stratégie nationale dotée de plus de 1 000 milliards FCFA.',
-  'Un cabinet IA se choisit sur sa R&D, sa conformité locale et la souveraineté de son hébergement — pas sur une démo.',
+  'Un cabinet IA se choisit sur sa R&D, sa conformité locale et la souveraineté de son hébergement, pas sur une démo.',
   'Six critères séparent un vrai cabinet d’une agence digitale qui sous-traite l’IA.',
 ];
 const KEYWORDS = [
@@ -33,11 +33,11 @@ const KEYWORDS = [
 ];
 const SOURCES = [
   {
-    label: 'McKinsey — Africa’s gen AI opportunity (2025)',
+    label: 'McKinsey : Africa’s gen AI opportunity (2025)',
     url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/leading-not-lagging-africas-gen-ai-opportunity',
   },
   {
-    label: 'Mastercard / Statista — Marché IA Afrique 2030 (2025)',
+    label: 'Mastercard / Statista : Marché IA Afrique 2030 (2025)',
     url: 'https://www.mastercard.com/news/eemea/en/newsroom/press-releases/en/2025-1/august/ai-in-africa-to-top-16-5b-by-2030-mastercard-explores-path-for-continued-digital-transformation/',
   },
   {
@@ -56,7 +56,7 @@ const COVER_MEDIA_ID = 4;
 const CHARTS = {
   marche: [
     'public/insights/charts/marche-ia-afrique.png',
-    'Marché de l’IA en Afrique : 4,5 Md$ en 2025, 16,5 Md$ en 2030 (× 3,7) — Mastercard / Statista.',
+    'Marché de l’IA en Afrique : 4,5 Md$ en 2025, 16,5 Md$ en 2030 (× 3,7), Mastercard / Statista.',
   ],
   adoption: [
     'public/insights/charts/adoption-gen-ia-afrique.png',
@@ -183,7 +183,7 @@ async function main(): Promise<void> {
     ]),
     para([
       text(
-        'Un projet IA raté coûte deux fois : le budget perdu, et le temps que vos équipes n’ont pas consacré à autre chose. Ce guide vous donne les critères pour trancher — avant le premier devis.',
+        'Un projet IA raté coûte deux fois : le budget perdu, et le temps que vos équipes n’ont pas consacré à autre chose. Ce guide vous donne les critères pour trancher, avant le premier devis.',
       ),
     ]),
 
@@ -233,7 +233,7 @@ async function main(): Promise<void> {
     para([
       text('2. Conformité locale réellement maîtrisée. ', BOLD),
       text(
-        'Une IA RH qui ignore les taux CNPS, ITS et FDFP produit des fichiers faux. Un ERP qui ne parle pas SYSCOHADA n’est pas déployable en zone OHADA. Et toute donnée personnelle relève de la loi ivoirienne 2013-450 — et du RGPD dès qu’un client européen est concerné.',
+        'Une IA RH qui ignore les taux CNPS, ITS et FDFP produit des fichiers faux. Un ERP qui ne parle pas SYSCOHADA n’est pas déployable en zone OHADA. Et toute donnée personnelle relève de la loi ivoirienne 2013-450, et du RGPD dès qu’un client européen est concerné.',
       ),
     ]),
     para([
@@ -268,7 +268,7 @@ async function main(): Promise<void> {
     img('secteurs'),
     para([
       text(
-        'Un bon cabinet sait où l’IA paie vite chez vous — et où elle ne paiera pas. C’est tout l’objet d’un cadrage sérieux.',
+        'Un bon cabinet sait où l’IA paie vite chez vous, et où elle ne paiera pas. C’est tout l’objet d’un cadrage sérieux.',
       ),
     ]),
 
@@ -285,7 +285,7 @@ async function main(): Promise<void> {
     heading('h2', 'Les signaux d’alerte'),
     para([
       text(
-        'Méfiez-vous des promesses chiffrées sans source, des « démos » qui sont en réalité des vidéos montées, et de la sous-traitance offshore non assumée — votre projet, et vos données, partent alors là où vous ne les suivez plus. Méfiez-vous aussi du cabinet qui dit oui à tout : un partenaire honnête sait dire « ceci n’est pas un bon cas d’usage pour l’IA ».',
+        'Méfiez-vous des promesses chiffrées sans source, des « démos » qui sont en réalité des vidéos montées, et de la sous-traitance offshore non assumée, votre projet, et vos données, partent alors là où vous ne les suivez plus. Méfiez-vous aussi du cabinet qui dit oui à tout : un partenaire honnête sait dire « ceci n’est pas un bon cas d’usage pour l’IA ».',
       ),
     ]),
 
@@ -297,21 +297,21 @@ async function main(): Promise<void> {
     ]),
     para([
       text(
-        'OpenLab Consulting tient les trois. Le conseil cadre et déploie. La R&D produit huit logiciels propriétaires. Et l’édition — avec le ',
+        'OpenLab Consulting tient les trois. Le conseil cadre et déploie. La R&D produit huit logiciels propriétaires. Et l’édition, avec le ',
       ),
       link(
         '/livre',
         'livre « Intelligence Artificielle : du Machine Learning aux Agents Autonomes »',
       ),
       text(
-        ' — ancre une exigence académique. Ce n’est pas un argument de vente : c’est ce qui garantit qu’un conseil est adossé à une pratique réelle, pas à une présentation.',
+        ', ancre une exigence académique. Ce n’est pas un argument de vente : c’est ce qui garantit qu’un conseil est adossé à une pratique réelle, pas à une présentation.',
       ),
     ]),
 
     heading('h2', 'Combien ça coûte : pourquoi nous n’affichons pas de tarif'),
     para([
       text(
-        'Un projet IA n’a pas de prix de catalogue. Tout dépend de votre périmètre, de l’état de vos données, du niveau de conformité requis et de l’ambition visée. Afficher une grille tarifaire serait malhonnête — et le signe d’un prestataire qui vend un produit standard, pas une réponse à votre situation.',
+        'Un projet IA n’a pas de prix de catalogue. Tout dépend de votre périmètre, de l’état de vos données, du niveau de conformité requis et de l’ambition visée. Afficher une grille tarifaire serait malhonnête, et le signe d’un prestataire qui vend un produit standard, pas une réponse à votre situation.',
       ),
     ]),
     para([

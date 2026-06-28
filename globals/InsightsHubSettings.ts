@@ -11,7 +11,7 @@ import type { GlobalConfig } from 'payload';
  */
 export const InsightsHubSettings: GlobalConfig = {
   slug: 'insights-hub-settings',
-  label: 'Insights — Hub',
+  label: 'Insights : Hub',
   admin: {
     description:
       'Hero et textes de la page /insights (titre, intro, état vide). Les articles eux-mêmes vivent dans la collection Articles.',

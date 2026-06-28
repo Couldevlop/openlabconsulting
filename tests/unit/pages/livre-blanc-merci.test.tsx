@@ -84,6 +84,6 @@ describe('Page /livres-blancs/[slug]/merci', () => {
     const meta = await generateMetadata({
       params: Promise.resolve({ slug: 'inconnu' }),
     });
-    expect(meta.title).toBe('Livre blanc — Merci');
+    expect(meta.title).toBe('Livre blanc : Merci');
   });
 });

@@ -31,7 +31,7 @@ export async function generateMetadata({
   const label = CATEGORY_LABELS[cat as ArticleCategory];
   return {
     title: `Insights · ${label}`,
-    description: `Tous les articles OpenLab dans la catégorie « ${label} » — retours de terrain et analyses opérables.`,
+    description: `Tous les articles OpenLab dans la catégorie « ${label} », retours de terrain et analyses opérables.`,
     alternates: alternatesFor(`/insights/categorie/${cat}`),
   };
 }

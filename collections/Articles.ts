@@ -65,7 +65,7 @@ export const Articles: CollectionConfig = {
       index: true,
       admin: {
         description:
-          'Slug URL — minuscules, tirets, sans accents. Ex : migration-ia-souveraine-k3s-hetzner',
+          'Slug URL : minuscules, tirets, sans accents. Ex : migration-ia-souveraine-k3s-hetzner',
       },
     },
     {
@@ -86,7 +86,7 @@ export const Articles: CollectionConfig = {
       fields: [{ name: 'point', type: 'text', required: true, maxLength: 200 }],
       admin: {
         description:
-          'Résumé en 2 à 4 points clés, affiché en tête d’article et exposé aux crawlers LLM (GEO — CLAUDE.md §12.4). Une phrase actionnable par point.',
+          'Résumé en 2 à 4 points clés, affiché en tête d’article et exposé aux crawlers LLM (GEO, CLAUDE.md §12.4). Une phrase actionnable par point.',
       },
     },
     {
@@ -108,7 +108,7 @@ export const Articles: CollectionConfig = {
           name: 'label',
           type: 'text',
           required: true,
-          admin: { description: 'Ex : Banque mondiale — Rapport 2024' },
+          admin: { description: 'Ex : Banque mondiale, Rapport 2024' },
         },
         {
           name: 'url',
@@ -122,7 +122,7 @@ export const Articles: CollectionConfig = {
       ],
       admin: {
         description:
-          'Références sourçant les chiffres et indicateurs de l’article (CLAUDE.md §17.9 — tous chiffres sourcés). Affichées en bas d’article.',
+          'Références sourçant les chiffres et indicateurs de l’article (CLAUDE.md §17.9, tous chiffres sourcés). Affichées en bas d’article.',
       },
     },
     {

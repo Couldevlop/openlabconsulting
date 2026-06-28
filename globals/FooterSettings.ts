@@ -9,7 +9,7 @@ import { accessEditorChiefPlus } from '../lib/auth/roles';
  */
 export const FooterSettings: GlobalConfig = {
   slug: 'footer-settings',
-  label: 'Footer — Pied de page',
+  label: 'Footer : Pied de page',
   admin: {
     description:
       'Pied de page : tagline, colonnes, social, mentions légales (CLAUDE.md §6.11).',
@@ -80,7 +80,7 @@ export const FooterSettings: GlobalConfig = {
       type: 'text',
       maxLength: 200,
       admin: {
-        description: 'Texte copyright affiché en bas (sans année — auto).',
+        description: 'Texte copyright affiché en bas (sans année, auto).',
       },
     },
   ],

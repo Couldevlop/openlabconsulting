@@ -49,11 +49,11 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
     ],
     pitch: [
       'Le livre blanc qu’un comité de direction lit en deux heures et applique en six mois.',
-      'Quatre piliers, douze décisions clés, six pièges à éviter — tirés de déploiements réels dans la zone UEMOA.',
+      'Quatre piliers, douze décisions clés, six pièges à éviter, tirés de déploiements réels dans la zone UEMOA.',
       'Pas de buzz, pas de modèles fantaisistes. Une grille de lecture pour décider, pas pour rêver.',
     ],
     status: 'draft',
-    publicationLabel: 'En rédaction — sortie prévue T2 2026',
+    publicationLabel: 'En rédaction : sortie prévue T2 2026',
     cover: {
       src: '/livres-blancs/ia-souveraine-couverture.png',
       width: 1023,
@@ -69,19 +69,19 @@ const WHITEPAPERS: Record<string, Whitepaper> = {
       'Dirigeants, DSI, décideurs publics & privés · Côte d’Ivoire et UEMOA',
     pageCount: 93,
     pillars: [
-      'Du document au corpus : collecte (auto ou dépôt) de vos sources — HTML, TXT, PDF, notes internes',
-      'Constitution et indexation du savoir métier (RAG) — rien ne se perd, tout est retrouvable',
+      'Du document au corpus : collecte (auto ou dépôt) de vos sources, HTML, TXT, PDF, notes internes',
+      'Constitution et indexation du savoir métier (RAG), rien ne se perd, tout est retrouvable',
       'Spécialisation par fine-tuning (LoRA) d’un modèle ouvert sur votre corpus',
       'Déploiement souverain et amélioration continue, sous validation humaine',
     ],
     pitch: [
-      'La méthode qui a donné OpenCacao — appliquée à votre métier, public ou privé.',
+      'La méthode qui a donné OpenCacao, appliquée à votre métier, public ou privé.',
       'Vos données ont une voix. Ce livre explique comment la leur donner, étape par étape, sans dépendre d’un cloud étranger.',
       'De la souveraineté concrète, pas un slogan : vos données entrent, votre IA souveraine sort.',
     ],
     status: 'published',
     publicationLabel:
-      'Disponible — téléchargement ouvert lundi 22 juin à 12h (heure de Paris)',
+      'Disponible : téléchargement ouvert lundi 22 juin à 12h (heure de Paris)',
     cover: {
       src: '/livres-blancs/donnez-la-parole-couverture.png',
       width: 1024,
@@ -105,7 +105,7 @@ export async function generateMetadata({
   const wp = WHITEPAPERS[slug];
   if (!wp) return { title: 'Livre blanc introuvable' };
   return {
-    title: `${wp.title} — ${wp.subtitle}`,
+    title: `${wp.title} : ${wp.subtitle}`,
     description: wp.pitch[0],
     alternates: alternatesFor(`/livres-blancs/${wp.slug}`),
     openGraph: {
@@ -172,7 +172,7 @@ export default async function WhitepaperPage({
               <div className="mx-auto w-full max-w-[17rem] lg:mx-0">
                 <Image
                   src={wp.cover.src}
-                  alt={`Couverture du livre blanc « ${wp.title} — ${wp.subtitle} »`}
+                  alt={`Couverture du livre blanc « ${wp.title} : ${wp.subtitle} »`}
                   width={wp.cover.width}
                   height={wp.cover.height}
                   priority

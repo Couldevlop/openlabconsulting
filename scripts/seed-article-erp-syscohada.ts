@@ -20,7 +20,7 @@ const SLUG = 'erp-syscohada-pme-uemoa-exigences';
 const TITLE =
   'ERP SYSCOHADA : ce qu’une PME de l’UEMOA doit exiger de son logiciel de gestion';
 const EXCERPT =
-  'Trop de PME ouest-africaines plient leur comptabilité au logiciel au lieu d’exiger un logiciel qui parle SYSCOHADA — le plan comptable de dix-sept pays OHADA. Quatre exigences pour bien choisir son ERP.';
+  'Trop de PME ouest-africaines plient leur comptabilité au logiciel au lieu d’exiger un logiciel qui parle SYSCOHADA, le plan comptable de dix-sept pays OHADA. Quatre exigences pour bien choisir son ERP.';
 const SUMMARY_POINTS = [
   'Le SYSCOHADA est le plan comptable de dix-sept pays OHADA : un ERP conçu pour le PCG français ne le connaît pas et impose des bricolages coûteux.',
   'Quatre exigences pour une PME de l’UEMOA : SYSCOHADA + PCG en parallèle sans double saisie, multi-devises natif, cycle complet, souveraineté des données.',

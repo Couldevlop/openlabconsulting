@@ -14,7 +14,7 @@ import { alternatesFor } from '@/lib/seo/site';
 const NOTIFY_HREF = '/contact?sujet=notification-livre';
 
 export const metadata: Metadata = {
-  title: `À paraître — ${BOOK.title}`,
+  title: `À paraître : ${BOOK.title}`,
   description:
     'Le livre paraît en 2026. Découvrez les canaux de diffusion prévus (PDF + ePub direct OpenLab, Amazon, Lulu, librairies de Côte d’Ivoire) et faites-vous prévenir dès sa sortie.',
   alternates: alternatesFor('/livre/acheter'),
@@ -55,7 +55,7 @@ export default function LivreAcheterPage(): React.ReactElement {
               .
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
-              {BOOK.subtitle} — {BOOK.edition}. L’ouvrage est en cours de
+              {BOOK.subtitle}, {BOOK.edition}. L’ouvrage est en cours de
               finalisation. À sa sortie, il sera diffusé en numérique (PDF +
               ePub direct OpenLab) puis en imprimé via Amazon, Lulu et les
               librairies partenaires d’Abidjan. Laissez-nous votre contact pour
@@ -82,7 +82,7 @@ export default function LivreAcheterPage(): React.ReactElement {
             <div>
               <Badge tone="orange">Édition numérique directe</Badge>
               <Heading id="bundle-title" level={2} className="mt-4">
-                Bouquet OpenLab — PDF + ePub direct.
+                Bouquet OpenLab : PDF + ePub direct.
               </Heading>
               <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/80">
                 Sans intermédiaire, sans DRM, sans tracking tiers. À la sortie,
@@ -226,9 +226,9 @@ export default function LivreAcheterPage(): React.ReactElement {
               partenaires suivantes :
             </p>
             <ul className="mt-4 grid gap-2 text-sm text-[var(--color-ol-graphite)]/80 sm:grid-cols-3">
-              <li>· Carrefour Mercure — Plateau</li>
-              <li>· Librairie de France — Yopougon</li>
-              <li>· Librairie Aleph — Cocody</li>
+              <li>· Carrefour Mercure, Plateau</li>
+              <li>· Librairie de France, Yopougon</li>
+              <li>· Librairie Aleph, Cocody</li>
             </ul>
           </div>
         </Container>

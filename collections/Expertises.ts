@@ -83,7 +83,7 @@ export const Expertises: CollectionConfig = {
       maxLength: 80,
       admin: {
         description:
-          'Titre court — cards homepage + h1 page détail. Ex : « Conseil & stratégie IA ».',
+          'Titre court : cards homepage + h1 page détail. Ex : « Conseil & stratégie IA ».',
       },
     },
     {
@@ -112,7 +112,7 @@ export const Expertises: CollectionConfig = {
       required: true,
       maxLength: 600,
       admin: {
-        description: 'Paragraphe d’intro hero page détail — 2 à 3 phrases.',
+        description: 'Paragraphe d’intro hero page détail : 2 à 3 phrases.',
       },
     },
     {

@@ -47,7 +47,7 @@ const RD_DEMARCHE: readonly { title: string; body: string }[] = [
   },
   {
     title: 'Données africaines & sources ouvertes',
-    body: 'Séries climatiques SODEXAM, ERA5, CHIRPS, imagerie Sentinel-2 — des données publiques mobilisées pour des modèles ancrés dans le contexte.',
+    body: 'Séries climatiques SODEXAM, ERA5, CHIRPS, imagerie Sentinel-2, des données publiques mobilisées pour des modèles ancrés dans le contexte.',
   },
   {
     title: 'Infrastructure souveraine',
@@ -60,7 +60,7 @@ const RD_DEMARCHE: readonly { title: string; body: string }[] = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Laboratoire — R&D, publications, partenariats',
+  title: 'Laboratoire : R&D, publications, partenariats',
   description: `OpenLab Consulting est un cabinet qui code, qui édite, qui publie. ${PRODUCT_WORD_CAP} logiciels propriétaires, un livre IA de référence, des partenariats universitaires francophones.`,
   alternates: alternatesFor('/laboratoire'),
 };
@@ -76,14 +76,14 @@ const AXES = [
   {
     Icon: BookOpen,
     title: 'Édition académique',
-    body: '« Intégration de l’Intelligence Artificielle dans le développement logiciel » — 11 chapitres, capstone AgroSense, à destination des étudiants, dirigeants et enseignants.',
+    body: '« Intégration de l’Intelligence Artificielle dans le développement logiciel » : 11 chapitres, capstone AgroSense, à destination des étudiants, dirigeants et enseignants.',
     href: '/livre',
     cta: 'Explorer le livre',
   },
   {
     Icon: Atom,
     title: 'Recherche appliquée',
-    body: 'MLOps, agents multi-acteurs, séries temporelles climatiques, RAG souverain — adossés à des partenariats universitaires francophones et à des données africaines (SODEXAM, ERA5, CHIRPS).',
+    body: 'MLOps, agents multi-acteurs, séries temporelles climatiques, RAG souverain, adossés à des partenariats universitaires francophones et à des données africaines (SODEXAM, ERA5, CHIRPS).',
     href: '/laboratoire/axes',
     cta: 'Découvrir nos axes',
   },
@@ -121,7 +121,7 @@ const PUBLICATIONS_PREVIEW = [
   },
   {
     label: 'Livre blanc',
-    title: 'L’IA souveraine en Côte d’Ivoire — feuille de route 2026',
+    title: 'L’IA souveraine en Côte d’Ivoire : feuille de route 2026',
     href: '/laboratoire/publications/ia-souveraine-feuille-de-route-2026',
   },
 ];

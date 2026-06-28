@@ -23,7 +23,7 @@ const TITLE =
 const EXCERPT =
   'La Côte d’Ivoire, premier producteur mondial de cacao, devra rattacher chaque fève exportée vers l’UE à une parcelle géolocalisée et non déforestée. Comment la donnée, l’IoT et l’imagerie satellite en font la preuve.';
 const SUMMARY_POINTS = [
-  'Avec l’EUDR, chaque parcelle de cacao exportée vers l’UE doit être géolocalisée et prouvée non déforestée après le 31 décembre 2020 — condition d’accès au marché.',
+  'Avec l’EUDR, chaque parcelle de cacao exportée vers l’UE doit être géolocalisée et prouvée non déforestée après le 31 décembre 2020 : condition d’accès au marché.',
   'Le défi n’est pas le principe mais l’exécution : géolocaliser des centaines de milliers de petites parcelles et produire un dossier opposable, à l’échelle des coopératives.',
   'AgroSense CI géolocalise chaque parcelle (< 5 m), la croise avec les masques de déforestation satellite (Sentinel-2) et génère le rapport de conformité EUDR en un clic.',
 ];

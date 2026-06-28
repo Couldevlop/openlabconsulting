@@ -11,7 +11,7 @@ import { alternatesFor } from '@/lib/seo/site';
 import { breadcrumbSchema, howToSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Audit IA gratuit — Questionnaire interactif + recommandation',
+  title: 'Audit IA gratuit : Questionnaire interactif + recommandation',
   description:
     'Cinq questions pour cadrer votre besoin IA, une recommandation adaptée (atelier, audit éclair, cadrage stratégique ou programme), un consultant senior sous 48 h.',
   alternates: alternatesFor('/audit-ia'),

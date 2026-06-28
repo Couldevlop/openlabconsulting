@@ -18,7 +18,7 @@ import { BOOK, COMPANION_RESOURCES } from '@/lib/data/book';
 import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
-  title: `Companion lecteurs — ${BOOK.title}`,
+  title: `Companion lecteurs : ${BOOK.title}`,
   description:
     'Ressources lecteurs : code source GitHub des exemples, datasets ouverts CHIRPS/ERA5/SODEXAM, errata public, forum Discourse francophone.',
   alternates: alternatesFor('/livre/companion'),
@@ -128,7 +128,7 @@ export default function LivreCompanionPage(): React.ReactElement {
       >
         <Container width="wide">
           <div className="max-w-2xl">
-            <Eyebrow tone="orange">Détails — datasets ouverts</Eyebrow>
+            <Eyebrow tone="orange">Détails : datasets ouverts</Eyebrow>
             <Heading id="datasets-title" level={2} className="mt-4">
               Trois sources climatiques, pré-formatées.
             </Heading>
@@ -151,7 +151,7 @@ export default function LivreCompanionPage(): React.ReactElement {
                   ERA5
                 </Heading>
                 <p className="mt-2 text-sm text-[var(--color-ol-graphite)]/75">
-                  Reanalyse climatique ECMWF — température, vent, humidité.
+                  Reanalyse climatique ECMWF : température, vent, humidité.
                   Échantillon GeoJSON et Parquet prêts à charger.
                 </p>
               </Card>
@@ -178,7 +178,7 @@ export default function LivreCompanionPage(): React.ReactElement {
       >
         <Container width="wide">
           <div className="max-w-2xl">
-            <Eyebrow tone="orange">Détails — errata</Eyebrow>
+            <Eyebrow tone="orange">Détails : errata</Eyebrow>
             <Heading id="errata-title" level={2} className="mt-4">
               Aucun livre n’est parfait. Tout est public.
             </Heading>
