@@ -10,7 +10,7 @@ export function AgrosenseMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — carte parcelles AgroSense CI"
+      aria-label="Aperçu : carte parcelles AgroSense CI"
       className="h-full w-full"
     >
       {/* Fond carte */}

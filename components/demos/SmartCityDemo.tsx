@@ -80,7 +80,7 @@ export function SmartCityDemo(): ReactElement {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
       <div className="rounded-xl bg-[var(--color-ol-night)] p-6 text-[var(--color-ol-ivory)] sm:p-8">
-        <Badge tone="orange">Abidjan — modèle prédictif J+7</Badge>
+        <Badge tone="orange">Abidjan : modèle prédictif J+7</Badge>
         <Heading
           level={3}
           visualLevel={4}
@@ -97,7 +97,7 @@ export function SmartCityDemo(): ReactElement {
                 key={q.id}
                 type="button"
                 onClick={(): void => setSelected(q)}
-                aria-label={`Quartier ${q.nom} — risque ${q.risque}`}
+                aria-label={`Quartier ${q.nom} : risque ${q.risque}`}
                 className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 transition-all hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)]"
                 style={{
                   backgroundColor: colorForRisk(q.risque),

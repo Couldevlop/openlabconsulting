@@ -40,7 +40,7 @@ export function Expertises({
             .
           </Heading>
           <p className="mt-6 text-lg text-[var(--color-ol-graphite)]/75">
-            Pas un PoC en sandbox — des chaînes de valeur déployées dans vos
+            Pas un PoC en sandbox, des chaînes de valeur déployées dans vos
             systèmes, conformes à la réglementation, gouvernées, auditables.
           </p>
         </div>

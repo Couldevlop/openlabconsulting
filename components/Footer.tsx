@@ -27,7 +27,7 @@ export function Footer({
             <address className="mt-6 text-sm text-[var(--color-ol-ivory)]/70 not-italic">
               Riviera Faya Lauriers 8
               <br />
-              Cocody, Abidjan — Côte d&apos;Ivoire
+              Cocody, Abidjan, Côte d&apos;Ivoire
               <br />
               <a
                 href="tel:+2250709334238"

@@ -42,7 +42,7 @@ export function QualitOsDemo(): ReactElement {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
       <div className="rounded-xl border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] p-6 shadow-sm sm:p-8">
-        <Badge tone="orange">Ishikawa (5M) — assisté IA</Badge>
+        <Badge tone="orange">Ishikawa (5M) : assisté IA</Badge>
         <Heading level={3} visualLevel={4} className="mt-4">
           Non-conformité lot #2026-04-A.
         </Heading>
@@ -107,8 +107,8 @@ export function QualitOsDemo(): ReactElement {
         </ol>
 
         <p className="mt-6 text-xs text-[var(--color-ol-ivory)]/45">
-          L’opérateur valide ou recadre — le modèle apprend des décisions
-          finales pour les analyses futures.
+          L’opérateur valide ou recadre, le modèle apprend des décisions finales
+          pour les analyses futures.
         </p>
       </div>
     </div>

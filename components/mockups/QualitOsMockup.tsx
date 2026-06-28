@@ -10,7 +10,7 @@ export function QualitOsMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — tableau de bord qualité QualitOS"
+      aria-label="Aperçu : tableau de bord qualité QualitOS"
       className="h-full w-full"
     >
       {/* Topbar */}

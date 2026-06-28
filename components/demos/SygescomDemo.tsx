@@ -187,7 +187,7 @@ export function SygescomDemo(): ReactElement {
       </ul>
 
       <p className="mt-6 text-xs text-[var(--color-ol-ivory)]/45">
-        Démo synthétique — données générées en local. En production, SYGESCOM
+        Démo synthétique, données générées en local. En production, SYGESCOM
         ingère via Kafka les jauges, pompes et terminaux paiement de chaque
         station.
       </p>

@@ -89,7 +89,7 @@ export function NexusErpDemo(): ReactElement {
       </div>
 
       <Heading level={3} visualLevel={4} className="mt-6">
-        Avril 2026 — clôture mensuelle
+        Avril 2026 : clôture mensuelle
       </Heading>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-3">

@@ -363,7 +363,7 @@ function ContactFormStep({
     >
       <Eyebrow tone="orange">Vos coordonnées</Eyebrow>
       <Heading level={2} visualLevel={3} className="mt-4">
-        Dernière étape — comment vous joindre ?
+        Dernière étape : comment vous joindre ?
       </Heading>
       <p className="mt-3 text-sm text-[var(--color-ol-graphite)]/70">
         Vos réponses au questionnaire sont déjà transmises à votre consultant
