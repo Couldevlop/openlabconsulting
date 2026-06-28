@@ -55,7 +55,7 @@ export const EXPERTISES: readonly Expertise[] = [
     punchline:
       "Cartographier l'IA réellement utile. Écarter ce qui ne le sera jamais.",
     intro:
-      "Avant de coder quoi que ce soit, on cadre. Nos missions de conseil partent d'un diagnostic terrain — vos workflows, vos contraintes réglementaires, vos données disponibles — et débouchent sur une feuille de route priorisée par ROI mesurable, pas par buzzword.",
+      "Avant de coder quoi que ce soit, on cadre. Nos missions de conseil partent d'un diagnostic terrain, vos workflows, vos contraintes réglementaires, vos données disponibles, et débouchent sur une feuille de route priorisée par ROI mesurable, pas par buzzword.",
     competences: [
       'Diagnostic des cas d’usage IA prioritaires (impact × faisabilité)',
       'Cadrage MVP / Pilote / Industrialisation, jalonné et chiffré',
@@ -90,9 +90,9 @@ export const EXPERTISES: readonly Expertise[] = [
     iconKey: 'bot',
     title: 'Agents & automatisation',
     punchline:
-      'Vos workflows, automatisés. Vos équipes, augmentées — pas remplacées.',
+      'Vos workflows, automatisés. Vos équipes, augmentées, pas remplacées.',
     intro:
-      "On déploie des agents IA qui exécutent vos workflows répétitifs — saisie comptable, qualification de leads, triage de tickets, reporting réglementaire — sans casser les outils et processus qui marchent déjà. L'humain reste au point de décision critique.",
+      "On déploie des agents IA qui exécutent vos workflows répétitifs, saisie comptable, qualification de leads, triage de tickets, reporting réglementaire, sans casser les outils et processus qui marchent déjà. L'humain reste au point de décision critique.",
     competences: [
       'Agents Claude / GPT en boucle outils (function calling, RAG souverain)',
       'Orchestration multi-agents pour workflows métier complexes',
@@ -104,7 +104,7 @@ export const EXPERTISES: readonly Expertise[] = [
       {
         step: '01',
         title: 'Tracer le workflow réel',
-        body: 'On suit physiquement le processus pendant 5 jours — clics, ré-encodage, allers-retours. Le PowerPoint n’a jamais raconté la vraie histoire.',
+        body: 'On suit physiquement le processus pendant 5 jours, clics, ré-encodage, allers-retours. Le PowerPoint n’a jamais raconté la vraie histoire.',
       },
       {
         step: '02',
@@ -130,7 +130,7 @@ export const EXPERTISES: readonly Expertise[] = [
     punchline:
       'La data est votre pétrole. La gouvernance est votre raffinerie.',
     intro:
-      'Une IA performante repose sur une donnée gouvernée. On construit votre socle data — catalog, lineage, qualité, accès — pour que vos modèles soient explicables, vos audits passent, et votre conformité ne devienne pas une surprise.',
+      'Une IA performante repose sur une donnée gouvernée. On construit votre socle data, catalog, lineage, qualité, accès, pour que vos modèles soient explicables, vos audits passent, et votre conformité ne devienne pas une surprise.',
     competences: [
       'Cartographie des sources data (SI, CSV, capteurs IoT, scraping interne)',
       'Catalog & lineage : Atlan, OpenMetadata, ou stack OpenLab self-hosted',
@@ -147,7 +147,7 @@ export const EXPERTISES: readonly Expertise[] = [
       {
         step: '02',
         title: 'Définir le pacte data',
-        body: 'Qui est propriétaire, qui valide les schémas, qui répond aux régulateurs. Un document, un comité, une cadence — pas trois.',
+        body: 'Qui est propriétaire, qui valide les schémas, qui répond aux régulateurs. Un document, un comité, une cadence, pas trois.',
       },
       {
         step: '03',
@@ -184,7 +184,7 @@ export const EXPERTISES: readonly Expertise[] = [
       {
         step: '02',
         title: 'Empiler des couches IA',
-        body: 'Modèles dédiés par typologie de risque, intégrés à vos SOC ou SIEM existants. On ne remplace pas vos analystes — on filtre leur flux.',
+        body: 'Modèles dédiés par typologie de risque, intégrés à vos SOC ou SIEM existants. On ne remplace pas vos analystes, on filtre leur flux.',
       },
       {
         step: '03',

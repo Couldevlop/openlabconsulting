@@ -85,7 +85,7 @@ export const Sectors: CollectionConfig = {
       required: true,
       maxLength: 80,
       admin: {
-        description: 'Nom court — cards + h1. Ex : « Banque & assurance ».',
+        description: 'Nom court : cards + h1. Ex : « Banque & assurance ».',
       },
     },
     {
@@ -114,7 +114,7 @@ export const Sectors: CollectionConfig = {
       required: true,
       maxLength: 600,
       admin: {
-        description: 'Hero pitch page détail — 2 à 3 phrases.',
+        description: 'Hero pitch page détail : 2 à 3 phrases.',
       },
     },
     {

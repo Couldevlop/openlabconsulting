@@ -16,7 +16,7 @@ import { accessEditorPlus } from '../lib/auth/roles';
  */
 export const HeroSettings: GlobalConfig = {
   slug: 'hero-settings',
-  label: 'Hero — Homepage',
+  label: 'Hero : Homepage',
   admin: {
     description:
       'Bandeau principal de la homepage (CLAUDE.md §6.1). Sans valeurs ici, le site retombe sur les textes par défaut codés.',

@@ -155,7 +155,7 @@ export const FALLBACK_ARTICLES: readonly Article[] = [
     slug: 'migration-ia-souveraine-k3s-hetzner',
     title: 'Migration vers une IA souveraine en Afrique francophone',
     excerpt:
-      'Pourquoi un cluster K3s Hetzner change la donne pour les institutions ouest-africaines — leçons tirées du déploiement NexusRH.',
+      'Pourquoi un cluster K3s Hetzner change la donne pour les institutions ouest-africaines, leçons tirées du déploiement NexusRH.',
     category: 'souverainete',
     categoryLabel: 'Souveraineté',
     author: 'Debora Ahouma',

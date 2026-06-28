@@ -33,7 +33,7 @@ const SYGESCOM_CASE: CaseStudy = {
   duration: 'Déploiement en moins de 3 mois',
   visualBefore: {
     src: null,
-    alt: 'Reporting station manuel — papier, Excel, retards d’une journée',
+    alt: 'Reporting station manuel : papier, Excel, retards d’une journée',
   },
   visualAfter: {
     src: null,

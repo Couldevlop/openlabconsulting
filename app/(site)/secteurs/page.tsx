@@ -16,7 +16,7 @@ import { alternatesFor } from '@/lib/seo/site';
 import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Secteurs — IA appliquée par industrie',
+  title: 'Secteurs : IA appliquée par industrie',
   description:
     'Public, banque & assurance, agro-industrie, santé, télécoms & énergie : nos déploiements IA adaptés aux contraintes de chaque secteur africain francophone.',
   alternates: alternatesFor('/secteurs'),
@@ -34,7 +34,7 @@ export default async function SecteursHubPage(): Promise<React.ReactElement> {
         nonce={nonce}
         data={[
           collectionPageSchema({
-            name: 'Secteurs — IA appliquée par industrie',
+            name: 'Secteurs : IA appliquée par industrie',
             description: hub.description,
             url: '/secteurs',
             items: sectors.map((s) => ({

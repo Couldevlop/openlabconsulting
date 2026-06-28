@@ -11,7 +11,7 @@ import { accessEditorPlus } from '../lib/auth/roles';
  */
 export const AuditIaCtaSettings: GlobalConfig = {
   slug: 'audit-ia-cta-settings',
-  label: 'Audit IA — Bandeau lead magnet',
+  label: 'Audit IA : Bandeau lead magnet',
   admin: {
     description:
       'CTA « Audit IA gratuit » récurrent dans le site (CLAUDE.md §6.10).',

@@ -12,7 +12,7 @@ import { BOOK, CHAPTERS } from '@/lib/data/book';
 import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
-  title: `Extraits gratuits — ${BOOK.title}`,
+  title: `Extraits gratuits : ${BOOK.title}`,
   description:
     'Préface intégrale + chapitre 06 (RAG souverain) en accès libre. Téléchargement PDF gratuit contre simple email professionnel.',
   alternates: alternatesFor('/livre/extraits'),
@@ -76,16 +76,16 @@ export default function LivreExtraitsPage(): React.ReactElement {
             </p>
             <p>
               L’intelligence artificielle n’est pas une discipline importée.
-              C’est un outil de transformation qui se déploie dans des contextes
-              — et nos contextes africains francophones ont leurs propres
-              exigences : conformité CNPS, multi-devises FCFA-EUR, climatologie
-              SODEXAM, parcelles cacao géoréférencées, fraude documentaire
-              spécifique, et un cadre réglementaire qui s’écrit en ce
-              moment-même.
+              C’est un outil de transformation qui se déploie dans des
+              contextes, et nos contextes africains francophones ont leurs
+              propres exigences : conformité CNPS, multi-devises FCFA-EUR,
+              climatologie SODEXAM, parcelles cacao géoréférencées, fraude
+              documentaire spécifique, et un cadre réglementaire qui s’écrit en
+              ce moment-même.
             </p>
             <p>
-              Ce livre s’adresse à quatre publics — étudiants ingénieurs, data
-              scientists confirmés, dirigeants, enseignants — avec une promesse
+              Ce livre s’adresse à quatre publics, étudiants ingénieurs, data
+              scientists confirmés, dirigeants, enseignants, avec une promesse
               simple : chaque chapitre est utilisable seul, et chaque concept
               est ancré sur un déploiement réel. Le capstone final, AgroSense
               CI, montre comment on passe d’un capteur planté dans un champ
@@ -99,7 +99,7 @@ export default function LivreExtraitsPage(): React.ReactElement {
           </div>
 
           <p className="mt-10 text-right text-sm text-[var(--color-ol-graphite)]/70">
-            — Debora Ahouma · Abidjan, mai 2026
+            Debora Ahouma · Abidjan, mai 2026
           </p>
         </Container>
       </section>

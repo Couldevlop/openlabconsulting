@@ -11,7 +11,7 @@ import { BOOK, CHAPTERS } from '@/lib/data/book';
 import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
-  title: `Chapitres — ${BOOK.title}`,
+  title: `Chapitres : ${BOOK.title}`,
   description: `Les ${CHAPTERS.length} chapitres du livre OpenLab sur l’IA : du machine learning aux agents autonomes, en passant par MLOps, sécurité et capstone AgroSense.`,
   alternates: alternatesFor('/livre/chapitres'),
 };
@@ -52,7 +52,7 @@ export default function LivreChapitresPage(): React.ReactElement {
             </Heading>
             <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
               Chaque chapitre est conçu pour être lu indépendamment. Les numéros
-              sont indicatifs — un dirigeant peut entrer par le chapitre 10
+              sont indicatifs, un dirigeant peut entrer par le chapitre 10
               (gouvernance) sans avoir lu les précédents.
             </p>
 

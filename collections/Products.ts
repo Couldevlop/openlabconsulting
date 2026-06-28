@@ -75,10 +75,10 @@ export const Products: CollectionConfig = {
       maxLength: 60,
       validate: (value: unknown): true | string =>
         (typeof value === 'string' && PRODUCT_SLUG_PATTERN.test(value)) ||
-        'Slug invalide — minuscules, chiffres et tirets uniquement (ex. « sentinelbtp », « fraud-shield »).',
+        'Slug invalide : minuscules, chiffres et tirets uniquement (ex. « sentinelbtp », « fraud-shield »).',
       admin: {
         description:
-          'Identifiant URL du produit (/solutions/<slug>) — minuscules, chiffres, tirets. Ex : « sentinelbtp ».',
+          'Identifiant URL du produit (/solutions/<slug>) : minuscules, chiffres, tirets. Ex : « sentinelbtp ».',
       },
     },
     {
@@ -170,7 +170,7 @@ export const Products: CollectionConfig = {
       required: true,
       maxLength: 600,
       admin: {
-        description: 'Pitch hero page détail — 2 à 3 phrases.',
+        description: 'Pitch hero page détail : 2 à 3 phrases.',
       },
     },
     {
@@ -179,7 +179,7 @@ export const Products: CollectionConfig = {
       required: true,
       maxLength: 600,
       admin: {
-        description: 'Storytelling « avant » / problème — 2 à 3 phrases.',
+        description: 'Storytelling « avant » / problème : 2 à 3 phrases.',
       },
     },
     {
@@ -260,7 +260,7 @@ export const Products: CollectionConfig = {
       labels: { singular: 'Preuve chiffrée', plural: 'Preuves chiffrées' },
       admin: {
         description:
-          '2 à 4 stats sourcées. Aucun chiffre rond non sourcé (§4.10) — `source` obligatoire.',
+          '2 à 4 stats sourcées. Aucun chiffre rond non sourcé (§4.10), `source` obligatoire.',
       },
       fields: [
         {
@@ -286,7 +286,7 @@ export const Products: CollectionConfig = {
           required: true,
           maxLength: 160,
           admin: {
-            description: 'Source de la statistique — OBLIGATOIRE (§4.10).',
+            description: 'Source de la statistique : OBLIGATOIRE (§4.10).',
           },
         },
       ],
@@ -296,7 +296,7 @@ export const Products: CollectionConfig = {
       type: 'group',
       label: 'Tarification',
       admin: {
-        description: 'Tarification §7.1 — modèle + headline + détails.',
+        description: 'Tarification §7.1 : modèle + headline + détails.',
       },
       fields: [
         {

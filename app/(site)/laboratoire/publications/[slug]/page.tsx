@@ -37,7 +37,7 @@ export async function generateMetadata({
   const pub = await getPublicationBySlug(slug);
   if (!pub) return { title: 'Publication introuvable' };
   return {
-    title: `${pub.title} — Publications OpenLab`,
+    title: `${pub.title} : Publications OpenLab`,
     description: (pub.abstract ?? pub.summary).slice(0, 155),
     alternates: alternatesFor(`/laboratoire/publications/${slug}`),
   };
@@ -123,7 +123,7 @@ export default async function PublicationDetailPage({
                 Laboratoire OpenLab
               </Eyebrow>
               Publication issue de la démarche de R&amp;D appliquée d’OpenLab
-              Consulting — un laboratoire en structuration, adossé à des
+              Consulting, un laboratoire en structuration, adossé à des
               déploiements terrain réels et à un livre de référence.
             </p>
           </Container>

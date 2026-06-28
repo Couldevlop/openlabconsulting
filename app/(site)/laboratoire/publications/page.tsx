@@ -15,7 +15,7 @@ import { getPublications } from '@/lib/laboratoire-server';
 import { alternatesFor } from '@/lib/seo/site';
 
 export const metadata: Metadata = {
-  title: 'Publications — Laboratoire OpenLab',
+  title: 'Publications : Laboratoire OpenLab',
   description:
     'Livre IA & Agents Autonomes, livres blancs souveraineté + paie, conférences. Toutes les sorties publiques de la R&D OpenLab.',
   alternates: alternatesFor('/laboratoire/publications'),

@@ -38,7 +38,7 @@ export const AnnouncementBanner: GlobalConfig = {
       maxLength: 200,
       admin: {
         description:
-          'Texte du bandeau — court et percutant (capter en 5 secondes).',
+          'Texte du bandeau : court et percutant (capter en 5 secondes).',
       },
     },
     {

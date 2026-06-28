@@ -5,7 +5,7 @@ import {
 } from '@/lib/seo/og-image-template';
 
 export const runtime = 'nodejs';
-export const alt = 'Secteurs OpenLab — l’IA appliquée par industrie';
+export const alt = 'Secteurs OpenLab : l’IA appliquée par industrie';
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

@@ -15,7 +15,7 @@ import { accessEditorPlus } from '../lib/auth/roles';
  */
 export const ReassuranceSettings: GlobalConfig = {
   slug: 'reassurance-settings',
-  label: 'Réassurance — Homepage',
+  label: 'Réassurance : Homepage',
   admin: {
     description:
       'Bandeau « Ils nous accompagnent depuis le terrain » (CLAUDE.md §6.2). Logos clients/partenaires.',
@@ -50,7 +50,7 @@ export const ReassuranceSettings: GlobalConfig = {
           required: true,
           maxLength: 80,
           admin: {
-            description: 'Nom de la marque — sert de texte alternatif (a11y).',
+            description: 'Nom de la marque : sert de texte alternatif (a11y).',
           },
         },
         {

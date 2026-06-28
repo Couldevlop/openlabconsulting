@@ -36,7 +36,7 @@ import { SITE, alternatesFor } from '@/lib/seo/site';
  */
 
 export const metadata: Metadata = {
-  title: 'Équipe — OpenLab Consulting',
+  title: 'Équipe : OpenLab Consulting',
   description:
     'Debora Ahouma, fondatrice d’OpenLab Consulting et auteure du livre « Intégration de l’Intelligence Artificielle dans le développement logiciel ». Cabinet ivoirien d’IA appliquée, R&D et édition.',
   alternates: alternatesFor('/a-propos/equipe'),
@@ -116,7 +116,7 @@ export default async function EquipePage(): Promise<React.ReactElement> {
                 className="shadow-2xl"
               />
               <figcaption className="mt-4 text-sm text-[var(--color-ol-graphite)]/70">
-                Photo de {member.name} — à venir.
+                Photo de {member.name}, à venir.
               </figcaption>
             </figure>
 
