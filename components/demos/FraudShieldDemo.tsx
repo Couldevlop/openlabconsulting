@@ -77,7 +77,7 @@ const CASES: readonly FraudCase[] = [
         x: 25,
         y: 55,
         r: 12,
-        reason: 'Date superposée — éditeur Adobe détecté',
+        reason: 'Date superposée, éditeur Adobe détecté',
       },
       {
         x: 80,

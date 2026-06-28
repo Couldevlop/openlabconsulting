@@ -42,7 +42,7 @@ export async function GET(): Promise<Response> {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${escapeXml(SITE.name)} — Insights</title>
+    <title>${escapeXml(SITE.name)} : Insights</title>
     <link>${absoluteUrl('/insights')}</link>
     <atom:link href="${absoluteUrl('/feed.xml')}" rel="self" type="application/rss+xml" />
     <description>${escapeXml(SITE.description)}</description>

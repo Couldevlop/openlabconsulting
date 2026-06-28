@@ -3,7 +3,7 @@ import { PRODUCTS } from '@/lib/data/products';
 
 export const runtime = 'edge';
 export const alt =
-  'OpenLab Consulting — IA, R&D et publication de référence pour l’Afrique francophone';
+  'OpenLab Consulting : IA, R&D et publication de référence pour l’Afrique francophone';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
