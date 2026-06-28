@@ -38,7 +38,7 @@ export async function generateMetadata({
     return { title: 'Expertise introuvable' };
   }
   return {
-    title: `${expertise.title} — Expertise OpenLab`,
+    title: `${expertise.title} : Expertise OpenLab`,
     description: expertise.punchline,
     alternates: alternatesFor(`/expertises/${expertise.slug}`),
   };

@@ -16,7 +16,7 @@ export const RD_AXES: readonly RdAxe[] = [
     slug: 'paie-conformite-ouest-africaine',
     title: 'Paie & conformité ouest-africaine',
     pitch:
-      'Cotisations CNPS, ITS, FDFP, diffusion Mobile Money — modélisés comme un domaine métier de premier niveau et pas un module en bout de chaîne.',
+      'Cotisations CNPS, ITS, FDFP, diffusion Mobile Money, modélisés comme un domaine métier de premier niveau et pas un module en bout de chaîne.',
     produitsLies: ['NexusRH CI', 'NexusERP'],
     exemples: [
       'Bareme ITS 2024 progressif testé sur 1 200 cas d’employés réels',
@@ -76,7 +76,7 @@ export const RD_AXES: readonly RdAxe[] = [
     slug: 'smart-city-anonymisation',
     title: 'Smart City respectueuse de la vie privée',
     pitch:
-      "Fusion CCTV + mobilité + signalements citoyens sans identifier personne — anonymisation différentielle dès l'ingestion.",
+      "Fusion CCTV + mobilité + signalements citoyens sans identifier personne, anonymisation différentielle dès l'ingestion.",
     produitsLies: ['Smart City'],
     exemples: [
       'Carte chaleur urbaine prédictive J+7',
@@ -124,7 +124,7 @@ export const PUBLICATIONS: readonly Publication[] = [
   },
   {
     type: 'livre-blanc',
-    title: 'L’IA souveraine en Côte d’Ivoire — Feuille de route 2026',
+    title: 'L’IA souveraine en Côte d’Ivoire : Feuille de route 2026',
     authors: ['Équipe OpenLab'],
     year: 2026,
     href: '/livres-blancs/ia-souveraine-ci-2026',
@@ -132,7 +132,7 @@ export const PUBLICATIONS: readonly Publication[] = [
       'Comment les dirigeants ivoiriens peuvent déployer une IA hébergée en UE conforme RGPD + loi 2013-450, sans dépendre des hyperscalers.',
     slug: 'ia-souveraine-feuille-de-route-2026',
     abstract:
-      'Feuille de route pour une IA souveraine en Côte d’Ivoire à l’horizon de la Stratégie Nationale de l’Intelligence Artificielle (SNIA 2030). L’analyse identifie sept verrous structurels — énergie, puissance de calcul, datacenters, données, compétences, cadre réglementaire et fonctionnement en silos — et propose une trajectoire progressive et réaliste : digitaliser via le RAG, spécialiser des modèles open source sur des données nationales, puis bâtir une IA pleinement souveraine. Hébergement en Union européenne conforme RGPD et loi ivoirienne 2013-450, sans dépendance aux hyperscalers.',
+      'Feuille de route pour une IA souveraine en Côte d’Ivoire à l’horizon de la Stratégie Nationale de l’Intelligence Artificielle (SNIA 2030). L’analyse identifie sept verrous structurels, énergie, puissance de calcul, datacenters, données, compétences, cadre réglementaire et fonctionnement en silos, et propose une trajectoire progressive et réaliste : digitaliser via le RAG, spécialiser des modèles open source sur des données nationales, puis bâtir une IA pleinement souveraine. Hébergement en Union européenne conforme RGPD et loi ivoirienne 2013-450, sans dépendance aux hyperscalers.',
   },
   {
     // Lien repointé vers l'article réel (la landing /livres-blancs/
@@ -150,7 +150,7 @@ export const PUBLICATIONS: readonly Publication[] = [
   },
   {
     type: 'conference',
-    title: 'Africa Tech Week 2025 — IA pour l’agro-industrie africaine',
+    title: 'Africa Tech Week 2025 : IA pour l’agro-industrie africaine',
     authors: ['Debora Ahouma'],
     year: 2025,
     href: 'https://africatechfestival.com/',

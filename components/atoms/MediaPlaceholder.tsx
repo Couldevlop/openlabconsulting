@@ -91,7 +91,7 @@ export function MediaPlaceholder({
   return (
     <div
       role="img"
-      aria-label={`${alt} — capture à venir`}
+      aria-label={`${alt}, capture à venir`}
       className={cn(
         'relative flex flex-col items-center justify-center gap-3 overflow-hidden rounded-lg border border-dashed border-[var(--color-ol-graphite)]/15',
         aspectMap[aspect],

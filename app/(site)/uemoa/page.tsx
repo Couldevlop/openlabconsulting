@@ -12,7 +12,7 @@ import { alternatesFor } from '@/lib/seo/site';
 const LOCATION = getLocation('uemoa');
 
 export const metadata: Metadata = {
-  title: `${LOCATION.h1.replace(/[.:].*$/, '')} — OpenLab Consulting`,
+  title: `${LOCATION.h1.replace(/[.:].*$/, '')} : OpenLab Consulting`,
   description: LOCATION.metaDescription,
   alternates: alternatesFor(`/${LOCATION.slug}`),
 };

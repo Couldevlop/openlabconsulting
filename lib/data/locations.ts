@@ -43,11 +43,11 @@ export const LOCATIONS: readonly LocationContent[] = [
     eyebrow: 'OpenLab à Abidjan',
     h1: 'Cabinet IA à Abidjan : conseil, R&D, intégration.',
     subtitle:
-      'Notre siège est à Cocody. Nos consultants interviennent dans toute la métropole abidjanaise — Plateau, Marcory, Treichville, Yopougon, Riviera — pour cadrer, intégrer et gouverner vos projets d’intelligence artificielle.',
+      'Notre siège est à Cocody. Nos consultants interviennent dans toute la métropole abidjanaise, Plateau, Marcory, Treichville, Yopougon, Riviera, pour cadrer, intégrer et gouverner vos projets d’intelligence artificielle.',
     metaDescription:
       'Cabinet d’IA appliquée à Abidjan : audit, intégration, R&D produit. Siège Cocody, RCCM CI-ABJ. NexusRH, SYGESCOM, Fraud Shield en prod.',
     pitch: [
-      'OpenLab Consulting est un cabinet ivoirien basé à Abidjan, immatriculé au RCCM Côte d’Ivoire sous le numéro CI-ABJ-03-2022-B13-03239. Nos consultants vivent ici — pas en visioconférence depuis Paris ou New York. Nous connaissons le terrain abidjanais : les usages Mobile Money de Wave et Orange Money, les contraintes CNPS, ITS et FDFP de la paie, les pics de trafic des banques de la place, les enjeux opérationnels des stations-service.',
+      'OpenLab Consulting est un cabinet ivoirien basé à Abidjan, immatriculé au RCCM Côte d’Ivoire sous le numéro CI-ABJ-03-2022-B13-03239. Nos consultants vivent ici, pas en visioconférence depuis Paris ou New York. Nous connaissons le terrain abidjanais : les usages Mobile Money de Wave et Orange Money, les contraintes CNPS, ITS et FDFP de la paie, les pics de trafic des banques de la place, les enjeux opérationnels des stations-service.',
       'Cette proximité change tout dans un projet d’IA. Un atelier de cadrage à Cocody le matin permet une démo terrain l’après-midi à Marcory et un déploiement le lendemain. Les itérations sont rapides, les décisions sont prises avec les bons interlocuteurs, et la conformité (Loi 2013-450, RGPD UE) est intégrée dès le premier sprint.',
     ],
     proofs: [
@@ -110,7 +110,7 @@ export const LOCATIONS: readonly LocationContent[] = [
     metaDescription:
       'Consultant IA basé à Cocody, Riviera Faya Lauriers. Interventions sans déplacement. Audit IA, intégration, R&D produit pour la zone Cocody-II Plateaux.',
     pitch: [
-      'Cocody concentre une grande partie de l’écosystème tech ivoirien : sièges de banques, ambassades, organisations internationales, cabinets de conseil, startups. OpenLab Consulting y est installée depuis 2022 et accompagne plusieurs de ces structures dans leurs projets d’IA appliquée — du cadrage stratégique à la mise en production.',
+      'Cocody concentre une grande partie de l’écosystème tech ivoirien : sièges de banques, ambassades, organisations internationales, cabinets de conseil, startups. OpenLab Consulting y est installée depuis 2022 et accompagne plusieurs de ces structures dans leurs projets d’IA appliquée, du cadrage stratégique à la mise en production.',
       'Pour les entreprises basées à Cocody, nous proposons des formats courts (atelier d’une demi-journée, audit éclair sur 5 jours, immersion produit sur 2 semaines) qui tirent parti de la proximité physique. Pas de visio interminable : on s’installe chez vous, on parle aux opérationnels, on revient avec un livrable décisionnel.',
     ],
     proofs: [
@@ -167,7 +167,7 @@ export const LOCATIONS: readonly LocationContent[] = [
     metaDescription:
       'Cabinet d’IA pour l’UEMOA : Bénin, Burkina, Côte d’Ivoire, Guinée-Bissau, Mali, Niger, Sénégal, Togo. SYSCOHADA, BCEAO, F CFA, francophonie.',
     pitch: [
-      'L’UEMOA regroupe huit pays — Bénin, Burkina Faso, Côte d’Ivoire, Guinée-Bissau, Mali, Niger, Sénégal, Togo — qui partagent un cadre comptable commun (SYSCOHADA révisé), une monnaie (le F CFA), un régulateur bancaire (BCEAO) et une langue administrative (le français). Cette unité change fondamentalement la façon de bâtir des produits IA pour la zone : on conçoit une fois, on déploie huit fois.',
+      'L’UEMOA regroupe huit pays, Bénin, Burkina Faso, Côte d’Ivoire, Guinée-Bissau, Mali, Niger, Sénégal, Togo, qui partagent un cadre comptable commun (SYSCOHADA révisé), une monnaie (le F CFA), un régulateur bancaire (BCEAO) et une langue administrative (le français). Cette unité change fondamentalement la façon de bâtir des produits IA pour la zone : on conçoit une fois, on déploie huit fois.',
       'OpenLab Consulting a fait ce choix dès sa création. NexusERP intègre nativement SYSCOHADA et le multi-devises (F CFA, EUR, USD). NexusRH gère les spécificités sociales ivoiriennes (CNPS, ITS, FDFP) tout en s’adaptant aux régimes des autres États UEMOA. Nos livres blancs (« IA souveraine en Côte d’Ivoire 2026 ») sont pensés pour s’étendre à la zone, et nos formations sont dispensées en français en présentiel ou à distance.',
     ],
     proofs: [

@@ -8,7 +8,7 @@ import {
 const LOCATION = getLocation('uemoa');
 
 export const runtime = 'nodejs';
-export const alt = `OpenLab Consulting — ${LOCATION.label}`;
+export const alt = `OpenLab Consulting : ${LOCATION.label}`;
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

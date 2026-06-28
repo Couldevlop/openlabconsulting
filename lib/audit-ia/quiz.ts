@@ -246,11 +246,11 @@ export function getRecommendation(answers: QuizAnswers): Recommendation {
   ) {
     return {
       format: 'atelier',
-      title: 'Atelier découverte IA — demi-journée',
+      title: 'Atelier découverte IA : demi-journée',
       subtitle: 'On démystifie l’IA appliquée à votre métier, sans engagement.',
       body: [
         'Format court mais cadré : 3 heures avec votre comité de direction ou votre équipe technique. On part de votre quotidien, on identifie les frottements où l’IA peut aider, on écarte les fantasmes (« faisons ChatGPT pour tout »).',
-        'À l’issue, vous aurez les bonnes questions à poser et 1-3 cas d’usage candidats à explorer plus sérieusement le cas échéant. Aucun livrable PDF — c’est un atelier de conviction, pas un audit.',
+        'À l’issue, vous aurez les bonnes questions à poser et 1-3 cas d’usage candidats à explorer plus sérieusement le cas échéant. Aucun livrable PDF, c’est un atelier de conviction, pas un audit.',
       ],
       duration: '1 demi-journée (3 h)',
       deliverable: 'Mémo synthétique 1 page + 3 pistes priorisées',
@@ -265,7 +265,7 @@ export function getRecommendation(answers: QuizAnswers): Recommendation {
   ) {
     return {
       format: 'audit-eclair',
-      title: 'Audit IA éclair — 5 jours ouvrés',
+      title: 'Audit IA éclair : 5 jours ouvrés',
       subtitle:
         'On regarde votre pilote en cours et on dit ce qui marche, ce qui freine, ce qui doit changer pour passer à l’échelle.',
       body: [
@@ -284,7 +284,7 @@ export function getRecommendation(answers: QuizAnswers): Recommendation {
   ) {
     return {
       format: 'programme',
-      title: 'Programme IA stratégique — 6 à 12 mois',
+      title: 'Programme IA stratégique : 6 à 12 mois',
       subtitle:
         'Vision IA d’entreprise, gouvernance, comité de pilotage, roadmap multi-projets.',
       body: [
@@ -299,7 +299,7 @@ export function getRecommendation(answers: QuizAnswers): Recommendation {
   // Cadrage stratégique (cas par défaut) — adapté pour la plupart
   return {
     format: 'cadrage',
-    title: 'Cadrage stratégique IA — 3 à 4 semaines',
+    title: 'Cadrage stratégique IA : 3 à 4 semaines',
     subtitle:
       'On comprend votre contexte, on identifie 3-5 cas d’usage à fort ROI, on chiffre, on priorise.',
     body: [

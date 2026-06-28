@@ -20,7 +20,7 @@ import { alternatesFor } from '@/lib/seo/site';
 import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Expertises — Conseil, agents, data, cybersécurité IA',
+  title: 'Expertises : Conseil, agents, data, cybersécurité IA',
   description:
     'Quatre expertises OpenLab pour transformer l’IA en levier mesurable : conseil stratégique, agents & automatisation, data & gouvernance, cybersécurité augmentée.',
   alternates: alternatesFor('/expertises'),

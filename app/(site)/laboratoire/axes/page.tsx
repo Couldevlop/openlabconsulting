@@ -16,7 +16,7 @@ import { alternatesFor } from '@/lib/seo/site';
 const PRODUCTS_WORD = spellFrenchCount(PRODUCTS.length);
 
 export const metadata: Metadata = {
-  title: 'Axes R&D — Laboratoire OpenLab',
+  title: 'Axes R&D : Laboratoire OpenLab',
   description:
     'Six axes de recherche appliquée derrière les produits OpenLab : paie ouest-africaine, fraude documentaire, agro-précision, supervision temps réel, QMS multi-norme, Smart City respectueuse de la vie privée.',
   alternates: alternatesFor('/laboratoire/axes'),
@@ -134,7 +134,7 @@ export default async function LaboratoireAxesPage(): Promise<React.ReactElement>
               Voir les publications associées.
             </Heading>
             <p className="mt-3 text-[var(--color-ol-graphite)]/75">
-              Livre, livres blancs, conférences — la sortie publique de nos axes
+              Livre, livres blancs, conférences, la sortie publique de nos axes
               de recherche.
             </p>
             <Link

@@ -50,7 +50,7 @@ export async function generateMetadata({
     return { title: 'Produit introuvable' };
   }
   return {
-    title: `${product.name} — Solution OpenLab`,
+    title: `${product.name} : Solution OpenLab`,
     description: product.tagline,
     alternates: alternatesFor(`/solutions/${product.slug}`),
   };

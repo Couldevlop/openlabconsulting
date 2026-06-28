@@ -24,13 +24,13 @@ const SRC_HTML = 'docs/images/article_sentinelbtp.html';
 
 const SLUG = 'sentinelbtp-ia-securite-batiments-cote-divoire';
 const TITLE =
-  'SentinelBTP : voir le danger avant l’effondrement — l’IA au service de la sécurité des bâtiments en Côte d’Ivoire';
+  'SentinelBTP : voir le danger avant l’effondrement, l’IA au service de la sécurité des bâtiments en Côte d’Ivoire';
 const EXCERPT =
-  'À Abidjan, un immeuble qui s’effondre a presque toujours prévenu. Comment l’IA prédictive et l’IoT transforment la sécurité des bâtiments — d’une posture réactive et tardive à une anticipation mesurable.';
+  'À Abidjan, un immeuble qui s’effondre a presque toujours prévenu. Comment l’IA prédictive et l’IoT transforment la sécurité des bâtiments, d’une posture réactive et tardive à une anticipation mesurable.';
 const SUMMARY_POINTS = [
-  'En 2024, la presse et les secours ivoiriens ont recensé une quinzaine d’effondrements majeurs à Abidjan et dans le pays — un risque récurrent, documenté et pourtant évitable.',
+  'En 2024, la presse et les secours ivoiriens ont recensé une quinzaine d’effondrements majeurs à Abidjan et dans le pays, un risque récurrent, documenté et pourtant évitable.',
   'Le marché du Structural Health Monitoring (SHM) est mature (≈ 10,5 Md$ visés en 2030) : ce qui manque en Afrique n’est pas la technologie, mais son accessibilité et sa localisation.',
-  'SentinelBTP combine capteurs edge, IA sur séries temporelles et dossier de preuve opposable (article 37) pour anticiper ≥ 72 h avant le seuil de danger — du réactif au préventif.',
+  'SentinelBTP combine capteurs edge, IA sur séries temporelles et dossier de preuve opposable (article 37) pour anticiper ≥ 72 h avant le seuil de danger, du réactif au préventif.',
 ];
 const KEYWORDS = [
   'SentinelBTP',

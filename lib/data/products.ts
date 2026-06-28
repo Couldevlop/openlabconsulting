@@ -140,7 +140,7 @@ export const PRODUCTS: readonly Product[] = [
       {
         iconKey: 'building',
         title: 'Mobile Money intégré',
-        body: 'Diffusion salariale Orange Money, MTN Mobile Money, Moov Money — réconciliation automatique.',
+        body: 'Diffusion salariale Orange Money, MTN Mobile Money, Moov Money, réconciliation automatique.',
       },
       {
         iconKey: 'scan-search',
@@ -374,7 +374,7 @@ export const PRODUCTS: readonly Product[] = [
       model: 'license',
       headline: 'Licence + maintenance sur devis',
       details: [
-        'Licence groupe — utilisateurs illimités du même réseau',
+        'Licence groupe : utilisateurs illimités du même réseau',
         'Inclut intégration jauges + pompes + terminaux paiement',
         'Modèle IA de détection anomalies entraîné sur vos historiques',
         'Maintenance corrective + mises à jour majeures incluses 12 mois',
@@ -554,7 +554,7 @@ export const PRODUCTS: readonly Product[] = [
       {
         value: '4',
         label: 'normes ISO supportées en parallèle',
-        source: 'ISO 9001, 14001, 45001, 22000 — référentiel unifié',
+        source: 'ISO 9001, 14001, 45001, 22000 : référentiel unifié',
       },
       {
         value: '5',
@@ -616,7 +616,7 @@ export const PRODUCTS: readonly Product[] = [
     statusLabel: 'En production',
     eyebrow: 'Détection fraude documentaire par IA',
     intro:
-      "Fraud Shield analyse un document à l'image et au texte : pièces d'identité, factures, attestations bancaires, certificats de domiciliation. Il isole les manipulations invisibles à l'œil — copier-coller de cachet, retouche de montant, signature reproduite.",
+      "Fraud Shield analyse un document à l'image et au texte : pièces d'identité, factures, attestations bancaires, certificats de domiciliation. Il isole les manipulations invisibles à l'œil : copier-coller de cachet, retouche de montant, signature reproduite.",
     problem:
       "Le contrôleur regarde 200 dossiers par jour. Au 50ᵉ, l'œil se fatigue. À midi, il signe les yeux fermés. La fraude documentaire ne s'arrête pas, elle attend que le contrôleur cligne.",
     features: [
@@ -714,7 +714,7 @@ export const PRODUCTS: readonly Product[] = [
     statusLabel: 'En pilote',
     eyebrow: 'IA sécurité urbaine',
     intro:
-      "Smart City fusionne caméras urbaines, données mobilité, données socio-économiques et signalements citoyens pour cartographier les risques avant qu'ils ne dégénèrent. Pas un outil de surveillance — un outil de planification.",
+      "Smart City fusionne caméras urbaines, données mobilité, données socio-économiques et signalements citoyens pour cartographier les risques avant qu'ils ne dégénèrent. Pas un outil de surveillance, un outil de planification.",
     problem:
       'Les caméras filment. La police arrive. Les statistiques arrivent un mois plus tard. La décision politique se prend sur un sentiment, pas sur une cartographie.',
     features: [
@@ -812,9 +812,9 @@ export const PRODUCTS: readonly Product[] = [
     statusLabel: 'En pilote',
     eyebrow: 'Surveillance structurelle par IA · SHM',
     intro:
-      'SentinelBTP instrumente les bâtiments et ouvrages avec des capteurs edge (inclinaison, fissuration, tassement, vibrations) et compare chaque mesure à la trajectoire historique de la structure. Le résultat n’est pas un seuil fixe mais un score de risque évolutif — du suivi de chantier à l’exploitation.',
+      'SentinelBTP instrumente les bâtiments et ouvrages avec des capteurs edge (inclinaison, fissuration, tassement, vibrations) et compare chaque mesure à la trajectoire historique de la structure. Le résultat n’est pas un seuil fixe mais un score de risque évolutif, du suivi de chantier à l’exploitation.',
     problem:
-      'À Abidjan, un immeuble qui s’effondre a presque toujours prévenu : le béton fissure, la structure s’incline de quelques millimètres, les vibrations changent de signature. Le problème n’est pas l’absence de signaux — c’est que personne ne les mesure en continu. Les inspections restent humaines, ponctuelles et tardives.',
+      'À Abidjan, un immeuble qui s’effondre a presque toujours prévenu : le béton fissure, la structure s’incline de quelques millimètres, les vibrations changent de signature. Le problème n’est pas l’absence de signaux, c’est que personne ne les mesure en continu. Les inspections restent humaines, ponctuelles et tardives.',
     features: [
       {
         iconKey: 'antenna',
@@ -829,7 +829,7 @@ export const PRODUCTS: readonly Product[] = [
       {
         iconKey: 'scan-search',
         title: 'Score de risque sur séries temporelles',
-        body: 'Des modèles d’IA comparent chaque mesure à l’historique de l’ouvrage et calculent un risque évolutif, au lieu de simples seuils — le cœur de la valeur.',
+        body: 'Des modèles d’IA comparent chaque mesure à l’historique de l’ouvrage et calculent un risque évolutif, au lieu de simples seuils, le cœur de la valeur.',
       },
       {
         iconKey: 'badge-check',
@@ -863,7 +863,7 @@ export const PRODUCTS: readonly Product[] = [
       {
         value: '10,5 Md$',
         label: 'marché SHM mondial visé en 2030',
-        source: 'Grand View Research — Structural Health Monitoring 2024',
+        source: 'Grand View Research : Structural Health Monitoring 2024',
       },
     ],
     pricing: {

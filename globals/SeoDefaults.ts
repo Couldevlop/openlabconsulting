@@ -11,7 +11,7 @@ import { accessAdminPlus } from '../lib/auth/roles';
  */
 export const SeoDefaults: GlobalConfig = {
   slug: 'seo-defaults',
-  label: 'SEO — Défauts globaux',
+  label: 'SEO : Défauts globaux',
   admin: {
     description: 'Méta-balises SEO par défaut pour les pages sans override.',
     group: 'SEO & marketing',

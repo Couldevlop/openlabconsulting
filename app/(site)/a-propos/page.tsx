@@ -19,7 +19,7 @@ import { SITE, alternatesFor } from '@/lib/seo/site';
 import { getAboutContent } from '@/lib/cms/site-settings-server';
 
 export const metadata: Metadata = {
-  title: 'À propos — OpenLab Consulting',
+  title: 'À propos : OpenLab Consulting',
   description:
     'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Trois piliers : conseil, produits, édition.',
   alternates: alternatesFor('/a-propos'),

@@ -31,7 +31,7 @@ const SLUG = 'ia-souveraine-cote-ivoire';
 const TITLE =
   'L’IA souveraine ivoirienne : un cap juste, un chemin à construire';
 const EXCERPT =
-  'Pourquoi la Côte d’Ivoire ne réussira pas son IA en brûlant les étapes — et comment avancer dès aujourd’hui, méthodiquement.';
+  'Pourquoi la Côte d’Ivoire ne réussira pas son IA en brûlant les étapes, et comment avancer dès aujourd’hui, méthodiquement.';
 const SUMMARY_POINTS = [
   'La Côte d’Ivoire vise plus de 1 000 milliards FCFA d’investissements IA d’ici 2030, mais part de loin : 138ᵉ/193 au Government AI Readiness Index 2023.',
   'Sept verrous freinent l’IA souveraine : énergie, puissance de calcul, datacenters, données, compétences, cadre réglementaire et fonctionnement en silos.',

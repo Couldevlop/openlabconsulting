@@ -40,7 +40,7 @@ export const Users: CollectionConfig = {
     // l'écran natif /admin/reset/<token> de Payload.
     forgotPassword: {
       generateEmailSubject: () =>
-        'Réinitialisation de votre mot de passe — Admin OpenLab',
+        'Réinitialisation de votre mot de passe : Admin OpenLab',
       generateEmailHTML: (args) => {
         const token = args?.token ?? '';
         const user = args?.user as

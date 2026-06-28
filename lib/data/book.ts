@@ -62,14 +62,14 @@ export const BOOK = {
   capstone: 'AgroSense CI',
   longPitch: [
     'Un parcours rigoureux du machine learning supervisé aux agents multi-acteurs, en passant par les séries temporelles climatiques, le RAG souverain, MLOps et la sécurité IA.',
-    "Un capstone terrain ivoirien — AgroSense CI — qui démontre comment l'IA se déploie concrètement sur des coopératives cacao, anacarde, coton et hévéa.",
+    "Un capstone terrain ivoirien, AgroSense CI, qui démontre comment l'IA se déploie concrètement sur des coopératives cacao, anacarde, coton et hévéa.",
     "Un manuel praticien : chaque chapitre majeur s'accompagne d'extraits de code Python ou TypeScript, et d'une mise en situation tirée d'un déploiement réel.",
   ],
   audiences: [
     {
       label: 'Étudiants ingénieurs',
       description:
-        'Du M1 à la thèse — bases ML, MLOps, sécurité IA. Lectures dirigées et exercices fournis.',
+        'Du M1 à la thèse : bases ML, MLOps, sécurité IA. Lectures dirigées et exercices fournis.',
     },
     {
       label: 'Data scientists confirmés',
@@ -111,7 +111,7 @@ export const CHAPTERS: readonly Chapter[] = [
     title: 'Machine learning supervisé : la mécanique de base',
     readingTime: '45 min',
     summary:
-      'Régression, classification, validation, biais — les fondations indispensables avant tout le reste.',
+      'Régression, classification, validation, biais, les fondations indispensables avant tout le reste.',
     keywords: ['ML supervisé', 'scikit-learn', 'validation'],
     hasCode: true,
     hasCaseStudy: false,
@@ -121,7 +121,7 @@ export const CHAPTERS: readonly Chapter[] = [
     title: 'Apprentissage non supervisé et auto-supervisé',
     readingTime: '40 min',
     summary:
-      'Clustering, réduction de dimension, embeddings. Comment apprendre sans étiquettes — et quand cela rend.',
+      'Clustering, réduction de dimension, embeddings. Comment apprendre sans étiquettes, et quand cela rend.',
     keywords: ['clustering', 'embeddings', 'PCA', 'UMAP'],
     hasCode: true,
     hasCaseStudy: false,
@@ -131,7 +131,7 @@ export const CHAPTERS: readonly Chapter[] = [
     title: 'Séries temporelles climatiques et financières',
     readingTime: '50 min',
     summary:
-      'ARIMA, Prophet, modèles state-space, deep learning temporel — appliqués à SODEXAM, CHIRPS, ERA5.',
+      'ARIMA, Prophet, modèles state-space, deep learning temporel, appliqués à SODEXAM, CHIRPS, ERA5.',
     keywords: ['séries temporelles', 'climat', 'CHIRPS'],
     hasCode: true,
     hasCaseStudy: true,
@@ -198,7 +198,7 @@ export const CHAPTERS: readonly Chapter[] = [
   },
   {
     index: '11',
-    title: 'Capstone — AgroSense CI, du capteur à la décision',
+    title: 'Capstone : AgroSense CI, du capteur à la décision',
     readingTime: '90 min',
     summary:
       'Étude de cas terrain intégrale : capteurs IoT, séries climatiques, prédiction maladies, interface coopérative.',
@@ -210,7 +210,7 @@ export const CHAPTERS: readonly Chapter[] = [
 
 export const PURCHASE_CHANNELS: readonly PurchaseChannel[] = [
   {
-    name: 'Boutique OpenLab — PDF + ePub',
+    name: 'Boutique OpenLab : PDF + ePub',
     description:
       'À la parution : téléchargement immédiat après achat, accès illimité aux mises à jour de l’édition courante.',
     href: '/livre/acheter#openlab-direct',
@@ -226,7 +226,7 @@ export const PURCHASE_CHANNELS: readonly PurchaseChannel[] = [
   {
     name: 'Lulu (impression à la demande)',
     description:
-      'Impression à la demande mondiale, à la parution — pour les zones hors distribution Amazon. Couverture cartonnée.',
+      'Impression à la demande mondiale, à la parution, pour les zones hors distribution Amazon. Couverture cartonnée.',
     href: '/livre/acheter',
     primary: false,
   },

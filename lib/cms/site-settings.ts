@@ -128,7 +128,7 @@ export const SECTEURS_HUB_FALLBACK: HubHeroContent = {
   headlineLead: 'Cinq secteurs.',
   headlineHighlight: 'Une exigence commune',
   description:
-    'L’IA n’a pas la même tête dans une banque, une coopérative cacao ou un hôpital. On adapte le déploiement à votre cadre réglementaire, à vos régulateurs, à vos systèmes existants — jamais l’inverse.',
+    'L’IA n’a pas la même tête dans une banque, une coopérative cacao ou un hôpital. On adapte le déploiement à votre cadre réglementaire, à vos régulateurs, à vos systèmes existants, jamais l’inverse.',
 };
 
 export interface AuditIaProcessStep {
@@ -169,7 +169,7 @@ export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
     {
       step: '03',
       title: 'Consultant senior · 48 h',
-      body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris — pas de questions répétées.',
+      body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris, pas de questions répétées.',
     },
   ],
 };
@@ -192,7 +192,7 @@ export const HERO_FALLBACK: HeroContent = {
   headlineLead: 'L’IA, au service',
   headlineHighlight: 'des réalités africaines.',
   subtitle:
-    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Conseil, intégration, {productsWord} logiciels propriétaires et un livre de référence — sous le même toit.',
+    'Cabinet ivoirien d’IA appliquée, R&D produit et publication de référence pour l’Afrique francophone. Conseil, intégration, {productsWord} logiciels propriétaires et un livre de référence, sous le même toit.',
   primaryCta: { label: 'Demander un audit IA gratuit', href: '/audit-ia' },
   secondaryCta: {
     label: 'Découvrir l’écosystème produits',
@@ -210,7 +210,7 @@ export const MANIFESTO_FALLBACK: ManifestoContent = {
   stances: [
     {
       excuse: '« On n’a pas les outils. »',
-      fact: '{ProductsWord} logiciels propriétaires produits à Abidjan. SYSCOHADA, CNPS, Mobile Money — natifs.',
+      fact: '{ProductsWord} logiciels propriétaires produits à Abidjan. SYSCOHADA, CNPS, Mobile Money, natifs.',
     },
     {
       excuse: '« On n’a pas la recherche. »',
@@ -235,7 +235,7 @@ export const METHODOLOGIE_FALLBACK: MethodologieContent = {
   titleLead: 'L’IA ne s’installe pas.',
   titleHighlight: 'Elle s’adopte.',
   intro:
-    'OpenLab accompagne les entreprises ivoiriennes et africaines à transformer l’IA en avantage compétitif réel. Trois étapes, dans l’ordre — pas un gadget, une adoption qui produit.',
+    'OpenLab accompagne les entreprises ivoiriennes et africaines à transformer l’IA en avantage compétitif réel. Trois étapes, dans l’ordre, pas un gadget, une adoption qui produit.',
   axes: [
     {
       index: '01',
@@ -246,7 +246,7 @@ export const METHODOLOGIE_FALLBACK: MethodologieContent = {
     {
       index: '02',
       title: 'Choix des données & des secteurs',
-      punchline: 'Quoi confier à l’IA — et quoi garder humain.',
+      punchline: 'Quoi confier à l’IA, et quoi garder humain.',
       body: 'Nous identifions les données et les processus à fort levier, leur qualité et leur sensibilité. La bonne IA, au bon endroit, sous gouvernance.',
     },
     {
@@ -355,7 +355,7 @@ export const FOOTER_FALLBACK: FooterContent = {
     },
   ],
   copyright:
-    'OpenLab Consulting SARL — RCCM CI-ABJ-03-2022-B13-03239. Tous droits réservés.',
+    'OpenLab Consulting SARL, RCCM CI-ABJ-03-2022-B13-03239. Tous droits réservés.',
 };
 
 export interface AboutPillar {
@@ -436,7 +436,7 @@ export interface AnnouncementBannerContent {
 export const ANNOUNCEMENT_BANNER_FALLBACK: AnnouncementBannerContent = {
   enabled: false,
   message:
-    '⚡ Flash info — OpenCacao : l’IA souveraine du cacao, conçue et hébergée en Côte d’Ivoire, est en ligne.',
+    '⚡ Flash info, OpenCacao : l’IA souveraine du cacao, conçue et hébergée en Côte d’Ivoire, est en ligne.',
   linkLabel: 'Découvrir',
   linkHref: '/insights/opencacao-ia-souveraine-cacao-cote-divoire',
 };

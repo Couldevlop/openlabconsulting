@@ -50,13 +50,13 @@ export const SECTORS: readonly Sector[] = [
     tagline:
       'Souveraineté des données. Service rendu. Et le citoyen au centre.',
     intro:
-      "Ministères, collectivités, régulateurs : la digitalisation publique en Afrique francophone se heurte à trois obstacles — souveraineté des données, conformité, qualité du service. On déploie de l'IA qui respecte le cadre, gouvernée bout en bout, vérifiable par n'importe quel audit.",
+      "Ministères, collectivités, régulateurs : la digitalisation publique en Afrique francophone se heurte à trois obstacles : souveraineté des données, conformité, qualité du service. On déploie de l'IA qui respecte le cadre, gouvernée bout en bout, vérifiable par n'importe quel audit.",
     enjeux: [
-      "Souveraineté des données — pas de cloud étranger pour des données d'usagers",
-      "Anti-fraude documentaire — pièces d'identité, attestations, certificats",
-      'Pilotage urbain — sécurité, mobilité, services publics anticipés',
-      'Conformité juridique — loi ivoirienne 2013-450, traité de Malabo, RGPD',
-      "Continuité de service — pas d'interruption acceptable sur les SI critiques",
+      "Souveraineté des données : pas de cloud étranger pour des données d'usagers",
+      "Anti-fraude documentaire : pièces d'identité, attestations, certificats",
+      'Pilotage urbain : sécurité, mobilité, services publics anticipés',
+      'Conformité juridique : loi ivoirienne 2013-450, traité de Malabo, RGPD',
+      "Continuité de service : pas d'interruption acceptable sur les SI critiques",
     ],
     regulation: [
       'Loi ivoirienne 2013-450 sur les données personnelles',
@@ -83,14 +83,14 @@ export const SECTORS: readonly Sector[] = [
     intro:
       'Banques, microfinances, assureurs : vos contrôleurs croulent sous les pièces justificatives. Une fraude documentaire bien faite passe sous le radar. Une lutte anti-blanchiment réactive arrive toujours trop tard. On installe des couches IA défensives intégrées à vos workflows existants.',
     enjeux: [
-      'KYC accéléré — vérification documentaire automatisée',
-      'AML / lutte anti-blanchiment — détection patterns suspects en temps réel',
-      "Anti-fraude documentaire — certificats de domiciliation, attestations bancaires, pièces d'identité",
-      'Scoring crédit explicable — modèles auditables par la BCEAO',
+      'KYC accéléré : vérification documentaire automatisée',
+      'AML / lutte anti-blanchiment : détection patterns suspects en temps réel',
+      "Anti-fraude documentaire : certificats de domiciliation, attestations bancaires, pièces d'identité",
+      'Scoring crédit explicable : modèles auditables par la BCEAO',
       'Réconciliation comptable IFRS + SYSCOHADA',
     ],
     regulation: [
-      'BCEAO — règlements UEMOA sur la lutte anti-blanchiment',
+      'BCEAO : règlements UEMOA sur la lutte anti-blanchiment',
       'CRBF / ACPR pour les filiales bancaires opérant en zone euro',
       'Directives FATF / GAFI sur la finance internationale',
       'Loi ivoirienne 2013-450 sur les données personnelles',
@@ -116,8 +116,8 @@ export const SECTORS: readonly Sector[] = [
     enjeux: [
       'Traçabilité origine parcelle GPS pour la conformité EUDR',
       'Prédiction maladies et rendements (cacao, anacarde, coton, hévéa)',
-      'Optimisation des intrants — réduction des coûts par hectare',
-      'Pilotage coopérative — adhérents, livraisons, qualité, paiements',
+      'Optimisation des intrants : réduction des coûts par hectare',
+      'Pilotage coopérative : adhérents, livraisons, qualité, paiements',
       'Reporting ESG aux acheteurs européens et aux bailleurs',
     ],
     regulation: [
@@ -144,14 +144,14 @@ export const SECTORS: readonly Sector[] = [
     intro:
       'Hôpitaux, cliniques, mutuelles, laboratoires : la qualité de soin se joue dans la fluidité du parcours patient et la rigueur du système qualité. On déploie des outils qui automatisent la traçabilité ISO, gèrent les CAPA, et protègent les données patients sans alourdir vos équipes.',
     enjeux: [
-      'Conformité qualité — ISO 22000, ISO 9001, accréditation HAS',
-      'CAPA traçabilité — actions correctives sur événements indésirables',
+      'Conformité qualité : ISO 22000, ISO 9001, accréditation HAS',
+      'CAPA traçabilité : actions correctives sur événements indésirables',
       'Gestion des plannings équipes médicales et paramédicales',
       'Protection des données patient (RGPD santé, loi ivoirienne)',
       'Pilotage activité, occupation, équipement',
     ],
     regulation: [
-      'RGPD article 9 (catégories particulières de données — santé)',
+      'RGPD article 9 (catégories particulières de données : santé)',
       'Loi ivoirienne 2013-450 sur les données personnelles',
       'Référentiels HAS pour les cliniques opérant en partenariat français',
       'Normes ISO 9001 / 22000 / 27001 selon activité',
@@ -181,7 +181,7 @@ export const SECTORS: readonly Sector[] = [
       'Anti-blanchiment Mobile Money et services financiers connexes',
     ],
     regulation: [
-      'ARTCI — Autorité de régulation des télécommunications de Côte d’Ivoire',
+      'ARTCI : Autorité de régulation des télécommunications de Côte d’Ivoire',
       'CIE / Petroci pour la chaîne de distribution énergétique',
       'BCEAO pour les services financiers Mobile Money',
       'Loi ivoirienne 2013-450 sur les données personnelles',

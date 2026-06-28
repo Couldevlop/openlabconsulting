@@ -31,42 +31,42 @@ const COVERS: readonly CoverMapping[] = [
   {
     slug: 'fraude-documentaire-ia-banques-assurances',
     image: '1001290076.png',
-    alt: 'Détection de fraude documentaire par IA — tableau de bord Fraud Shield',
+    alt: 'Détection de fraude documentaire par IA, tableau de bord Fraud Shield',
   },
   {
     slug: 'migration-ia-souveraine-k3s-hetzner',
     image: '1001290645.png',
-    alt: 'Décisions augmentées par l’IA — souveraineté numérique africaine',
+    alt: 'Décisions augmentées par l’IA, souveraineté numérique africaine',
   },
   {
     slug: 'cnps-its-fdfp-conformite-sirh-ivoirien',
     image: '1001289248.png',
-    alt: 'Conformité RH NexusRH — CNPS, ITS, FDFP',
+    alt: 'Conformité RH NexusRH : CNPS, ITS, FDFP',
   },
   {
     slug: 'data-petrole-ia-raffinerie-entreprises-ivoiriennes',
     image: '1001290243.png',
-    alt: 'La data est votre pétrole, l’IA votre raffinerie — Data & IA',
+    alt: 'La data est votre pétrole, l’IA votre raffinerie, Data & IA',
   },
   {
     slug: 'pertes-carburant-stations-pilotage-temps-reel',
     image: '1001287382.png',
-    alt: 'Pertes de carburant en station — pilotage SYGESCOM temps réel',
+    alt: 'Pertes de carburant en station, pilotage SYGESCOM temps réel',
   },
   {
     slug: 'ia-securite-urbaine-villes-africaines-2050',
     image: '1001293417.png',
-    alt: 'Quand l’IA protège la ville — sécurité urbaine augmentée par l’IA',
+    alt: 'Quand l’IA protège la ville, sécurité urbaine augmentée par l’IA',
   },
   {
     slug: 'ia-ivoirienne-notre-futur-manifeste',
     image: '1001294771.png',
-    alt: 'L’IA ivoirienne, notre futur — manifeste souveraineté',
+    alt: 'L’IA ivoirienne, notre futur, manifeste souveraineté',
   },
   {
     slug: 'opencacao-ia-souveraine-cacao-cote-divoire',
     image: 'opencacao-cover.png',
-    alt: 'OpenCacao — l’IA souveraine du cacao conçue et hébergée en Côte d’Ivoire',
+    alt: 'OpenCacao : l’IA souveraine du cacao conçue et hébergée en Côte d’Ivoire',
   },
 ];
 

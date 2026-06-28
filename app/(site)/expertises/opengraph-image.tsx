@@ -6,7 +6,7 @@ import {
 
 export const runtime = 'nodejs';
 export const alt =
-  'Expertises OpenLab — conseil, agents, data, cybersécurité IA';
+  'Expertises OpenLab : conseil, agents, data, cybersécurité IA';
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

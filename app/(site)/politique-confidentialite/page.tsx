@@ -8,7 +8,7 @@ import { SITE, alternatesFor } from '@/lib/seo/site';
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
   description:
-    'Politique de confidentialité d’OpenLab Consulting — RGPD, loi ivoirienne 2013-450, droits utilisateurs, conservation, sous-traitants.',
+    'Politique de confidentialité d’OpenLab Consulting : RGPD, loi ivoirienne 2013-450, droits utilisateurs, conservation, sous-traitants.',
   alternates: alternatesFor('/politique-confidentialite'),
   robots: { index: true, follow: true },
 };
@@ -102,18 +102,18 @@ export default function PolitiqueConfidentialitePage(): React.ReactElement {
               </p>
               <ul className="mt-3 list-disc space-y-1 pl-6">
                 <li>
-                  <strong>Hetzner Online GmbH</strong> (Allemagne) — hébergement
+                  <strong>Hetzner Online GmbH</strong> (Allemagne) : hébergement
                   infrastructure
                 </li>
                 <li>
-                  <strong>Resend / Brevo</strong> — envoi email transactionnel
+                  <strong>Resend / Brevo</strong> : envoi email transactionnel
                 </li>
                 <li>
-                  <strong>Anthropic</strong> — service Claude API pour
+                  <strong>Anthropic</strong> : service Claude API pour
                   l’assistant IA (anonymisation amont des prompts sensibles)
                 </li>
                 <li>
-                  <strong>Stripe</strong> — paiement livres / formations
+                  <strong>Stripe</strong> : paiement livres / formations
                   (PCI-DSS niveau 1)
                 </li>
               </ul>

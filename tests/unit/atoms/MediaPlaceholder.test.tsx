@@ -6,7 +6,7 @@ describe('MediaPlaceholder', () => {
   it('rend le placeholder typé quand src est null', () => {
     render(<MediaPlaceholder src={null} alt="Capture SYGESCOM" />);
     const el = screen.getByRole('img', {
-      name: /Capture SYGESCOM — capture à venir/i,
+      name: /Capture SYGESCOM, capture à venir/i,
     });
     expect(el).toBeInTheDocument();
     // Pas de <img> tag : c'est un div role=img

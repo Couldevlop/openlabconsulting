@@ -123,7 +123,7 @@ describe('Page /livre/acheter', () => {
     render(<LivreAcheterPage />);
     expect(screen.getByText(/Édition numérique directe/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Bouquet OpenLab — PDF \+ ePub direct/i),
+      screen.getByText(/Bouquet OpenLab : PDF \+ ePub direct/i),
     ).toBeInTheDocument();
   });
 

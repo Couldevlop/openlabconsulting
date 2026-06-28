@@ -34,7 +34,7 @@ export default function ContactPage(): React.ReactElement {
               </Heading>
               <p className="mt-6 text-lg leading-relaxed text-[var(--color-ol-graphite)]/80">
                 Pour un audit IA, une démo produit, une intervention en
-                conférence ou un partenariat universitaire — utilisez le canal
+                conférence ou un partenariat universitaire, utilisez le canal
                 qui vous convient. Réponse sous 24 h ouvrées.
               </p>
 
