@@ -63,7 +63,20 @@ function fixEmDashes(input: string): string {
       if (offset === 0) return '';
       if (isShortTitle) {
         const before = str.slice(0, offset).trim();
-        if (before.length > 0 && !before.includes(',')) return ' : ';
+        // Mot qui suit le tiret : si c'est une conjonction (« et quoi… »,
+        // « ou… »), c'est une continuation, pas une définition → virgule.
+        const afterWord = (
+          str
+            .slice(offset)
+            .replace(/^\s*—\s*/, '')
+            .match(/^[\p{L}’']+/u)?.[0] ?? ''
+        ).toLowerCase();
+        const isConjunction = /^(et|ou|mais|car|ni|donc|puis|or)$/.test(
+          afterWord,
+        );
+        if (before.length > 0 && !before.includes(',') && !isConjunction) {
+          return ' : ';
+        }
       }
       // Incise / milieu de phrase → virgule.
       return ', ';
@@ -71,10 +84,16 @@ function fixEmDashes(input: string): string {
     .replace(/ {2,}/g, ' ');
 }
 
+/** Échantillons avant/après collectés pour la prévisualisation (DRY-RUN). */
+const SAMPLES: { before: string; after: string }[] = [];
+
 /** Parcourt récursivement une valeur et remplace les « — » dans les chaînes. */
 function walk(value: unknown): { value: unknown; count: number } {
   if (typeof value === 'string') {
     const fixed = fixEmDashes(value);
+    if (fixed !== value && SAMPLES.length < 14) {
+      SAMPLES.push({ before: value, after: fixed });
+    }
     return { value: fixed, count: fixed !== value ? 1 : 0 };
   }
   if (Array.isArray(value)) {
@@ -115,6 +134,7 @@ async function main(): Promise<void> {
 
   let totalDocs = 0;
   let totalStrings = 0;
+  const failures: { ref: string; reason: string }[] = [];
 
   // --- Globals ---
   for (const global of payload.config.globals) {
@@ -157,20 +177,43 @@ async function main(): Promise<void> {
           `[collection] ${slug} #${String(doc.id)} — ${count} chaîne(s) avec « — »`,
         );
         if (APPLY) {
-          await payload.update({
-            collection: slug,
-            id: doc.id as string | number,
-            data: stripManaged(value as Record<string, unknown>),
-            depth: 0,
-          });
+          try {
+            await payload.update({
+              collection: slug,
+              id: doc.id as string | number,
+              data: stripManaged(value as Record<string, unknown>),
+              depth: 0,
+            });
+          } catch (err) {
+            const reason = err instanceof Error ? err.message : String(err);
+            failures.push({ ref: `${slug} #${String(doc.id)}`, reason });
+            console.log(`   ⚠ échec ${slug} #${String(doc.id)} : ${reason}`);
+          }
         }
       }
     }
   }
 
+  if (!APPLY && SAMPLES.length > 0) {
+    const trunc = (s: string): string =>
+      s.length > 120 ? s.slice(0, 117) + '…' : s;
+    console.log('\n--- Échantillon avant / après ---');
+    for (const { before, after } of SAMPLES) {
+      console.log(`AV: ${trunc(before)}`);
+      console.log(`AP: ${trunc(after)}\n`);
+    }
+  }
+
+  if (failures.length > 0) {
+    console.log(`\n--- ${failures.length} échec(s) (laissés intacts) ---`);
+    for (const f of failures) console.log(`  ${f.ref} : ${f.reason}`);
+  }
+
   console.log(
     `\n=== ${totalStrings} chaîne(s) sur ${totalDocs} document(s) ${
-      APPLY ? 'mises à jour' : 'à mettre à jour (DRY-RUN)'
+      APPLY
+        ? `traité(s) (${failures.length} échec[s])`
+        : 'à mettre à jour (DRY-RUN)'
     } ===`,
   );
   if (!APPLY && totalStrings > 0) {
