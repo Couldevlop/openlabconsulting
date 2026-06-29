@@ -21,7 +21,7 @@ import { SITE, hreflangMap } from '@/lib/seo/site';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — IA, R&D et conseil pour l’Afrique francophone`,
+    default: `${SITE.name} : IA, R&D et conseil pour l’Afrique francophone`,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
@@ -52,13 +52,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: SITE.locale,
     siteName: SITE.name,
-    title: `${SITE.name} — IA, R&D et conseil pour l’Afrique francophone`,
+    title: `${SITE.name} : IA, R&D et conseil pour l’Afrique francophone`,
     description: SITE.description,
     url: SITE.url,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE.name} — IA, R&D et conseil pour l’Afrique francophone`,
+    title: `${SITE.name} : IA, R&D et conseil pour l’Afrique francophone`,
     description: SITE.description,
   },
   robots: {

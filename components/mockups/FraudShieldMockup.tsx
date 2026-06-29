@@ -10,7 +10,7 @@ export function FraudShieldMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — analyse document Fraud Shield"
+      aria-label="Aperçu : analyse document Fraud Shield"
       className="h-full w-full"
     >
       {/* Topbar */}

@@ -11,7 +11,7 @@ export function NexusRhMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — dashboard paie NexusRH"
+      aria-label="Aperçu : dashboard paie NexusRH"
       className="h-full w-full"
     >
       {/* Sidebar */}

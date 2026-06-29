@@ -223,8 +223,8 @@ export function WhitepaperRequestForm({
           className="mt-0.5 h-4 w-4 rounded border-[var(--color-ol-mist)] text-[var(--color-ol-orange)] focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
         />
         <span>
-          Je souhaite m&apos;abonner au fil d&apos;actualité OpenLab — sorties
-          de livres, nouveaux articles, solutions, formations et webinaires.
+          Je souhaite m&apos;abonner au fil d&apos;actualité OpenLab, sorties de
+          livres, nouveaux articles, solutions, formations et webinaires.
           (Facultatif, désabonnement en un clic.)
         </span>
       </label>
@@ -239,7 +239,7 @@ export function WhitepaperRequestForm({
         ) : null}
         {status.kind === 'success' ? (
           <p className="rounded-md border border-[var(--color-ol-success)]/40 bg-[var(--color-ol-success)]/10 px-3 py-2 text-[var(--color-ol-success)]">
-            Demande reçue — redirection…
+            Demande reçue, redirection…
           </p>
         ) : null}
       </div>

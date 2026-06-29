@@ -10,7 +10,7 @@ export function NexusErpMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — tableau de bord financier NexusERP"
+      aria-label="Aperçu : tableau de bord financier NexusERP"
       className="h-full w-full"
     >
       {/* Topbar */}

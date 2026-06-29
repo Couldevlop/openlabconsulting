@@ -10,7 +10,7 @@ export function SygescomMockup(): ReactElement {
       viewBox="0 0 480 270"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="Aperçu — dashboard temps réel SYGESCOM"
+      aria-label="Aperçu : dashboard temps réel SYGESCOM"
       className="h-full w-full"
     >
       {/* Topbar */}
