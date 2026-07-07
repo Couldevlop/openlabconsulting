@@ -134,9 +134,9 @@ export async function send(
 }
 
 export function logFailure(label: string, detail: string): void {
-  if (process.env.NODE_ENV !== 'production') {
-    console.warn(`[email] envoi ZeptoMail échoué — ${label}:`, detail);
-  }
+  // Loggé en prod aussi (OWASP A09) : l'envoi étant fail-soft, ce log est la
+  // SEULE trace d'un incident mailer (ex. crédits ZeptoMail épuisés, 429).
+  console.error(`[email] envoi ZeptoMail échoué — ${label}:`, detail);
 }
 
 // ────────────────────────────────────────────────────────────
