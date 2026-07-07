@@ -154,6 +154,34 @@ describe('lib/email — envoi ZeptoMail', () => {
     expect(res.error).toContain('401');
   });
 
+  it('logge l’échec même en production (observabilité A09)', async () => {
+    // Incident 2026-07-07 : crédits ZeptoMail épuisés (HTTP 429) pendant des
+    // jours sans aucune trace — l'ancien logFailure était muet en prod.
+    vi.stubEnv('NODE_ENV', 'production');
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const fetchSpy = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 429,
+      text: async () =>
+        '{"error":{"details":[{"message":"Credit exhausted"}]}}',
+    } as Response);
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    const res = await sendLeadAcknowledgement({
+      source: 'contact',
+      name: 'Test',
+      email: 'test@example.com',
+    });
+
+    vi.unstubAllEnvs();
+    expect(res.ok).toBe(false);
+    expect(errorSpy).toHaveBeenCalledTimes(1);
+    const logged = (errorSpy.mock.calls[0] ?? []).join(' ');
+    expect(logged).toContain('[email]');
+    expect(logged).toContain('HTTP 429');
+    expect(logged).toContain('Credit exhausted');
+  });
+
   it('fail-soft : renvoie ok=false sans throw si fetch rejette', async () => {
     const fetchSpy = vi.fn().mockRejectedValue(new Error('network down'));
     globalThis.fetch = fetchSpy as unknown as typeof fetch;
