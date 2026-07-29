@@ -82,7 +82,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   }
 
   // Persistance lead enrichi + scoring Claude (best-effort)
-  await persistLead({
+  const lead = await persistLead({
     source: 'audit-ia',
     name: parsed.data.name,
     email: parsed.data.email,
@@ -111,6 +111,8 @@ export async function POST(req: Request): Promise<NextResponse> {
         'Maturité IA': parsed.data.maturity,
         Effectif: parsed.data.headcount,
       },
+      aiScore: lead.score,
+      aiSummary: lead.summary,
     }),
     sendLeadAcknowledgement({
       source: 'audit-ia',
