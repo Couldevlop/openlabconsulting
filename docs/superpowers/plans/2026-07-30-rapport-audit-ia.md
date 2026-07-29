@@ -2462,6 +2462,10 @@ git commit -m "feat(audit-report): relance à 12 h et alerte d’échéance à 2
 import { describe, expect, it, vi } from 'vitest';
 
 const auth = vi.fn();
+// Indispensable : le stub Vitest de `@payload-config` lève une exception
+// par défaut (cf. tests/stubs/payload-config.ts). Mocker `payload` sans
+// lui fait échouer toute route qui importe la config.
+vi.mock('@payload-config', () => ({ default: {} }));
 vi.mock('payload', () => ({
   getPayload: async () => ({
     auth,
