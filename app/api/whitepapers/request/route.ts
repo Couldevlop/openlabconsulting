@@ -123,7 +123,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       ? parsed.data.name
       : 'Téléchargement anonyme';
 
-  await persistLead({
+  const lead = await persistLead({
     source: 'whitepaper',
     name: leadName,
     email: parsed.data.email,
@@ -161,6 +161,8 @@ export async function POST(req: Request): Promise<NextResponse> {
         'Livre blanc': title,
         Newsletter: parsed.data.newsletter === true ? 'oui' : 'non',
       },
+      aiScore: lead.score,
+      aiSummary: lead.summary,
     }),
   ]);
 

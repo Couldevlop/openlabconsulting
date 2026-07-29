@@ -57,10 +57,12 @@ RUN pnpm build
 # casse tout traitement d'image Payload (uploads médias, AVIF/WebP).
 # On réinstalle donc sharp sur une base glibc (node:22-slim = Debian) pour
 # récupérer les bons binaires `@img/sharp-linux*-x64` et on les copie dans
-# le runner. Version épinglée sur celle du package.json (sharp ^0.34.5).
+# le runner. Version épinglée sur celle du package.json (sharp ^0.35.3) :
+# toute montée de sharp doit être reportée ICI, sinon l'image embarque
+# l'ancienne version et Trivy bloque (GHSA-f88m-g3jw-g9cj, libvips).
 FROM node:22-slim AS sharp-glibc
 WORKDIR /sharp
-RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.34.5
+RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.35.3
 
 # -----------------------------------------------------------------------------
 # Stage 3 : migrator (image INTERNE — applique les migrations Payload)

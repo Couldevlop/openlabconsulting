@@ -82,7 +82,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   }
 
   // 4. Persistance lead + scoring Claude (best-effort, fail-soft)
-  await persistLead({
+  const lead = await persistLead({
     source: 'contact',
     name: parsed.data.name,
     email: parsed.data.email,
@@ -102,6 +102,8 @@ export async function POST(req: Request): Promise<NextResponse> {
       organization: parsed.data.organization || null,
       subject: parsed.data.subject,
       message: parsed.data.message,
+      aiScore: lead.score,
+      aiSummary: lead.summary,
     }),
     sendLeadAcknowledgement({
       source: 'contact',
