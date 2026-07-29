@@ -1,5 +1,5 @@
 import 'server-only';
-import { scoreLead, type LeadScoreInput } from './claude';
+import { scoreLead, type LeadScoreInput, type LeadScoreResult } from './claude';
 
 /**
  * Helper server-only — crée un lead dans Payload après score Claude.
@@ -10,6 +10,12 @@ import { scoreLead, type LeadScoreInput } from './claude';
  *
  * Toujours appelée depuis un route handler `/api/contact` ou
  * `/api/audit-ia` après validation Zod et Turnstile.
+ *
+ * Renvoie le score du lead pour que l'appelant le reporte dans la
+ * notification équipe (`sendLeadNotification`) : sans ça, le commercial
+ * recevait l'email sans la qualification affichée dans le back-office.
+ * Le scoring est calculé avant l'écriture Payload et reste valable même
+ * si celle-ci échoue (`scoreLead` ne throw jamais, fallback heuristique).
  */
 
 export interface PersistLeadInput extends LeadScoreInput {
@@ -28,22 +34,25 @@ interface PayloadLike {
   }) => Promise<unknown>;
 }
 
-export async function persistLead(input: PersistLeadInput): Promise<void> {
+export async function persistLead(
+  input: PersistLeadInput,
+): Promise<LeadScoreResult> {
+  // Scoring Claude best-effort — fail-soft interne (fallback heuristique),
+  // donc hors du try : le score est renvoyé même si Payload est indisponible.
+  const score = await scoreLead({
+    source: input.source,
+    name: input.name,
+    email: input.email,
+    organization: input.organization,
+    jobTitle: input.jobTitle,
+    message: input.message,
+    metadata: input.metadata,
+  });
+
   try {
     const { getPayload } = await import('payload');
     const config = (await import('@payload-config')).default;
     const payload = (await getPayload({ config })) as unknown as PayloadLike;
-
-    // Scoring Claude best-effort en parallèle.
-    const score = await scoreLead({
-      source: input.source,
-      name: input.name,
-      email: input.email,
-      organization: input.organization,
-      jobTitle: input.jobTitle,
-      message: input.message,
-      metadata: input.metadata,
-    });
 
     await payload.create({
       collection: 'leads',
@@ -74,4 +83,6 @@ export async function persistLead(input: PersistLeadInput): Promise<void> {
       );
     }
   }
+
+  return score;
 }

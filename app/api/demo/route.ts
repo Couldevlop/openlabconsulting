@@ -92,13 +92,13 @@ export async function POST(req: Request): Promise<NextResponse> {
   const message = parsed.data.message || null;
 
   // 5. Persistance lead + scoring Claude (best-effort, fail-soft).
-  await persistLead({
+  const lead = await persistLead({
     source: 'demo-produit',
     name: parsed.data.name,
     email: parsed.data.email,
     organization: parsed.data.organization,
     phone,
-    subject: `Démo — ${product.name}`,
+    subject: `Démo : ${product.name}`,
     message,
     metadata: {
       productSlug: product.slug,
@@ -115,12 +115,14 @@ export async function POST(req: Request): Promise<NextResponse> {
       name: parsed.data.name,
       email: parsed.data.email,
       organization: parsed.data.organization,
-      subject: `Démo — ${product.name}`,
+      subject: `Démo : ${product.name}`,
       message,
       details: {
         Produit: product.name,
         Téléphone: phone ?? undefined,
       },
+      aiScore: lead.score,
+      aiSummary: lead.summary,
     }),
     sendLeadAcknowledgement({
       source: 'demo-produit',

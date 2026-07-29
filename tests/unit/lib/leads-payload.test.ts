@@ -12,16 +12,21 @@ import { persistLead } from '@/lib/leads';
  * unitaire car l'alias Vite redirige `@payload-config` vers un stub
  * qui throw avant que `vi.doMock('payload')` ne puisse prendre effet.
  * Couvert par les tests d'intégration P6 avec DB éphémère.
+ *
+ * Le score renvoyé alimente la notification équipe : il doit rester
+ * exploitable même quand l'écriture Payload échoue.
  */
 describe('lib/leads — persistLead (fail-soft)', () => {
-  it('ne throw pas si Payload est indisponible', async () => {
-    await expect(
-      persistLead({
-        source: 'contact',
-        name: 'X',
-        email: 'x@y.fr',
-      }),
-    ).resolves.toBeUndefined();
+  it('renvoie le score même si Payload est indisponible', async () => {
+    const score = await persistLead({
+      source: 'contact',
+      name: 'X',
+      email: 'x@y.fr',
+    });
+
+    expect(score.score).toBeGreaterThanOrEqual(0);
+    expect(score.score).toBeLessThanOrEqual(100);
+    expect(typeof score.summary).toBe('string');
   });
 
   it('accepte tous les champs optionnels sans throw', async () => {
@@ -40,6 +45,6 @@ describe('lib/leads — persistLead (fail-soft)', () => {
         consentRgpd: true,
         metadata: { utm: 'test' },
       }),
-    ).resolves.toBeUndefined();
+    ).resolves.toMatchObject({ score: expect.any(Number) });
   });
 });
