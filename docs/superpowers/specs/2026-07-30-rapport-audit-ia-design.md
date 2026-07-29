@@ -18,14 +18,15 @@ Produire automatiquement un brouillon de rapport à partir des réponses au ques
 
 ## 3. Décisions structurantes
 
-| Décision              | Choix retenu                                                                                  | Raison                                                                                                            |
-| --------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Validation            | Dans le back-office Payload, texte librement éditable                                         | Traçabilité native (qui, quand, quelle version) ; le correcteur peut réécrire ce que le modèle a mal dit          |
-| Alerte                | Email à `EMAIL_TEAM` + compteur permanent dans l'admin + relance à 12 h puis rappel quotidien | Un dispositif reposant sur le seul email est resté muet trois semaines sans que personne ne s'en aperçoive        |
-| Livraison             | Lien signé à durée limitée, PDF stocké hors du web public                                     | Un rapport nominatif contenant le diagnostic d'une entreprise ne doit être ni devinable, ni indexable, ni éternel |
-| Matière               | Une 6e question libre, facultative, ajoutée au questionnaire                                  | Sans texte libre, deux entreprises du même secteur et de la même taille reçoivent un rapport interchangeable      |
-| Repli                 | Squelette déterministe si le modèle échoue                                                    | Le consultant a toujours un document à corriger, jamais une page blanche                                          |
-| Hébergement du modèle | Lucie-7B-Instruct v1.1 (Ollama, cluster)                                                      | Souveraineté : les données du prospect ne quittent pas l'infrastructure                                           |
+| Décision              | Choix retenu                                                                             | Raison                                                                                                                  |
+| --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Validation            | Dans le back-office Payload, texte librement éditable                                    | Traçabilité native (qui, quand, quelle version) ; le correcteur peut réécrire ce que le modèle a mal dit                |
+| Alerte                | Email à `EMAIL_TEAM` + compteur permanent dans l'admin + relance à 12 h, échéance à 24 h | Un dispositif reposant sur le seul email est resté muet trois semaines sans que personne ne s'en aperçoive              |
+| Délai promis          | **24 h ouvrées** (au lieu de 48 h aujourd'hui)                                           | Décision du 30/07 : la génération automatique rend le délai court tenable, et un délai court est un argument commercial |
+| Livraison             | Lien signé à durée limitée, PDF stocké hors du web public                                | Un rapport nominatif contenant le diagnostic d'une entreprise ne doit être ni devinable, ni indexable, ni éternel       |
+| Matière               | Une 6e question libre, facultative, ajoutée au questionnaire                             | Sans texte libre, deux entreprises du même secteur et de la même taille reçoivent un rapport interchangeable            |
+| Repli                 | Squelette déterministe si le modèle échoue                                               | Le consultant a toujours un document à corriger, jamais une page blanche                                                |
+| Hébergement du modèle | Lucie-7B-Instruct v1.1 (Ollama, cluster)                                                 | Souveraineté : les données du prospect ne quittent pas l'infrastructure                                                 |
 
 ## 4. Flux
 
@@ -105,7 +106,21 @@ Trois signaux, de force croissante :
 
 1. **À la création du brouillon** — email à `EMAIL_TEAM` (`waopron@`) portant le nom de l'organisation, le score du lead et le lien direct vers le rapport dans l'admin.
 2. **En permanence** — compteur des rapports en statut `brouillon-ia` ou `echec-generation` affiché dans la navigation du back-office. Ce signal ne dépend d'aucun transport externe : il reste visible même quand l'email est en panne.
-3. **À 12 h sans validation** — second email ; puis rappel quotidien tant que le rapport n'est pas validé. La tâche de relance tourne dans la même file que la génération.
+3. **À 12 h sans validation** — second email, à mi-parcours de l'échéance promise. **À 24 h** — email « échéance dépassée » distinct dans son objet, puis rappel quotidien tant que le rapport n'est pas validé. La tâche de relance tourne dans la même file que la génération.
+
+### Passage de 48 h à 24 h
+
+La promesse affichée passe à **24 h ouvrées**. Six emplacements portent aujourd'hui « 48 h » et doivent être alignés :
+
+| Emplacement                                                 | Nature                                          |
+| ----------------------------------------------------------- | ----------------------------------------------- |
+| `app/(site)/audit-ia/page.tsx` (metadata description)       | SEO, visible en résultat de recherche           |
+| `app/api/audit-ia/route.ts` (message du 202)                | réponse serveur                                 |
+| `components/forms/AuditIaQuizWizard.tsx` (message de repli) | affiché si le serveur ne renvoie pas de message |
+| `lib/email.ts` (accusé de réception `audit-ia`)             | email prospect                                  |
+| `lib/cms/site-settings.ts` — deux entrées du process        | **valeurs de repli uniquement**                 |
+
+Attention sur le dernier point : ces textes sont pilotables depuis l'admin. Changer le repli ne suffit pas — la valeur enregistrée dans le global en production doit être modifiée aussi, sinon le site continuera d'afficher 48 h.
 
 ## 7. Sécurité (OWASP)
 
