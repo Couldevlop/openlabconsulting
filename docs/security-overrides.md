@@ -173,3 +173,38 @@ CLAUDE.md §10.2 (A06). Deux passes :
    ligne avec sa condition de retrait.
 3. En dernier recours seulement, si aucun fix n'existe encore amont :
    tracer la CVE ici et décider explicitement (pas de bypass silencieux).
+
+### Remédiation du 2026-07-29 — 10 CVE prod HIGH
+
+Les portes `pnpm audit (deps)` et `Trivy image scan` passaient encore le
+2026-07-07 ; elles sont devenues rouges avec la publication de nouvelles
+advisories, sans changement de code. Remédiation :
+
+**Bumps de deps directes**
+
+- `next` `^15.5.18` → `^15.5.22` — CVE-2026-64641 (DoS App Router / Server
+  Actions), CVE-2026-64645 (SSRF Server Actions), CVE-2026-64649 (SSRF via
+  rewrites). Correctif amont à partir de 15.5.21.
+- `sharp` `^0.34.5` → `^0.35.3` — GHSA-f88m-g3jw-g9cj (vulnérabilités
+  héritées de libvips).
+- `postcss` (devDependency) `^8.5.14` → `^8.5.18` — GHSA-r28c-9q8g-f849
+  (path traversal via previous source map).
+
+**Overrides ajoutés** (`pnpm.overrides`)
+
+| Override             | CVE couverte                   | Chemin                                | Condition de retrait                 |
+| -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------ |
+| `postcss` `^8.5.18`  | GHSA-r28c-9q8g-f849            | `next > postcss`                      | quand Next embarque postcss ≥ 8.5.18 |
+| `js-yaml` `^4.3.0`   | CVE-2026-59869                 | `payload > json-schema-to-typescript` | quand Payload bump en amont          |
+| `immutable` `^4.3.9` | CVE-2026-59879, CVE-2026-59880 | `@payloadcms/next > sass`             | quand `sass` bump `immutable`        |
+| `fast-uri` `^3.1.4`  | CVE-2026-13676, CVE-2026-16221 | `payload > ajv`                       | quand `ajv` bump `fast-uri`          |
+| `sharp` `^0.35.3`    | GHSA-f88m-g3jw-g9cj            | `next > sharp` (dep optionnelle)      | quand Next référence sharp ≥ 0.35.0  |
+
+**État après remédiation** : `pnpm audit --prod --audit-level high` →
+exit 0 (6 low / 15 moderate, 0 high). Build production OK, 1070 tests
+verts, First Load JS 104 kB.
+
+**Note peer dependency** : `@payloadcms/ui@3.84.1` déclare un range `next`
+qui exclut la série 15.5.x (déjà le cas avec 15.5.18 avant ce bump). Le
+warning pnpm est donc **préexistant**, pas introduit par cette montée de
+version.
