@@ -9,6 +9,9 @@ data:
   REDIS_URL: 'redis://redis-master.{{ .Release.Namespace }}.svc.cluster.local:6379'
   MINIO_ENDPOINT: 'minio.{{ .Release.Namespace }}.svc.cluster.local:9000'
   MINIO_BUCKET: 'openlab-media'
+  MINIO_REPORTS_BUCKET: 'openlab-audit-reports'
+  OLLAMA_BASE_URL: 'http://10.42.0.1:11434'
+  OLLAMA_MODEL: 'hf.co/OpenLLM-France/Lucie-7B-Instruct-v1.1-gguf:Q4_K_M'
   MINIO_USE_SSL: 'false'
   MEILISEARCH_URL: 'http://{{ include "openlab-website.fullname" . }}-meilisearch.{{ .Release.Namespace }}.svc.cluster.local:7700'
   {{- range $key, $value := .Values.config }}

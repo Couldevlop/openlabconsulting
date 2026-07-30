@@ -71,6 +71,15 @@ spec:
       ports:
         - protocol: TCP
           port: 443
+    # Ollama (Lucie-7B) : generation des rapports d'audit IA. Le service
+    # ecoute sur l'IP du bridge CNI, dans une plage privee exclue de la
+    # regle 443 ci-dessus. Regle nominative : une IP, un port.
+    - to:
+        - ipBlock:
+            cidr: 10.42.0.1/32
+      ports:
+        - protocol: TCP
+          port: 11434
 ---
 # Postgres : interdit l'accès depuis l'extérieur du namespace.
 apiVersion: networking.k8s.io/v1
