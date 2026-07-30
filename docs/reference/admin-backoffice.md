@@ -125,3 +125,34 @@ Dans `/admin/insights/ia` :
 - **Traduction FR → EN** en un clic (phase 2)
 
 Coût plafonné : 30 €/mois max via rate-limiting serveur.
+
+## 6. Valider un rapport d'audit IA
+
+Le parcours `/audit-ia` promet au prospect un rapport personnalisé sous **24 h ouvrées**. Un brouillon est généré automatiquement à chaque demande ; il n'est **jamais** envoyé sans relecture humaine.
+
+### Où sont les brouillons
+
+Trois signaux, de force croissante :
+
+1. **Email** à `waopron@` dès qu'un brouillon est prêt, avec un lien direct vers la fiche.
+2. **Compteur permanent** dans la navigation du back-office (« N rapports à valider »). Il ne dépend d'aucun transport externe : il reste visible même quand l'email est en panne.
+3. **Relance** à 12 h, puis email « échéance dépassée » à 24 h et rappel quotidien tant que rien n'est validé.
+
+### Ce qu'il faut relire en priorité
+
+Le champ **Généré par** indique l'origine du texte :
+
+- `Lucie-7B` : le modèle a produit le brouillon. Relire pour le fond, corriger les approximations, vérifier qu'aucun chiffre n'a été inventé.
+- `Squelette de repli` : le modèle était indisponible. Le document est un canevas générique rempli à partir des réponses au questionnaire. **Il doit être réécrit**, pas seulement relu. Le champ `generationError` précise la raison.
+
+Le texte est librement modifiable. La version envoyée au prospect est celle qui figure à l'écran au moment du clic.
+
+### Envoyer
+
+Le bouton **« Valider et envoyer »** enchaîne : rendu du PDF, dépôt dans le bucket privé, envoi au prospect d'un email contenant un lien signé, puis passage du rapport au statut « envoyé » et du lead au stade « contacté ».
+
+Le message de confirmation distingue deux cas. « Rapport envoyé au prospect » signifie que le transport a accepté le message. « Enregistré comme envoyé, mais le transport email l'a refusé » signifie que **le prospect n'a rien reçu** : vérifier la configuration ZeptoMail avant de considérer qu'il est prévenu.
+
+### Révoquer un lien
+
+Le lien de téléchargement expire au bout de 30 jours. Pour le couper avant terme, il suffit de repasser le rapport à un statut autre que « envoyé » : la route de téléchargement ne sert le fichier que pour un rapport au statut « envoyé ».

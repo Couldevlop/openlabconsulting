@@ -530,3 +530,34 @@ CronJob hebdomadaire :
 3. Smoke tests
 4. Cleanup
 5. Rapport email
+
+## 4. Rapports d'audit IA : réseau et stockage
+
+### Egress vers Ollama (Lucie-7B)
+
+La rédaction des brouillons appelle Ollama, qui écoute sur l'**IP du bridge CNI** (`10.42.0.1:11434`), pas sur `localhost`. Cette adresse appartient à une plage privée explicitement exclue de la règle d'egress 443 vers Internet : sans règle dédiée, les pods du site reçoivent un `ECONNREFUSED` (kube-router implémente les NetworkPolicy avec `REJECT`, pas avec `DROP`).
+
+La règle est nominative, une IP et un port, dans `deploy/k8s/base/networkpolicy.yaml` et le template Helm.
+
+> **Ne pas patcher le cluster à la main.** L'application ArgoCD `openlab-website` tourne avec `selfHeal: true` et `prune: true` : tout patch manuel est effacé à la réconciliation suivante, souvent avant même que kube-router ne l'ait traduit en iptables. Toute modification réseau passe par Git.
+
+Vérification après déploiement :
+
+```bash
+ssh root@62.238.11.20 "POD=\$(kubectl -n openlab get pods -o name | grep openlab-website- | head -1); \
+  kubectl -n openlab exec \${POD#pod/} -- node -e \"fetch('http://10.42.0.1:11434/api/tags').then(r=>console.log('HTTP',r.status)).catch(e=>console.log('ERR',e.message))\""
+```
+
+Attendu : `HTTP 200`. Un `ECONNREFUSED` signale que la règle n'est pas appliquée.
+
+### Bucket privé des rapports
+
+Les PDF vivent dans un bucket **distinct** de celui des médias (`MINIO_REPORTS_BUCKET`, défaut `openlab-audit-reports`). Aucune politique d'accès anonyme ne doit y être posée : un rapport nominatif ne se sert que par la route sous jeton signé.
+
+```bash
+ssh root@62.238.11.20 "kubectl -n openlab exec deploy/minio -- mc mb --ignore-existing local/openlab-audit-reports"
+```
+
+### File de tâches Payload
+
+L'activation de `jobs` crée deux tables système (`payload_jobs`, `payload_jobs_log`), apportées par la migration `20260730_043922_add_payload_jobs`. L'exécution automatique tourne sur les cinq répliques, le verrouillage étant assuré par la base. `PAYLOAD_DISABLE_JOBS=true` la coupe (scripts, tests).
