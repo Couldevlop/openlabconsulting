@@ -103,6 +103,47 @@ describe('generateWithLucie', () => {
     expect(await generateWithLucie(input)).toBeNull();
   });
 
+  it('remplace les tirets cadratins produits par le modèle', async () => {
+    mockOllama({
+      response: JSON.stringify({
+        title: 'Audit IA — Banque X',
+        synthesis: 'Une lecture — franche — de votre situation.',
+        situation: 'Si',
+        recommendation: 'R',
+        roadmap: [{ title: 'Cadrage — initial', horizon: 'S1', body: 'c' }],
+        nextSteps: 'N',
+      }),
+    });
+    const out = await generateWithLucie(input);
+    expect(JSON.stringify(out)).not.toContain('—');
+    expect(out?.title).toBe('Audit IA, Banque X');
+  });
+
+  it('borne les champs de la feuille de route et écarte les propriétés inventées', async () => {
+    mockOllama({
+      response: JSON.stringify({
+        title: 'T',
+        synthesis: 'S',
+        situation: 'Si',
+        recommendation: 'R',
+        roadmap: [
+          {
+            title: 'x'.repeat(300),
+            horizon: 'y'.repeat(200),
+            body: 'z'.repeat(3000),
+            budget: '10 000 000 FCFA',
+          },
+        ],
+        nextSteps: 'N',
+      }),
+    });
+    const step = (await generateWithLucie(input))?.roadmap[0];
+    expect(step?.title).toHaveLength(120);
+    expect(step?.horizon).toHaveLength(60);
+    expect(step?.body).toHaveLength(1500);
+    expect(step).not.toHaveProperty('budget');
+  });
+
   it('n’envoie aucune donnée nominative au modèle', async () => {
     const spy = vi.fn(
       async (_url: string, _init: RequestInit) =>

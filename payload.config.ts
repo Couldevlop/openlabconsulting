@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { zeptomailAdapter } from './lib/email-adapter';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
+import { AuditReports } from './collections/AuditReports';
 import { CaseStudies } from './collections/CaseStudies';
 import { Expertises } from './collections/Expertises';
 import { Leads } from './collections/Leads';
@@ -193,6 +194,7 @@ export default buildConfig({
     Media,
     Users,
     Leads,
+    AuditReports,
     AuditLog,
     Visits,
     RdAxes,

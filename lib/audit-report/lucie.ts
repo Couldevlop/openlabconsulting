@@ -60,17 +60,40 @@ function buildPrompt(input: AuditReportInput): string {
   ].join('\n');
 }
 
+/**
+ * Normalise une chaîne produite par le modèle.
+ *
+ * Le prompt système interdit le tiret cadratin, mais une consigne n'est
+ * pas une garantie : la sortie d'un modèle est une entrée non fiable et
+ * ce texte finit dans un PDF envoyé à un prospect. On applique donc la
+ * convention typographique du projet côté code, et on borne la longueur.
+ */
+function clean(value: string, maxLength: number): string {
+  return value
+    .replace(/\s*[—–]\s*/g, ', ')
+    .trim()
+    .slice(0, maxLength);
+}
+
 function parseSections(raw: string): AuditReportSections | null {
   try {
     const cleaned = raw.replace(/^```(?:json)?\s*|\s*```$/g, '').trim();
     const obj = JSON.parse(cleaned) as Partial<AuditReportSections>;
+    // Reconstruction explicite de chaque étape : on ne laisse passer ni
+    // propriété additionnelle inventée par le modèle, ni champ non borné.
     const roadmap = Array.isArray(obj.roadmap)
-      ? obj.roadmap.filter(
-          (s): s is AuditReportSections['roadmap'][number] =>
-            typeof s?.title === 'string' &&
-            typeof s?.horizon === 'string' &&
-            typeof s?.body === 'string',
-        )
+      ? obj.roadmap
+          .filter(
+            (s): s is AuditReportSections['roadmap'][number] =>
+              typeof s?.title === 'string' &&
+              typeof s?.horizon === 'string' &&
+              typeof s?.body === 'string',
+          )
+          .map((s) => ({
+            title: clean(s.title, 120),
+            horizon: clean(s.horizon, 60),
+            body: clean(s.body, 1500),
+          }))
       : [];
     if (
       typeof obj.title !== 'string' ||
@@ -83,12 +106,12 @@ function parseSections(raw: string): AuditReportSections | null {
       return null;
     }
     return {
-      title: obj.title.slice(0, 200),
-      synthesis: obj.synthesis.slice(0, 3000),
-      situation: obj.situation.slice(0, 3000),
-      recommendation: obj.recommendation.slice(0, 5000),
+      title: clean(obj.title, 200),
+      synthesis: clean(obj.synthesis, 3000),
+      situation: clean(obj.situation, 3000),
+      recommendation: clean(obj.recommendation, 5000),
       roadmap: roadmap.slice(0, 5),
-      nextSteps: obj.nextSteps.slice(0, 2000),
+      nextSteps: clean(obj.nextSteps, 2000),
     };
   } catch {
     return null;
