@@ -65,6 +65,13 @@ jobs:
           # chemin nominal (202) en CI sans vrai widget. Court-circuitée côté
           # serveur (lib/turnstile.ts), sans appel réseau. Jamais une vraie clé.
           TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA'
+          # Le serveur E2E tourne en mode production (`pnpm start`) : sans
+          # PAYLOAD_SECRET, `requireSecret` refuse de démarrer par sécurité
+          # et chaque rendu de page utilisant Payload lève. Le HTML SSR
+          # sort quand même, mais la charge RSC est tronquée et la page ne
+          # s'hydrate jamais : tout test d'interaction échoue au clic.
+          # Valeur de test uniquement, jamais un secret réel.
+          PAYLOAD_SECRET: 'e2e-secret-de-test-sans-valeur-en-production'
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
