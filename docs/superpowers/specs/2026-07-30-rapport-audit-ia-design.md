@@ -98,7 +98,7 @@ Collection `AuditReports` :
 | `sentAt`                      | date                      | horodatage de l'envoi au prospect                                      |
 | `downloadCount`               | number                    | incrémenté à chaque téléchargement                                     |
 
-À l'envoi, le `stage` du lead passe de `nouveau` à `contacte`.
+À l'envoi, le `stage` du lead passe de `nouveau` à `qualifie` : c'est la valeur qui existe réellement dans l'énumération des leads.
 
 ### Alerte et relance
 

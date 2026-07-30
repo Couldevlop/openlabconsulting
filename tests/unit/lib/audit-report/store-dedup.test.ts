@@ -14,15 +14,16 @@ const find = vi.fn();
 const create = vi.fn(async (_args: { data: Record<string, unknown> }) => ({
   id: 99,
 }));
+const update = vi.fn(
+  async (_args: { collection: string; data: Record<string, unknown> }) => ({
+    id: 42,
+    lead: 18,
+  }),
+);
 
 vi.mock('@payload-config', () => ({ default: {} }));
 vi.mock('payload', () => ({
-  getPayload: async () => ({
-    find,
-    create,
-    update: vi.fn(),
-    findByID: vi.fn(),
-  }),
+  getPayload: async () => ({ find, create, update, findByID: vi.fn() }),
 }));
 
 const { createDraftReport } = await import('@/lib/audit-report/store-server');
@@ -83,5 +84,60 @@ describe('createDraftReport', () => {
     expect(data.title).toBe('Audit IA : Banque X');
     expect(data.sections).not.toHaveProperty('title');
     expect(data.sections).toHaveProperty('synthesis');
+  });
+});
+
+describe('markReportSent', () => {
+  beforeEach(() => {
+    update.mockClear();
+    update.mockResolvedValue({ id: 42, lead: 18 });
+  });
+
+  it('marque le rapport envoyé et renvoie true', async () => {
+    const { markReportSent } = await import('@/lib/audit-report/store-server');
+
+    const ok = await markReportSent('42', {
+      pdfKey: 'audit-reports/42.pdf',
+      validatedBy: 1,
+    });
+
+    expect(ok).toBe(true);
+    const report = update.mock.calls.find(
+      (c) => c[0].collection === 'audit-reports',
+    );
+    expect(report?.[0].data).toMatchObject({
+      status: 'envoye',
+      pdfKey: 'audit-reports/42.pdf',
+    });
+  });
+
+  it('fait avancer le lead sur une valeur du référentiel', async () => {
+    const { markReportSent } = await import('@/lib/audit-report/store-server');
+    await markReportSent('42', {
+      pdfKey: 'audit-reports/42.pdf',
+      validatedBy: 1,
+    });
+
+    const lead = update.mock.calls.find((c) => c[0].collection === 'leads');
+    expect(lead).toBeDefined();
+    // Les seules valeurs admises par l'énumération des leads. Écrire une
+    // valeur hors référentiel ferait échouer l'update en silence.
+    expect([
+      'nouveau',
+      'qualifie',
+      'rdv',
+      'proposition',
+      'signe',
+      'perdu',
+    ]).toContain(lead?.[0].data.stage);
+  });
+
+  it('renvoie false si l’enregistrement échoue', async () => {
+    const { markReportSent } = await import('@/lib/audit-report/store-server');
+    update.mockRejectedValueOnce(new Error('base indisponible'));
+
+    expect(await markReportSent('42', { pdfKey: 'k', validatedBy: 1 })).toBe(
+      false,
+    );
   });
 });

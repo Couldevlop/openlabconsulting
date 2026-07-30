@@ -151,7 +151,7 @@ Un rapport déjà envoyé ne peut pas être renvoyé d'un second clic : la route
 
 ### Envoyer
 
-Le bouton **« Valider et envoyer »** enchaîne : rendu du PDF, dépôt dans le bucket privé, envoi au prospect d'un email contenant un lien signé, puis passage du rapport au statut « envoyé » et du lead au stade « contacté ».
+Le bouton **« Valider et envoyer »** enchaîne : rendu du PDF, dépôt dans le bucket privé, envoi au prospect d'un email contenant un lien signé, puis passage du rapport au statut « envoyé » et du lead au stade « qualifié ».
 
 Le message de confirmation distingue deux cas. « Rapport envoyé au prospect » signifie que le transport a accepté le message. « Enregistré comme envoyé, mais le transport email l'a refusé » signifie que **le prospect n'a rien reçu** : vérifier la configuration ZeptoMail avant de considérer qu'il est prévenu.
 

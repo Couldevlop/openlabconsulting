@@ -20,12 +20,16 @@ CREATE TABLE IF NOT EXISTS "payload_jobs_stats" (
   `)
 
   await db.execute(sql`
-ALTER TABLE "payload_jobs" ADD COLUMN "meta" jsonb;
+ALTER TABLE "payload_jobs" ADD COLUMN IF NOT EXISTS "meta" jsonb;
   `)
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
 DROP TABLE IF EXISTS "payload_jobs_stats" CASCADE;
+  `)
+
+  await db.execute(sql`
+ALTER TABLE "payload_jobs" DROP COLUMN IF EXISTS "meta";
   `)
 }

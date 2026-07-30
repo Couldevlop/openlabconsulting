@@ -339,8 +339,11 @@ export async function markReportSent(
       },
     })) as { lead?: { id?: number | string } | number | string };
 
-    // Le lead passe au stade « contacté » : le pipeline commercial doit
-    // refléter qu'un livrable est parti (spec § 6).
+    // Le lead passe au stade « qualifié » : le pipeline commercial doit
+    // refléter qu'un livrable chiffré est parti. La spec parlait de
+    // « contacté », valeur qui n'existe pas dans l'énumération des leads
+    // (nouveau, qualifie, rdv, proposition, signe, perdu) : écrire une
+    // valeur hors référentiel aurait fait échouer l'update en silence.
     const leadId =
       typeof updated.lead === 'object' && updated.lead
         ? updated.lead.id
@@ -351,7 +354,7 @@ export async function markReportSent(
           collection: 'leads',
           id: leadId,
           overrideAccess: true,
-          data: { stage: 'contacte' },
+          data: { stage: 'qualifie' },
         });
       } catch (err) {
         // Non bloquant : le rapport est bien parti, seul le pipeline
