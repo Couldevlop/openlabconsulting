@@ -52,7 +52,15 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/admin/*', '/api/', '/_next/'],
+        // `/audit-ia/rapport/` sert des rapports nominatifs sous jeton :
+        // rien à explorer, et surtout rien à indexer.
+        disallow: [
+          '/admin',
+          '/admin/*',
+          '/api/',
+          '/_next/',
+          '/audit-ia/rapport/',
+        ],
       },
       // Bots LLM — on les autorise explicitement (GEO, voir §12.4)
       { userAgent: 'GPTBot', allow: ['/', '/insights'] },
