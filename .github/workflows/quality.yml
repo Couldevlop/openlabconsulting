@@ -72,6 +72,13 @@ jobs:
           # s'hydrate jamais : tout test d'interaction échoue au clic.
           # Valeur de test uniquement, jamais un secret réel.
           PAYLOAD_SECRET: 'e2e-secret-de-test-sans-valeur-en-production'
+          # Même garde-fou : `requireSecret` exige la présence de la
+          # variable, pas une base joignable. Aucun service n'est démarré
+          # en CI, donc la connexion échoue et les pages retombent sur
+          # leurs valeurs de repli, ce qui est le comportement voulu ici.
+          # Sans elle, le refus de démarrer tronque la charge RSC et
+          # aucune page ne s'hydrate.
+          DATABASE_URL: 'postgresql://e2e:e2e@127.0.0.1:5432/e2e'
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
