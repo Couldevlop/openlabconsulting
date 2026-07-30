@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Leads } from '@/collections/Leads';
 import type { AuditReportSections } from '@/lib/audit-report/types';
 
 /**
@@ -120,16 +121,19 @@ describe('markReportSent', () => {
 
     const lead = update.mock.calls.find((c) => c[0].collection === 'leads');
     expect(lead).toBeDefined();
-    // Les seules valeurs admises par l'énumération des leads. Écrire une
-    // valeur hors référentiel ferait échouer l'update en silence.
-    expect([
-      'nouveau',
+    // Valeur exacte, et non « une valeur du référentiel » : une liste
+    // incluant « nouveau » resterait verte si le lead n'avançait pas.
+    // Le référentiel est dérivé de la collection pour que ce test tombe
+    // si quelqu'un retire l'option au lieu de dériver silencieusement.
+    expect(lead?.[0].data.stage).toBe('qualifie');
+    const stageField = Leads.fields.find(
+      (f) => 'name' in f && f.name === 'stage',
+    );
+    const options =
+      stageField && 'options' in stageField ? stageField.options : [];
+    expect((options as { value: string }[]).map((o) => o.value)).toContain(
       'qualifie',
-      'rdv',
-      'proposition',
-      'signe',
-      'perdu',
-    ]).toContain(lead?.[0].data.stage);
+    );
   });
 
   it('renvoie false si l’enregistrement échoue', async () => {
