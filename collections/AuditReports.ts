@@ -23,6 +23,30 @@ const isStaff = (role: string | undefined): boolean =>
 const roleOf = (req: { user: unknown }): string | undefined =>
   (req.user as { role?: string } | null)?.role;
 
+/**
+ * Normalise la typographie de tout texte destiné au prospect.
+ *
+ * Le client Lucie écarte déjà les tirets cadratins de la sortie du
+ * modèle, mais c'est le texte RELU ET CORRIGÉ par le consultant qui part
+ * réellement dans le PDF et l'email. La règle doit donc s'appliquer au
+ * document, pas seulement au générateur.
+ */
+const DASHES = /\s*[—–]\s*/g;
+
+function normalize(value: unknown): unknown {
+  if (typeof value === 'string') return value.replace(DASHES, ', ');
+  if (Array.isArray(value)) return value.map(normalize);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([k, v]) => [
+        k,
+        normalize(v),
+      ]),
+    );
+  }
+  return value;
+}
+
 export const AuditReports: CollectionConfig = {
   slug: 'audit-reports',
   labels: { singular: 'Rapport d’audit', plural: 'Rapports d’audit' },
@@ -40,6 +64,19 @@ export const AuditReports: CollectionConfig = {
     delete: ({ req }): boolean => roleOf(req) === 'super-admin',
   },
   versions: { drafts: false },
+  hooks: {
+    beforeChange: [
+      ({ data }): Record<string, unknown> => ({
+        ...data,
+        ...(typeof data.title === 'string'
+          ? { title: data.title.replace(DASHES, ', ') }
+          : {}),
+        ...(data.sections
+          ? { sections: normalize(data.sections) as Record<string, unknown> }
+          : {}),
+      }),
+    ],
+  },
   fields: [
     {
       name: 'validate',
@@ -121,6 +158,10 @@ export const AuditReports: CollectionConfig = {
     {
       name: 'pdfKey',
       type: 'text',
+      // `readOnly` ne verrouille que l'interface : sans contrôle d'accès
+      // au niveau du champ, n'importe quel rôle staff pourrait réécrire
+      // la clé via l'API REST et faire servir un autre objet du bucket.
+      access: { update: (): boolean => false },
       admin: {
         readOnly: true,
         description:

@@ -261,7 +261,11 @@ export async function listPendingReports(): Promise<
       depth: 1,
       limit: 100,
       where: {
-        status: { in: ['brouillon-ia', 'en-revue', 'echec-generation'] },
+        // « valide » compris : un rapport validé mais jamais envoyé est
+        // le pire des cas, le prospect n'a rien et plus rien ne le signale.
+        status: {
+          in: ['brouillon-ia', 'en-revue', 'valide', 'echec-generation'],
+        },
       },
     })) as {
       docs: {
@@ -307,14 +311,22 @@ export async function markReminded(reportId: string): Promise<void> {
   }
 }
 
+/**
+ * Marque le rapport envoyé et fait avancer le lead au stade « contacté ».
+ *
+ * Renvoie `false` en cas d'échec, et l'appelant DOIT en tenir compte :
+ * un rapport resté au statut brouillon alors que le lien est parti donne
+ * un lien mort à vie (la route de téléchargement exige « envoyé »).
+ * C'est pour cela que cette écriture précède l'email.
+ */
 export async function markReportSent(
   reportId: string,
   args: { pdfKey: string; validatedBy: number | string },
-): Promise<void> {
+): Promise<boolean> {
   try {
     const payload = await getPayloadClient();
     const now = new Date().toISOString();
-    await payload.update({
+    const updated = (await payload.update({
       collection: 'audit-reports',
       id: reportId,
       overrideAccess: true,
@@ -325,11 +337,38 @@ export async function markReportSent(
         validatedAt: now,
         sentAt: now,
       },
-    });
+    })) as { lead?: { id?: number | string } | number | string };
+
+    // Le lead passe au stade « contacté » : le pipeline commercial doit
+    // refléter qu'un livrable est parti (spec § 6).
+    const leadId =
+      typeof updated.lead === 'object' && updated.lead
+        ? updated.lead.id
+        : updated.lead;
+    if (leadId !== undefined && leadId !== null) {
+      try {
+        await payload.update({
+          collection: 'leads',
+          id: leadId,
+          overrideAccess: true,
+          data: { stage: 'contacte' },
+        });
+      } catch (err) {
+        // Non bloquant : le rapport est bien parti, seul le pipeline
+        // commercial reste à jour manuellement.
+        console.error(
+          '[audit-report] stade du lead non mis à jour:',
+          (err as Error).message,
+        );
+      }
+    }
+
+    return true;
   } catch (err) {
     console.error(
       '[audit-report] statut d’envoi non enregistré:',
       (err as Error).message,
     );
+    return false;
   }
 }

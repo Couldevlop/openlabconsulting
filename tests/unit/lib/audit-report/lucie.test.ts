@@ -144,18 +144,25 @@ describe('generateWithLucie', () => {
     expect(step).not.toHaveProperty('budget');
   });
 
-  it('n’envoie aucune donnée nominative au modèle', async () => {
+  it('n’envoie au modèle que les champs attendus, jamais l’identité', async () => {
     const spy = vi.fn(
       async (_url: string, _init: RequestInit) =>
         new Response(JSON.stringify({ response: '{}' })),
     );
     vi.stubGlobal('fetch', spy);
+    // On force des champs nominatifs dans l'entrée : le prompt est
+    // construit par liste blanche, ils ne doivent pas ressortir.
     await generateWithLucie({
       ...input,
+      name: 'Debora Ahouma',
+      email: 'debora@openlabconsulting.com',
       answers: { ...input.answers, challenge: 'Rapprochement trop lent.' },
-    });
+    } as unknown as AuditReportInput);
+
     const body = String(spy.mock.calls[0]?.[1].body);
-    expect(body).not.toContain('@');
+    expect(body).not.toContain('debora@openlabconsulting.com');
+    expect(body).not.toContain('Debora Ahouma');
+    expect(body).toContain('Banque X');
     expect(body).toContain('Rapprochement trop lent.');
   });
 });

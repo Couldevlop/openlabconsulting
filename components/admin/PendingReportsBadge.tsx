@@ -18,7 +18,7 @@ export default function PendingReportsBadge(): ReactElement | null {
   useEffect(() => {
     const controller = new AbortController();
     const query =
-      'limit=0&depth=0&where[status][in]=brouillon-ia,en-revue,echec-generation';
+      'limit=1&depth=0&where[status][in]=brouillon-ia,en-revue,valide,echec-generation';
 
     fetch(`/api/audit-reports?${query}`, {
       credentials: 'include',
@@ -35,7 +35,7 @@ export default function PendingReportsBadge(): ReactElement | null {
 
   return (
     <Link
-      href="/admin/collections/audit-reports?where[status][in]=brouillon-ia,en-revue,echec-generation"
+      href="/admin/collections/audit-reports?where[status][in]=brouillon-ia,en-revue,valide,echec-generation"
       style={{
         display: 'block',
         margin: '0 0 12px',

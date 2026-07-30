@@ -145,7 +145,9 @@ Le champ **Généré par** indique l'origine du texte :
 - `Lucie-7B` : le modèle a produit le brouillon. Relire pour le fond, corriger les approximations, vérifier qu'aucun chiffre n'a été inventé.
 - `Squelette de repli` : le modèle était indisponible. Le document est un canevas générique rempli à partir des réponses au questionnaire. **Il doit être réécrit**, pas seulement relu. Le champ `generationError` précise la raison.
 
-Le texte est librement modifiable. La version envoyée au prospect est celle qui figure à l'écran au moment du clic.
+Le texte est librement modifiable. **Enregistrez avant de valider** : le PDF est rendu à partir du document en base, une correction laissée dans le formulaire sans sauvegarde ne partira pas. La fenêtre de confirmation le rappelle.
+
+Un rapport déjà envoyé ne peut pas être renvoyé d'un second clic : la route refuse, pour éviter un deuxième email au prospect et la réactivation d'un lien qu'on aurait voulu couper.
 
 ### Envoyer
 

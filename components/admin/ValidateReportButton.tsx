@@ -13,6 +13,10 @@ import { useDocumentInfo } from '@payloadcms/ui';
  * Le message de succès distingue explicitement « envoyé au prospect » de
  * « enregistré mais email refusé par le transport » : le consultant doit
  * savoir si le prospect a réellement reçu quelque chose.
+ *
+ * Le PDF est rendu côté serveur depuis le document EN BASE : une
+ * correction laissée dans le formulaire sans enregistrement ne part pas.
+ * La confirmation le dit explicitement.
  */
 
 type State =
@@ -79,7 +83,8 @@ export default function ValidateReportButton(): ReactElement | null {
         disabled={state.kind === 'sending'}
         onClick={() => {
           const ok = window.confirm(
-            'Le rapport va être envoyé au prospect. Confirmer ?',
+            'Le rapport va être envoyé au prospect, dans sa version ENREGISTRÉE. ' +
+              'Toute correction non sauvegardée ne partira pas. Confirmer ?',
           );
           if (ok) void validate();
         }}

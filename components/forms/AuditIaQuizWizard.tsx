@@ -76,9 +76,15 @@ export function AuditIaQuizWizard(): ReactElement {
 
     try {
       const formData = new FormData(form);
-      // Champs auto-injectés depuis le quiz pour valider auditIaSchema serveur.
+      // Champs auto-injectés depuis le quiz pour valider auditIaSchema
+      // serveur. Les SIX réponses partent : le rapport est produit côté
+      // serveur à partir d'elles, il doit recommander le même format que
+      // celui affiché à l'écran.
       formData.set('maturity', answers.maturity ?? '');
       formData.set('headcount', answers.headcount ?? '');
+      formData.set('sector', answers.sector ?? '');
+      formData.set('scope', answers.scope ?? '');
+      formData.set('urgency', answers.urgency ?? '');
       formData.set('goal', summarizeAnswers(answers, recommendation));
       formData.set('challenge', answers.challenge ?? '');
 

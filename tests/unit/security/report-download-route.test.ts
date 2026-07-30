@@ -16,6 +16,8 @@ vi.mock('@/lib/audit-report/store-server', () => ({
   findReportForDownload,
   incrementDownloadCount,
   getReportPdf,
+  // La route re-dérive la clé plutôt que de faire confiance au champ.
+  buildReportKey: (id: string) => `audit-reports/${id}.pdf`,
 }));
 
 const { GET } = await import('@/app/audit-ia/rapport/[token]/route');

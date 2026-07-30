@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyReportToken } from '@/lib/audit-report/link';
 import {
+  buildReportKey,
   findReportForDownload,
   getReportPdf,
   incrementDownloadCount,
@@ -46,7 +47,10 @@ export async function GET(
     return NextResponse.json({ error: 'not_found' }, { status: 404 });
   }
 
-  const pdf = await getReportPdf(report.pdfKey);
+  // La clé est re-dérivée de l'identifiant plutôt que lue depuis le
+  // document : même si le champ était altéré, on ne peut servir que
+  // l'objet correspondant à ce rapport.
+  const pdf = await getReportPdf(buildReportKey(report.id));
   if (!pdf) {
     return NextResponse.json({ error: 'not_found' }, { status: 404 });
   }

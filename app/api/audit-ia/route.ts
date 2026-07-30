@@ -93,6 +93,9 @@ export async function POST(req: Request): Promise<NextResponse> {
     metadata: {
       maturity: parsed.data.maturity,
       headcount: parsed.data.headcount,
+      sector: parsed.data.sector || null,
+      scope: parsed.data.scope || null,
+      urgency: parsed.data.urgency || null,
       challenge: parsed.data.challenge || null,
     },
     consentRgpd: parsed.data.consentRgpd,
@@ -110,6 +113,9 @@ export async function POST(req: Request): Promise<NextResponse> {
     answers: {
       maturity: parsed.data.maturity,
       headcount: parsed.data.headcount,
+      sector: parsed.data.sector || undefined,
+      scope: parsed.data.scope || undefined,
+      urgency: parsed.data.urgency || undefined,
       challenge: parsed.data.challenge || undefined,
     },
   });

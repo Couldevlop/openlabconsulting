@@ -55,6 +55,9 @@ test.describe('parcours audit IA', () => {
 
   test('la promesse affichée est de 24 h ouvrées', async ({ page }) => {
     await page.goto('/audit-ia');
+    // Assertion positive d'abord : un « not.toContainText » seul serait
+    // vert sur une page blanche.
+    await expect(page.locator('main')).toContainText('24 h');
     await expect(page.locator('body')).not.toContainText('48 h');
   });
 });

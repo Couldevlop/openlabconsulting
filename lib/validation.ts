@@ -39,6 +39,29 @@ export const auditIaSchema = z.object({
   maturity: z.enum(['decouverte', 'pilote', 'production', 'industrialisation']),
   // Volume d'employés impactés — sert au scoring lead.
   headcount: z.enum(['lt-50', '50-200', '200-1000', 'gt-1000']),
+  // Secteur, périmètre et horizon : facultatifs pour rester tolérant aux
+  // anciens formulaires, mais déterminants pour le rapport. Sans eux, le
+  // moteur de recommandation retombe sur son cas par défaut et le
+  // document contredit ce que le prospect a vu à l'écran.
+  sector: z
+    .enum([
+      'banque-assurance',
+      'secteur-public',
+      'agro-industrie',
+      'sante',
+      'telecoms-energie',
+      'autre',
+    ])
+    .optional()
+    .or(z.literal('')),
+  scope: z
+    .enum(['single-usecase', 'single-dept', 'multi-dept', 'enterprise'])
+    .optional()
+    .or(z.literal('')),
+  urgency: z
+    .enum(['exploration', '3-months', '6-months', 'no-deadline'])
+    .optional()
+    .or(z.literal('')),
   // Champ libre : ce qu'il attend de l'audit.
   goal: z.string().min(20).max(2000),
   // Texte libre facultatif : seule matière réellement personnelle dont

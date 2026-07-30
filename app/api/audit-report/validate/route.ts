@@ -13,9 +13,10 @@ import { sendReportDelivery } from '@/lib/email';
  * serveur : masquer un bouton dans l'interface ne protège rien
  * (OWASP A01).
  *
- * L'ordre compte : on rend le PDF et on le dépose AVANT de marquer le
- * rapport envoyé, pour ne jamais annoncer un envoi dont le fichier
- * n'existe pas.
+ * L'ordre compte, et il est strict : rendu du PDF, dépôt, enregistrement
+ * du statut, PUIS envoi de l'email. La route de téléchargement exige le
+ * statut « envoyé » : expédier le lien avant de l'enregistrer donnerait
+ * au prospect un lien définitivement mort si l'écriture échouait.
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -25,6 +26,7 @@ const ALLOWED_ROLES = new Set(['super-admin', 'admin', 'editor-chief']);
 interface ReportDoc {
   id: string | number;
   title: string;
+  status: string;
   sections: AuditReportSections;
   lead:
     | { name?: string; email?: string; organization?: string }
@@ -55,12 +57,24 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
   }
 
-  const report = (await payload.findByID({
-    collection: 'audit-reports',
-    id: body.reportId,
-    overrideAccess: true,
-    depth: 1,
-  })) as unknown as ReportDoc;
+  let report: ReportDoc;
+  try {
+    report = (await payload.findByID({
+      collection: 'audit-reports',
+      id: body.reportId,
+      overrideAccess: true,
+      depth: 1,
+    })) as unknown as ReportDoc;
+  } catch {
+    return NextResponse.json({ error: 'not_found' }, { status: 404 });
+  }
+
+  // Un rapport déjà envoyé ne se renvoie pas d'un second clic : cela
+  // expédierait un deuxième email au prospect et réactiverait un lien
+  // que l'équipe a pu vouloir révoquer.
+  if (report.status === 'envoye') {
+    return NextResponse.json({ error: 'deja_envoye' }, { status: 409 });
+  }
 
   const lead =
     typeof report.lead === 'object' && report.lead ? report.lead : null;
@@ -69,12 +83,36 @@ export async function POST(req: Request): Promise<NextResponse> {
   }
 
   const organization = lead.organization ?? 'votre organisation';
-  const pdf = await renderReportPdf({
-    sections: { ...report.sections, title: report.title },
-    organization,
-    generatedOn: new Date(),
+
+  let pdfKey: string;
+  try {
+    const pdf = await renderReportPdf({
+      sections: { ...report.sections, title: report.title },
+      organization,
+      generatedOn: new Date(),
+    });
+    pdfKey = await putReportPdf(String(report.id), pdf);
+  } catch (err) {
+    console.error(
+      '[audit-report] rendu ou dépôt du PDF impossible:',
+      (err as Error).message,
+    );
+    return NextResponse.json({ error: 'pdf_indisponible' }, { status: 502 });
+  }
+
+  // L'enregistrement précède l'email : la route de téléchargement exige
+  // le statut « envoyé ». Envoyer d'abord donnerait au prospect un lien
+  // définitivement mort si cette écriture échouait.
+  const recorded = await markReportSent(String(report.id), {
+    pdfKey,
+    validatedBy: (user as { id: number | string }).id,
   });
-  const pdfKey = await putReportPdf(String(report.id), pdf);
+  if (!recorded) {
+    return NextResponse.json(
+      { error: 'enregistrement_impossible' },
+      { status: 502 },
+    );
+  }
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? 'https://openlabconsulting.com';
@@ -85,11 +123,6 @@ export async function POST(req: Request): Promise<NextResponse> {
     email: lead.email,
     organization,
     downloadUrl,
-  });
-
-  await markReportSent(String(report.id), {
-    pdfKey,
-    validatedBy: (user as { id: number | string }).id,
   });
 
   return NextResponse.json(

@@ -135,6 +135,10 @@ export const generateAuditReportTask = {
 export const remindPendingReportsTask = {
   slug: 'remindPendingReports' as const,
   retries: 1,
+  // `schedule` met la tâche EN FILE toutes les heures. `autoRun` seul se
+  // contente d'exécuter ce qui s'y trouve déjà : sans cette ligne, la
+  // file « reminders » resterait vide et aucune relance ne partirait.
+  schedule: [{ cron: '0 * * * *', queue: 'reminders' }],
   handler: async (): Promise<{ output: { reminded: number } }> => {
     const { listPendingReports, markReminded } = await import('./store-server');
     const { sendReportReviewAlert } = await import('@/lib/email');

@@ -20,7 +20,7 @@ const renderReportPdf = vi.fn(async () => Buffer.from('%PDF-1.7'));
 vi.mock('@/lib/audit-report/pdf', () => ({ renderReportPdf }));
 
 const putReportPdf = vi.fn(async () => 'audit-reports/42.pdf');
-const markReportSent = vi.fn(async () => undefined);
+const markReportSent = vi.fn(async () => true);
 vi.mock('@/lib/audit-report/store-server', () => ({
   putReportPdf,
   markReportSent,
@@ -42,6 +42,7 @@ function req(body: unknown = { reportId: '42' }): Request {
 const reportDoc = {
   id: '42',
   title: 'Audit IA : Banque X',
+  status: 'brouillon-ia',
   sections: {
     synthesis: 'S',
     situation: 'Si',
@@ -67,6 +68,7 @@ describe('POST /api/audit-report/validate', () => {
     findByID.mockResolvedValue(reportDoc);
     sendReportDelivery.mockClear();
     markReportSent.mockClear();
+    markReportSent.mockResolvedValue(true);
     putReportPdf.mockClear();
   });
 
@@ -113,6 +115,53 @@ describe('POST /api/audit-report/validate', () => {
       pdfKey: 'audit-reports/42.pdf',
       validatedBy: 1,
     });
+  });
+
+  it('refuse de renvoyer un rapport déjà envoyé', async () => {
+    auth.mockResolvedValueOnce({ user: { id: 1, role: 'admin' } });
+    findByID.mockResolvedValueOnce({ ...reportDoc, status: 'envoye' });
+
+    const res = await POST(req());
+
+    expect(res.status).toBe(409);
+    expect(sendReportDelivery).not.toHaveBeenCalled();
+    expect(putReportPdf).not.toHaveBeenCalled();
+  });
+
+  it('renvoie 404 sur un identifiant inconnu au lieu de lever', async () => {
+    auth.mockResolvedValueOnce({ user: { id: 1, role: 'admin' } });
+    findByID.mockRejectedValueOnce(new Error('NotFound'));
+
+    expect((await POST(req())).status).toBe(404);
+  });
+
+  it('n’envoie pas l’email si l’enregistrement du statut échoue', async () => {
+    auth.mockResolvedValueOnce({ user: { id: 1, role: 'admin' } });
+    markReportSent.mockResolvedValueOnce(false);
+
+    const res = await POST(req());
+
+    // Sans statut « envoyé », la route de téléchargement répondrait 404 :
+    // le prospect recevrait un lien mort à vie.
+    expect(res.status).toBe(502);
+    expect(sendReportDelivery).not.toHaveBeenCalled();
+  });
+
+  it('enregistre le statut AVANT d’envoyer l’email', async () => {
+    auth.mockResolvedValueOnce({ user: { id: 1, role: 'admin' } });
+    const ordre: string[] = [];
+    markReportSent.mockImplementationOnce(async () => {
+      ordre.push('enregistrement');
+      return true;
+    });
+    sendReportDelivery.mockImplementationOnce(async () => {
+      ordre.push('email');
+      return { ok: true };
+    });
+
+    await POST(req());
+
+    expect(ordre).toEqual(['enregistrement', 'email']);
   });
 
   it('signale un envoi refusé par le transport sans masquer l’échec', async () => {
