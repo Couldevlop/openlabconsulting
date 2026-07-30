@@ -14,7 +14,25 @@ describe('middleware sécurité', () => {
     expect(csp).toContain("default-src 'self'");
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).toContain("object-src 'none'");
-    expect(csp).toContain('upgrade-insecure-requests');
+  });
+
+  it('n’impose pas upgrade-insecure-requests sur localhost', async () => {
+    // WebKit applique la directive jusque sur localhost : sur un serveur
+    // de test en HTTP, tous les chunks partiraient en https:// et la
+    // page ne s'hydraterait jamais.
+    const res = await middleware(makeReq());
+    expect(res.headers.get('Content-Security-Policy')).not.toContain(
+      'upgrade-insecure-requests',
+    );
+  });
+
+  it('impose upgrade-insecure-requests sur un hôte public', async () => {
+    const res = await middleware(
+      new NextRequest(new URL('https://openlabconsulting.com/')),
+    );
+    expect(res.headers.get('Content-Security-Policy')).toContain(
+      'upgrade-insecure-requests',
+    );
   });
 
   it('pose X-Frame-Options DENY', async () => {

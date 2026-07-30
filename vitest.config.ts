@@ -95,6 +95,8 @@ export default defineConfig({
         'app/robots.ts',
         // app/fonts.ts : import next/font, pas de logique testable.
         'app/fonts.ts',
+        // types.ts : interfaces pures, aucune instruction exécutable.
+        'lib/audit-report/types.ts',
       ],
       thresholds: {
         // Seuils relevés après PR feat/coverage-100 (570 tests, +157 vs base).

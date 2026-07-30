@@ -72,7 +72,7 @@ function generateNonce(): string {
   return btoa(bin).replace(/=+$/, '');
 }
 
-function buildCsp(nonce: string): string {
+function buildCsp(nonce: string, isLocalHost = false): string {
   // En dev, Next.js + React Refresh + Webpack HMR utilisent eval() pour
   // recharger les modules à chaud — sans 'unsafe-eval' la console est
   // polluée d'erreurs CSP et le HMR plante. En prod on garde la CSP
@@ -93,7 +93,13 @@ function buildCsp(nonce: string): string {
     "form-action 'self'",
     "object-src 'none'",
     "worker-src 'self' blob:",
-    'upgrade-insecure-requests',
+    // WebKit applique `upgrade-insecure-requests` jusque sur localhost,
+    // contrairement à Chromium qui exempte les origines réputées sûres.
+    // Sur un serveur de test en HTTP, tous les chunks partent alors en
+    // https:// et échouent au handshake TLS : la page ne s'hydrate jamais
+    // et aucun test d'interaction ne peut passer. La directive n'a de
+    // sens que sur un hôte public.
+    ...(isLocalHost ? [] : ['upgrade-insecure-requests']),
   ].join('; ');
 }
 
@@ -107,7 +113,13 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
   }
 
   const nonce = generateNonce();
-  const csp = buildCsp(nonce);
+  // Gate sur l'hôte et non sur NODE_ENV : la CI lance `pnpm start`, donc
+  // en mode production. Un test d'environnement ne changerait rien, et
+  // un hôte public ne peut pas matcher cette expression.
+  const isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(
+    req.nextUrl.hostname,
+  );
+  const csp = buildCsp(nonce, isLocalHost);
 
   // Propage le nonce dans la requête pour que les Server Components y
   // accèdent via `headers().get('x-nonce')`.

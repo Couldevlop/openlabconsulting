@@ -13,7 +13,7 @@ import { breadcrumbSchema, howToSchema } from '@/lib/seo/schema';
 export const metadata: Metadata = {
   title: 'Audit IA gratuit : Questionnaire interactif + recommandation',
   description:
-    'Cinq questions pour cadrer votre besoin IA, une recommandation adaptée (atelier, audit éclair, cadrage stratégique ou programme), un consultant senior sous 24 h ouvrées.',
+    'Six questions pour cadrer votre besoin IA, une recommandation adaptée (atelier, audit éclair, cadrage stratégique ou programme), un consultant senior sous 24 h ouvrées.',
   alternates: alternatesFor('/audit-ia'),
 };
 
