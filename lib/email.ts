@@ -167,7 +167,7 @@ export async function sendLeadAcknowledgement(
         : 'Votre message est bien reçu';
   const delay =
     input.source === 'audit-ia'
-      ? 'Votre rapport personnalisé vous parviendra sous 48 h ouvrées.'
+      ? 'Votre rapport personnalisé vous parviendra sous 24 h ouvrées.'
       : input.source === 'demo-produit'
         ? 'Un consultant vous recontacte sous 24 h ouvrées pour planifier votre démonstration.'
         : 'Notre équipe vous répond sous 24 h ouvrées.';

@@ -92,6 +92,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     metadata: {
       maturity: parsed.data.maturity,
       headcount: parsed.data.headcount,
+      challenge: parsed.data.challenge || null,
     },
     consentRgpd: parsed.data.consentRgpd,
     ipAddress: ip,
@@ -110,6 +111,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       details: {
         'Maturité IA': parsed.data.maturity,
         Effectif: parsed.data.headcount,
+        'Problème décrit': parsed.data.challenge || undefined,
       },
       aiScore: lead.score,
       aiSummary: lead.summary,
@@ -127,7 +129,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     {
       ok: true,
       message:
-        'Demande reçue. Votre rapport personnalisé est prêt sous 48 h ouvrées.',
+        'Demande reçue. Votre rapport personnalisé est prêt sous 24 h ouvrées.',
     },
     { status: 202 },
   );

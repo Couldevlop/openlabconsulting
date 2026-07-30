@@ -9,6 +9,7 @@ import { Heading } from '@/components/atoms/Heading';
 import { Turnstile } from '@/components/atoms/Turnstile';
 import { cn } from '@/lib/cn';
 import {
+  CHALLENGE_QUESTION,
   QUESTIONS,
   getRecommendation,
   summarizeAnswers,
@@ -24,8 +25,9 @@ type Status =
 /**
  * Questionnaire interactif `/audit-ia` — chantier audit P2 §7 item #14.
  *
- * Wizard 7 étapes :
+ * Wizard 8 étapes :
  *   - 5 questions (maturité, secteur, headcount, périmètre, urgence)
+ *   - 1 question libre facultative (le problème concret à régler)
  *   - 1 écran « recommandation » contextuelle
  *   - 1 écran « coordonnées » qui soumet à /api/audit-ia
  *
@@ -34,18 +36,19 @@ type Status =
  * sans re-poser les questions au call.
  */
 export function AuditIaQuizWizard(): ReactElement {
-  const [step, setStep] = useState(0); // 0..4 = questions, 5 = reco, 6 = form
+  const [step, setStep] = useState(0); // 0..4 = questions, 5 = libre, 6 = reco, 7 = form
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
 
   const totalQuestionSteps = QUESTIONS.length;
   const isQuestionStep = step < totalQuestionSteps;
-  const isRecoStep = step === totalQuestionSteps;
-  const isFormStep = step === totalQuestionSteps + 1;
+  const isChallengeStep = step === totalQuestionSteps;
+  const isRecoStep = step === totalQuestionSteps + 1;
+  const isFormStep = step === totalQuestionSteps + 2;
 
   const progress = Math.min(
     100,
-    Math.round(((step + 1) / (totalQuestionSteps + 2)) * 100),
+    Math.round(((step + 1) / (totalQuestionSteps + 3)) * 100),
   );
 
   const recommendation = useMemo(
@@ -77,6 +80,7 @@ export function AuditIaQuizWizard(): ReactElement {
       formData.set('maturity', answers.maturity ?? '');
       formData.set('headcount', answers.headcount ?? '');
       formData.set('goal', summarizeAnswers(answers, recommendation));
+      formData.set('challenge', answers.challenge ?? '');
 
       const res = await fetch('/api/audit-ia', {
         method: 'POST',
@@ -95,7 +99,7 @@ export function AuditIaQuizWizard(): ReactElement {
           kind: 'success',
           message:
             data.message ??
-            'Demande reçue. Votre rapport personnalisé est prêt sous 48 h ouvrées.',
+            'Demande reçue. Votre rapport personnalisé est prêt sous 24 h ouvrées.',
         });
         return;
       }
@@ -167,7 +171,19 @@ export function AuditIaQuizWizard(): ReactElement {
         />
       ) : null}
 
-      {/* Étape recommandation (5) */}
+      {/* Étape libre facultative (5) */}
+      {isChallengeStep ? (
+        <ChallengeStep
+          value={answers.challenge ?? ''}
+          onChange={(value) =>
+            setAnswers((prev) => ({ ...prev, challenge: value }))
+          }
+          onContinue={() => setStep((s) => s + 1)}
+          onBack={goBack}
+        />
+      ) : null}
+
+      {/* Étape recommandation (6) */}
       {isRecoStep && recommendation ? (
         <RecommendationStep
           recommendation={recommendation}
@@ -176,7 +192,7 @@ export function AuditIaQuizWizard(): ReactElement {
         />
       ) : null}
 
-      {/* Étape formulaire final (6) */}
+      {/* Étape formulaire final (7) */}
       {isFormStep && recommendation ? (
         <ContactFormStep
           status={status}
@@ -250,6 +266,66 @@ function QuestionStep<V extends string>({
           </button>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function ChallengeStep({
+  value,
+  onChange,
+  onContinue,
+  onBack,
+}: {
+  readonly value: string;
+  readonly onChange: (v: string) => void;
+  readonly onContinue: () => void;
+  readonly onBack: () => void;
+}): ReactElement {
+  return (
+    <div>
+      <Eyebrow tone="orange">{CHALLENGE_QUESTION.eyebrow}</Eyebrow>
+      <Heading level={2} visualLevel={3} className="mt-4">
+        {CHALLENGE_QUESTION.question}
+      </Heading>
+      <p className="mt-3 text-sm text-[var(--color-ol-graphite)]/70">
+        Plus votre réponse est concrète, plus le rapport sera utile. Vous pouvez
+        aussi passer cette étape.
+      </p>
+      <label className="mt-6 block">
+        <span className="sr-only">{CHALLENGE_QUESTION.question}</span>
+        <textarea
+          name="challenge"
+          rows={4}
+          maxLength={CHALLENGE_QUESTION.maxLength}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={CHALLENGE_QUESTION.placeholder}
+          className="w-full rounded-md border border-[var(--color-ol-mist)] bg-white px-4 py-3 text-base text-[var(--color-ol-night)] focus:border-[var(--color-ol-orange)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+        />
+      </label>
+      <p className="mt-2 text-xs text-[var(--color-ol-graphite)]/55">
+        {value.length} / {CHALLENGE_QUESTION.maxLength}
+      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <Button type="button" variant="primary" size="lg" onClick={onContinue}>
+          Voir ma recommandation
+        </Button>
+        <button
+          type="button"
+          onClick={onContinue}
+          className="text-sm font-medium text-[var(--color-ol-graphite)]/70 hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+        >
+          Passer
+        </button>
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ol-graphite)]/70 hover:text-[var(--color-ol-orange)] focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+        >
+          <ArrowLeft width={14} height={14} aria-hidden />
+          Question précédente
+        </button>
+      </div>
     </div>
   );
 }

@@ -168,8 +168,8 @@ export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
     },
     {
       step: '03',
-      title: 'Consultant senior · 48 h',
-      body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris, pas de questions répétées.',
+      title: 'Consultant senior · 24 h',
+      body: 'Un consultant senior reprend contact sous 24 h ouvrées avec votre contexte déjà compris, pas de questions répétées.',
     },
   ],
 };

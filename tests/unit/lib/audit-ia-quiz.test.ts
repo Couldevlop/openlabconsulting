@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import {
+  CHALLENGE_QUESTION,
   QUESTIONS,
   getRecommendation,
   summarizeAnswers,
+  type QuizAnswers,
 } from '@/lib/audit-ia/quiz';
 
 describe('lib/audit-ia/quiz — questionnaire interactif (audit P2 §7 #14)', () => {
@@ -147,6 +149,20 @@ describe('lib/audit-ia/quiz — questionnaire interactif (audit P2 §7 #14)', ()
     it('summarize avec réponses vides → met « ? » mais ne plante pas', () => {
       const summary = summarizeAnswers({}, getRecommendation({}));
       expect(summary).toMatch(/\?/);
+    });
+
+    it('expose une 6e étape libre et la reprend dans la synthèse', () => {
+      const answers: QuizAnswers = {
+        maturity: 'decouverte',
+        sector: 'agro-industrie',
+        headcount: '200-1000',
+        scope: 'single-dept',
+        urgency: 'exploration',
+        challenge: 'Nos rapprochements bancaires prennent 4 jours par mois.',
+      };
+      const summary = summarizeAnswers(answers, getRecommendation(answers));
+      expect(summary).toContain('rapprochements bancaires');
+      expect(CHALLENGE_QUESTION.eyebrow).toBe('Question 6 sur 6 (facultative)');
     });
   });
 });

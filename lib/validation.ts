@@ -41,6 +41,10 @@ export const auditIaSchema = z.object({
   headcount: z.enum(['lt-50', '50-200', '200-1000', 'gt-1000']),
   // Champ libre : ce qu'il attend de l'audit.
   goal: z.string().min(20).max(2000),
+  // Texte libre facultatif : seule matière réellement personnelle dont
+  // dispose la génération de rapport. Borné pour limiter la surface de
+  // prompt injection et le coût d'inférence (OWASP A03).
+  challenge: z.string().max(600).optional().or(z.literal('')),
   consentRgpd: z
     .union([z.literal('on'), z.literal('true'), z.boolean()])
     .transform((v) => v === true || v === 'on' || v === 'true'),
