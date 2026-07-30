@@ -2,7 +2,6 @@ import type { Field } from 'payload';
 import type { QuizAnswers } from '@/lib/audit-ia/quiz';
 import { generateWithLucie } from './lucie';
 import { buildSkeletonReport } from './skeleton';
-import { createDraftReport } from './store-server';
 import type { AuditReportInput } from './types';
 
 /**
@@ -25,6 +24,12 @@ const FALLBACK_REASON =
 export async function runGeneration(
   input: GenerationInput,
 ): Promise<{ reportId: string | null; generatedBy: 'lucie-7b' | 'squelette' }> {
+  // Import différé : `store-server` porte `import 'server-only'`, qui ne
+  // résout pas sous tsx. Un import statique ici le ferait remonter dans le
+  // graphe de payload.config et casserait les scripts de migration, de
+  // seed et de génération d'importMap.
+  const { createDraftReport } = await import('./store-server');
+
   const fromLucie = await generateWithLucie(input);
   const sections = fromLucie ?? buildSkeletonReport(input);
   const generatedBy = fromLucie ? 'lucie-7b' : 'squelette';
@@ -45,6 +50,42 @@ export async function runGeneration(
  * volontairement : la file réessaiera, et le rapport ne doit pas être
  * considéré comme produit tant qu'il n'est pas en base.
  */
+export interface PendingReport {
+  id: string;
+  organization: string;
+  createdAt: string;
+  remindedAt: string | null;
+}
+
+/** Première relance à mi-parcours de la promesse de 24 h ouvrées. */
+const FIRST_REMINDER_H = 12;
+/** Au-delà, la promesse faite au prospect n'est plus tenue. */
+const DEADLINE_H = 24;
+/** Espacement minimal entre deux relances, pour ne pas noyer l'équipe. */
+const MIN_GAP_H = 20;
+
+/**
+ * Sélectionne les rapports à relancer. Fonction pure : la lecture en
+ * base reste dans la tâche, la règle métier se teste sans Payload.
+ */
+export function selectReportsToRemind(
+  now: Date,
+  reports: PendingReport[],
+): { report: PendingReport; overdue: boolean }[] {
+  const hoursSince = (iso: string): number =>
+    (now.getTime() - new Date(iso).getTime()) / 3_600_000;
+
+  return reports
+    .filter((r) => hoursSince(r.createdAt) >= FIRST_REMINDER_H)
+    .filter(
+      (r) => r.remindedAt === null || hoursSince(r.remindedAt) >= MIN_GAP_H,
+    )
+    .map((r) => ({
+      report: r,
+      overdue: hoursSince(r.createdAt) >= DEADLINE_H,
+    }));
+}
+
 const GENERATION_INPUT_SCHEMA: Field[] = [
   { name: 'leadId', type: 'text', required: true },
   { name: 'organization', type: 'text' },
@@ -81,5 +122,34 @@ export const generateAuditReportTask = {
     });
 
     return { output: { reportId, generatedBy } };
+  },
+};
+
+/**
+ * Relance périodique : signale à l'équipe les rapports qui dorment.
+ *
+ * Deuxième filet du dispositif d'alerte, après l'email de création et
+ * avant le compteur permanent du back-office. Tourne toutes les heures ;
+ * la règle de sélection décide, elle, du rythme réel des envois.
+ */
+export const remindPendingReportsTask = {
+  slug: 'remindPendingReports' as const,
+  retries: 1,
+  handler: async (): Promise<{ output: { reminded: number } }> => {
+    const { listPendingReports, markReminded } = await import('./store-server');
+    const { sendReportReviewAlert } = await import('@/lib/email');
+
+    const due = selectReportsToRemind(new Date(), await listPendingReports());
+
+    for (const { report, overdue } of due) {
+      await sendReportReviewAlert({
+        reportId: report.id,
+        organization: report.organization,
+        overdue,
+      });
+      await markReminded(report.id);
+    }
+
+    return { output: { reminded: due.length } };
   },
 };

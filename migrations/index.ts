@@ -16,6 +16,8 @@ import * as migration_20260612_130000_add_book_settings from './20260612_130000_
 import * as migration_20260612_140000_add_publication_detail from './20260612_140000_add_publication_detail';
 import * as migration_20260616_090000_add_laboratoire_locked_rels from './20260616_090000_add_laboratoire_locked_rels';
 import * as migration_20260620_090000_add_announcement_banner from './20260620_090000_add_announcement_banner';
+import * as migration_20260730_022949_add_audit_reports from './20260730_022949_add_audit_reports';
+import * as migration_20260730_043922_add_payload_jobs from './20260730_043922_add_payload_jobs';
 
 export const migrations = [
   {
@@ -107,5 +109,15 @@ export const migrations = [
     up: migration_20260620_090000_add_announcement_banner.up,
     down: migration_20260620_090000_add_announcement_banner.down,
     name: '20260620_090000_add_announcement_banner',
+  },
+  {
+    up: migration_20260730_022949_add_audit_reports.up,
+    down: migration_20260730_022949_add_audit_reports.down,
+    name: '20260730_022949_add_audit_reports',
+  },
+  {
+    up: migration_20260730_043922_add_payload_jobs.up,
+    down: migration_20260730_043922_add_payload_jobs.down,
+    name: '20260730_043922_add_payload_jobs'
   },
 ];

@@ -104,6 +104,31 @@ export async function createDraftReport(args: {
 }): Promise<string | null> {
   try {
     const payload = await getPayloadClient();
+
+    // Idempotence : la file réessaie jusqu'à deux fois, et une écriture
+    // peut réussir côté base alors que la confirmation se perd (timeout
+    // réseau). Sans ce garde, le prospect se retrouverait avec deux
+    // rapports pour une seule demande. Un lead, un rapport.
+    const existing = (await payload.find({
+      collection: 'audit-reports',
+      overrideAccess: true,
+      depth: 0,
+      limit: 1,
+      where: { lead: { equals: args.leadId } },
+    })) as { docs: { id: number | string }[] };
+    const already = existing.docs[0];
+    if (already) {
+      console.error(
+        `[audit-report] rapport déjà existant pour le lead ${args.leadId}, création ignorée.`,
+      );
+      return String(already.id);
+    }
+
+    // Le titre vit sur le document, pas dans le groupe `sections` : on
+    // écarte explicitement la clé plutôt que de laisser Payload ignorer
+    // un champ surnuméraire en silence.
+    const { title: _sectionTitle, ...sectionFields } = args.sections;
+
     const created = (await payload.create({
       collection: 'audit-reports',
       overrideAccess: true,
@@ -113,7 +138,7 @@ export async function createDraftReport(args: {
         status: args.generationError ? 'echec-generation' : 'brouillon-ia',
         generatedBy: args.generatedBy,
         generationError: args.generationError ?? null,
-        sections: args.sections,
+        sections: sectionFields,
       },
     })) as { id: number | string };
 
@@ -183,9 +208,15 @@ export async function findReportForDownload(reportId: string): Promise<{
       pdfKey: doc.pdfKey ?? null,
       downloadCount: doc.downloadCount ?? 0,
     };
-  } catch {
+  } catch (err) {
     // Un identifiant inconnu est un cas nominal (jeton périmé, rapport
-    // supprimé) : pas de bruit dans les logs, la route répond 404.
+    // supprimé) et ne mérite pas d'alerte. Toute autre erreur signale en
+    // revanche une panne base ou Payload : elle doit être visible, sinon
+    // un incident se traduirait par des 404 silencieux côté prospect.
+    const message = (err as Error).message ?? '';
+    if (!/not\s*found/i.test(message)) {
+      console.error('[audit-report] lecture du rapport impossible:', message);
+    }
     return null;
   }
 }
@@ -205,6 +236,72 @@ export async function incrementDownloadCount(
   } catch (err) {
     console.error(
       '[audit-report] compteur de téléchargement non incrémenté:',
+      (err as Error).message,
+    );
+  }
+}
+
+/**
+ * Rapports encore en attente de validation, pour la tâche de relance.
+ * `depth: 1` pour disposer du nom de l'organisation sans second appel.
+ */
+export async function listPendingReports(): Promise<
+  {
+    id: string;
+    organization: string;
+    createdAt: string;
+    remindedAt: string | null;
+  }[]
+> {
+  try {
+    const payload = await getPayloadClient();
+    const res = (await payload.find({
+      collection: 'audit-reports',
+      overrideAccess: true,
+      depth: 1,
+      limit: 100,
+      where: {
+        status: { in: ['brouillon-ia', 'en-revue', 'echec-generation'] },
+      },
+    })) as {
+      docs: {
+        id: string | number;
+        createdAt: string;
+        remindedAt?: string | null;
+        lead?: { organization?: string | null } | number | string;
+      }[];
+    };
+
+    return res.docs.map((d) => ({
+      id: String(d.id),
+      organization:
+        typeof d.lead === 'object' && d.lead
+          ? (d.lead.organization ?? 'organisation non précisée')
+          : 'organisation non précisée',
+      createdAt: d.createdAt,
+      remindedAt: d.remindedAt ?? null,
+    }));
+  } catch (err) {
+    console.error(
+      '[audit-report] lecture des rapports en attente impossible:',
+      (err as Error).message,
+    );
+    return [];
+  }
+}
+
+export async function markReminded(reportId: string): Promise<void> {
+  try {
+    const payload = await getPayloadClient();
+    await payload.update({
+      collection: 'audit-reports',
+      id: reportId,
+      overrideAccess: true,
+      data: { remindedAt: new Date().toISOString() },
+    });
+  } catch (err) {
+    console.error(
+      '[audit-report] horodatage de relance impossible:',
       (err as Error).message,
     );
   }
