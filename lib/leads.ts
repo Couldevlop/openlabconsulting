@@ -34,9 +34,18 @@ interface PayloadLike {
   }) => Promise<unknown>;
 }
 
+export interface PersistLeadResult extends LeadScoreResult {
+  /**
+   * Identifiant du lead créé, ou `null` si l'écriture a échoué. Le
+   * pipeline de rapport d'audit s'en sert pour rattacher le rapport à la
+   * demande : sans lui, aucun rapport n'est généré.
+   */
+  leadId: string | null;
+}
+
 export async function persistLead(
   input: PersistLeadInput,
-): Promise<LeadScoreResult> {
+): Promise<PersistLeadResult> {
   // Scoring Claude best-effort — fail-soft interne (fallback heuristique),
   // donc hors du try : le score est renvoyé même si Payload est indisponible.
   const score = await scoreLead({
@@ -54,7 +63,7 @@ export async function persistLead(
     const config = (await import('@payload-config')).default;
     const payload = (await getPayload({ config })) as unknown as PayloadLike;
 
-    await payload.create({
+    const created = (await payload.create({
       collection: 'leads',
       overrideAccess: true,
       data: {
@@ -74,15 +83,16 @@ export async function persistLead(
         userAgent: input.userAgent ?? null,
         consentRgpd: input.consentRgpd ?? false,
       },
-    });
+    })) as { id: number | string };
+    return { ...score, leadId: String(created.id) };
   } catch (err) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        '[leads] persist lead failed — Payload indisponible:',
-        (err as Error).message,
-      );
-    }
+    // Journalisé y compris en production (OWASP A09) : un lead perdu en
+    // silence est resté invisible trois semaines sur la chaîne email, on
+    // ne reconduit pas ce défaut ici.
+    console.error(
+      '[leads] persistance impossible, lead perdu:',
+      (err as Error).message,
+    );
+    return { ...score, leadId: null };
   }
-
-  return score;
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { sendLeadAcknowledgement, sendLeadNotification } from '@/lib/email';
+import { queueReportGeneration } from '@/lib/audit-report/store-server';
 import { persistLead } from '@/lib/leads';
 import { METRICS } from '@/lib/metrics';
 import { RATE_LIMITS, rateLimit } from '@/lib/rate-limit';
@@ -97,6 +98,20 @@ export async function POST(req: Request): Promise<NextResponse> {
     consentRgpd: parsed.data.consentRgpd,
     ipAddress: ip,
     userAgent: req.headers.get('user-agent'),
+  });
+
+  // Mise en file de la génération de rapport : le modèle met plusieurs
+  // dizaines de secondes sur CPU, il ne doit pas s'exécuter dans le
+  // cycle de la requête. Fail-soft, jamais bloquant pour le visiteur.
+  await queueReportGeneration({
+    leadId: lead.leadId,
+    organization: parsed.data.organization,
+    jobTitle: parsed.data.jobTitle,
+    answers: {
+      maturity: parsed.data.maturity,
+      headcount: parsed.data.headcount,
+      challenge: parsed.data.challenge || undefined,
+    },
   });
 
   // Emails transactionnels ZeptoMail (best-effort, fail-soft)
