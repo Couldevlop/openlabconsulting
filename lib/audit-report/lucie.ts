@@ -155,21 +155,49 @@ export async function generateWithLucie(
         stream: false,
         system: SYSTEM_PROMPT,
         prompt: buildPrompt(input),
-        options: { temperature: 0.3, num_ctx: 8192, num_predict: 1800 },
+        // `format: 'json'` contraint le décodage à produire du JSON
+        // valide : sans lui, le modèle encadre sa réponse de balises
+        // markdown et peut la tronquer en fin de budget de tokens, ce qui
+        // rend le document inparsable et fait basculer TOUTE génération
+        // sur le squelette. Constaté en production le 2026-07-31.
+        format: 'json',
+        options: { temperature: 0.3, num_ctx: 8192, num_predict: 2500 },
       }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
       cache: 'no-store',
     });
-  } catch {
+  } catch (err) {
+    console.error(
+      '[lucie] appel au modèle impossible:',
+      (err as Error).message,
+    );
     return null;
   }
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.error(`[lucie] réponse HTTP ${res.status} du modèle.`);
+    return null;
+  }
 
+  let raw = '';
   try {
     const data = (await res.json()) as OllamaResponse;
-    return parseSections(data.response ?? '');
-  } catch {
+    raw = data.response ?? '';
+  } catch (err) {
+    console.error(
+      '[lucie] enveloppe Ollama illisible:',
+      (err as Error).message,
+    );
     return null;
   }
+
+  const sections = parseSections(raw);
+  if (!sections) {
+    // Sans cette trace, un repli systématique sur le squelette reste
+    // invisible : le repli est un chemin nominal, pas une erreur.
+    console.error(
+      `[lucie] réponse inexploitable (${raw.length} caractères), début : ${raw.slice(0, 300)}`,
+    );
+  }
+  return sections;
 }

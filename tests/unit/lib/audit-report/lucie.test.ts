@@ -144,6 +144,32 @@ describe('generateWithLucie', () => {
     expect(step).not.toHaveProperty('budget');
   });
 
+  it('demande au modèle de produire du JSON contraint', async () => {
+    // Sans `format: 'json'`, le modèle encadre sa réponse de balises
+    // markdown et peut la tronquer : le document devient inparsable et
+    // toute génération bascule sur le squelette. Constaté en production.
+    const spy = vi.fn(
+      async (_url: string, _init: RequestInit) =>
+        new Response(JSON.stringify({ response: '{}' })),
+    );
+    vi.stubGlobal('fetch', spy);
+    await generateWithLucie(input);
+
+    const body = JSON.parse(String(spy.mock.calls[0]?.[1].body)) as {
+      format?: string;
+    };
+    expect(body.format).toBe('json');
+  });
+
+  it('journalise une réponse inexploitable au lieu de la taire', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    mockOllama({ response: 'pas du JSON' });
+
+    expect(await generateWithLucie(input)).toBeNull();
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('inexploitable'));
+    spy.mockRestore();
+  });
+
   it('accepte les clés préfixées d’une espace que Lucie produit réellement', async () => {
     // Sortie observée sur le cluster le 2026-07-31 : le modèle insère une
     // espace après la ponctuation, y compris dans les noms de clés JSON.
