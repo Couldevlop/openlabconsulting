@@ -80,6 +80,19 @@ spec:
       ports:
         - protocol: TCP
           port: 11434
+    # SMTP sortant (port 587, STARTTLS). Transport de repli quand l'API
+    # ZeptoMail est indisponible : la regle 443 ne couvre pas ce port.
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
+      ports:
+        - protocol: TCP
+          port: 587
 ---
 # Postgres : interdit l'accès depuis l'extérieur du namespace.
 apiVersion: networking.k8s.io/v1

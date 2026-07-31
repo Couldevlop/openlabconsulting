@@ -45,11 +45,44 @@ export interface SendEmailResult {
   error?: string;
 }
 
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  pass: string;
+}
+
 export interface MailerConfig {
+  /** Vide lorsque le transport SMTP prend le relais. */
   token: string;
   apiUrl: string;
   from: ZeptoAddress;
   team: ZeptoAddress;
+  /** Renseigné si SMTP_HOST est défini : ce transport est prioritaire. */
+  smtp?: SmtpConfig;
+}
+
+/**
+ * Lit la configuration SMTP si elle est fournie.
+ *
+ * SMTP prend le pas sur l'API ZeptoMail quand `SMTP_HOST` est présent :
+ * cela permet de basculer de transport par simple configuration, sans
+ * redéploiement de code, notamment quand le compte ZeptoMail est à court
+ * de crédit (HTTP 429).
+ */
+function readSmtpConfig(): SmtpConfig | null {
+  const host = process.env.SMTP_HOST;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  if (!host || !user || !pass) return null;
+  return {
+    host,
+    port: Number(process.env.SMTP_PORT ?? 587),
+    secure: process.env.SMTP_SECURE === 'true',
+    user,
+    pass,
+  };
 }
 
 /**
@@ -57,10 +90,13 @@ export interface MailerConfig {
  * token est absent → l'envoi est sauté proprement (mode dev / CI).
  */
 export function readConfig(): MailerConfig | null {
+  const smtp = readSmtpConfig();
   const token = process.env.ZEPTOMAIL_TOKEN;
-  if (!token) return null;
+  // Aucun transport configuré : envoi sauté proprement (dev / CI).
+  if (!smtp && !token) return null;
   return {
-    token,
+    ...(smtp ? { smtp } : {}),
+    token: token ?? '',
     apiUrl: process.env.ZEPTOMAIL_API_URL || DEFAULT_API_URL,
     from: {
       address: process.env.EMAIL_FROM || 'noreply@openlabconsulting.com',
@@ -105,6 +141,8 @@ export async function send(
       : {}),
   };
 
+  if (cfg.smtp) return sendViaSmtp(cfg, input);
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -133,10 +171,50 @@ export async function send(
   }
 }
 
+/**
+ * Envoi via SMTP (nodemailer). Même contrat que l'API : fail-soft,
+ * jamais de throw, échec journalisé.
+ */
+async function sendViaSmtp(
+  cfg: MailerConfig,
+  input: SendEmailInput,
+): Promise<SendEmailResult> {
+  const smtp = cfg.smtp;
+  if (!smtp) return { ok: false, error: 'smtp_non_configure' };
+
+  try {
+    const nodemailer = (await import('nodemailer')).default;
+    const transport = nodemailer.createTransport({
+      host: smtp.host,
+      port: smtp.port,
+      secure: smtp.secure,
+      auth: { user: smtp.user, pass: smtp.pass },
+      connectionTimeout: TIMEOUT_MS,
+      greetingTimeout: TIMEOUT_MS,
+    });
+
+    await transport.sendMail({
+      from: { address: cfg.from.address, name: cfg.from.name ?? '' },
+      to: input.to.name
+        ? { address: input.to.address, name: input.to.name }
+        : input.to.address,
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+      ...(input.replyTo ? { replyTo: input.replyTo.address } : {}),
+    });
+
+    return { ok: true };
+  } catch (err) {
+    logFailure('SMTP', (err as Error).message);
+    return { ok: false, error: (err as Error).message };
+  }
+}
+
 export function logFailure(label: string, detail: string): void {
   // Loggé en prod aussi (OWASP A09) : l'envoi étant fail-soft, ce log est la
   // SEULE trace d'un incident mailer (ex. crédits ZeptoMail épuisés, 429).
-  console.error(`[email] envoi ZeptoMail échoué — ${label}:`, detail);
+  console.error(`[email] envoi échoué (${label}) :`, detail);
 }
 
 // ────────────────────────────────────────────────────────────
