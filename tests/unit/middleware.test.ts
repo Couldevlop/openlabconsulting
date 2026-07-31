@@ -14,7 +14,51 @@ describe('middleware sécurité', () => {
     expect(csp).toContain("default-src 'self'");
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).toContain("object-src 'none'");
-    expect(csp).toContain('upgrade-insecure-requests');
+  });
+
+  it('n’impose pas upgrade-insecure-requests sur localhost', async () => {
+    // WebKit applique la directive jusque sur localhost : sur un serveur
+    // de test en HTTP, tous les chunks partiraient en https:// et la
+    // page ne s'hydraterait jamais.
+    const res = await middleware(makeReq());
+    expect(res.headers.get('Content-Security-Policy')).not.toContain(
+      'upgrade-insecure-requests',
+    );
+  });
+
+  it('n’impose pas la directive sur les autres boucles locales', async () => {
+    // WebKit résout parfois localhost en IPv6 : `nextUrl.hostname` renvoie
+    // alors « ::1 » sans crochets. Toutes les formes doivent être couvertes.
+    for (const origin of [
+      'http://127.0.0.1:3000',
+      'http://[::1]:3000',
+      'http://app.localhost:3000',
+    ]) {
+      const res = await middleware(new NextRequest(new URL(`${origin}/`)));
+      expect(res.headers.get('Content-Security-Policy')).not.toContain(
+        'upgrade-insecure-requests',
+      );
+    }
+  });
+
+  it('impose upgrade-insecure-requests sur un hôte public en HTTPS', async () => {
+    const res = await middleware(
+      new NextRequest(new URL('https://openlabconsulting.com/')),
+    );
+    expect(res.headers.get('Content-Security-Policy')).toContain(
+      'upgrade-insecure-requests',
+    );
+  });
+
+  it('impose la directive derrière un proxy TLS', async () => {
+    // En production, l'application reçoit du HTTP en clair depuis
+    // l'ingress : c'est `x-forwarded-proto` qui atteste du TLS côté client.
+    const req = new NextRequest(new URL('http://openlabconsulting.com/'), {
+      headers: { 'x-forwarded-proto': 'https' },
+    });
+    expect(
+      (await middleware(req)).headers.get('Content-Security-Policy'),
+    ).toContain('upgrade-insecure-requests');
   });
 
   it('pose X-Frame-Options DENY', async () => {

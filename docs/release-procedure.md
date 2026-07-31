@@ -191,3 +191,13 @@ chaque commit polluerait GHCR).
 
 `release.yml` est le pipeline de publication, déclenché **explicitement**
 sur tag — c'est un acte intentionnel, pas un effet de bord du dev.
+
+## Rapport d'audit IA : point de vigilance hors code
+
+La promesse affichée au prospect est passée de 48 h à **24 h ouvrées**. Le texte visible sur `/audit-ia` vient du global `AuditIaProcessSettings` **en base de production**, pas du repli `lib/cms/site-settings.ts` : mettre le code à jour ne suffit pas.
+
+À faire dans `/admin` au moment de la mise en ligne, sinon le site annoncera 48 h avec un pipeline calibré sur 24 h :
+
+- `AuditIaProcessSettings` : les deux entrées du process qui mentionnent le délai.
+
+Vérification après déploiement : `curl -s https://openlabconsulting.com/audit-ia | grep -c "48 h"` doit renvoyer `0`.

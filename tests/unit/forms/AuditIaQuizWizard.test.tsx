@@ -34,9 +34,15 @@ describe('AuditIaQuizWizard', () => {
     fireEvent.click(await screen.findByText(/Phase d.exploration/i));
   }
 
+  /** Répond aux 5 questions puis passe la 6e étape libre (facultative). */
+  async function answerAllQuestionsAndSkipChallenge(): Promise<void> {
+    await answerAllQuestions();
+    fireEvent.click(await screen.findByRole('button', { name: /passer/i }));
+  }
+
   it('rend la barre de progression et la 1re question au démarrage', () => {
     render(<AuditIaQuizWizard />);
-    expect(screen.getByText(/Question 1 sur 5/i)).toBeInTheDocument();
+    expect(screen.getByText(/Question 1 sur 6/i)).toBeInTheDocument();
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
@@ -44,12 +50,12 @@ describe('AuditIaQuizWizard', () => {
     const user = userEvent.setup();
     render(<AuditIaQuizWizard />);
     await user.click(screen.getByText(/On en parle, on explore/i));
-    expect(await screen.findByText(/Question 2 sur 5/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Question 2 sur 6/i)).toBeInTheDocument();
   });
 
-  it('après les 5 questions, affiche la recommandation contextuelle', async () => {
+  it('après les 5 questions puis la 6e étape passée, affiche la recommandation contextuelle', async () => {
     render(<AuditIaQuizWizard />);
-    await answerAllQuestions();
+    await answerAllQuestionsAndSkipChallenge();
     const reco = await screen.findByTestId('audit-ia-recommendation');
     expect(reco).toBeInTheDocument();
     // Découverte + exploration → atelier
@@ -58,18 +64,20 @@ describe('AuditIaQuizWizard', () => {
     );
   });
 
-  it('le bouton « Modifier mes réponses » revient à la 5e question', async () => {
+  it('le bouton « Modifier mes réponses » revient à la 6e étape (question libre)', async () => {
     const user = userEvent.setup();
     render(<AuditIaQuizWizard />);
-    await answerAllQuestions();
+    await answerAllQuestionsAndSkipChallenge();
     await user.click(screen.getByText(/Modifier mes réponses/i));
-    expect(await screen.findByText(/Question 5 sur 5/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Question 6 sur 6 \(facultative\)/i),
+    ).toBeInTheDocument();
   });
 
   it('« Demander cet audit » bascule sur le formulaire de coordonnées', async () => {
     const user = userEvent.setup();
     render(<AuditIaQuizWizard />);
-    await answerAllQuestions();
+    await answerAllQuestionsAndSkipChallenge();
     await user.click(screen.getByTestId('audit-ia-continue-to-form'));
     expect(await screen.findByTestId('audit-ia-form')).toBeInTheDocument();
     expect(screen.getByLabelText(/Nom complet/i)).toBeInTheDocument();
@@ -80,7 +88,7 @@ describe('AuditIaQuizWizard', () => {
 
   async function reachFormAndFill(): Promise<HTMLFormElement> {
     const user = userEvent.setup();
-    await answerAllQuestions();
+    await answerAllQuestionsAndSkipChallenge();
     await user.click(screen.getByTestId('audit-ia-continue-to-form'));
     await screen.findByTestId('audit-ia-form');
 
@@ -165,6 +173,27 @@ describe('AuditIaQuizWizard', () => {
     await waitFor(() => {
       expect(screen.getByText(/Erreur inattendue/i)).toBeInTheDocument();
     });
+  });
+
+  it('affiche la 6e étape facultative et permet de la passer', async () => {
+    render(<AuditIaQuizWizard />);
+    // Répondre aux 5 questions à choix.
+    for (const label of [
+      'On en parle, on explore',
+      'Agro-industrie',
+      '200 à 1 000',
+      'Un département',
+      'Phase d’exploration',
+    ]) {
+      await userEvent.click(
+        screen.getByRole('button', { name: new RegExp(label, 'i') }),
+      );
+    }
+    expect(
+      screen.getByRole('textbox', { name: /problème concret/i }),
+    ).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /passer/i }));
+    expect(screen.getByTestId('audit-ia-recommendation')).toBeInTheDocument();
   });
 
   it('le payload envoyé à /api/audit-ia inclut maturity/headcount/goal pré-remplis', async () => {

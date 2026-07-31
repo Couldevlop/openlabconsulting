@@ -150,7 +150,7 @@ export interface AuditIaProcessContent {
 
 export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
   heroEyebrow: 'Audit IA gratuit',
-  headlineLead: 'Cinq questions pour savoir si l’IA',
+  headlineLead: 'Six questions pour savoir si l’IA',
   headlineHighlight: 'vous fera gagner du temps',
   lead: 'Pas un appel commercial déguisé. Un cadrage opérationnel qui commence par un questionnaire interactif, débouche sur une recommandation contextuelle, et finit avec un consultant senior qui connaît déjà votre contexte.',
   processEyebrow: 'Comment ça se passe',
@@ -159,7 +159,7 @@ export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
     {
       step: '01',
       title: 'Questionnaire · 3 min',
-      body: 'Cinq questions séquentielles pour qualifier votre maturité IA, votre secteur, votre périmètre et votre urgence.',
+      body: 'Six questions séquentielles pour qualifier votre maturité IA, votre secteur, votre périmètre et votre urgence.',
     },
     {
       step: '02',
@@ -168,8 +168,8 @@ export const AUDIT_IA_PROCESS_FALLBACK: AuditIaProcessContent = {
     },
     {
       step: '03',
-      title: 'Consultant senior · 48 h',
-      body: 'Un consultant senior reprend contact sous 48 h ouvrées avec votre contexte déjà compris, pas de questions répétées.',
+      title: 'Consultant senior · 24 h',
+      body: 'Un consultant senior reprend contact sous 24 h ouvrées avec votre contexte déjà compris, pas de questions répétées.',
     },
   ],
 };
