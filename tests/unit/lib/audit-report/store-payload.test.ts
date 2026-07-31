@@ -15,16 +15,15 @@ const findByID = vi.fn();
 const queue = vi.fn();
 const s3send = vi.fn();
 
-vi.mock('@payload-config', () => ({ default: {} }));
-vi.mock('payload', () => ({
-  getPayload: async () => ({
-    find,
-    create,
-    update,
-    findByID,
-    jobs: { queue },
-  }),
+const getPayload = vi.fn(async (_opts: { cron?: boolean }) => ({
+  find,
+  create,
+  update,
+  findByID,
+  jobs: { queue },
 }));
+vi.mock('@payload-config', () => ({ default: {} }));
+vi.mock('payload', () => ({ getPayload }));
 vi.mock('@aws-sdk/client-s3', () => ({
   S3Client: class {
     send = s3send;
@@ -42,6 +41,20 @@ const store = await import('@/lib/audit-report/store-server');
 beforeEach(() => {
   for (const m of [find, create, update, findByID, queue, s3send])
     m.mockReset();
+});
+
+describe('initialisation de Payload', () => {
+  it('demande le démarrage du planificateur', async () => {
+    // Sans `cron: true`, Payload n'appelle jamais `_initializeCrons` :
+    // les tâches s'empilent en file sans être exécutées, en silence.
+    // Constaté en production le 2026-07-31.
+    find.mockResolvedValueOnce({ docs: [] });
+    await store.listPendingReports();
+
+    expect(getPayload).toHaveBeenCalledWith(
+      expect.objectContaining({ cron: true }),
+    );
+  });
 });
 
 describe('dépôt et lecture du PDF', () => {
