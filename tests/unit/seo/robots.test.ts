@@ -21,6 +21,15 @@ describe('app/robots', () => {
     expect(disallow.some((d) => d.startsWith('/api'))).toBe(true);
   });
 
+  it('interdit l’exploration des rapports d’audit nominatifs', () => {
+    const rules = Array.isArray(result.rules) ? result.rules : [result.rules];
+    const wildcardRule = rules.find((r) => r.userAgent === '*');
+    const disallow = Array.isArray(wildcardRule?.disallow)
+      ? wildcardRule!.disallow
+      : [wildcardRule?.disallow ?? ''];
+    expect(disallow).toContain('/audit-ia/rapport/');
+  });
+
   it('autorise les bots LLM (GPTBot, ClaudeBot, PerplexityBot)', () => {
     const rules = Array.isArray(result.rules) ? result.rules : [result.rules];
     const llmBots = ['GPTBot', 'ClaudeBot', 'PerplexityBot'];

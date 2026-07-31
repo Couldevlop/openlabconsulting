@@ -99,6 +99,29 @@ describe('lib/validation — auditIaSchema', () => {
     const r = auditIaSchema.safeParse({ ...valid, maturity: 'autre' });
     expect(r.success).toBe(false);
   });
+
+  it('accepte un challenge libre borné à 600 caractères', () => {
+    const base = {
+      name: 'Debora Ahouma',
+      email: 'debora@openlabconsulting.com',
+      organization: 'OpenLab',
+      jobTitle: 'CEO',
+      maturity: 'pilote',
+      headcount: '50-200',
+      goal: 'Nous voulons industrialiser notre pilote IA sur la filiale UEMOA.',
+      consentRgpd: 'on',
+    };
+    expect(
+      auditIaSchema.safeParse({
+        ...base,
+        challenge: 'Rapprochements bancaires : 4 jours par mois.',
+      }).success,
+    ).toBe(true);
+    expect(auditIaSchema.safeParse({ ...base }).success).toBe(true);
+    expect(
+      auditIaSchema.safeParse({ ...base, challenge: 'x'.repeat(601) }).success,
+    ).toBe(false);
+  });
 });
 
 describe('lib/validation — flattenZodErrors', () => {

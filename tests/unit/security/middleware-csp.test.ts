@@ -40,7 +40,9 @@ describe('middleware — security headers + nonce CSP', () => {
     expect(csp).toContain("'strict-dynamic'");
     expect(csp).toContain('challenges.cloudflare.com');
     expect(csp).toContain("frame-ancestors 'none'");
-    expect(csp).toContain('upgrade-insecure-requests');
+    // `upgrade-insecure-requests` est conditionné à l'hôte : présent en
+    // production, absent sur localhost où il empêcherait tout chargement
+    // de script sous WebKit. Couvert par tests/unit/middleware.test.ts.
   });
 
   it('propage le nonce dans le header request x-nonce', async () => {

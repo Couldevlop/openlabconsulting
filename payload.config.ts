@@ -22,6 +22,11 @@ import { fileURLToPath } from 'node:url';
 import { zeptomailAdapter } from './lib/email-adapter';
 import { Articles } from './collections/Articles';
 import { AuditLog } from './collections/AuditLog';
+import { AuditReports } from './collections/AuditReports';
+import {
+  generateAuditReportTask,
+  remindPendingReportsTask,
+} from './lib/audit-report/jobs';
 import { CaseStudies } from './collections/CaseStudies';
 import { Expertises } from './collections/Expertises';
 import { Leads } from './collections/Leads';
@@ -170,6 +175,9 @@ export default buildConfig({
       titleSuffix: ' · Admin OpenLab',
     },
     components: {
+      // Compteur des rapports en attente de validation : signal
+      // permanent, indépendant de tout transport email.
+      beforeNavLinks: ['/components/admin/PendingReportsBadge.tsx#default'],
       views: {
         // Dashboard custom premium (refonte admin P2 phase 3) :
         // KPIs leads + articles + audit log, derniers leads, activité.
@@ -180,6 +188,24 @@ export default buildConfig({
         },
       },
     },
+  },
+  /**
+   * File de tâches : génération des rapports d'audit hors du cycle de la
+   * requête HTTP (le modèle met plusieurs dizaines de secondes sur CPU).
+   *
+   * L'exécution automatique tourne sur les cinq répliques ; le
+   * verrouillage des tâches est assuré par la base. `PAYLOAD_DISABLE_JOBS`
+   * permet de la couper (tests, scripts de seed, migrations).
+   */
+  jobs: {
+    tasks: [generateAuditReportTask, remindPendingReportsTask],
+    autoRun: [
+      { cron: '* * * * *', queue: 'default', limit: 3 },
+      { cron: '0 * * * *', queue: 'reminders', limit: 1 },
+    ],
+    shouldAutoRun: async (): Promise<boolean> =>
+      process.env.PAYLOAD_DISABLE_JOBS !== 'true' &&
+      process.env.PAYLOAD_MIGRATING !== 'true',
   },
   collections: [
     Articles,
@@ -193,6 +219,7 @@ export default buildConfig({
     Media,
     Users,
     Leads,
+    AuditReports,
     AuditLog,
     Visits,
     RdAxes,

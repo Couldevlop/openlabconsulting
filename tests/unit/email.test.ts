@@ -212,7 +212,7 @@ describe('lib/email — envoi ZeptoMail', () => {
     const [, init] = fetchSpy.mock.calls[0] as [string, RequestInit];
     const body = JSON.parse(init.body as string);
     expect(body.subject).toContain('audit IA');
-    expect(body.textbody).toContain('48 h');
+    expect(body.textbody).toContain('24 h');
   });
 
   it('notification : champs optionnels (subject/score/résumé) et absences', async () => {

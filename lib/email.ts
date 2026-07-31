@@ -140,6 +140,123 @@ ${
 }
 
 // ────────────────────────────────────────────────────────────
+// 1 bis. Rapport d'audit : alerte de relecture (vers l'équipe)
+// ────────────────────────────────────────────────────────────
+
+export interface ReportReviewAlertInput {
+  reportId: string;
+  organization: string;
+  aiScore?: number;
+  /** true à partir de 24 h sans validation : objet distinct, ton plus direct. */
+  overdue?: boolean;
+}
+
+/**
+ * Alerte l'équipe qu'un brouillon de rapport attend sa relecture.
+ *
+ * Premier des trois signaux prévus (email, compteur permanent dans
+ * l'admin, relance) : c'est le seul qui dépende d'un transport externe,
+ * d'où l'existence des deux autres.
+ */
+export async function sendReportReviewAlert(
+  input: ReportReviewAlertInput,
+): Promise<SendEmailResult> {
+  const cfg = readConfig();
+  if (!cfg) return { ok: false, skipped: true };
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://openlabconsulting.com';
+  const adminUrl = `${siteUrl}/admin/collections/audit-reports/${encodeURIComponent(input.reportId)}`;
+  const subject = input.overdue
+    ? `Échéance dépassée : rapport d’audit à valider (${input.organization})`
+    : `Rapport d’audit à valider : ${input.organization}`;
+
+  const intro = input.overdue
+    ? 'Ce rapport attend une validation depuis plus de 24 heures. Le prospect a reçu la promesse d’un rapport sous 24 h ouvrées.'
+    : 'Un brouillon de rapport d’audit vient d’être généré et attend votre relecture.';
+
+  const inner = `
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">${esc(intro)}</p>
+<table style="width:100%;border-collapse:collapse;margin:0 0 24px;">
+${row('Organisation', esc(input.organization))}
+${typeof input.aiScore === 'number' ? row('Score IA', `${input.aiScore} / 100`) : ''}
+</table>
+<a href="${adminUrl}" style="display:inline-block;background:#ff5a00;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Relire et valider</a>`;
+
+  return send(cfg, {
+    to: cfg.team,
+    replyTo: cfg.team,
+    subject,
+    html: shell(subject, inner),
+    text: [
+      subject,
+      '',
+      intro,
+      `Organisation : ${input.organization}`,
+      typeof input.aiScore === 'number'
+        ? `Score IA : ${input.aiScore}/100`
+        : '',
+      '',
+      `Relire et valider : ${adminUrl}`,
+    ]
+      .filter((l) => l !== '')
+      .join('\n'),
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// 1 ter. Rapport d'audit : livraison au prospect
+// ────────────────────────────────────────────────────────────
+
+export interface ReportDeliveryInput {
+  name: string;
+  email: string;
+  organization: string;
+  downloadUrl: string;
+}
+
+/**
+ * Livre le rapport d'audit au prospect. Le PDF n'est pas joint : il est
+ * servi par une route sous jeton signé, ce qui permet de faire expirer
+ * le lien et de le révoquer.
+ */
+export async function sendReportDelivery(
+  input: ReportDeliveryInput,
+): Promise<SendEmailResult> {
+  const cfg = readConfig();
+  if (!cfg) return { ok: false, skipped: true };
+
+  const firstName = input.name.split(' ')[0] || input.name;
+  const subject = `Votre rapport d’audit IA : ${input.organization}`;
+
+  const inner = `
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">Bonjour ${esc(firstName)},</p>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#1a1d24;">Votre rapport d’audit IA est prêt. Il reprend votre contexte, le format d’intervention que nous recommandons et une feuille de route en quatre temps.</p>
+<p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#1a1d24;">Le lien ci-dessous reste valable 30 jours.</p>
+<a href="${esc(input.downloadUrl)}" style="display:inline-block;background:#ff5a00;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 24px;border-radius:8px;">Télécharger mon rapport</a>
+<p style="margin:24px 0 0;font-size:13px;color:#5b6170;">Une question sur son contenu ? Répondez simplement à cet email, il arrive directement chez le consultant qui a préparé votre dossier.</p>
+<p style="margin:16px 0 0;font-size:13px;color:#5b6170;">L’équipe OpenLab Consulting</p>`;
+
+  const text = `Bonjour ${firstName},
+
+Votre rapport d'audit IA est prêt. Le lien ci-dessous reste valable 30 jours.
+
+${input.downloadUrl}
+
+Une question sur son contenu ? Répondez simplement à cet email.
+
+L'équipe OpenLab Consulting`;
+
+  return send(cfg, {
+    to: { address: input.email, name: input.name },
+    replyTo: cfg.team,
+    subject,
+    html: shell(subject, inner),
+    text,
+  });
+}
+
+// ────────────────────────────────────────────────────────────
 // 2. Accusé de réception (vers le prospect)
 // ────────────────────────────────────────────────────────────
 
@@ -167,7 +284,7 @@ export async function sendLeadAcknowledgement(
         : 'Votre message est bien reçu';
   const delay =
     input.source === 'audit-ia'
-      ? 'Votre rapport personnalisé vous parviendra sous 48 h ouvrées.'
+      ? 'Votre rapport personnalisé vous parviendra sous 24 h ouvrées.'
       : input.source === 'demo-produit'
         ? 'Un consultant vous recontacte sous 24 h ouvrées pour planifier votre démonstration.'
         : 'Notre équipe vous répond sous 24 h ouvrées.';

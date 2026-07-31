@@ -13,13 +13,13 @@ describe('Page /audit-ia (refonte avec questionnaire interactif, audit P2 §7 #1
     render(await AuditIaPage());
     expect(screen.getByText(/Questionnaire · 3 min/i)).toBeInTheDocument();
     expect(screen.getByText(/Recommandation instantanée/i)).toBeInTheDocument();
-    expect(screen.getByText(/Consultant senior · 48 h/i)).toBeInTheDocument();
+    expect(screen.getByText(/Consultant senior · 24 h/i)).toBeInTheDocument();
   });
 
   it('embarque le questionnaire interactif AuditIaQuizWizard', async () => {
     render(await AuditIaPage());
     expect(screen.getByTestId('audit-ia-quiz')).toBeInTheDocument();
     // Première question affichée par défaut
-    expect(screen.getByText(/Question 1 sur 5/i)).toBeInTheDocument();
+    expect(screen.getByText(/Question 1 sur 6/i)).toBeInTheDocument();
   });
 });

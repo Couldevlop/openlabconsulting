@@ -14,6 +14,12 @@
  * dans le script package.json. Pas besoin de loadEnv ici.
  */
 
+// Coupe le push automatique du schema et la file de taches pendant
+// l'operation : sans ca, Payload synchronise la base au demarrage et
+// `migrate:create` diffe contre un schema deja pousse, produisant une
+// migration vide ou aberrante (incident du 2026-07-30).
+process.env.PAYLOAD_MIGRATING = 'true';
+
 import { getPayload } from 'payload';
 import config from '../payload.config';
 

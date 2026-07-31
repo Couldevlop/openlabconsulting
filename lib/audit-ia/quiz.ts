@@ -2,7 +2,8 @@
  * Configuration du questionnaire interactif /audit-ia — chantier audit
  * P2 §7 item #14.
  *
- * Cinq questions séquentielles qui :
+ * Cinq questions séquentielles à choix + une 6e question libre facultative
+ * qui :
  *   1. qualifient le lead (data scoring claude.ts en aval)
  *   2. génèrent une recommandation contextuelle (atelier court, pilote,
  *      cadrage stratégique, programme long) pour guider l'attente
@@ -43,6 +44,8 @@ export interface QuizAnswers {
   headcount?: Headcount;
   scope?: Scope;
   urgency?: Urgency;
+  /** Texte libre facultatif : matière de la génération de rapport. */
+  challenge?: string;
 }
 
 export interface QuizOption<V extends string> {
@@ -64,7 +67,7 @@ export interface QuizQuestion<V extends string> {
 
 export const MATURITY_QUESTION: QuizQuestion<Maturity> = {
   id: 'maturity',
-  eyebrow: 'Question 1 sur 5',
+  eyebrow: 'Question 1 sur 6',
   question: 'Où en êtes-vous avec l’IA aujourd’hui ?',
   options: [
     {
@@ -92,7 +95,7 @@ export const MATURITY_QUESTION: QuizQuestion<Maturity> = {
 
 export const SECTOR_QUESTION: QuizQuestion<Sector> = {
   id: 'sector',
-  eyebrow: 'Question 2 sur 5',
+  eyebrow: 'Question 2 sur 6',
   question: 'Votre secteur d’activité ?',
   options: [
     {
@@ -130,7 +133,7 @@ export const SECTOR_QUESTION: QuizQuestion<Sector> = {
 
 export const HEADCOUNT_QUESTION: QuizQuestion<Headcount> = {
   id: 'headcount',
-  eyebrow: 'Question 3 sur 5',
+  eyebrow: 'Question 3 sur 6',
   question: 'Combien êtes-vous dans l’organisation ?',
   options: [
     { value: 'lt-50', label: 'Moins de 50', hint: 'TPE/PME.' },
@@ -150,7 +153,7 @@ export const HEADCOUNT_QUESTION: QuizQuestion<Headcount> = {
 
 export const SCOPE_QUESTION: QuizQuestion<Scope> = {
   id: 'scope',
-  eyebrow: 'Question 4 sur 5',
+  eyebrow: 'Question 4 sur 6',
   question: 'Quel est le périmètre que vous voulez auditer ?',
   options: [
     {
@@ -178,7 +181,7 @@ export const SCOPE_QUESTION: QuizQuestion<Scope> = {
 
 export const URGENCY_QUESTION: QuizQuestion<Urgency> = {
   id: 'urgency',
-  eyebrow: 'Question 5 sur 5',
+  eyebrow: 'Question 5 sur 6',
   question: 'Sous quel délai voulez-vous démarrer ?',
   options: [
     {
@@ -211,6 +214,21 @@ export const QUESTIONS = [
   SCOPE_QUESTION,
   URGENCY_QUESTION,
 ] as const;
+
+/**
+ * 6e étape : question ouverte, facultative. Sans elle, deux entreprises
+ * du même secteur et de la même taille reçoivent un rapport
+ * interchangeable (cf. spec § 3).
+ */
+export const CHALLENGE_QUESTION = {
+  id: 'challenge' as const,
+  eyebrow: 'Question 6 sur 6 (facultative)',
+  question:
+    'En deux ou trois phrases, quel est le problème concret que vous voulez régler ?',
+  placeholder:
+    'Exemple : nos rapprochements bancaires prennent 4 jours par mois à deux comptables.',
+  maxLength: 600,
+} as const;
 
 // ────────────────────────────────────────────────────────────
 // Moteur de recommandation
@@ -337,5 +355,8 @@ export function summarizeAnswers(
     `- Headcount : ${labelFor(HEADCOUNT_QUESTION, answers.headcount)}`,
     `- Périmètre souhaité : ${labelFor(SCOPE_QUESTION, answers.scope)}`,
     `- Délai de démarrage : ${labelFor(URGENCY_QUESTION, answers.urgency)}`,
+    ...(answers.challenge?.trim()
+      ? ['', `Problème décrit par le prospect : ${answers.challenge.trim()}`]
+      : []),
   ].join('\n');
 }
