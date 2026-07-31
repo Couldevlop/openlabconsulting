@@ -28,6 +28,46 @@ const TIMEOUT_MS = 120_000;
 
 const SYSTEM_PROMPT = `Tu es consultant senior en intelligence artificielle appliquée chez OpenLab Consulting, cabinet ivoirien basé à Abidjan. Tu rédiges en français professionnel : phrases courtes, ton factuel, adresse directe au lecteur. Tu n'inventes aucun chiffre, aucun nom de client, aucune référence. Tu n'emploies jamais le tiret cadratin. Tu réponds STRICTEMENT en JSON valide, sans texte autour, selon le schéma demandé.`;
 
+/**
+ * Schéma imposé au décodage.
+ *
+ * `format: 'json'` ne garantit que la validité syntaxique : le modèle
+ * reste libre de renommer les champs. Observé en production le
+ * 2026-07-31, il a rendu « synopsis » au lieu de « synthesis », ce qui
+ * suffisait à faire basculer toute génération sur le squelette. Passer
+ * le schéma contraint le décodage aux clés exactes.
+ */
+const RESPONSE_SCHEMA = {
+  type: 'object',
+  properties: {
+    title: { type: 'string' },
+    synthesis: { type: 'string' },
+    situation: { type: 'string' },
+    recommendation: { type: 'string' },
+    roadmap: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          horizon: { type: 'string' },
+          body: { type: 'string' },
+        },
+        required: ['title', 'horizon', 'body'],
+      },
+    },
+    nextSteps: { type: 'string' },
+  },
+  required: [
+    'title',
+    'synthesis',
+    'situation',
+    'recommendation',
+    'roadmap',
+    'nextSteps',
+  ],
+} as const;
+
 interface OllamaResponse {
   response?: string;
 }
@@ -155,12 +195,9 @@ export async function generateWithLucie(
         stream: false,
         system: SYSTEM_PROMPT,
         prompt: buildPrompt(input),
-        // `format: 'json'` contraint le décodage à produire du JSON
-        // valide : sans lui, le modèle encadre sa réponse de balises
-        // markdown et peut la tronquer en fin de budget de tokens, ce qui
-        // rend le document inparsable et fait basculer TOUTE génération
-        // sur le squelette. Constaté en production le 2026-07-31.
-        format: 'json',
+        // Schéma imposé plutôt que simple `format: 'json'` : le modèle
+        // produisait du JSON valide mais renommait les champs.
+        format: RESPONSE_SCHEMA,
         options: { temperature: 0.3, num_ctx: 8192, num_predict: 2500 },
       }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
