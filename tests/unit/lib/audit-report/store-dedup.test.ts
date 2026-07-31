@@ -11,7 +11,8 @@ import type { AuditReportSections } from '@/lib/audit-report/types';
  * Critère « non-duplication si relancé » de la spec.
  */
 
-const find = vi.fn();
+const find =
+  vi.fn<(args: { where?: Record<string, unknown> }) => Promise<unknown>>();
 const create = vi.fn(async (_args: { data: Record<string, unknown> }) => ({
   id: 99,
 }));
@@ -75,6 +76,18 @@ describe('createDraftReport', () => {
         where: { lead: { equals: 18 } },
       }),
     );
+  });
+
+  it('convertit un identifiant de lead reçu en chaîne', async () => {
+    // La file de tâches transporte l'identifiant en JSON, donc en chaîne,
+    // alors que la relation pointe une table à clé entière. Payload
+    // rejetait le document : « The following field is invalid: Lead ».
+    // Constaté en production le 2026-07-31.
+    find.mockResolvedValueOnce({ docs: [] });
+    await createDraftReport({ ...args, leadId: '19' });
+
+    expect(find.mock.calls[0]?.[0].where).toEqual({ lead: { equals: 19 } });
+    expect(create.mock.calls[0]?.[0].data.lead).toBe(19);
   });
 
   it('n’écrit pas le titre dans le groupe sections', async () => {
