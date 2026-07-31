@@ -144,6 +144,31 @@ describe('generateWithLucie', () => {
     expect(step).not.toHaveProperty('budget');
   });
 
+  it('accepte les clés préfixées d’une espace que Lucie produit réellement', async () => {
+    // Sortie observée sur le cluster le 2026-07-31 : le modèle insère une
+    // espace après la ponctuation, y compris dans les noms de clés JSON.
+    // Sans normalisation, chaque champ ressortait undefined et TOUTE
+    // génération basculait sur le squelette de repli.
+    mockOllama({
+      response: JSON.stringify({
+        ' title': 'Rapport OpenLab',
+        ' synthesis': 'Une synthèse.',
+        ' situation': 'Une situation.',
+        ' recommendation': 'Une recommandation.',
+        ' roadmap': [
+          { ' title': 'Cadrage', ' horizon': 'S1', ' body': 'Entretiens.' },
+        ],
+        ' nextSteps': 'Contact sous 24 h ouvrées.',
+      }),
+    });
+
+    const out = await generateWithLucie(input);
+
+    expect(out?.title).toBe('Rapport OpenLab');
+    expect(out?.roadmap).toHaveLength(1);
+    expect(out?.roadmap[0]?.title).toBe('Cadrage');
+  });
+
   it('n’envoie au modèle que les champs attendus, jamais l’identité', async () => {
     const spy = vi.fn(
       async (_url: string, _init: RequestInit) =>

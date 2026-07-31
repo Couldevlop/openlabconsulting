@@ -158,3 +158,9 @@ Le message de confirmation distingue deux cas. « Rapport envoyé au prospect »
 ### Révoquer un lien
 
 Le lien de téléchargement expire au bout de 30 jours. Pour le couper avant terme, il suffit de repasser le rapport à un statut autre que « envoyé » : la route de téléchargement ne sert le fichier que pour un rapport au statut « envoyé ».
+
+### Ce que vaut réellement un brouillon de Lucie
+
+Mesuré sur le cluster le 31 juillet 2026, sur un cas type : **55 secondes** de génération, JSON exploitable, mais **un chiffre inventé** dès le premier essai. Le modèle avait transformé la tranche d'effectif « 50 à 200 » en « budget estimé entre 50 à 200 », alors que la consigne système lui interdit d'inventer des chiffres.
+
+Conséquence pratique pour le relecteur : **traquer les chiffres en priorité**. Tout montant, pourcentage, délai ou volume présent dans un brouillon doit être vérifié ou supprimé. Le reste du texte est reformulable ; un chiffre faux dans un document signé OpenLab, envoyé à un prospect, ne l'est pas.
