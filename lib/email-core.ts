@@ -232,12 +232,27 @@ export function esc(value: string): string {
 }
 
 /** Coquille HTML minimale, charte OpenLab (night + orange). */
+/**
+ * URL absolue du logo, servi par le site.
+ *
+ * Un logo distant plutôt qu'une pièce jointe en ligne : les deux
+ * transports (API ZeptoMail et SMTP) l'acceptent sans traitement
+ * particulier, et le fichier reste unique. Les clients qui bloquent les
+ * images distantes afficheront le texte alternatif, d'où le repli
+ * typographique conservé sous le logo.
+ */
+function logoUrl(): string {
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://openlabconsulting.com';
+  return `${site.replace(/\/$/, '')}/OPENLAB.png`;
+}
+
 export function shell(title: string, inner: string): string {
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;background:#0a0e1a;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#1a1d24;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0e1a;padding:32px 0;"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#faf8f5;border-radius:12px;overflow:hidden;">
 <tr><td style="background:#0a0e1a;padding:24px 32px;">
-<span style="color:#ffffff;font-size:18px;font-weight:700;letter-spacing:-0.02em;">OpenLab<span style="color:#ff5a00;">.</span>Consulting</span>
+<img src="${logoUrl()}" alt="OpenLab Consulting" width="150" style="display:block;border:0;outline:none;text-decoration:none;height:auto;max-width:150px;">
 </td></tr>
 <tr><td style="padding:32px;">
 <h1 style="margin:0 0 16px;font-size:20px;line-height:1.3;color:#0a0e1a;">${esc(title)}</h1>
