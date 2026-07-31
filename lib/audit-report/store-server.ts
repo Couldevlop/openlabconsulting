@@ -58,7 +58,13 @@ async function getPayloadClient(): Promise<{
 }> {
   const { getPayload } = await import('payload');
   const config = (await import('@payload-config')).default;
-  return (await getPayload({ config })) as unknown as Awaited<
+  // `cron: true` est indispensable : Payload ne démarre son planificateur
+  // que si cette option est passée (cf. `_initializeCrons`, appelé
+  // uniquement quand `options.cron` est vrai). Sans elle, les tâches
+  // s'empilent dans `payload_jobs` sans jamais être exécutées, et rien ne
+  // le signale. Constaté en production le 2026-07-31 : job en file,
+  // `total_tried` à 0, aucun rapport généré.
+  return (await getPayload({ config, cron: true })) as unknown as Awaited<
     ReturnType<typeof getPayloadClient>
   >;
 }
