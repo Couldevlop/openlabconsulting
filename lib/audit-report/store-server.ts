@@ -28,6 +28,21 @@ export const REPORTS_BUCKET =
  * contraint pour interdire toute traversée de chemin ou écriture hors
  * du préfixe attendu (OWASP A03).
  */
+/**
+ * Normalise un identifiant de relation Payload.
+ *
+ * Les identifiants circulent en chaîne dans la file de tâches (JSON),
+ * mais la relation `lead` pointe une table à clé entière : Payload
+ * rejette alors le document avec « The following field is invalid: Lead ».
+ * Constaté en production le 2026-07-31, le job échouant ses trois
+ * tentatives sans qu'aucun rapport ne soit créé.
+ */
+function toRelationId(id: number | string): number | string {
+  if (typeof id === 'number') return id;
+  const asNumber = Number(id);
+  return Number.isInteger(asNumber) && id.trim() !== '' ? asNumber : id;
+}
+
 export function buildReportKey(reportId: string): string {
   if (!/^[A-Za-z0-9-]+$/.test(reportId)) {
     throw new Error(`Identifiant de rapport invalide : ${reportId}`);
@@ -120,7 +135,7 @@ export async function createDraftReport(args: {
       overrideAccess: true,
       depth: 0,
       limit: 1,
-      where: { lead: { equals: args.leadId } },
+      where: { lead: { equals: toRelationId(args.leadId) } },
     })) as { docs: { id: number | string }[] };
     const already = existing.docs[0];
     if (already) {
@@ -140,7 +155,7 @@ export async function createDraftReport(args: {
       overrideAccess: true,
       data: {
         title: args.title,
-        lead: args.leadId,
+        lead: toRelationId(args.leadId),
         status: args.generationError ? 'echec-generation' : 'brouillon-ia',
         generatedBy: args.generatedBy,
         generationError: args.generationError ?? null,
