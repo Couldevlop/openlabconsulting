@@ -72,7 +72,7 @@ function generateNonce(): string {
   return btoa(bin).replace(/=+$/, '');
 }
 
-function buildCsp(nonce: string, isLocalHost = false): string {
+function buildCsp(nonce: string, skipUpgrade = false): string {
   // En dev, Next.js + React Refresh + Webpack HMR utilisent eval() pour
   // recharger les modules à chaud — sans 'unsafe-eval' la console est
   // polluée d'erreurs CSP et le HMR plante. En prod on garde la CSP
@@ -99,7 +99,7 @@ function buildCsp(nonce: string, isLocalHost = false): string {
     // https:// et échouent au handshake TLS : la page ne s'hydrate jamais
     // et aucun test d'interaction ne peut passer. La directive n'a de
     // sens que sur un hôte public.
-    ...(isLocalHost ? [] : ['upgrade-insecure-requests']),
+    ...(skipUpgrade ? [] : ['upgrade-insecure-requests']),
   ].join('; ');
 }
 
@@ -113,13 +113,29 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
   }
 
   const nonce = generateNonce();
-  // Gate sur l'hôte et non sur NODE_ENV : la CI lance `pnpm start`, donc
-  // en mode production. Un test d'environnement ne changerait rien, et
-  // un hôte public ne peut pas matcher cette expression.
-  const isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(
-    req.nextUrl.hostname,
-  );
-  const csp = buildCsp(nonce, isLocalHost);
+  // `upgrade-insecure-requests` n'a de sens que sur une page déjà servie
+  // en HTTPS. On l'omet donc quand la requête arrive sur une boucle
+  // locale (serveur de test) ou en clair sans proxy TLS devant.
+  //
+  // Motif : WebKit applique la directive jusque sur localhost, à la
+  // différence de Chromium. Tous les chunks partent alors en https://,
+  // échouent au handshake, et la page ne s'hydrate jamais : aucun test
+  // d'interaction ne peut passer.
+  //
+  // L'hôte est normalisé (IPv6 avec ou sans crochets) : `nextUrl.hostname`
+  // renvoie `::1` sans crochets quand le client résout localhost en IPv6.
+  const host = req.nextUrl.hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  const isLoopback =
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host === '::1' ||
+    host === '0.0.0.0' ||
+    host.endsWith('.localhost');
+  const forwardedProto = req.headers.get('x-forwarded-proto');
+  const servedOverHttps = forwardedProto
+    ? forwardedProto.split(',')[0]?.trim() === 'https'
+    : req.nextUrl.protocol === 'https:';
+  const csp = buildCsp(nonce, isLoopback || !servedOverHttps);
 
   // Propage le nonce dans la requête pour que les Server Components y
   // accèdent via `headers().get('x-nonce')`.
