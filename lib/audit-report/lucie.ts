@@ -75,10 +75,31 @@ function clean(value: string, maxLength: number): string {
     .slice(0, maxLength);
 }
 
+/**
+ * Normalise les noms de clés d'un objet renvoyé par le modèle.
+ *
+ * Lucie insère des espaces après la ponctuation, y compris dans les
+ * noms de clés JSON : elle renvoie `" title"` et non `"title"`. Vérifié
+ * sur le cluster le 2026-07-31. Sans ce nettoyage, chaque champ ressort
+ * `undefined` et TOUTE génération bascule sur le squelette de repli.
+ */
+function trimKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(trimKeys);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([k, v]) => [
+        k.trim(),
+        trimKeys(v),
+      ]),
+    );
+  }
+  return value;
+}
+
 function parseSections(raw: string): AuditReportSections | null {
   try {
     const cleaned = raw.replace(/^```(?:json)?\s*|\s*```$/g, '').trim();
-    const obj = JSON.parse(cleaned) as Partial<AuditReportSections>;
+    const obj = trimKeys(JSON.parse(cleaned)) as Partial<AuditReportSections>;
     // Reconstruction explicite de chaque étape : on ne laisse passer ni
     // propriété additionnelle inventée par le modèle, ni champ non borné.
     const roadmap = Array.isArray(obj.roadmap)
