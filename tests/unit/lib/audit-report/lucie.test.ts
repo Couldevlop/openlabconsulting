@@ -144,10 +144,10 @@ describe('generateWithLucie', () => {
     expect(step).not.toHaveProperty('budget');
   });
 
-  it('demande au modèle de produire du JSON contraint', async () => {
-    // Sans `format: 'json'`, le modèle encadre sa réponse de balises
-    // markdown et peut la tronquer : le document devient inparsable et
-    // toute génération bascule sur le squelette. Constaté en production.
+  it('impose le schéma exact au modèle', async () => {
+    // Constaté en production : sans schéma, le modèle rend « synopsis »
+    // au lieu de « synthesis » et toute génération bascule sur le
+    // squelette de repli.
     const spy = vi.fn(
       async (_url: string, _init: RequestInit) =>
         new Response(JSON.stringify({ response: '{}' })),
@@ -156,9 +156,12 @@ describe('generateWithLucie', () => {
     await generateWithLucie(input);
 
     const body = JSON.parse(String(spy.mock.calls[0]?.[1].body)) as {
-      format?: string;
+      format?: { required?: string[] };
     };
-    expect(body.format).toBe('json');
+    // Le schéma, et pas seulement « json » : le modèle produisait du JSON
+    // valide en renommant les champs (« synopsis » pour « synthesis »).
+    expect(body.format?.required).toContain('synthesis');
+    expect(body.format?.required).toContain('roadmap');
   });
 
   it('journalise une réponse inexploitable au lieu de la taire', async () => {
