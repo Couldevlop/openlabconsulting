@@ -41,6 +41,16 @@ config:
   # Break-glass : repasser à 'false' (rolling restart via checksum/config) ou
   # `UPDATE users SET totp_enabled=false WHERE email='...'` en base.
   ENFORCE_ADMIN_2FA: 'true'
+  # File de tâches COUPÉE en production depuis l'incident du 2026-08-07.
+  # L'exécution automatique (`jobs.autoRun`, payload.config.ts) laissait une
+  # transaction ouverte par réplique à chaque tour de cron : 5 connexions
+  # « idle in transaction » permanentes, jamais rendues au pool, jusqu'à
+  # saturer PostgreSQL (44 sessions bloquées sur 56 après sept jours
+  # d'uptime) et rendre le site injoignable. Mesure d'endiguement, le temps
+  # de corriger la fuite dans le pipeline de rapport d'audit : repasser à
+  # 'false' (ou retirer la clé) une fois le correctif livré — le rollout
+  # est automatique via checksum/config.
+  PAYLOAD_DISABLE_JOBS: 'true'
 
 # Job de migration Payload ACTIVÉ : utilise l'image migrator dédiée
 # (Dockerfile stage `migrator` — toolchain complet + /bin/sh) qui lance
