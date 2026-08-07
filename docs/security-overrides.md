@@ -208,3 +208,46 @@ verts, First Load JS 104 kB.
 qui exclut la série 15.5.x (déjà le cas avec 15.5.18 avant ce bump). Le
 warning pnpm est donc **préexistant**, pas introduit par cette montée de
 version.
+
+### Remédiation du 2026-08-07 — 6 CVE prod HIGH
+
+Mêmes portes redevenues rouges sans changement de code, par publication de
+nouvelles advisories. Quatre des six ont un correctif amont, deux n'en ont
+aucun.
+
+**Overrides remontés**
+
+| Override            | CVE / GHSA                                                                | Chemin                                | Condition de retrait                   |
+| ------------------- | ------------------------------------------------------------------------- | ------------------------------------- | -------------------------------------- |
+| `undici` `^7.29.0`  | CVE-2026-13697 (divulgation inter-utilisateurs + DoS via `Cache-Control`) | `payload > undici`                    | quand Payload bump `undici`            |
+| `fast-uri` `^3.1.5` | CVE-2026-18446 (confusion d'hôte via antislash dans l'autorité)           | `payload > ajv`                       | quand `ajv` bump `fast-uri`            |
+| `js-yaml` `^4.3.1`  | GHSA-5p4m-2wfm-xmqj / CVE-2026-59870 (CPU quadratique sur `!!omap`)       | `payload > json-schema-to-typescript` | quand Payload bump en amont            |
+| `nanoid` `^3.3.17`  | GHSA-2v37-7h3g-55p8 (boucle infinie si `size` vaut zéro)                  | `next > postcss > nanoid`             | quand `postcss` bump `nanoid` ≥ 3.3.17 |
+
+**CVE sans correctif amont — décision explicite**
+
+`image-size` est tiré par `payload` pour lire les dimensions des médias
+uploadés. Deux advisories DoS (boucles infinies sur les parseurs ICNS puis
+JXL/HEIF) couvrent **toutes les versions publiées** : `<=2.0.2`, dernière
+version disponible 2.0.2, aucune version corrigée annoncée. Aucun bump ni
+override ne peut donc fermer la porte.
+
+Exposition réelle : le parseur n'est atteint que par un upload de média,
+réservé aux comptes admin authentifiés (accès CUD `Media` durci le
+2026-06-02, 2FA obligatoire). Un fichier piégé y ferait boucler la
+réplique qui le traite — dégradation de service par un compte de
+confiance, pas une porte d'entrée anonyme.
+
+Décision : les deux GHSA sont mises en sourdine via
+`pnpm.auditConfig.ignoreGhsas` dans `package.json`, plutôt que d'abaisser
+le seuil de la porte ou de la désactiver — la mise en sourdine est nominative
+et visible en revue.
+
+| GHSA                                                                     | Paquet       | Condition de retrait                                       |
+| ------------------------------------------------------------------------ | ------------ | ---------------------------------------------------------- |
+| [GHSA-w3rx-r6r6-pgpr](https://github.com/advisories/GHSA-w3rx-r6r6-pgpr) | `image-size` | dès qu'une version corrigée sort (surveiller `pnpm audit`) |
+| [GHSA-5p2g-fcmc-qvqq](https://github.com/advisories/GHSA-5p2g-fcmc-qvqq) | `image-size` | idem                                                       |
+
+**État après remédiation** : `pnpm audit --prod --audit-level high` →
+exit 0 (6 low / 16 moderate / 2 high mises en sourdine). Typecheck OK,
+1204 tests verts.
