@@ -137,6 +137,15 @@ metrics:
 # ────────────────────────────────────────────────────────────
 networkPolicy:
   enabled: true
+  # Politiques nominatives sur Postgres / Redis / MinIO, en remplacement
+  # de celles des sous-charts Bitnami qui déclarent un `ingress` sans
+  # `from` — donc ouvert à tout pod du cluster (audit 2026-08-08).
+  # Voir templates/networkpolicy-datastores.yaml.
+  restrictDatastores: true
+  # Sources d'administration conservées : pont CNI du nœud, pour que le
+  # tunnel SSH de maintenance base reste possible.
+  adminSourceCidrs:
+    - '10.42.0.1/32'
 
 # ────────────────────────────────────────────────────────────
 # Sub-charts Bitnami (postgres / redis / minio)
@@ -155,6 +164,10 @@ postgresql:
       allowInsecureImages: true
   image:
     repository: bitnamilegacy/postgresql
+  # Remplacée par notre politique nominative (voir networkPolicy ci-dessus) :
+  # celle du sous-chart ouvre 5432 à tout le cluster.
+  networkPolicy:
+    enabled: false
   auth:
     username: 'openlab'
     database: 'openlab'
@@ -184,6 +197,10 @@ redis:
       allowInsecureImages: true
   image:
     repository: bitnamilegacy/redis
+  # Idem Postgres. Redis tournant sans mot de passe, c'est ici que le
+  # filtrage par source fait tout le travail.
+  networkPolicy:
+    enabled: false
   architecture: 'standalone'
   auth:
     enabled: false # Réseau interne, NetworkPolicy filtre déjà.
@@ -210,6 +227,9 @@ minio:
       allowInsecureImages: true
   image:
     repository: bitnamilegacy/minio
+  # Idem Postgres et Redis.
+  networkPolicy:
+    enabled: false
   console:
     image:
       repository: bitnamilegacy/minio-object-browser
