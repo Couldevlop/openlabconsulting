@@ -469,6 +469,17 @@ export default async function OpenLabAdminDashboard(
           )}
         </Panel>
       </section>
+
+      {/* -------- Marche à suivre : ajouter un produit -------- */}
+      <section aria-label="Ajouter un produit">
+        <Panel
+          title="Ajouter un produit au site"
+          hint="Ce qui se met à jour tout seul, et ce qui demande encore une intervention"
+          href="/admin/collections/products/create"
+        >
+          <ProductChecklist />
+        </Panel>
+      </section>
     </div>
   );
 }
@@ -476,6 +487,88 @@ export default async function OpenLabAdminDashboard(
 // =============================================================
 // Sub-components
 // =============================================================
+
+/**
+ * Marche à suivre pour l'ajout d'un produit.
+ *
+ * Écrit après le recentrage du catalogue du 2026-08-08, où trois surfaces
+ * ont été oubliées avant d'être rattrapées : la palette de commandes
+ * (liste codée en dur), le sitemap (figé au build, l'image Docker étant
+ * construite sans accès à la base) et les liens croisés des pages
+ * Secteurs et Expertises, qui pointaient vers des fiches dépubliées —
+ * autant de 404. Ce panneau existe pour que l'oubli ne se répète pas.
+ *
+ * Il dit la vérité du moment plutôt qu'une intention : la colonne
+ * « manuel » doit rétrécir à mesure que ces surfaces passeront au CMS.
+ */
+function ProductChecklist(): ReactElement {
+  const automatique = [
+    'La page /solutions et la vitrine de la page d’accueil',
+    'La page détail /solutions/<slug>',
+    'Le compteur de produits (« quatre logiciels propriétaires »)',
+    'Le sitemap, dans l’heure qui suit',
+    'Les données structurées et les métadonnées de la fiche',
+  ];
+  const manuel = [
+    'La palette de commandes (lib/command-palette-index.ts)',
+    'Les produits liés des pages Secteurs (lib/data/sectors.ts)',
+    'Les produits liés des pages Expertises (lib/data/expertises.ts)',
+    'Les données de repli servies si la base est injoignable (lib/data/products.ts)',
+    'La démo interactive et le mockup SVG, tous deux facultatifs',
+  ];
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <p style={{ ...dashboardStyles.panelHint, margin: 0 }}>
+        Publier une fiche suffit à la faire apparaître aux endroits ci-dessous.
+        Le reste vit encore dans le code : sans passage par un développeur, un
+        nouveau produit y restera absent — et un produit dépublié y laissera des
+        liens morts.
+      </p>
+      <div style={{ display: 'grid', gap: 16, gridTemplateColumns: '1fr 1fr' }}>
+        <div>
+          <h3
+            style={{
+              ...dashboardStyles.panelTitle,
+              fontSize: 13,
+              margin: '0 0 8px',
+            }}
+          >
+            Automatique — rien à faire
+          </h3>
+          <ul style={{ ...dashboardStyles.list, gap: 6 }}>
+            {automatique.map((item) => (
+              <li key={item} style={dashboardStyles.panelHint}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3
+            style={{
+              ...dashboardStyles.panelTitle,
+              fontSize: 13,
+              margin: '0 0 8px',
+            }}
+          >
+            À demander à un développeur
+          </h3>
+          <ul style={{ ...dashboardStyles.list, gap: 6 }}>
+            {manuel.map((item) => (
+              <li key={item} style={dashboardStyles.panelHint}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p style={{ ...dashboardStyles.panelHint, margin: 0 }}>
+        Pour retirer un produit du site sans le perdre : ouvrir sa fiche et la
+        repasser en brouillon. Rien n’est supprimé, tout revient d’un clic.
+      </p>
+    </div>
+  );
+}
 
 function KpiBlock({ kpi }: { kpi: KpiCard }): ReactElement {
   const accentColor = kpi.accent === 'orange' ? '#FF5A00' : '#0B1B3D';
