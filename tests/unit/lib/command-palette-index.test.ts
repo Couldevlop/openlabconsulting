@@ -46,10 +46,10 @@ describe('lib/command-palette-index — Cmd+K (audit P2 §7 #10)', () => {
   });
 
   it('filterCommands est insensible à la casse', () => {
-    const a = filterCommands('SYGESCOM');
-    const b = filterCommands('sygescom');
+    const a = filterCommands('AEGIS');
+    const b = filterCommands('aegis');
     expect(a.length).toBe(b.length);
-    expect(a[0]?.href).toBe('/solutions/sygescom');
+    expect(a[0]?.href).toBe('/solutions/aegis');
   });
 
   it('filterCommands "audit" matche /audit-ia + Conseil', () => {
