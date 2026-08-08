@@ -1,6 +1,6 @@
 # Politique de sécurité — overrides pnpm & scans Trivy
 
-Sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI, (3) WAF ModSecurity, (4) `pnpm audit` en CI, (5) durcissement du cluster (audit 2026-08-08).
+Sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI, (3) WAF ModSecurity, (4) `pnpm audit` en CI, (5) durcissement du cluster et TLS (audit 2026-08-08).
 
 ## 1. Overrides pnpm — packages forcés
 
@@ -393,7 +393,51 @@ manuelle** : elle coupe le plan de contrôle.
   stockés en `SCRAM-SHA-256` (`pg_authid`), et PostgreSQL bascule
   automatiquement en SCRAM dans ce cas. Aucun override risqué de
   `pg_hba.conf` n'a donc été fait.
-- **Certificat TLS de `nexusrh.openlabconsulting.com` expiré** depuis le
-  2026-08-03 (`notAfter=Aug 3 08:35:26 2026 GMT`). Hors périmètre OpenLab,
-  mais cert-manager ne renouvelle plus sur cet hôte — à traiter côté
-  NexusRH.
+
+### 5.7 Solveur ACME bloqué par un LimitRange — CORRIGÉ
+
+Le certificat de `nexusrh.openlabconsulting.com` était **expiré depuis le
+2026-08-03**. Cause exacte, lue dans le statut du Challenge :
+
+```
+pods "cm-acme-http-solver-4jflm" is forbidden:
+minimum cpu usage per Container is 50m, but request is 10m
+```
+
+Le namespace `nexusrh-ci` porte un LimitRange (`min.cpu: 50m`) ; le pod
+solveur HTTP-01 de cert-manager demande 10m par défaut. Le pod ne pouvait
+donc jamais être créé : challenge bloqué depuis le 2026-07-04, certificat
+expiré 30 jours plus tard.
+
+Correctif : argument `--acme-http01-solver-resource-request-cpu=50m` ajouté
+au Deployment `cert-manager/cert-manager`. Solution globale — elle couvre
+tout namespace du cluster portant un LimitRange comparable — et elle
+n'affaiblit pas la politique de ressources du namespace, contrairement à
+un abaissement du `min`.
+
+> ⚠️ **cert-manager est déployé par Helm, hors ArgoCD.** Ce patch est posé
+> directement sur le Deployment : **un `helm upgrade` de cert-manager le
+> perdra**. À reporter dans les values du release (`extraArgs`) à la
+> prochaine montée de version.
+
+Remise en état : la reprise a demandé de purger les objets ACME figés
+(Challenges périmés puis CertificateRequest), car cert-manager était en
+attente exponentielle et n'avait plus de `CertificateRequest` courant
+(`Issuing=False`) — la seule correction du solveur ne suffisait donc pas à
+relancer. Le renouvellement a ensuite été forcé en posant la condition
+`Issuing=True` sur le statut du Certificate (l'équivalent de
+`cmctl renew`, indisponible sur ce nœud).
+
+Vérifié : `notAfter=2026-11-06`, renouvellement programmé au 2026-10-07,
+`https://nexusrh.openlabconsulting.com` en 200 sans `-k`.
+
+### 5.8 Points relevés sans action
+
+- **`keycloak-tls` (`qualitos-preprod`) en échec depuis 5 jours**, cause
+  différente : `auth.preprod.qualitos.openlabconsulting.com` ne résout pas
+  (`dial tcp: lookup … no such host`). Il manque l'enregistrement DNS —
+  rien à corriger côté cluster.
+- **NetworkPolicy `minio-console`** : elle aussi déclare un `ingress` sans
+  `from` (port 9090). La console n'est pas un dépôt de données et reste
+  protégée par ses identifiants MinIO, mais elle mériterait le même
+  traitement que les trois autres.
