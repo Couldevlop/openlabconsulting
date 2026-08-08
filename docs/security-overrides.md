@@ -437,7 +437,9 @@ Vérifié : `notAfter=2026-11-06`, renouvellement programmé au 2026-10-07,
   différente : `auth.preprod.qualitos.openlabconsulting.com` ne résout pas
   (`dial tcp: lookup … no such host`). Il manque l'enregistrement DNS —
   rien à corriger côté cluster.
-- **NetworkPolicy `minio-console`** : elle aussi déclare un `ingress` sans
-  `from` (port 9090). La console n'est pas un dépôt de données et reste
-  protégée par ses identifiants MinIO, mais elle mériterait le même
-  traitement que les trois autres.
+  La NetworkPolicy `minio-console`, elle aussi ouverte à toute source sur le
+  port 9090, a été traitée avec les trois autres (§5.3). Sa clé de
+  désactivation est encore différente : `console.networkPolicy.enabled`,
+  gardée par le chart MinIO sur le sous-objet `console`. La console n'étant
+  exposée par aucun Ingress, seule la source d'administration (pont CNI du
+  nœud, pour le port-forward) est autorisée.

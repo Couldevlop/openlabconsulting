@@ -234,6 +234,10 @@ minio:
   networkPolicy:
     enabled: false
   console:
+    # Clé distincte de celle de MinIO lui-même : le chart gate la politique
+    # de la console sur `console.networkPolicy.enabled`.
+    networkPolicy:
+      enabled: false
     image:
       repository: bitnamilegacy/minio-object-browser
   mode: 'standalone'

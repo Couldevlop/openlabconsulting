@@ -108,4 +108,32 @@ spec:
       ports:
         - protocol: TCP
           port: 9000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-minio-console
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: console
+  policyTypes:
+    - Ingress
+  ingress:
+    # La console n'est exposée par aucun Ingress : elle ne s'atteint qu'en
+    # port-forward, c'est-à-dire par du trafic issu du nœud. Si elle devait
+    # un jour être publiée, ajouter ici un namespaceSelector sur
+    # `ingress-nginx`.
+    - from:
+        {{- range $nodeCidrs }}
+        - ipBlock:
+            cidr: {{ . }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: 9090
 {{- end -}}
