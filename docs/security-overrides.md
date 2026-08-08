@@ -1,6 +1,6 @@
 # Politique de sécurité — overrides pnpm & scans Trivy
 
-Sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI, (3) WAF ModSecurity, (4) `pnpm audit` en CI.
+Sections : (1) overrides `pnpm` pour patcher des CVE transitives, (2) politique du job Trivy en CI, (3) WAF ModSecurity, (4) `pnpm audit` en CI, (5) durcissement du cluster (audit 2026-08-08).
 
 ## 1. Overrides pnpm — packages forcés
 
@@ -251,3 +251,149 @@ et visible en revue.
 **État après remédiation** : `pnpm audit --prod --audit-level high` →
 exit 0 (6 low / 16 moderate / 2 high mises en sourdine). Typecheck OK,
 1204 tests verts.
+
+---
+
+## 5. Durcissement du cluster — audit du 2026-08-08
+
+Audit déclenché par la demande « tous les endpoints sont-ils sécurisés, la
+base peut-elle être atteinte par une attaque ». Les endpoints applicatifs
+et le contrôle d'accès Payload sont ressortis sains (vérifié en direct :
+`/api/leads`, `/api/users`, `/api/audit-reports`, `/api/auditLog`,
+`/api/visits` → 403 anonyme ; `/api/metrics` → 401 ; jeton de rapport
+forgé → 403). La base n'est joignable d'aucune adresse publique : services
+en `ClusterIP`, aucun NodePort, ports 5432/6379/9000/7700 filtrés depuis
+Internet. Cinq écarts ont été relevés au niveau du cluster.
+
+### 5.1 Port 6443 (API server K3s) exposé à Internet — CORRIGÉ
+
+`ufw` inactif, aucun filtre Hetzner : l'API server répondait depuis
+n'importe quelle adresse. Des scanners l'atteignaient déjà — trace dans
+`journalctl -u k3s` : `TLS handshake error from 64.225.98.95 : client sent
+an HTTP request to an HTTPS server` (du HTTP en clair sur le port HTTPS :
+c'est un scan, pas un client kubectl).
+
+Correctif : table nftables dédiée `inet openlab_fw`, appliquée par
+`/usr/local/sbin/k3s-api-firewall.sh` et rejouée au boot par l'unité
+`k3s-api-firewall.service`. Sources autorisées sur 6443 : boucle locale,
+`10.42.0.0/16` (pods), `10.43.0.0/16` (services), IP du nœud. Le reste est
+jeté.
+
+Une table nft **à part** plutôt qu'`ufw` : ufw réécrit la chaîne FORWARD et
+casserait le routage des pods K3s. k3s ne touche qu'à `ip filter`, il ne
+flushera jamais cette table.
+
+Pour ouvrir une IP d'administration : ajouter
+`ip saddr <IP> tcp dport 6443 accept` avant la ligne `drop` du script,
+puis `systemctl restart k3s-api-firewall`.
+
+### 5.2 CSP applicative écrasée à l'edge — CORRIGÉ
+
+Le ConfigMap partagé `ingress-nginx/web-security-headers` (injecté par
+`add-headers` sur **tous** les hôtes du cluster) posait une CSP
+`unsafe-inline`/`unsafe-eval` par-dessus la CSP nonce + `strict-dynamic`
+que `middleware.ts` génère à chaque requête. La protection XSS de
+l'application n'atteignait jamais le navigateur.
+
+Le runbook de juin proposait de retirer la CSP globale et de ne la re-poser
+que pour l'hôte NexusRH. **Cette approche a été écartée** : en interrogeant
+un pod hors ingress, l'application ne pose de CSP ni sur `/admin` ni sur
+`/api` — ces surfaces se seraient retrouvées sans aucune politique, et les
+autres hôtes du cluster (agrosense, maturia, opencacao, qualitos…)
+dépendent eux aussi du ConfigMap global.
+
+Règle retenue, inversée : **l'en-tête de l'upstream l'emporte quand il
+existe, sinon la CSP globale historique s'applique à l'identique.**
+
+```
+# ConfigMap ingress-nginx-controller, clé http-snippet
+map $upstream_http_content_security_policy $openlab_csp_final {
+    ""      "<CSP globale historique, inchangée>";
+    default $upstream_http_content_security_policy;
+}
+# clé server-snippet
+more_set_headers "Content-Security-Policy: $openlab_csp_final";
+```
+
+La clé `Content-Security-Policy` a été retirée de `web-security-headers`
+(sinon `add-headers` continuerait d'écraser).
+
+Vérifié après rechargement : `openlabconsulting.com/` → CSP nonce +
+`strict-dynamic` + `frame-ancestors 'none'` + `object-src 'none'` ;
+`/admin` et `nexusrh.openlabconsulting.com` → CSP historique inchangée ;
+les trois en 200. Aucune surface ne perd de protection, seul le site
+public en gagne.
+
+Sauvegarde des deux ConfigMaps avant modification :
+`/root/ingress-cm-backup-<horodatage>/` sur le nœud.
+
+### 5.3 NetworkPolicies sans filtrage de source — CORRIGÉ
+
+Les politiques générées par les sous-charts Bitnami déclaraient un
+`ingress` avec le port mais **sans `from`** : une source vide autorise
+tout le monde. Sur ce cluster mutualisé (huit namespaces applicatifs),
+n'importe quel pod pouvait ouvrir une connexion vers Postgres, Redis ou
+MinIO d'OpenLab.
+
+Redis était le plus exposé : il tourne sans mot de passe
+(`redis.auth.enabled: false`), choix justifié dans le values par « réseau
+interne, NetworkPolicy filtre déjà » — ce qu'elle ne faisait pas.
+
+Correctif : `networkPolicy.enabled: false` sur les trois sous-charts, et
+politiques nominatives dans `templates/networkpolicy-datastores.yaml`
+(sources : pods de l'application, pont CNI du nœud pour le tunnel
+d'administration, et la console pour MinIO). Sélecteurs écrits à la main
+sur les libellés relevés en production plutôt que dérivés des helpers
+Bitnami, dont les conventions changent d'une version de chart à l'autre.
+
+### 5.4 Authentification SSH par mot de passe — CORRIGÉ
+
+L'image Hetzner laissait `PasswordAuthentication yes` : surface de force
+brute permanente sur un port ouvert. `root` était déjà en clé seule et
+aucun autre compte humain n'existe (`/home` vide), donc aucun risque de
+verrouillage. Drop-in `/etc/ssh/sshd_config.d/99-openlab-hardening.conf`
+(`PasswordAuthentication no`, `KbdInteractiveAuthentication no`,
+`PermitRootLogin prohibit-password`).
+
+### 5.5 Secrets K8s non chiffrés au repos — NON RÉSOLU, décision requise
+
+`k3s secrets-encrypt status` → `Disabled`. Vérifié dans le datastore : le
+mot de passe PostgreSQL apparaît **en clair 4 fois** dans
+`/var/lib/rancher/k3s/server/db/state.db`. Cela vaut pour les secrets des
+huit namespaces, et pour toute sauvegarde du fichier.
+
+Deux voies tentées, toutes deux bloquées :
+
+1. **Voie k3s.** `k3s secrets-encrypt enable` écrit un
+   `encryption-config.json` ne contenant que le fournisseur `identity`
+   (donc aucun chiffrement) et journalise « restart with
+   secrets-encryption ». L'option a été posée dans
+   `/etc/rancher/k3s/config.yaml` (`secrets-encryption: true`, conservée —
+   inoffensive et nécessaire à toute reprise). Après redémarrage, le
+   second `enable` échoue systématiquement :
+   `Put "https://127.0.0.1:6443/v1-k3s/encrypt/config": EOF`, **sans
+   aucune trace côté serveur**, y compris avec `--token` explicite.
+   `reencrypt` répond alors « incorrect stage: start ».
+
+2. **Voie Kubernetes standard.** Écriture manuelle d'une
+   `EncryptionConfiguration` aescbc. k3s **refuse de démarrer** :
+   « encryption-config.json newer than datastore and could cause a cluster
+   outage ». Les données de bootstrap vivent dans le datastore, pas sur le
+   disque : le fichier a été retiré et le contrôle rétabli en une seconde.
+
+Piste la plus probable : le datastore est **kine/SQLite**, pas etcd
+embarqué. Décision à prendre avant toute nouvelle tentative — migrer vers
+etcd embarqué, ou assumer et compenser (chiffrement du volume, contrôle
+d'accès aux sauvegardes du `state.db`). **Ne pas rejouer l'écriture
+manuelle** : elle coupe le plan de contrôle.
+
+### 5.6 Points relevés sans action
+
+- **`pg_hba` en `md5`** : sans conséquence réelle. Les vérificateurs sont
+  stockés en `SCRAM-SHA-256` (`pg_authid`), et PostgreSQL bascule
+  automatiquement en SCRAM dans ce cas. Aucun override risqué de
+  `pg_hba.conf` n'a donc été fait.
+- **Certificat TLS de `nexusrh.openlabconsulting.com` expiré** depuis le
+  2026-08-03 (`notAfter=Aug 3 08:35:26 2026 GMT`). Hors périmètre OpenLab,
+  mais cert-manager ne renouvelle plus sur cet hôte — à traiter côté
+  NexusRH.

@@ -1,0 +1,111 @@
+{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.restrictDatastores -}}
+{{- /*
+  NetworkPolicies des dépôts de données — Postgres, Redis, MinIO.
+
+  Les politiques générées par les sous-charts Bitnami déclarent un bloc
+  `ingress` avec le port mais SANS `from` : en NetworkPolicy, une source
+  vide autorise tout le monde. Sur ce cluster mutualisé (huit namespaces
+  applicatifs), n'importe quel pod pouvait donc ouvrir une connexion vers
+  la base OpenLab. Redis était le plus exposé : il tourne sans mot de
+  passe (`auth.enabled: false`), justifié dans le values par « la
+  NetworkPolicy filtre déjà » — ce qu'elle ne faisait pas.
+
+  On désactive donc les politiques des sous-charts (cf. values) et on pose
+  les nôtres, nominatives. Les sélecteurs reprennent les libellés relevés
+  sur le cluster ; ils sont volontairement écrits à la main plutôt que
+  dérivés des helpers Bitnami, dont les conventions changent d'une version
+  de chart à l'autre.
+
+  Sources autorisées :
+    - les pods de l'application (web + Job de migration : mêmes
+      selectorLabels) ;
+    - le pont CNI et l'IP du nœud, pour ne pas casser l'accès
+      d'administration par tunnel SSH décrit dans
+      docs/reference/infrastructure-deploy.md ;
+    - pour MinIO seulement, la console MinIO.
+*/ -}}
+{{- $appSelector := include "openlab-website.selectorLabels" . -}}
+{{- $nodeCidrs := .Values.networkPolicy.adminSourceCidrs | default (list "10.42.0.1/32") -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-postgres
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- $appSelector | nindent 14 }}
+        {{- range $nodeCidrs }}
+        - ipBlock:
+            cidr: {{ . }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-redis
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- $appSelector | nindent 14 }}
+        {{- range $nodeCidrs }}
+        - ipBlock:
+            cidr: {{ . }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: 6379
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "openlab-website.fullname" . }}-minio
+  labels:
+    {{- include "openlab-website.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: minio
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- $appSelector | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/component: console
+        {{- range $nodeCidrs }}
+        - ipBlock:
+            cidr: {{ . }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: 9000
+{{- end -}}
