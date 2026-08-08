@@ -45,6 +45,7 @@
     "cms:seed:article:erp-syscohada": "tsx --env-file=.env scripts/seed-article-erp-syscohada.ts",
     "cms:seed:article:adoption": "tsx --env-file=.env scripts/seed-article-adoption.ts",
     "cms:seed:article:signature-fraude": "tsx --env-file=.env scripts/seed-article-signature-fraude.ts",
+    "cms:seed:catalogue-2026-08": "tsx --env-file=.env scripts/seed-catalogue-produits-2026-08.ts",
     "db:migrate": "tsx --env-file=.env scripts/payload-migrate.ts",
     "db:migrate:create": "payload migrate:create",
     "db:migrate:create:tsx": "tsx --env-file=.env scripts/payload-migrate-create.ts",

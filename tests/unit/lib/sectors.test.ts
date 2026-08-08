@@ -55,6 +55,8 @@ describe('lib/data/sectors', () => {
   it('chaque secteur lie au moins 1 produit existant', () => {
     const knownProducts = new Set([
       'nexusrh',
+      'maturia',
+      'aegis',
       'nexuserp',
       'sygescom',
       'agrosense',

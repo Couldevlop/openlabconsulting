@@ -7,18 +7,20 @@ import {
 import { ICON_KEYS } from '@/lib/icon-map';
 
 describe('lib/data/products', () => {
-  it('expose exactement 8 produits (CLAUDE.md §1.3)', () => {
-    expect(PRODUCTS).toHaveLength(8);
+  it('expose exactement 10 fiches de repli (4 publiées, 6 en brouillon)', () => {
+    expect(PRODUCTS).toHaveLength(10);
   });
 
   it('chaque produit a un slug unique attendu', () => {
     const slugs = PRODUCTS.map((p) => p.slug);
-    expect(new Set(slugs).size).toBe(8);
+    expect(new Set(slugs).size).toBe(10);
     expect(slugs.sort()).toEqual(
       [
+        'aegis',
         'agrosense',
         'fraud-shield',
         'nexuserp',
+        'maturia',
         'nexusrh',
         'qualitos',
         'sentinelbtp',
