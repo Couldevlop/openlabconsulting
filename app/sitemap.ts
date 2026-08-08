@@ -9,6 +9,16 @@ import { SECTORS } from '@/lib/data/sectors';
 import { absoluteUrl } from '@/lib/seo/site';
 
 /**
+ * Le sitemap lit le CMS (produits, articles, publications). Sans
+ * revalidation, Next le fige au build — or l'image est construite sans
+ * accès à la base, donc figée sur les données de repli. Constaté le
+ * 2026-08-08 : après le recentrage du catalogue, le sitemap annonçait
+ * encore dix pages produits pour quatre publiées, dont cinq dépubliées.
+ * Une heure suffit : le sitemap n'a pas besoin d'être à la seconde.
+ */
+export const revalidate = 3600;
+
+/**
  * Extension image-sitemap (Google Images) : déclare l'illustration d'une
  * page quand un média existe (URL rendue absolue), sinon rien — l'entrée
  * sitemap reste alors sans clé `images`. Pur et testable.
