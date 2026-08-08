@@ -18,6 +18,19 @@ interface MockupProps {
   /** Attribut `sizes` de next/image quand `src` est fourni (perf LCP). Défaut
    *  `100vw` ; à régler selon la largeur d'affichage réelle. */
   sizes?: string;
+  /**
+   * Cadrage de l'image dans le chrome.
+   *
+   * `cover` remplit le cadre en rognant ce qui dépasse : c'est le bon
+   * choix pour une capture d'écran, dont les bords ne portent rien.
+   * `contain` montre l'image entière, quitte à laisser des bandes.
+   *
+   * À réserver aux visuels composés — une infographie légendée dont on
+   * rognerait le titre ou le pied ne veut plus rien dire. C'est le cas
+   * des images téléversées depuis la médiathèque, dont on ne maîtrise
+   * pas le format.
+   */
+  fit?: 'cover' | 'contain';
   /** next/image `priority` (précharge l'image LCP au-dessus de la ligne de
    *  flottaison). À réserver au hero. */
   priority?: boolean;
@@ -57,6 +70,7 @@ export function Mockup({
   src,
   alt,
   sizes = '100vw',
+  fit = 'cover',
   priority = false,
   children,
   className,
@@ -111,7 +125,7 @@ export function Mockup({
             fill
             sizes={sizes}
             priority={priority}
-            className="object-cover"
+            className={fit === 'contain' ? 'object-contain' : 'object-cover'}
           />
         ) : (
           <div className="absolute inset-0">{children}</div>
