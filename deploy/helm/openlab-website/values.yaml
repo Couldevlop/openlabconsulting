@@ -164,10 +164,6 @@ postgresql:
       allowInsecureImages: true
   image:
     repository: bitnamilegacy/postgresql
-  # Remplacée par notre politique nominative (voir networkPolicy ci-dessus) :
-  # celle du sous-chart ouvre 5432 à tout le cluster.
-  networkPolicy:
-    enabled: false
   auth:
     username: 'openlab'
     database: 'openlab'
@@ -176,6 +172,13 @@ postgresql:
       adminPasswordKey: POSTGRES_PASSWORD
       userPasswordKey: POSTGRES_PASSWORD
   primary:
+    # Remplacée par notre politique nominative (voir networkPolicy plus
+    # haut) : celle du sous-chart ouvre 5432 à tout le cluster. Attention,
+    # la clé est sous `primary` pour le chart PostgreSQL, alors que Redis
+    # et MinIO l'exposent à la racine — vérifié dans
+    # postgresql-16.3.3/templates/primary/networkpolicy.yaml.
+    networkPolicy:
+      enabled: false
     persistence:
       enabled: true
       size: 50Gi
