@@ -176,10 +176,15 @@ export default async function SolutionDetailPage({
 
             {product.heroImage ? (
               // Visuel piloté depuis l'admin (médiathèque) — prioritaire.
+              // Cadre en 3/2 et cadrage `contain` : on ne maîtrise pas le
+              // format de ce que l'équipe téléverse, et ces visuels sont
+              // souvent composés (titre, légendes, chiffres). Les rogner
+              // en 16/9 coupait le haut et le bas — donc le sens.
               <Mockup
                 variant="dashboard"
                 tone="orange"
-                aspect="16/9"
+                aspect="3/2"
+                fit="contain"
                 label={name}
                 src={product.heroImage.src}
                 alt={product.heroImage.alt}
