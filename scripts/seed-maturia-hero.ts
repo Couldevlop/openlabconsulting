@@ -1,6 +1,6 @@
 /* eslint-disable */
 /**
- * Visuel d'en-tête de la fiche Openlab MaturIA.
+ * Visuel d'en-tête de la fiche MaturIA.
  *
  * Uploade `docs/images/maturia-hero.png` dans la médiathèque puis le
  * renseigne comme `heroImage` du produit `maturia`. Ce champ prime sur la
@@ -23,7 +23,7 @@ import config from '../payload.config';
 
 const FICHIER = 'maturia-hero.png';
 const ALT =
-  'Openlab MaturIA : résultat de maturité IA par domaine, niveau global et feuille de route VOIE';
+  'MaturIA : résultat de maturité IA par domaine, niveau global et feuille de route VOIE';
 
 async function main(): Promise<void> {
   const chemin = path.resolve(process.cwd(), 'docs/images', FICHIER);

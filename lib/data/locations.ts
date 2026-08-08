@@ -193,7 +193,7 @@ export const LOCATIONS: readonly LocationContent[] = [
       {
         title: 'Diagnostic de maturité IA',
         href: '/solutions/maturia',
-        body: "Openlab MaturIA mesure la maturité IA d'une organisation secteur par secteur et débouche sur une feuille de route chiffrée.",
+        body: "MaturIA mesure la maturité IA d'une organisation secteur par secteur et débouche sur une feuille de route chiffrée.",
       },
       {
         title: 'SIRH conformité régionale',

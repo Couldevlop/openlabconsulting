@@ -66,7 +66,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'Openlab MaturIA' },
+      { slug: 'maturia', title: 'MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -96,7 +96,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'Openlab MaturIA' },
+      { slug: 'maturia', title: 'MaturIA' },
     ],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
@@ -127,7 +127,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'agrosense', title: 'AgroSense CI' },
-      { slug: 'maturia', title: 'Openlab MaturIA' },
+      { slug: 'maturia', title: 'MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -156,7 +156,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'nexusrh', title: 'NexusRH CI' },
-      { slug: 'maturia', title: 'Openlab MaturIA' },
+      { slug: 'maturia', title: 'MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -186,7 +186,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'Openlab MaturIA' },
+      { slug: 'maturia', title: 'MaturIA' },
     ],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
