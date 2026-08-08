@@ -65,9 +65,8 @@ export const SECTORS: readonly Sector[] = [
       'Normes ANSSI françaises pour les coopérations bilatérales',
     ],
     produitsLies: [
-      { slug: 'smart-city', title: 'OpenLab Smart City' },
-      { slug: 'fraud-shield', title: 'OpenLab Fraud Shield' },
-      { slug: 'nexuserp', title: 'NexusERP' },
+      { slug: 'aegis', title: 'AEGIS' },
+      { slug: 'maturia', title: 'Openlab MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -96,8 +95,8 @@ export const SECTORS: readonly Sector[] = [
       'Loi ivoirienne 2013-450 sur les données personnelles',
     ],
     produitsLies: [
-      { slug: 'fraud-shield', title: 'OpenLab Fraud Shield' },
-      { slug: 'nexuserp', title: 'NexusERP' },
+      { slug: 'aegis', title: 'AEGIS' },
+      { slug: 'maturia', title: 'Openlab MaturIA' },
     ],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
@@ -128,8 +127,7 @@ export const SECTORS: readonly Sector[] = [
     ],
     produitsLies: [
       { slug: 'agrosense', title: 'AgroSense CI' },
-      { slug: 'qualitos', title: 'QualitOS' },
-      { slug: 'nexuserp', title: 'NexusERP' },
+      { slug: 'maturia', title: 'Openlab MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -157,8 +155,8 @@ export const SECTORS: readonly Sector[] = [
       'Normes ISO 9001 / 22000 / 27001 selon activité',
     ],
     produitsLies: [
-      { slug: 'qualitos', title: 'QualitOS' },
       { slug: 'nexusrh', title: 'NexusRH CI' },
+      { slug: 'maturia', title: 'Openlab MaturIA' },
     ],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
@@ -187,9 +185,8 @@ export const SECTORS: readonly Sector[] = [
       'Loi ivoirienne 2013-450 sur les données personnelles',
     ],
     produitsLies: [
-      { slug: 'sygescom', title: 'SYGESCOM v2.0' },
-      { slug: 'fraud-shield', title: 'OpenLab Fraud Shield' },
-      { slug: 'smart-city', title: 'OpenLab Smart City' },
+      { slug: 'aegis', title: 'AEGIS' },
+      { slug: 'maturia', title: 'Openlab MaturIA' },
     ],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },

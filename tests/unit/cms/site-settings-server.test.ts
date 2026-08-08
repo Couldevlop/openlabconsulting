@@ -33,8 +33,8 @@ describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () =>
     const content = await getHeroContent();
     expect(content.eyebrow).toBe(HERO_FALLBACK.eyebrow);
     expect(content.primaryCta).toEqual(HERO_FALLBACK.primaryCta);
-    // Compteur dérivé du fallback produits (8) : token remplacé par « huit ».
-    expect(content.subtitle).toContain('huit logiciels propriétaires');
+    // Compteur dérivé du fallback produits (10) : token remplacé par « huit ».
+    expect(content.subtitle).toContain('dix logiciels propriétaires');
     expect(content.subtitle).not.toContain('{productsWord}');
   });
 
@@ -48,7 +48,7 @@ describe('lib/cms/site-settings-server — fallback path (audit P2 §A3)', () =>
     const content = await getManifestoContent();
     expect(content.headline).toBe(MANIFESTO_FALLBACK.headline);
     expect(content.stances).toHaveLength(MANIFESTO_FALLBACK.stances.length);
-    expect(content.stances[0]?.fact).toContain('Huit logiciels propriétaires');
+    expect(content.stances[0]?.fact).toContain('Dix logiciels propriétaires');
     expect(content.stances[0]?.fact).not.toContain('{ProductsWord}');
     expect(content.intro).not.toContain('{productsWord}');
   });

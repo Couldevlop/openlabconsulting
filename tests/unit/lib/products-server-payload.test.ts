@@ -17,9 +17,9 @@ describe('lib/products-server — fallback en environnement test', () => {
     expect(products).toEqual(FALLBACK_PRODUCTS);
   });
 
-  it('retourne les 8 produits avec un iconKey valide (string)', async () => {
+  it('retourne les 10 produits avec un iconKey valide (string)', async () => {
     const products = await getPublishedProducts();
-    expect(products).toHaveLength(8);
+    expect(products).toHaveLength(10);
     for (const p of products) {
       expect(typeof p.iconKey).toBe('string');
       expect(p.iconKey.length).toBeGreaterThan(0);
