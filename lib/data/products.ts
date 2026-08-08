@@ -6,6 +6,8 @@
  */
 export type ProductSlug =
   | 'nexusrh'
+  | 'maturia'
+  | 'aegis'
   | 'nexuserp'
   | 'sygescom'
   | 'agrosense'
@@ -102,7 +104,22 @@ export interface Product {
 }
 
 /**
- * Source unique de vérité pour les 8 produits propriétaires (CLAUDE.md §1.3).
+ * Catalogue des produits propriétaires.
+ *
+ * ⚠️ Cette liste est le **repli** : ce que le site affiche quand la
+ * collection Payload est vide ou indisponible. Le catalogue réellement
+ * visible en production est piloté depuis l'admin par l'état de
+ * publication (`_status`) de chaque fiche. Depuis le recentrage du
+ * 2026-08-08, quatre fiches seulement sont publiées — NexusRH CI,
+ * Openlab MaturIA, AEGIS et AgroSense CI ; les autres sont en brouillon,
+ * conservées et republiables d'un clic. Elles restent listées ici pour
+ * que le mode dégradé, les démos et les mockups continuent de fonctionner
+ * si l'une d'elles revient.
+ *
+ * AEGIS et OpenLab Fraud Shield coexistent dans ce repli mais partagent
+ * une seule fiche en base : AEGIS y a pris la place de Fraud Shield.
+ * Objets différents, contenu entièrement réécrit — d'où la redirection
+ * 301 de `/solutions/fraud-shield` posée dans `next.config.ts`.
  * Consommée par :
  *   - `components/sections/Solutions.tsx` (homepage §6.6)
  *   - `app/solutions/page.tsx` (hub)
@@ -898,6 +915,209 @@ export const PRODUCTS: readonly Product[] = [
         question: 'En quoi cela aide-t-il juridiquement le maître d’ouvrage ?',
         answer:
           'L’article 37 du Code de la Construction et de l’Habitat rend le maître d’ouvrage responsable de la stabilité du bâtiment. Le dossier de preuve horodaté et infalsifiable transforme cette obligation en diligence démontrable et opposable.',
+      },
+    ],
+    expertisesLies: [
+      { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
+      { slug: 'data-gouvernance', title: 'Data & gouvernance' },
+    ],
+  },
+  {
+    slug: 'maturia',
+    iconKey: 'compass',
+    name: 'Openlab MaturIA',
+    tagline: 'Votre maturité IA, mesurée. Plus jamais devinée.',
+    target: 'Dirigeants et comités de direction · Côte d’Ivoire et UEMOA',
+    status: 'production',
+    statusLabel: 'En production',
+    eyebrow: 'Diagnostic de maturité IA · Vertical Orion',
+    intro:
+      "Openlab MaturIA conduit un décideur, secteur par secteur, à travers un questionnaire adaptatif et une mise en situation, puis produit un scoring, un niveau de maturité de 1 à 5 et une feuille de route VOIE. Un agent mène l'entretien ; le moteur de calcul, lui, reste déterministe et auditable — le chiffre remis en comité de direction doit pouvoir être expliqué ligne à ligne.",
+    problem:
+      "« Où en sommes-nous vraiment sur l'IA ? » La réponse tient trop souvent à l'intuition du dernier séminaire ou au discours d'un fournisseur. Sans référentiel sectoriel ni mesure reproductible, une direction ne sait ni ce qu'elle maîtrise, ni par quoi commencer, ni ce qu'elle risque à attendre. Les feuilles de route se bâtissent alors sur des impressions.",
+    features: [
+      {
+        iconKey: 'compass',
+        title: 'Questionnaire adaptatif',
+        body: "L'entretien s'ajuste aux réponses : les questions inutiles sont écartées, les zones floues creusées. Le décideur ne remplit pas un formulaire, il conduit un diagnostic.",
+      },
+      {
+        iconKey: 'badge-check',
+        title: 'Référentiel sectoriel',
+        body: "La grille de questions est propre au secteur. Un secteur dont la grille n'est pas livrée n'est jamais proposé : mieux vaut ne pas mesurer que mal mesurer.",
+      },
+      {
+        iconKey: 'database',
+        title: 'Scoring déterministe',
+        body: 'Le calcul du niveau de maturité vit dans un domaine pur, sans dépendance à un modèle de langage. Deux passages identiques donnent le même résultat.',
+      },
+      {
+        iconKey: 'bot',
+        title: 'Feuille de route VOIE',
+        body: "Le diagnostic débouche sur des chantiers ordonnés et datés, pas sur un score isolé. C'est la partie que le comité de direction emporte.",
+      },
+      {
+        iconKey: 'shield-check',
+        title: 'Souveraineté et accès',
+        body: 'Hébergement K3s souverain, authentification multifacteur, conformité loi n° 2013-450. Vos réponses de diagnostic restent vos données.',
+      },
+    ],
+    stack: [
+      'Java 21 LTS · Spring Boot 3.3',
+      'Clean Architecture (domaine sans framework)',
+      'Python 3.12 · FastAPI',
+      'LangGraph · RAG Qdrant',
+      'Angular 18',
+      'Keycloak · K3s souverain',
+    ],
+    proofs: [
+      {
+        value: '1 à 5',
+        label: 'niveaux de maturité adossés à un référentiel sectoriel',
+        source: 'Openlab MaturIA — moteur de scoring',
+      },
+      {
+        value: '9',
+        label: 'secteurs déclarés, grille bancaire livrée à ce jour',
+        source: 'Openlab MaturIA — référentiel sectoriel',
+      },
+      {
+        value: '0',
+        label: 'dépendance à un modèle de langage dans le calcul du score',
+        source: 'Openlab MaturIA — architecture du domaine',
+      },
+    ],
+    pricing: {
+      model: 'quote',
+      headline: 'Diagnostic sur devis, restitution en comité de direction',
+      details: [
+        'Diagnostic complet conduit avec vos équipes',
+        'Rapport de maturité et feuille de route VOIE',
+        'Restitution et arbitrage des chantiers prioritaires',
+      ],
+      note: 'Le diagnostic se conduit secteur par secteur. Nous confirmons la disponibilité de la grille de votre secteur avant tout engagement.',
+    },
+    faq: [
+      {
+        question: 'Combien de temps prend un diagnostic ?',
+        answer:
+          "Le questionnaire adaptatif se conduit en une session de travail. Le temps réel se joue ensuite, sur la restitution et l'arbitrage des chantiers.",
+      },
+      {
+        question: 'Le score est-il calculé par une IA ?',
+        answer:
+          "Non, et c'est délibéré. L'agent mène l'entretien, mais le calcul du niveau de maturité est déterministe et auditable. Un chiffre présenté en comité de direction doit pouvoir être expliqué.",
+      },
+      {
+        question: 'Mon secteur est-il couvert ?',
+        answer:
+          'Le référentiel en déclare neuf, et les grilles sont livrées secteur par secteur. Nous vous confirmons la disponibilité de la vôtre avant de démarrer.',
+      },
+      {
+        question: 'Que reste-t-il après le diagnostic ?',
+        answer:
+          "Une feuille de route VOIE : des chantiers ordonnés, datés et chiffrés. Le score n'est qu'un point de départ.",
+      },
+    ],
+    expertisesLies: [
+      { slug: 'conseil-strategie', title: 'Conseil & stratégie IA' },
+      { slug: 'data-gouvernance', title: 'Data & gouvernance' },
+    ],
+  },
+  {
+    slug: 'aegis',
+    iconKey: 'shield-check',
+    name: 'AEGIS',
+    tagline: "Le chiffrement n'est pas le début de l'attaque. C'est sa fin.",
+    target: 'DSI, RSSI, institutions publiques, banques et assurances · UEMOA',
+    status: 'dev',
+    statusLabel: 'En développement',
+    eyebrow: 'Cyberdéfense IA souveraine · Rançongiciels',
+    intro:
+      "AEGIS est une plateforme de détection et de réponse aux rançongiciels, fondée sur une IA souveraine auto-hébergée : aucune dépendance à une API étrangère, déploiement sur cluster K3s. Elle combine télémétrie bas niveau, apprentissage automatique et IA agentique pour repérer les signaux d'une attaque avant l'étape de chiffrement. Programme de R&D du Laboratoire OpenLab, mené par paliers.",
+    problem:
+      "Le Ransomware-as-a-Service a industrialisé l'attaque et abaissé la barrière d'entrée ; les attaquants exfiltrent les identifiants avant de chiffrer. Un antivirus de signatures ne voit ni une menace polymorphe ni un binaire jamais observé, et les sauvegardes sont rarement immuables ou testées. Envoyer sa télémétrie de sécurité — donc la carte de ses propres vulnérabilités — hors du continent ajoute un risque souverain au risque technique.",
+    features: [
+      {
+        iconKey: 'antenna',
+        title: 'Télémétrie noyau',
+        body: 'Sondes eBPF et filtrage par signatures au plus près du système, normalisés vers le standard ouvert OCSF. Le contrat de données est typé et borné : une entrée hostile ne fait pas paniquer un décodeur.',
+      },
+      {
+        iconKey: 'radar',
+        title: 'Détection embarquée',
+        body: "Un modèle compilé dans le binaire de l'agent pré-filtre le flux sans appeler le moindre service : aucun processus, aucun port ouvert, aucune latence réseau sur le chemin chaud.",
+      },
+      {
+        iconKey: 'scan-search',
+        title: 'Anomalies et signaux faibles',
+        body: 'Au-delà des signatures, la détection porte sur les comportements — accès en rafale, chiffrement massif, mouvement latéral — là où les attaques inédites se trahissent.',
+      },
+      {
+        iconKey: 'bot',
+        title: 'Investigation assistée',
+        body: "Une couche agentique reconstitue la chronologie d'un incident et outille l'analyste. La décision d'isolation reste humaine : une IA qui se trompe causerait l'incident qu'elle devait prévenir.",
+      },
+      {
+        iconKey: 'shield-check',
+        title: 'Souveraineté réelle',
+        body: 'Entraînement, inférence et stockage restent dans le cluster du client. Conformité loi n° 2013-450, cadre ARTCI et ANSSI-CI.',
+      },
+    ],
+    stack: [
+      'Rust (chemin chaud)',
+      'eBPF (sonde noyau)',
+      'OCSF (contrat de données)',
+      'Kubernetes K3s · DaemonSet durci',
+      'Python (entraînement hors ligne)',
+    ],
+    proofs: [
+      {
+        value: '347',
+        label: 'tests automatisés sur le socle Rust',
+        source: 'Programme AEGIS — stratégie de test',
+      },
+      {
+        value: '0',
+        label: "appel à une API d'IA étrangère",
+        source: 'Programme AEGIS — architecture auto-hébergée',
+      },
+      {
+        value: '6',
+        label: 'couches de défense en profondeur spécifiées',
+        source: 'Programme AEGIS — architecture cible',
+      },
+    ],
+    pricing: {
+      model: 'quote',
+      headline: 'Programme de R&D — engagement pilote sur devis',
+      details: [
+        'Déploiement en environnement de test, sur votre cluster',
+        "Banc d'essai adversarial et mesure du taux de faux positifs",
+        'Transfert de compétences aux équipes sécurité',
+      ],
+      note: 'AEGIS est un programme de R&D mené par paliers, pas un produit sur étagère. Les engagements se prennent palier par palier, avec des portes de passage explicites.',
+    },
+    faq: [
+      {
+        question: 'AEGIS remplace-t-il un antivirus ?',
+        answer:
+          "Non. AEGIS est une couche de détection comportementale qui vient au-dessus des défenses existantes. Il repère ce qu'une base de signatures ne peut pas voir : une menace polymorphe ou un binaire jamais observé.",
+      },
+      {
+        question: 'Est-ce un SOC managé 24/7 ?',
+        answer:
+          'Non. La réponse à incident en pleine nuit est une organisation — astreintes, analystes, SLA — pas un logiciel. AEGIS outille vos équipes, il ne les remplace pas.',
+      },
+      {
+        question: 'Vos données sortent-elles du pays ?',
+        answer:
+          "Jamais. L'entraînement, l'inférence et le stockage se font dans votre cluster. C'est le point de départ du projet, pas une option.",
+      },
+      {
+        question: "Peut-on l'essayer aujourd'hui ?",
+        answer:
+          'Le socle est en cours de validation chez OpenLab. Les organisations intéressées par un pilote encadré peuvent nous contacter pour en discuter le périmètre.',
       },
     ],
     expertisesLies: [

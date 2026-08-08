@@ -36,6 +36,20 @@ const nextConfig: NextConfig = {
     '@payloadcms/next',
     '@payloadcms/translations',
   ],
+
+  // Recentrage du catalogue produits (2026-08-08) : AEGIS prend la place
+  // d'OpenLab Fraud Shield sur la même fiche, avec un slug différent.
+  // Sans cette 301, les liens déjà indexés vers l'ancienne URL tomberaient
+  // en 404 et l'autorité SEO accumulée serait perdue.
+  async redirects() {
+    return [
+      {
+        source: '/solutions/fraud-shield',
+        destination: '/solutions/aegis',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withPayload(nextConfig);

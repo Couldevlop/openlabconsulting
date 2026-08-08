@@ -191,9 +191,9 @@ export const LOCATIONS: readonly LocationContent[] = [
     ],
     services: [
       {
-        title: 'ERP SYSCOHADA multi-pays',
-        href: '/solutions/nexuserp',
-        body: 'NexusERP comptabilité SYSCOHADA, multi-devises F CFA/EUR/USD, conformité fiscale par pays UEMOA.',
+        title: 'Diagnostic de maturité IA',
+        href: '/solutions/maturia',
+        body: "Openlab MaturIA mesure la maturité IA d'une organisation secteur par secteur et débouche sur une feuille de route chiffrée.",
       },
       {
         title: 'SIRH conformité régionale',

@@ -58,6 +58,8 @@ describe('lib/data/expertises', () => {
   it('chaque expertise lie au moins un produit OpenLab existant', () => {
     const knownProducts = new Set([
       'nexusrh',
+      'maturia',
+      'aegis',
       'nexuserp',
       'sygescom',
       'agrosense',
