@@ -941,7 +941,7 @@ export const PRODUCTS: readonly Product[] = [
       {
         iconKey: 'compass',
         title: 'On vous parle de votre métier',
-        body: "Dix secteurs, trente sous-secteurs : cacao, anacarde, microfinance, banque de détail, transit en douane, pharmacie, notariat, mines d'or. La question posée à un transitaire porte sur ses délais de mainlevée, celle posée à une microfinance sur le scoring d'un membre sans historique bancaire. Personne ne vous demande si vous avez « une stratégie data ».",
+        body: "Dix secteurs, trente sous-secteurs : cacao, microfinance, banque de détail, transit en douane, pharmacie, notariat, mines d'or. La question posée à un transitaire porte sur ses délais de mainlevée, celle posée à une microfinance sur le scoring d'un membre sans historique bancaire.",
       },
       {
         iconKey: 'badge-check',
