@@ -926,97 +926,121 @@ export const PRODUCTS: readonly Product[] = [
     slug: 'maturia',
     iconKey: 'compass',
     name: 'MaturIA',
-    tagline: 'Votre maturité IA, mesurée. Plus jamais devinée.',
-    target: 'Dirigeants et comités de direction · Côte d’Ivoire et UEMOA',
+    tagline:
+      'Vos données dorment. En une séance, vous savez lesquelles réveiller, et ce que leur sommeil vous coûte chaque année.',
+    target:
+      'Dirigeants de PME et ETI · Banque, agro-industrie, transit, santé, assurance · Côte d’Ivoire et UEMOA',
     status: 'production',
     statusLabel: 'En production',
-    eyebrow: 'Diagnostic de maturité IA · Vertical Orion',
+    eyebrow: 'Diagnostic de maturité IA · Une séance, un rapport signé',
     intro:
-      "MaturIA conduit un décideur, secteur par secteur, à travers un questionnaire adaptatif et une mise en situation, puis produit un scoring, un niveau de maturité de 1 à 5 et une feuille de route VOIE. Un agent mène l'entretien ; le moteur de calcul, lui, reste déterministe et auditable — le chiffre remis en comité de direction doit pouvoir être expliqué ligne à ligne.",
+      "Vous répondez à des questions écrites pour votre métier : le cacao, le microcrédit, le transit en douane, la pharmacie. Pas un questionnaire de cabinet. À la clôture, votre score s'affiche : six piliers notés, la part de vos données qui dort, l'écart avec votre secteur. Le rapport complet suit, relu et signé par un consultant OpenLab. Vous en repartez avec trois ou quatre chantiers ordonnés, chiffrés en francs CFA, tenables avec le budget et les équipes que vous avez déjà.",
     problem:
-      "« Où en sommes-nous vraiment sur l'IA ? » La réponse tient trop souvent à l'intuition du dernier séminaire ou au discours d'un fournisseur. Sans référentiel sectoriel ni mesure reproductible, une direction ne sait ni ce qu'elle maîtrise, ni par quoi commencer, ni ce qu'elle risque à attendre. Les feuilles de route se bâtissent alors sur des impressions.",
+      "« Où en sommes-nous sur l'IA ? » Personne ne sait répondre. Vos données existent : dossiers de crédit, bons de livraison, déclarations en douane, relevés d'agents. Mais elles dorment dans des classeurs, des tableurs et trois logiciels qui ne se parlent pas. Alors vous arbitrez à l'intuition. Un fournisseur passe, promet, facture. Six mois plus tard, le pilote est mort et personne ne sait dire pourquoi.",
     features: [
       {
         iconKey: 'compass',
-        title: 'Questionnaire adaptatif',
-        body: "L'entretien s'ajuste aux réponses : les questions inutiles sont écartées, les zones floues creusées. Le décideur ne remplit pas un formulaire, il conduit un diagnostic.",
+        title: 'On vous parle de votre métier',
+        body: "Dix secteurs, trente sous-secteurs : cacao, anacarde, microfinance, banque de détail, transit en douane, pharmacie, notariat, mines d'or. La question posée à un transitaire porte sur ses délais de mainlevée, celle posée à une microfinance sur le scoring d'un membre sans historique bancaire. Personne ne vous demande si vous avez « une stratégie data ».",
       },
       {
         iconKey: 'badge-check',
-        title: 'Référentiel sectoriel',
-        body: "La grille de questions est propre au secteur. Un secteur dont la grille n'est pas livrée n'est jamais proposé : mieux vaut ne pas mesurer que mal mesurer.",
+        title: 'On ne vous croit pas sur parole',
+        body: "Le parcours mêle trois formes : ce que vous déclarez, la preuve qu'on vous demande de produire, et des mises en situation qui vous confrontent à un cas concret. Un diagnostic qui se contente de vos déclarations mesure votre optimisme, pas votre maturité.",
       },
       {
         iconKey: 'database',
-        title: 'Scoring déterministe',
-        body: 'Le calcul du niveau de maturité vit dans un domaine pur, sans dépendance à un modèle de langage. Deux passages identiques donnent le même résultat.',
+        title: 'Ce qui dort chez vous, en pourcentage',
+        body: "Le diagnostic estime la part de vos données jamais exploitée et la place en face du repère de votre secteur. Vous cessez de débattre d'une impression : vous lisez deux chiffres côte à côte, le vôtre et celui du marché.",
       },
       {
-        iconKey: 'bot',
-        title: 'Feuille de route VOIE',
-        body: "Le diagnostic débouche sur des chantiers ordonnés et datés, pas sur un score isolé. C'est la partie que le comité de direction emporte.",
+        iconKey: 'wallet',
+        title: 'Chiffré en francs CFA, pas en diapositives',
+        body: "Chaque chantier arrive avec son coût, son délai en mois et ce que son report vous fait perdre chaque année. Les montants sortent d'un calcul reproductible : votre directeur financier peut les contester ligne à ligne, ce qu'aucun devis d'intégrateur ne permet.",
+      },
+      {
+        iconKey: 'radar',
+        title: 'Le délestage compte, mais pas contre vous',
+        body: 'Vous déclarez ce que vous subissez : coupures de courant, connexion, hébergement, budget informatique, effectif capable de tenir la donnée. Ces contraintes ne baissent jamais votre note. Elles écartent les recommandations que vous ne pourriez pas tenir.',
       },
       {
         iconKey: 'shield-check',
-        title: 'Souveraineté et accès',
-        body: 'Hébergement K3s souverain, authentification multifacteur, conformité loi n° 2013-450. Vos réponses de diagnostic restent vos données.',
+        title: 'Un consultant signe, une machine ne signe pas',
+        body: "Votre note sort d'un moteur de calcul, pas d'une IA générative : mêmes réponses, même chiffre, à chaque fois. Le rapport est relu et validé par un consultant avant de vous parvenir. Hébergement souverain, double authentification, conformité à la loi n° 2013-450.",
       },
     ],
     stack: [
-      'Java 21 LTS · Spring Boot 3.3',
-      'Clean Architecture (domaine sans framework)',
-      'Python 3.12 · FastAPI',
-      'LangGraph · RAG Qdrant',
-      'Angular 18',
-      'Keycloak · K3s souverain',
+      'Moteur de calcul déterministe (Java 21 · Spring Boot)',
+      'Référentiel versionné : 10 secteurs, 30 sous-secteurs, 6 piliers',
+      'Rédaction assistée sous garde-fous (Python · FastAPI)',
+      'Corpus réglementaire indexé : SNIA 2030, loi n° 2013-450',
+      'Parcours décideur utilisable au téléphone (Angular 18)',
+      'Keycloak MFA · K3s souverain',
     ],
     proofs: [
       {
-        value: '1 à 5',
-        label: 'niveaux de maturité adossés à un référentiel sectoriel',
-        source: 'MaturIA — moteur de scoring',
+        value: '30',
+        label:
+          'sous-secteurs reconnus, du cacao au transit en douane, chacun avec ses questions',
+        source: 'MaturIA — référentiel sectoriel, millésime publié',
       },
       {
-        value: '9',
-        label: 'secteurs déclarés, grille bancaire livrée à ce jour',
-        source: 'MaturIA — référentiel sectoriel',
+        value: '3',
+        label:
+          'formes de question : déclaratif, preuve à produire, mise en situation',
+        source: 'MaturIA — grilles sectorielles du référentiel',
+      },
+      {
+        value: 'F CFA',
+        label:
+          'la devise des chantiers : coût, délai et perte annuelle en monnaie locale',
+        source: 'MaturIA — moteur de chiffrage, profil économique du pays',
       },
       {
         value: '0',
-        label: 'dépendance à un modèle de langage dans le calcul du score',
-        source: 'MaturIA — architecture du domaine',
+        label: 'part de votre score produite par un modèle de langage',
+        source: 'MaturIA — moteur de scoring, domaine sans dépendance IA',
       },
     ],
     pricing: {
       model: 'quote',
-      headline: 'Diagnostic sur devis, restitution en comité de direction',
+      headline:
+        'Sur devis. Votre score le jour même, votre rapport signé ensuite.',
       details: [
-        'Diagnostic complet conduit avec vos équipes',
-        'Rapport de maturité et feuille de route VOIE',
-        'Restitution et arbitrage des chantiers prioritaires',
+        'Le parcours conduit avec votre direction, dans la grille de votre sous-secteur',
+        'Votre score à la clôture : six piliers, part de données dormante, écart avec votre secteur',
+        'Un rapport relu et validé par un consultant OpenLab, remis en PDF',
+        'Trois à quatre chantiers ordonnés, avec coût, délai et perte annuelle en francs CFA',
+        'Une séance de restitution pour arbitrer les deux premiers chantiers',
       ],
-      note: 'Le diagnostic se conduit secteur par secteur. Nous confirmons la disponibilité de la grille de votre secteur avant tout engagement.',
+      note: 'Le rapport signale lui-même les coûts de référence qui restent à confronter à des sources publiques : nous ne présentons pas une estimation comme un devis.',
     },
     faq: [
       {
-        question: 'Combien de temps prend un diagnostic ?',
+        question: 'Combien de temps cela me prend ?',
         answer:
-          "Le questionnaire adaptatif se conduit en une session de travail. Le temps réel se joue ensuite, sur la restitution et l'arbitrage des chantiers.",
-      },
-      {
-        question: 'Le score est-il calculé par une IA ?',
-        answer:
-          "Non, et c'est délibéré. L'agent mène l'entretien, mais le calcul du niveau de maturité est déterministe et auditable. Un chiffre présenté en comité de direction doit pouvoir être expliqué.",
+          "Une séance de travail, à conduire avec les personnes qui connaissent vos données. Votre score s'affiche dès la clôture. Le rapport rédigé est produit ensuite, et un message vous prévient qu'il est prêt.",
       },
       {
         question: 'Mon secteur est-il couvert ?',
         answer:
-          'Le référentiel en déclare neuf, et les grilles sont livrées secteur par secteur. Nous vous confirmons la disponibilité de la vôtre avant de démarrer.',
+          "Dix : banque, agro-industrie, mobile money, assurance, santé, énergie et mines, logistique et ports, secteur public, télécommunications, juridique. Chacun se précise en trois sous-secteurs, du cacao au transit en douane, de la microfinance à la banque de détail. Un secteur dont la grille n'est pas publiée ne vous est jamais proposé : mieux vaut ne rien mesurer que mal mesurer.",
       },
       {
-        question: 'Que reste-t-il après le diagnostic ?',
+        question: 'Est-ce une IA qui me note ?',
         answer:
-          "Une feuille de route VOIE : des chantiers ordonnés, datés et chiffrés. Le score n'est qu'un point de départ.",
+          "Non, et c'est voulu. Votre note sort d'un moteur de calcul : les mêmes réponses donnent toujours le même chiffre, et chaque point se remonte jusqu'à la question qui l'a produit. L'IA n'intervient que pour rédiger le rapport, sous garde-fous, et un consultant relit avant l'envoi.",
+      },
+      {
+        question:
+          "Nous n'avons ni spécialiste de la donnée ni gros budget. Est-ce pour nous ?",
+        answer:
+          "C'est le cas prévu. Vous déclarez ce que vous subissez : coupures de courant, connexion, hébergement, budget, effectif. Ces contraintes ne touchent pas votre note. Une entreprise qui avance malgré le délestage n'est pas moins mûre, elle avance dans des conditions plus dures. Elles servent à écarter les chantiers que vous ne pourriez pas tenir.",
+      },
+      {
+        question: 'Que fait-on du rapport une fois reçu ?',
+        answer:
+          "Vous en tirez un premier chantier tenable dans le trimestre, puis les suivants dans l'ordre. Chaque ligne porte son coût et son délai : c'est un document qui se présente en conseil d'administration, devant un banquier ou devant un bailleur, pas une note de synthèse à ranger.",
       },
     ],
     expertisesLies: [
