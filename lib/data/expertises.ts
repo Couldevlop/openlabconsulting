@@ -81,7 +81,7 @@ export const EXPERTISES: readonly Expertise[] = [
       },
     ],
     produitsLies: [
-      { slug: 'maturia', name: 'Openlab MaturIA' },
+      { slug: 'maturia', name: 'MaturIA' },
       { slug: 'nexusrh', name: 'NexusRH CI' },
     ],
   },
@@ -155,7 +155,7 @@ export const EXPERTISES: readonly Expertise[] = [
       },
     ],
     produitsLies: [
-      { slug: 'maturia', name: 'Openlab MaturIA' },
+      { slug: 'maturia', name: 'MaturIA' },
       { slug: 'agrosense', name: 'AgroSense CI' },
     ],
   },
@@ -193,7 +193,7 @@ export const EXPERTISES: readonly Expertise[] = [
     ],
     produitsLies: [
       { slug: 'aegis', name: 'AEGIS' },
-      { slug: 'maturia', name: 'Openlab MaturIA' },
+      { slug: 'maturia', name: 'MaturIA' },
     ],
   },
 ] as const;

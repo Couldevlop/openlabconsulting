@@ -111,7 +111,7 @@ export interface Product {
  * visible en production est piloté depuis l'admin par l'état de
  * publication (`_status`) de chaque fiche. Depuis le recentrage du
  * 2026-08-08, quatre fiches seulement sont publiées — NexusRH CI,
- * Openlab MaturIA, AEGIS et AgroSense CI ; les autres sont en brouillon,
+ * MaturIA, AEGIS et AgroSense CI ; les autres sont en brouillon,
  * conservées et republiables d'un clic. Elles restent listées ici pour
  * que le mode dégradé, les démos et les mockups continuent de fonctionner
  * si l'une d'elles revient.
@@ -925,14 +925,14 @@ export const PRODUCTS: readonly Product[] = [
   {
     slug: 'maturia',
     iconKey: 'compass',
-    name: 'Openlab MaturIA',
+    name: 'MaturIA',
     tagline: 'Votre maturité IA, mesurée. Plus jamais devinée.',
     target: 'Dirigeants et comités de direction · Côte d’Ivoire et UEMOA',
     status: 'production',
     statusLabel: 'En production',
     eyebrow: 'Diagnostic de maturité IA · Vertical Orion',
     intro:
-      "Openlab MaturIA conduit un décideur, secteur par secteur, à travers un questionnaire adaptatif et une mise en situation, puis produit un scoring, un niveau de maturité de 1 à 5 et une feuille de route VOIE. Un agent mène l'entretien ; le moteur de calcul, lui, reste déterministe et auditable — le chiffre remis en comité de direction doit pouvoir être expliqué ligne à ligne.",
+      "MaturIA conduit un décideur, secteur par secteur, à travers un questionnaire adaptatif et une mise en situation, puis produit un scoring, un niveau de maturité de 1 à 5 et une feuille de route VOIE. Un agent mène l'entretien ; le moteur de calcul, lui, reste déterministe et auditable — le chiffre remis en comité de direction doit pouvoir être expliqué ligne à ligne.",
     problem:
       "« Où en sommes-nous vraiment sur l'IA ? » La réponse tient trop souvent à l'intuition du dernier séminaire ou au discours d'un fournisseur. Sans référentiel sectoriel ni mesure reproductible, une direction ne sait ni ce qu'elle maîtrise, ni par quoi commencer, ni ce qu'elle risque à attendre. Les feuilles de route se bâtissent alors sur des impressions.",
     features: [
@@ -974,17 +974,17 @@ export const PRODUCTS: readonly Product[] = [
       {
         value: '1 à 5',
         label: 'niveaux de maturité adossés à un référentiel sectoriel',
-        source: 'Openlab MaturIA — moteur de scoring',
+        source: 'MaturIA — moteur de scoring',
       },
       {
         value: '9',
         label: 'secteurs déclarés, grille bancaire livrée à ce jour',
-        source: 'Openlab MaturIA — référentiel sectoriel',
+        source: 'MaturIA — référentiel sectoriel',
       },
       {
         value: '0',
         label: 'dépendance à un modèle de langage dans le calcul du score',
-        source: 'Openlab MaturIA — architecture du domaine',
+        source: 'MaturIA — architecture du domaine',
       },
     ],
     pricing: {

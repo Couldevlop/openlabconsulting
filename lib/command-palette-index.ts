@@ -84,7 +84,7 @@ export const COMMAND_INDEX: readonly CommandEntry[] = [
     badge: 'RH',
   },
   {
-    title: 'Openlab MaturIA',
+    title: 'MaturIA',
     href: '/solutions/maturia',
     section: 'Solutions',
     keywords: [
