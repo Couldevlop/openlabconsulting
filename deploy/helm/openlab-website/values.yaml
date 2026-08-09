@@ -22,10 +22,27 @@ serviceAccount:
   name: ''
   annotations: {}
 
+# La réservation mémoire décide de l'ordre d'éviction, pas la limite.
+#
+# Sous pression, le kubelet évince d'abord les pods qui dépassent le plus
+# leur `requests`. À 256 Mi pour une consommation réelle mesurée entre 268
+# et 338 Mi, chaque réplique du site vivait au-dessus de sa réservation :
+# le site public était donc la première victime désignée. Il est tombé
+# ainsi le 2026-08-08, pendant que le nœud manquait de mémoire, et la
+# Search Console a relevé les erreurs serveur des passages de Googlebot
+# tombés dans cette fenêtre.
+#
+# 384 Mi passe au-dessus du pic observé, ce qui remet les répliques sous
+# leur réservation en régime normal. Coût : 640 Mi de réservation en plus
+# sur cinq répliques, sur un nœud qui en a une quinzaine de libres depuis
+# que la rétention des modèles Ollama a été bornée.
+#
+# La limite reste à 1 Gi : elle protège le nœud d'une fuite, elle ne joue
+# aucun rôle dans le choix de la victime.
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 384Mi
   limits:
     cpu: 1000m
     memory: 1Gi
