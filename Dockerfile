@@ -62,7 +62,7 @@ RUN pnpm build
 # l'ancienne version et Trivy bloque (GHSA-f88m-g3jw-g9cj, libvips).
 FROM node:22-slim AS sharp-glibc
 WORKDIR /sharp
-RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.35.3
+RUN npm install --no-save --omit=dev --cpu=x64 --os=linux --libc=glibc sharp@0.35.5
 
 # -----------------------------------------------------------------------------
 # Stage 3 : migrator (image INTERNE — applique les migrations Payload)

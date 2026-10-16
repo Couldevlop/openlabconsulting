@@ -56,11 +56,11 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.97.1",
     "@aws-sdk/client-s3": "^3.1098.0",
-    "@payloadcms/db-postgres": "^3.84.1",
-    "@payloadcms/next": "^3.84.1",
-    "@payloadcms/richtext-lexical": "^3.84.1",
-    "@payloadcms/storage-s3": "^3.84.1",
-    "@payloadcms/ui": "^3.84.1",
+    "@payloadcms/db-postgres": "^3.91.0",
+    "@payloadcms/next": "^3.91.0",
+    "@payloadcms/richtext-lexical": "^3.91.0",
+    "@payloadcms/storage-s3": "^3.91.0",
+    "@payloadcms/ui": "^3.91.0",
     "@react-pdf/renderer": "^4.5.1",
     "@react-three/fiber": "^9.6.1",
     "@types/qrcode": "^1.5.6",
@@ -69,14 +69,14 @@
     "ioredis": "^5.10.1",
     "lucide-react": "^1.16.0",
     "motion": "^12.39.0",
-    "next": "^15.5.22",
-    "nodemailer": "^9.0.3",
+    "next": "^15.5.28",
+    "nodemailer": "^10.1.1",
     "otplib": "^13.4.0",
-    "payload": "^3.84.1",
+    "payload": "^3.91.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.5",
     "shiki": "^4.1.0",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0",
@@ -100,7 +100,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^2.1.9",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.5.18",
+    "eslint-config-next": "^15.5.28",
     "eslint-config-prettier": "^9.1.2",
     "husky": "^9.1.7",
     "jsdom": "^25.0.1",
@@ -124,23 +124,26 @@
   "pnpm": {
     "overrides": {
       "postcss": "^8.5.18",
-      "sharp": "^0.35.3",
-      "js-yaml": "^4.3.1",
+      "sharp": "^0.35.5",
+      "js-yaml": "^4.3.2",
       "immutable": "^4.3.9",
-      "fast-uri": "^3.1.5",
+      "fast-uri": "^3.1.7",
       "nanoid": "^3.3.17",
       "tsx": "4.21.0",
       "ws": "^8.21.0",
-      "undici": "^7.29.0"
+      "undici": "^7.29.1",
+      "browserslist": "^4.28.7",
+      "source-map-js": "^1.2.2"
     },
     "auditConfig": {
       "ignoreGhsas": [
         "GHSA-w3rx-r6r6-pgpr",
-        "GHSA-5p2g-fcmc-qvqq"
+        "GHSA-5p2g-fcmc-qvqq",
+        "GHSA-vfj7-8cjw-p6xm"
       ]
     },
     "patchedDependencies": {
-      "payload@3.84.1": "patches/payload@3.84.1.patch"
+      "payload@3.91.0": "patches/payload@3.91.0.patch"
     }
   }
 }
