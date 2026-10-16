@@ -19,6 +19,7 @@ import * as migration_20260620_090000_add_announcement_banner from './20260620_0
 import * as migration_20260730_022949_add_audit_reports from './20260730_022949_add_audit_reports';
 import * as migration_20260730_043922_add_payload_jobs from './20260730_043922_add_payload_jobs';
 import * as migration_20260730_071125_add_jobs_stats from './20260730_071125_add_jobs_stats';
+import * as migration_20261016_120000_add_users_reset_password_requested_at from './20261016_120000_add_users_reset_password_requested_at';
 
 export const migrations = [
   {
@@ -124,6 +125,11 @@ export const migrations = [
   {
     up: migration_20260730_071125_add_jobs_stats.up,
     down: migration_20260730_071125_add_jobs_stats.down,
-    name: '20260730_071125_add_jobs_stats'
+    name: '20260730_071125_add_jobs_stats',
+  },
+  {
+    up: migration_20261016_120000_add_users_reset_password_requested_at.up,
+    down: migration_20261016_120000_add_users_reset_password_requested_at.down,
+    name: '20261016_120000_add_users_reset_password_requested_at',
   },
 ];
