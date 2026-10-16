@@ -252,6 +252,34 @@ et visible en revue.
 exit 0 (6 low / 16 moderate / 2 high mises en sourdine). Typecheck OK,
 1204 tests verts.
 
+### 4.x Remédiation du 2026-10-16 (CVE critiques next / payload)
+
+`pnpm audit --prod` et Trivy bloquaient toute PR : nouvelles advisories
+CRITICAL sur `next` (deux RCE non authentifiées, dont l'Image Optimization
+API avec AVIF, servi par le site) et `payload` (plusieurs CRITICAL/HIGH
+corrigées en 3.88/3.90).
+
+Bumps directs : `next` ^15.5.28 (et `eslint-config-next`), `payload` +
+`@payloadcms/*` ^3.91.0 (le patch `@next/env` reste nécessaire, renommé
+`patches/payload@3.91.0.patch`), `nodemailer` ^10.1.1, `sharp` ^0.35.5
+(dépendance directe, override **et** stage glibc du `Dockerfile`).
+
+Overrides transitifs relevés (retrait dès que la dépendance parente tire
+la version corrigée) :
+
+| Package         | Version forcée | Chemin                                          |
+| --------------- | -------------- | ----------------------------------------------- |
+| `fast-uri`      | `^3.1.7`       | `payload > ajv > fast-uri`                      |
+| `js-yaml`       | `^4.3.2`       | `payload > json-schema-to-typescript > js-yaml` |
+| `undici`        | `^7.29.1`      | `payload > undici`                              |
+| `browserslist`  | `^4.28.7`      | `next > styled-jsx > @babel/core > …`           |
+| `source-map-js` | `^1.2.2`       | `@payloadcms/next > sass > source-map-js`       |
+
+CVE sans correctif amont : `braces` (GHSA-vfj7-8cjw-p6xm, toutes versions)
+via `@payloadcms/next > sass > chokidar`. `chokidar` ne sert qu'au mode
+watch de `sass`, jamais appelé au runtime de l'image : mise en sourdine
+nominative dans `ignoreGhsas`, retrait dès qu'une version corrigée sort.
+
 ---
 
 ## 5. Durcissement du cluster — audit du 2026-08-08

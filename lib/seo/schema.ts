@@ -387,17 +387,23 @@ export function faqPageSchema(
   };
 }
 
-/** Type Schema.org selon la nature de la publication. */
+/**
+ * Type Schema.org selon la nature de la publication. Une conférence est ici
+ * une intervention passée référencée comme production du laboratoire, pas un
+ * événement à promouvoir : `Event` imposerait `startDate` + `location`
+ * (Search Console, erreur critique) que nous n'avons pas. `CreativeWork`
+ * reste honnête sans inventer de date ni de lieu.
+ */
 const PUBLICATION_SCHEMA_TYPE: Record<Publication['type'], string> = {
   livre: 'Book',
   'livre-blanc': 'Report',
   'article-pair': 'ScholarlyArticle',
-  conference: 'Event',
+  conference: 'CreativeWork',
 };
 
 /**
  * ItemList des publications du Laboratoire (CLAUDE.md §12.3 / audit #11).
- * Chaque entrée est typée Book / Report / ScholarlyArticle / Event selon
+ * Chaque entrée est typée Book / Report / ScholarlyArticle / CreativeWork selon
  * sa nature. Auteur Person ou Organization (équipe/laboratoire).
  */
 export function publicationsSchema(
