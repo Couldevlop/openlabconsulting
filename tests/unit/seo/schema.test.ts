@@ -41,10 +41,12 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
     }[];
     expect(items).toHaveLength(PUBLICATIONS.length);
     expect(items[0]?.position).toBe(1);
-    // Le livre est typé Book, la conférence Event.
+    // Le livre est typé Book, la conférence CreativeWork (jamais Event :
+    // Google exige startDate + location, absents de nos données).
     const types = items.map((it) => it.item['@type']);
     expect(types).toContain('Book');
-    expect(types).toContain('Event');
+    expect(types).toContain('CreativeWork');
+    expect(types).not.toContain('Event');
   });
 
   it('publicationSchema : page détail (slug) — type Report + abstract + auteur Org', () => {
@@ -65,7 +67,7 @@ describe('lib/seo/schema — JSON-LD helpers', () => {
   it('publicationSchema : sans slug (conférence) — url = href, auteur Person', () => {
     const conf = PUBLICATIONS.find((p) => p.type === 'conference')!;
     const s = publicationSchema(conf);
-    expect(s['@type']).toBe('Event');
+    expect(s['@type']).toBe('CreativeWork');
     expect(s.url).toBe(conf.href);
     // Description retombe sur le summary quand pas d'abstract.
     expect(s.description).toBe(conf.summary);
