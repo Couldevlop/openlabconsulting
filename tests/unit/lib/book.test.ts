@@ -79,12 +79,13 @@ describe('lib/data/book', () => {
     expect(PURCHASE_CHANNELS.filter((c) => c.primary)).toHaveLength(1);
   });
 
-  it('COMPANION_RESOURCES : 4 ressources, 1 par catégorie', () => {
-    expect(COMPANION_RESOURCES).toHaveLength(4);
+  it('COMPANION_RESOURCES : uniquement des ressources en ligne, sur le site', () => {
+    // Dépôt GitHub (404) et forum (domaine inexistant) retirés : liens morts.
+    expect(COMPANION_RESOURCES).toHaveLength(2);
     const categories = COMPANION_RESOURCES.map((r) => r.category);
-    expect(new Set(categories).size).toBe(4);
-    expect(categories.sort()).toEqual(
-      ['code', 'community', 'data', 'errata'].sort(),
-    );
+    expect(categories.sort()).toEqual(['data', 'errata']);
+    for (const r of COMPANION_RESOURCES) {
+      expect(r.href.startsWith('/livre/companion#')).toBe(true);
+    }
   });
 });

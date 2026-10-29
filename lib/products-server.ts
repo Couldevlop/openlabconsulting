@@ -2,6 +2,7 @@ import 'server-only';
 import {
   FALLBACK_PRODUCTS,
   PRODUCT_SLUG_PATTERN,
+  isWithdrawnProduct,
   type Product,
   type ProductStatus,
   type ProductFeature,
@@ -39,7 +40,7 @@ export async function getPublishedProducts(): Promise<readonly Product[]> {
     });
     const products = docs
       .map((d) => toProduct(d as RawPayloadProduct))
-      .filter((p): p is Product => p !== null);
+      .filter((p): p is Product => p !== null && !isWithdrawnProduct(p.slug));
     if (products.length === 0) return FALLBACK_PRODUCTS;
     return products;
   } catch (err) {
@@ -59,6 +60,8 @@ export async function getPublishedProducts(): Promise<readonly Product[]> {
  * n'est pas (encore) publié en base.
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
+  // Produit retiré du site : aucune page, même si la fiche est publiée.
+  if (isWithdrawnProduct(slug)) return null;
   try {
     const { getPayload } = await import('payload');
     const config = (await import('@payload-config')).default;

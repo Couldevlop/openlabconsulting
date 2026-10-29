@@ -4,7 +4,8 @@ import { getPublishedCaseStudies } from '@/lib/case-studies-server';
 
 /**
  * Tests du helper `getPublishedCaseStudies()` — vérifie que :
- *   1. Le fallback hard-codé contient les 4 cas fondateurs.
+ *   1. Le fallback hard-codé contient les 3 cas fondateurs (Fraud Shield
+ *      retiré avec le produit).
  *   2. Quand Payload échoue (DB down, import error), on retombe sur
  *      le fallback sans throw.
  *
@@ -12,8 +13,11 @@ import { getPublishedCaseStudies } from '@/lib/case-studies-server';
  * testé en intégration (à venir).
  */
 describe('lib/case-studies — FALLBACK_CASE_STUDIES', () => {
-  it('expose 4 cas fondateurs', () => {
-    expect(FALLBACK_CASE_STUDIES).toHaveLength(4);
+  it('expose 3 cas fondateurs, aucun sur un produit retiré', () => {
+    expect(FALLBACK_CASE_STUDIES).toHaveLength(3);
+    expect(
+      FALLBACK_CASE_STUDIES.some((c) => c.productSlug === 'fraud-shield'),
+    ).toBe(false);
   });
 
   it('chaque cas a un productSlug valide et 3 résultats', () => {
@@ -24,7 +28,6 @@ describe('lib/case-studies — FALLBACK_CASE_STUDIES', () => {
         'sygescom',
         'agrosense',
         'qualitos',
-        'fraud-shield',
         'smart-city',
       ]).toContain(cs.productSlug);
       expect(cs.results).toHaveLength(3);

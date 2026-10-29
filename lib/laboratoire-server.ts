@@ -7,6 +7,7 @@ import {
   type Publication,
   type Partenariat,
 } from './data/laboratoire';
+import { namesWithdrawnProduct } from './data/products';
 
 /**
  * Server-only : lecture des collections Laboratoire (`rd-axes`,
@@ -69,7 +70,9 @@ function toRdAxe(raw: Record<string, unknown>): RdAxe | null {
     slug: raw.slug,
     title: raw.title,
     pitch: raw.pitch,
-    produitsLies: toStringArray(raw.produitsLies),
+    produitsLies: toStringArray(raw.produitsLies).filter(
+      (p) => !namesWithdrawnProduct(p),
+    ),
     exemples: toStringArray(raw.exemples),
   };
 }

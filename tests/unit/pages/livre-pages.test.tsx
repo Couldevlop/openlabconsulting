@@ -153,18 +153,19 @@ describe('Page /livre/acheter', () => {
 });
 
 describe('Page /livre/companion', () => {
-  it('liste 4 ressources companion (code, data, errata, community)', () => {
+  it('liste les ressources companion en ligne (data, errata), sans lien mort', () => {
     render(<LivreCompanionPage />);
+    // Dépôt GitHub (404) et forum (domaine inexistant) retirés.
     expect(
-      screen.getByText(/Référentiel GitHub des exemples/i),
-    ).toBeInTheDocument();
+      screen.queryByText(/Référentiel GitHub des exemples/i),
+    ).not.toBeInTheDocument();
     // "Datasets ouverts" apparaît dans la card + dans la section ancrée
     // #datasets — on accepte plusieurs occurrences.
     expect(screen.getAllByText(/Datasets ouverts/i).length).toBeGreaterThan(0);
     expect(
       screen.getByText(/Errata et corrections continues/i),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Forum lecteurs/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Forum lecteurs/i)).not.toBeInTheDocument();
   });
 
   it('décrit les 3 sources climatiques (CHIRPS, ERA5, SODEXAM)', () => {

@@ -69,7 +69,7 @@ const AXES = [
   {
     Icon: Boxes,
     title: `${PRODUCT_WORD_CAP} logiciels propriétaires`,
-    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Fraud Shield, Smart City, SentinelBTP. Chaque produit naît d’un terrain client réel, déployé sur K3s, audité en interne.',
+    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense CI, QualitOS, Smart City, SentinelBTP, MaturIA. Chaque produit naît d’un terrain client réel, déployé sur K3s, audité en interne.',
     href: '/solutions',
     cta: 'Voir l’écosystème',
   },

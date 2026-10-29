@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     'NexusERP',
     'SYGESCOM',
     'AgroSense',
-    'Fraud Shield',
+    'MaturIA',
     'Smart City',
     'SYSCOHADA',
     'CNPS',

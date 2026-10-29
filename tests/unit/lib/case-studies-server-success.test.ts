@@ -26,7 +26,7 @@ function rawDoc(overrides: Record<string, unknown> = {}) {
     body: 'Le corps du cas client.',
     sector: 'Banque',
     client: 'Client X',
-    productSlug: 'fraud-shield',
+    productSlug: 'sygescom',
     results: [
       { value: '−50 %', label: 'fraude évitée' },
       { value: '2 s', label: 'analyse' },
@@ -45,7 +45,16 @@ describe('getPublishedCaseStudies — Payload disponible', () => {
     findMock.mockResolvedValue({ docs: [rawDoc()] });
     const studies = await getPublishedCaseStudies();
     expect(studies[0]?.headline).toBe('Titre cas');
-    expect(studies[0]?.href).toBe('/solutions/fraud-shield');
+    expect(studies[0]?.href).toBe('/solutions/sygescom');
+  });
+
+  it('écarte un cas rattaché à un produit retiré du site', async () => {
+    findMock.mockResolvedValue({
+      docs: [rawDoc({ id: 'cs-fs', productSlug: 'fraud-shield' }), rawDoc()],
+    });
+    const studies = await getPublishedCaseStudies();
+    expect(studies).toHaveLength(1);
+    expect(studies[0]?.productSlug).toBe('sygescom');
   });
 
   it('retombe sur le fallback si la collection est vide', async () => {

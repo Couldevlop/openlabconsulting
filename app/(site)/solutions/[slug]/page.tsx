@@ -23,6 +23,7 @@ import { ArticleCard } from '@/components/insights/ArticleCard';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DynamicIcon } from '@/lib/icon-map';
 import { PRODUCTS } from '@/lib/data/products';
+import { productSiteFor } from '@/lib/data/product-sites';
 import { getProductBySlug } from '@/lib/products-server';
 import { getArticlesForProduct } from '@/lib/articles-server';
 import { getCaseStudyForProduct } from '@/lib/case-studies-server';
@@ -94,13 +95,15 @@ export default async function SolutionDetailPage({
   const screenshot = SOLUTION_SCREENSHOTS[product.slug] ?? null;
   // Maillage interne : analyses Insights liées à ce produit (§12.5).
   const relatedArticles = await getArticlesForProduct(product.slug, 3);
+  // Site officiel du produit (sous-domaine dédié), s'il existe.
+  const officialSite = productSiteFor(product.slug);
 
   return (
     <main id="main">
       <JsonLd
         nonce={nonce}
         data={[
-          softwareApplicationSchema(product),
+          softwareApplicationSchema(product, officialSite?.url),
           breadcrumbSchema([
             { name: 'Accueil', url: '/' },
             { name: 'Solutions', url: '/solutions' },
@@ -171,6 +174,19 @@ export default async function SolutionDetailPage({
                 <Button as="a" href="/contact" variant="ghost" size="lg">
                   Parler à l’équipe produit
                 </Button>
+                {officialSite ? (
+                  <Button
+                    as="a"
+                    href={officialSite.url}
+                    target="_blank"
+                    rel="noopener"
+                    variant="ghost"
+                    size="lg"
+                  >
+                    Site officiel {name}
+                    <ArrowUpRight width={18} height={18} aria-hidden />
+                  </Button>
+                ) : null}
               </div>
             </div>
 
@@ -561,6 +577,57 @@ export default async function SolutionDetailPage({
           </ul>
         </Container>
       </section>
+
+      {/* Site officiel du produit — maillage vers le sous-domaine dédié */}
+      {officialSite ? (
+        <section
+          aria-labelledby="site-officiel-title"
+          data-testid="solution-official-site"
+          className="bg-white py-20 sm:py-28"
+        >
+          <Container width="wide">
+            <div className="max-w-2xl">
+              <Eyebrow tone="orange">Site officiel</Eyebrow>
+              <Heading id="site-officiel-title" level={2} className="mt-4">
+                Tout {name} sur son site dédié.
+              </Heading>
+              <p className="mt-4 text-lg text-[var(--color-ol-graphite)]/75">
+                Fonctionnalités détaillées, guides et tarifs :{' '}
+                <a
+                  href={officialSite.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="font-medium text-[var(--color-ol-orange-text)] underline-offset-2 hover:underline"
+                >
+                  {officialSite.domain}
+                </a>
+                .
+              </p>
+            </div>
+
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {officialSite.pages.map((page) => (
+                <li key={page.href}>
+                  <a
+                    href={page.href}
+                    target="_blank"
+                    rel="noopener"
+                    className="group flex h-full items-center justify-between gap-3 rounded-md border border-[var(--color-ol-mist)] bg-[var(--color-ol-ivory)] px-5 py-4 text-sm font-medium text-[var(--color-ol-night)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-ol-orange)]/40 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ol-orange)] focus-visible:ring-offset-2"
+                  >
+                    {page.label}
+                    <ArrowUpRight
+                      width={14}
+                      height={14}
+                      aria-hidden
+                      className="flex-shrink-0 text-[var(--color-ol-orange-text)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      ) : null}
 
       {/* Expertises liées */}
       {expertisesLies.length > 0 ? (

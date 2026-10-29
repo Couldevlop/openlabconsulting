@@ -21,7 +21,7 @@ const EXPECTED_ARTICLES = [
     slug: 'fraude-documentaire-ia-banques-assurances',
     title: /Détection de fraude documentaire/i,
     category: /Cybersécurité/i,
-    author: /Équipe Fraud Shield/i,
+    author: /Laboratoire OpenLab/i,
     iso: '2026-03-20',
   },
 ];

@@ -26,7 +26,10 @@ function rawDoc(overrides: Record<string, unknown> = {}) {
     intro: 'Intro du secteur depuis la base de données.',
     enjeux: [{ value: 'Enjeu A' }, { value: 'Enjeu B' }],
     regulation: [{ value: 'Texte A' }, { value: 'Texte B' }],
-    produitsLies: [{ slug: 'fraud-shield', title: 'OpenLab Fraud Shield' }],
+    produitsLies: [
+      { slug: 'maturia', title: 'MaturIA' },
+      { slug: 'fraud-shield', title: 'OpenLab Fraud Shield' },
+    ],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
     ],
@@ -46,8 +49,9 @@ describe('getPublishedSectors — Payload disponible', () => {
     expect(sectors[0]?.iconKey).toBe('wallet');
     expect(sectors[0]?.enjeux).toEqual(['Enjeu A', 'Enjeu B']);
     expect(sectors[0]?.regulation).toEqual(['Texte A', 'Texte B']);
+    // Le produit retiré du site (Fraud Shield) est écarté des liens.
     expect(sectors[0]?.produitsLies).toEqual([
-      { slug: 'fraud-shield', title: 'OpenLab Fraud Shield' },
+      { slug: 'maturia', title: 'MaturIA' },
     ]);
     expect(sectors[0]?.expertisesLies).toEqual([
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },

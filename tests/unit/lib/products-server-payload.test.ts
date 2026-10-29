@@ -17,9 +17,9 @@ describe('lib/products-server — fallback en environnement test', () => {
     expect(products).toEqual(FALLBACK_PRODUCTS);
   });
 
-  it('retourne les 10 produits avec un iconKey valide (string)', async () => {
+  it('retourne les 8 produits publics avec un iconKey valide (string)', async () => {
     const products = await getPublishedProducts();
-    expect(products).toHaveLength(10);
+    expect(products).toHaveLength(8);
     for (const p of products) {
       expect(typeof p.iconKey).toBe('string');
       expect(p.iconKey.length).toBeGreaterThan(0);
@@ -30,6 +30,11 @@ describe('lib/products-server — fallback en environnement test', () => {
     const product = await getProductBySlug('nexusrh');
     expect(product).not.toBeNull();
     expect(product?.name).toBe('NexusRH CI');
+  });
+
+  it('getProductBySlug renvoie null pour un produit retiré', async () => {
+    expect(await getProductBySlug('aegis')).toBeNull();
+    expect(await getProductBySlug('fraud-shield')).toBeNull();
   });
 
   it('getProductBySlug renvoie null pour un slug inconnu', async () => {

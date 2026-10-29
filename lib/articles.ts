@@ -202,15 +202,15 @@ export const FALLBACK_ARTICLES: readonly Article[] = [
     title:
       'Détection de fraude documentaire : ce que l’IA voit que vos contrôleurs manquent',
     excerpt:
-      'Trois patterns invisibles à l’œil humain que Fraud Shield isole en moins de deux secondes, et comment l’expliquer à un comité d’audit.',
+      'Trois patterns invisibles à l’œil humain que l’IA isole en moins de deux secondes, et comment l’expliquer à un comité d’audit.',
     category: 'cybersecurite',
     categoryLabel: 'Cybersécurité',
-    author: 'Équipe Fraud Shield',
+    author: 'Laboratoire OpenLab',
     publishedAt: 'Mars 2026',
     isoDate: '2026-03-20',
     cover: {
       src: null,
-      alt: 'Visualisation Fraud Shield : marqueurs de fraude détectés sur un document',
+      alt: 'Visualisation IA : marqueurs de fraude détectés sur un document',
     },
     summary: [
       'En 2024, la PLCC ivoirienne a traité 12 100 affaires de cybercriminalité pour près de 7 milliards FCFA de préjudice.',
