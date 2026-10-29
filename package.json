@@ -80,7 +80,7 @@
     "shiki": "^4.1.0",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
@@ -133,7 +133,10 @@
       "ws": "^8.21.0",
       "undici": "^7.29.1",
       "browserslist": "^4.28.7",
-      "source-map-js": "^1.2.2"
+      "source-map-js": "^1.2.2",
+      "dompurify": "^3.4.17",
+      "happy-dom": "^21.0.4",
+      "graphql-scalars": "^2.0.1"
     },
     "auditConfig": {
       "ignoreGhsas": [
