@@ -11,13 +11,15 @@ describe('lib/data/laboratoire — RD_AXES', () => {
     expect(RD_AXES).toHaveLength(6);
   });
 
-  it('chaque axe a un slug unique, un title, un pitch et au moins 1 produit lié', () => {
+  it('chaque axe a un slug unique, un title, un pitch et aucun produit retiré', () => {
     const slugs = new Set<string>();
     for (const axe of RD_AXES) {
       expect(typeof axe.slug).toBe('string');
       expect(typeof axe.title).toBe('string');
       expect(typeof axe.pitch).toBe('string');
-      expect(axe.produitsLies.length).toBeGreaterThan(0);
+      // Un axe peut ne citer aucun produit (ex. détection de fraude depuis
+      // le retrait de Fraud Shield) : le badge est alors masqué.
+      expect(axe.produitsLies.join(' ')).not.toMatch(/fraud\s*shield|aegis/i);
       expect(axe.exemples.length).toBeGreaterThan(0);
       expect(slugs.has(axe.slug)).toBe(false);
       slugs.add(axe.slug);

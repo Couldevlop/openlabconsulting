@@ -20,7 +20,7 @@ import { breadcrumbSchema, collectionPageSchema } from '@/lib/seo/schema';
 export const metadata: Metadata = {
   title: `Solutions : ${PRODUCTS.length} logiciels propriétaires OpenLab`,
   description:
-    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP, l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
+    'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Smart City, SentinelBTP, MaturIA, l’écosystème complet d’OpenLab Consulting, conçu à Abidjan et déployé en K3s.',
   alternates: alternatesFor('/solutions'),
 };
 

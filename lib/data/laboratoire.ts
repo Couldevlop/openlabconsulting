@@ -29,7 +29,7 @@ export const RD_AXES: readonly RdAxe[] = [
     title: 'Détection de fraude multi-modale',
     pitch:
       'Vision (manipulations pixel), texte (cohérence montants/dates) et métadonnées EXIF combinés en un score expliqué.',
-    produitsLies: ['Fraud Shield'],
+    produitsLies: [],
     exemples: [
       'Score 0-100 + overlay visuel des zones suspectes',
       'Modèles ré-entraînés client par client (multi-tenant strict)',
@@ -180,7 +180,7 @@ export const PARTENARIATS: readonly Partenariat[] = [
     title: 'ESATIC',
     type: 'universitaire',
     pitch:
-      'Partenariat sur les modules cybersécurité et IA appliquée, recrutement en alternance, accès labo Fraud Shield.',
+      'Partenariat sur les modules cybersécurité et IA appliquée, recrutement en alternance, accès au laboratoire de détection de fraude.',
   },
   {
     slug: 'sodexam',

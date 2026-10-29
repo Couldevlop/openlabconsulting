@@ -29,6 +29,8 @@ import {
   type ReassurancePartner,
 } from './site-settings';
 import { interpolateCounts } from '@/lib/format/product-count';
+import { isWithdrawnProductHref } from '@/lib/data/products';
+import { getArticleBySlug } from '@/lib/articles-server';
 import { getProductCount } from './product-count-server';
 
 /**
@@ -200,11 +202,34 @@ export async function getAuditIaCtaContent(): Promise<AuditIaCtaContent> {
 }
 
 export async function getFooterContent(): Promise<FooterContent> {
-  return readGlobal('footer-settings', FOOTER_FALLBACK);
+  const raw = await readGlobal('footer-settings', FOOTER_FALLBACK);
+  // Un lien saisi en admin vers un produit retiré du site tomberait sur
+  // une redirection : on l'écarte plutôt que d'afficher un lien mort.
+  return {
+    ...raw,
+    columns: raw.columns.map((column) => ({
+      ...column,
+      links: column.links.filter((link) => !isWithdrawnProductHref(link.href)),
+    })),
+  };
 }
 
 export async function getAnnouncementBanner(): Promise<AnnouncementBannerContent> {
-  return readGlobal('announcement-banner', ANNOUNCEMENT_BANNER_FALLBACK);
+  const banner = await readGlobal(
+    'announcement-banner',
+    ANNOUNCEMENT_BANNER_FALLBACK,
+  );
+  // Lien vers un article : on vérifie qu'il est publié. Sinon (brouillon,
+  // slug erroné) le bandeau garde son message mais perd son lien, plutôt
+  // que d'envoyer chaque visiteur — et chaque robot — sur une 404.
+  const articleSlug = /^\/insights\/([a-z0-9-]+)\/?$/.exec(
+    banner.linkHref.trim(),
+  )?.[1];
+  if (banner.enabled && articleSlug) {
+    const article = await getArticleBySlug(articleSlug);
+    if (!article) return { ...banner, linkHref: '', linkLabel: '' };
+  }
+  return banner;
 }
 
 export async function getAboutContent(): Promise<AboutContent> {

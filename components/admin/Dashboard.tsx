@@ -220,7 +220,7 @@ export default async function OpenLabAdminDashboard(
       hint: `${articlesPublished} publié(s) au total`,
       delta: null,
       accent: 'orange',
-      href: '/admin/collections/articles?where[status][equals]=draft',
+      href: '/admin/collections/articles?where[_status][equals]=draft',
     },
     {
       icon: Eye,

@@ -14,9 +14,9 @@ import SolutionDetailPage, {
 import { PRODUCTS } from '@/lib/data/products';
 
 describe('Page /solutions/[slug] (détail)', () => {
-  it('generateStaticParams retourne les 10 slugs', () => {
+  it('generateStaticParams retourne les 8 slugs publics', () => {
     const params = generateStaticParams();
-    expect(params).toHaveLength(10);
+    expect(params).toHaveLength(8);
     const slugs = params.map((p) => p.slug);
     for (const p of PRODUCTS) {
       expect(slugs).toContain(p.slug);
@@ -98,7 +98,6 @@ describe('Page /solutions/[slug] (détail)', () => {
       'nexusrh',
       'nexuserp',
       'qualitos',
-      'fraud-shield',
       'smart-city',
       'agrosense',
     ]) {
@@ -112,7 +111,7 @@ describe('Page /solutions/[slug] (détail)', () => {
   });
 
   it('chaque produit affiche son bloc pricing avec headline', async () => {
-    for (const slug of ['nexusrh', 'sygescom', 'agrosense', 'fraud-shield']) {
+    for (const slug of ['nexusrh', 'sygescom', 'agrosense', 'maturia']) {
       const element = await SolutionDetailPage({
         params: Promise.resolve({ slug }),
       });
@@ -149,6 +148,46 @@ describe('Page /solutions/[slug] (détail)', () => {
       .join('');
     expect(text).toContain('"FAQPage"');
     expect(text).toContain('"Question"');
+  });
+
+  it('un produit retiré (AEGIS, Fraud Shield) n’a pas de page', async () => {
+    for (const slug of ['aegis', 'fraud-shield']) {
+      await expect(
+        SolutionDetailPage({ params: Promise.resolve({ slug }) }),
+      ).rejects.toThrow();
+    }
+  });
+
+  it('NexusRH renvoie vers son site officiel (liens suivis + sameAs)', async () => {
+    const element = await SolutionDetailPage({
+      params: Promise.resolve({ slug: 'nexusrh' }),
+    });
+    render(element);
+    const section = screen.getByTestId('solution-official-site');
+    const links = Array.from(section.querySelectorAll('a'));
+    expect(links.length).toBeGreaterThanOrEqual(5);
+    for (const a of links) {
+      expect(a.getAttribute('href')).toMatch(
+        /^https:\/\/nexusrh\.openlabconsulting\.com\//,
+      );
+      expect(a.getAttribute('rel')).not.toMatch(/nofollow/);
+    }
+    const ld = Array.from(
+      document.querySelectorAll('script[type="application/ld+json"]'),
+    )
+      .map((s) => s.textContent ?? '')
+      .join('');
+    expect(ld).toContain('"sameAs":["https://nexusrh.openlabconsulting.com/"]');
+  });
+
+  it('un produit sans site dédié n’affiche pas la section site officiel', async () => {
+    const element = await SolutionDetailPage({
+      params: Promise.resolve({ slug: 'sygescom' }),
+    });
+    render(element);
+    expect(
+      screen.queryByTestId('solution-official-site'),
+    ).not.toBeInTheDocument();
   });
 
   it('affiche un fil d’Ariane Accueil > Solutions > <Produit>', async () => {

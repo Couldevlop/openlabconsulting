@@ -117,10 +117,7 @@ export const EXPERTISES: readonly Expertise[] = [
         body: 'Dashboards de qualité, KPIs gouvernance, plan de bascule progressive. Vous reprenez l’opération à 6 mois.',
       },
     ],
-    produitsLies: [
-      { slug: 'nexusrh', name: 'NexusRH CI' },
-      { slug: 'aegis', name: 'AEGIS' },
-    ],
+    produitsLies: [{ slug: 'nexusrh', name: 'NexusRH CI' }],
   },
   {
     slug: 'data-gouvernance',
@@ -168,7 +165,7 @@ export const EXPERTISES: readonly Expertise[] = [
     intro:
       "La cybersécurité reactive ne suffit plus : les attaques deviennent multimodales, les fraudes documentaires imitent les chartes graphiques, les RH se font phisher à l'échelle. On déploie des couches IA défensives qui complètent vos SOC sans les remplacer.",
     competences: [
-      'Détection de fraude documentaire (Fraud Shield, modèles vision)',
+      'Détection de fraude documentaire (modèles vision)',
       'Anomaly detection sur logs et flux transactionnels',
       'Phishing IA : détection au niveau du contenu, pas juste de l’en-tête',
       'Threat intelligence francophone Afrique de l’Ouest',
@@ -191,10 +188,7 @@ export const EXPERTISES: readonly Expertise[] = [
         body: 'Exercices red team + table-top tous les 3 mois. Les détecteurs IA sont ré-entraînés sur vos propres faux positifs.',
       },
     ],
-    produitsLies: [
-      { slug: 'aegis', name: 'AEGIS' },
-      { slug: 'maturia', name: 'MaturIA' },
-    ],
+    produitsLies: [{ slug: 'maturia', name: 'MaturIA' }],
   },
 ] as const;
 

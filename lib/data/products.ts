@@ -116,10 +116,10 @@ export interface Product {
  * que le mode dégradé, les démos et les mockups continuent de fonctionner
  * si l'une d'elles revient.
  *
- * AEGIS et OpenLab Fraud Shield coexistent dans ce repli mais partagent
- * une seule fiche en base : AEGIS y a pris la place de Fraud Shield.
- * Objets différents, contenu entièrement réécrit — d'où la redirection
- * 301 de `/solutions/fraud-shield` posée dans `next.config.ts`.
+ * AEGIS et OpenLab Fraud Shield sont encore en développement : ils
+ * restent décrits ici mais sont retirés du catalogue public
+ * (`WITHDRAWN_PRODUCT_SLUGS`, plus bas), et leurs URL redirigent vers
+ * `/solutions` (`next.config.ts`).
  * Consommée par :
  *   - `components/sections/Solutions.tsx` (homepage §6.6)
  *   - `app/solutions/page.tsx` (hub)
@@ -129,7 +129,7 @@ export interface Product {
  * 7 (hero, stats, problème, features, stack, expertises liées, CTA final).
  * Démo interactive et FAQ Schema.org sont deferées à des features dédiées.
  */
-export const PRODUCTS: readonly Product[] = [
+const ALL_PRODUCTS: readonly Product[] = [
   {
     slug: 'nexusrh',
     iconKey: 'users',
@@ -1150,6 +1150,45 @@ export const PRODUCTS: readonly Product[] = [
     ],
   },
 ] as const;
+
+/**
+ * Produits retirés du site public (décision du 2026-10-29) : encore en
+ * développement, ils ne doivent apparaître nulle part — ni page, ni lien,
+ * ni sitemap, ni schema. Leurs fiches restent dans `ALL_PRODUCTS` pour
+ * une réactivation ultérieure : il suffira de retirer le slug d'ici (et
+ * la redirection associée dans `next.config.ts`).
+ *
+ * Le filtre s'applique aussi aux fiches Payload (`lib/products-server.ts`) :
+ * publier AEGIS par erreur depuis l'admin ne le ré-exposerait pas.
+ */
+export const WITHDRAWN_PRODUCT_SLUGS: readonly string[] = [
+  'fraud-shield',
+  'aegis',
+];
+
+/** Vrai si le produit est retiré du site public. */
+export function isWithdrawnProduct(slug: string): boolean {
+  return WITHDRAWN_PRODUCT_SLUGS.includes(slug);
+}
+
+/** Vrai si le lien vise la page d'un produit retiré (`/solutions/<slug>`). */
+export function isWithdrawnProductHref(href: string): boolean {
+  const match = /^\/solutions\/([a-z0-9-]+)\/?(?:[?#].*)?$/.exec(href);
+  return match !== null && isWithdrawnProduct(match[1] ?? '');
+}
+
+/**
+ * Vrai si un libellé libre (badge saisi en admin, ex. « Fraud Shield »)
+ * désigne un produit retiré du site.
+ */
+export function namesWithdrawnProduct(label: string): boolean {
+  return /fraud\s*shield|\baegis\b/i.test(label);
+}
+
+/** Catalogue public : produits fondateurs hors produits retirés. */
+export const PRODUCTS: readonly Product[] = ALL_PRODUCTS.filter(
+  (p) => !isWithdrawnProduct(p.slug),
+);
 
 /**
  * Alias du fallback hard-codé — utilisé par `lib/products-server.ts` quand

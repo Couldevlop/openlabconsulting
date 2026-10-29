@@ -3,22 +3,23 @@ import {
   PRODUCTS,
   FALLBACK_PRODUCTS,
   getProductBySlug,
+  isWithdrawnProduct,
+  isWithdrawnProductHref,
+  namesWithdrawnProduct,
 } from '@/lib/data/products';
 import { ICON_KEYS } from '@/lib/icon-map';
 
 describe('lib/data/products', () => {
-  it('expose exactement 10 fiches de repli (4 publiées, 6 en brouillon)', () => {
-    expect(PRODUCTS).toHaveLength(10);
+  it('expose 8 fiches publiques (AEGIS et Fraud Shield retirés du site)', () => {
+    expect(PRODUCTS).toHaveLength(8);
   });
 
   it('chaque produit a un slug unique attendu', () => {
     const slugs = PRODUCTS.map((p) => p.slug);
-    expect(new Set(slugs).size).toBe(10);
+    expect(new Set(slugs).size).toBe(8);
     expect(slugs.sort()).toEqual(
       [
-        'aegis',
         'agrosense',
-        'fraud-shield',
         'nexuserp',
         'maturia',
         'nexusrh',
@@ -112,5 +113,31 @@ describe('lib/data/products', () => {
 
   it('getProductBySlug retourne undefined pour un slug inconnu', () => {
     expect(getProductBySlug('inexistant')).toBeUndefined();
+  });
+
+  it('getProductBySlug ne sert pas les produits retirés', () => {
+    expect(getProductBySlug('aegis')).toBeUndefined();
+    expect(getProductBySlug('fraud-shield')).toBeUndefined();
+  });
+
+  it('isWithdrawnProduct cible AEGIS et Fraud Shield seulement', () => {
+    expect(isWithdrawnProduct('aegis')).toBe(true);
+    expect(isWithdrawnProduct('fraud-shield')).toBe(true);
+    expect(isWithdrawnProduct('nexusrh')).toBe(false);
+  });
+
+  it('isWithdrawnProductHref reconnaît les liens vers un produit retiré', () => {
+    expect(isWithdrawnProductHref('/solutions/aegis')).toBe(true);
+    expect(isWithdrawnProductHref('/solutions/fraud-shield/')).toBe(true);
+    expect(isWithdrawnProductHref('/solutions/fraud-shield#demo')).toBe(true);
+    expect(isWithdrawnProductHref('/solutions/nexusrh')).toBe(false);
+    expect(isWithdrawnProductHref('/solutions')).toBe(false);
+    expect(isWithdrawnProductHref('/insights/aegis')).toBe(false);
+  });
+
+  it('namesWithdrawnProduct reconnaît les libellés libres', () => {
+    expect(namesWithdrawnProduct('OpenLab Fraud Shield')).toBe(true);
+    expect(namesWithdrawnProduct('AEGIS')).toBe(true);
+    expect(namesWithdrawnProduct('NexusRH CI')).toBe(false);
   });
 });

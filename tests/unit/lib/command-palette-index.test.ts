@@ -46,10 +46,15 @@ describe('lib/command-palette-index — Cmd+K (audit P2 §7 #10)', () => {
   });
 
   it('filterCommands est insensible à la casse', () => {
-    const a = filterCommands('AEGIS');
-    const b = filterCommands('aegis');
+    const a = filterCommands('MATURIA');
+    const b = filterCommands('maturia');
     expect(a.length).toBe(b.length);
-    expect(a[0]?.href).toBe('/solutions/aegis');
+    expect(a[0]?.href).toBe('/solutions/maturia');
+  });
+
+  it('filterCommands ne propose aucun produit retiré (AEGIS, Fraud Shield)', () => {
+    expect(filterCommands('aegis')).toHaveLength(0);
+    expect(filterCommands('fraud shield')).toHaveLength(0);
   });
 
   it('filterCommands "audit" matche /audit-ia + Conseil', () => {

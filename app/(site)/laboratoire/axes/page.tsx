@@ -112,18 +112,20 @@ export default async function LaboratoireAxesPage(): Promise<React.ReactElement>
                     ))}
                   </ul>
 
-                  <div className="mt-4 border-t border-[var(--color-ol-mist)] pt-4">
-                    <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
-                      Produits qui incarnent cet axe
-                    </p>
-                    <ul className="mt-3 flex flex-wrap gap-2">
-                      {axe.produitsLies.map((p) => (
-                        <li key={p}>
-                          <Badge tone="orange">{p}</Badge>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {axe.produitsLies.length > 0 ? (
+                    <div className="mt-4 border-t border-[var(--color-ol-mist)] pt-4">
+                      <p className="text-xs tracking-widest text-[var(--color-ol-graphite)]/70 uppercase">
+                        Produits qui incarnent cet axe
+                      </p>
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {axe.produitsLies.map((p) => (
+                          <li key={p}>
+                            <Badge tone="orange">{p}</Badge>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </Card>
               </li>
             ))}

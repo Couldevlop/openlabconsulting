@@ -45,7 +45,7 @@ export const LOCATIONS: readonly LocationContent[] = [
     subtitle:
       'Notre siège est à Cocody. Nos consultants interviennent dans toute la métropole abidjanaise, Plateau, Marcory, Treichville, Yopougon, Riviera, pour cadrer, intégrer et gouverner vos projets d’intelligence artificielle.',
     metaDescription:
-      'Cabinet d’IA appliquée à Abidjan : audit, intégration, R&D produit. Siège Cocody, RCCM CI-ABJ. NexusRH, SYGESCOM, Fraud Shield en prod.',
+      'Cabinet d’IA appliquée à Abidjan : audit, intégration, R&D produit. Siège Cocody, RCCM CI-ABJ. NexusRH, NexusERP, SYGESCOM en prod.',
     pitch: [
       'OpenLab Consulting est un cabinet ivoirien basé à Abidjan, immatriculé au RCCM Côte d’Ivoire sous le numéro CI-ABJ-03-2022-B13-03239. Nos consultants vivent ici, pas en visioconférence depuis Paris ou New York. Nous connaissons le terrain abidjanais : les usages Mobile Money de Wave et Orange Money, les contraintes CNPS, ITS et FDFP de la paie, les pics de trafic des banques de la place, les enjeux opérationnels des stations-service.',
       'Cette proximité change tout dans un projet d’IA. Un atelier de cadrage à Cocody le matin permet une démo terrain l’après-midi à Marcory et un déploiement le lendemain. Les itérations sont rapides, les décisions sont prises avec les bons interlocuteurs, et la conformité (Loi 2013-450, RGPD UE) est intégrée dès le premier sprint.',
@@ -61,7 +61,7 @@ export const LOCATIONS: readonly LocationContent[] = [
       },
       {
         label: 'Logiciels propriétaires en production',
-        value: 'NexusRH CI · NexusERP · SYGESCOM · Fraud Shield',
+        value: 'NexusRH CI · NexusERP · SYGESCOM · MaturIA',
       },
       {
         label: 'Cadre réglementaire maîtrisé',
@@ -87,7 +87,7 @@ export const LOCATIONS: readonly LocationContent[] = [
       {
         title: 'Cybersécurité IA',
         href: '/expertises/cybersecurite-ia',
-        body: 'Détection de fraude documentaire (Fraud Shield), durcissement des modèles, audit prompt injection.',
+        body: 'Détection de fraude documentaire, durcissement des modèles, audit prompt injection.',
       },
     ],
     areaServed: [
