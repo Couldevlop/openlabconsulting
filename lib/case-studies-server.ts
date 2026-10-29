@@ -108,6 +108,11 @@ interface RawPayloadCaseStudy {
   order?: unknown;
 }
 
+/**
+ * Slug produit d'un cas client affichable. `fraud-shield` en est exclu :
+ * le produit est retiré du site (`WITHDRAWN_PRODUCT_SLUGS`), un cas qui
+ * s'y rattache renverrait vers une page qui n'existe plus.
+ */
 function isProductSlug(value: unknown): value is ProductSlug {
   return (
     value === 'nexusrh' ||
@@ -115,7 +120,6 @@ function isProductSlug(value: unknown): value is ProductSlug {
     value === 'sygescom' ||
     value === 'agrosense' ||
     value === 'qualitos' ||
-    value === 'fraud-shield' ||
     value === 'smart-city'
   );
 }

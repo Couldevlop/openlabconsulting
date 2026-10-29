@@ -29,10 +29,10 @@ describe('CasesCarousel (homepage §6.5 enrichi)', () => {
     ).toBeInTheDocument();
   });
 
-  it('expose 4 dots de navigation (un par cas)', () => {
+  it('expose 3 dots de navigation (un par cas)', () => {
     render(<CasesCarousel />);
     const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(4);
+    expect(tabs).toHaveLength(3);
   });
 
   it('permet la mise en pause manuelle', () => {

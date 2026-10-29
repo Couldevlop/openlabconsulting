@@ -21,7 +21,6 @@ export const PRODUCT_ARTICLE_LINKS: Readonly<
   agrosense: ['eudr-cacao-tracabilite-zero-deforestation-cote-divoire'],
   nexuserp: ['erp-syscohada-pme-uemoa-exigences'],
   nexusrh: ['cnps-its-fdfp-conformite-sirh-ivoirien'],
-  'fraud-shield': ['fraude-documentaire-ia-banques-assurances'],
 } as const;
 
 /** Slugs d'articles liés à un produit (ordre = priorité). [] si aucun. */

@@ -21,11 +21,6 @@ const EXPECTED_PRODUCTS = [
     status: /En développement/i,
   },
   {
-    name: /OpenLab Fraud Shield/i,
-    href: '/solutions/fraud-shield',
-    status: /En production/i,
-  },
-  {
     name: /OpenLab Smart City/i,
     href: '/solutions/smart-city',
     status: /En pilote/i,
@@ -41,7 +36,7 @@ describe('Solutions (homepage §6.6 — showcase 8 produits)', () => {
   it('rend la section labellée par son h2', () => {
     render(<Solutions />);
     const section = screen.getByRole('region', {
-      name: /Dix logiciels propriétaires.*Un seul laboratoire/i,
+      name: /Huit logiciels propriétaires.*Un seul laboratoire/i,
     });
     expect(section.getAttribute('data-testid')).toBe('solutions');
   });
@@ -58,7 +53,7 @@ describe('Solutions (homepage §6.6 — showcase 8 produits)', () => {
     // Premier <ul> direct = la liste des produits ; on l'isole via role+name parent.
     const lists = within(section).getAllByRole('list');
     const productList = lists[0]!;
-    expect(within(productList).getAllByRole('listitem')).toHaveLength(10);
+    expect(within(productList).getAllByRole('listitem')).toHaveLength(8);
   });
 
   it.each(EXPECTED_PRODUCTS)(
@@ -74,11 +69,20 @@ describe('Solutions (homepage §6.6 — showcase 8 produits)', () => {
     },
   );
 
+  it('n’expose aucun produit retiré (AEGIS, Fraud Shield)', () => {
+    render(<Solutions />);
+    const hrefs = within(screen.getByTestId('solutions'))
+      .getAllByRole('link')
+      .map((l) => l.getAttribute('href'));
+    expect(hrefs).not.toContain('/solutions/aegis');
+    expect(hrefs).not.toContain('/solutions/fraud-shield');
+  });
+
   it('chaque card a une icône Lucide (svg)', () => {
     render(<Solutions />);
     const section = screen.getByTestId('solutions');
     const articles = within(section).getAllByRole('article');
-    expect(articles).toHaveLength(10);
+    expect(articles).toHaveLength(8);
     for (const article of articles) {
       expect(article.querySelector('svg')).not.toBeNull();
     }

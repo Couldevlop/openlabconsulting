@@ -239,14 +239,13 @@ export const PURCHASE_CHANNELS: readonly PurchaseChannel[] = [
   },
 ];
 
+/**
+ * Ressources companion réellement en ligne. Le dépôt GitHub des exemples
+ * et le forum lecteurs (Discourse) ont été retirés le 2026-10-29 : le
+ * dépôt répond 404 et le sous-domaine forum n'existe pas. À réintroduire
+ * dès leur mise en ligne effective.
+ */
 export const COMPANION_RESOURCES: readonly CompanionResource[] = [
-  {
-    category: 'code',
-    title: 'Référentiel GitHub des exemples',
-    description:
-      'Tous les snippets Python, TypeScript et notebooks Jupyter du livre, organisés par chapitre, sous licence MIT.',
-    href: 'https://github.com/openlab-consulting/livre-ia-examples',
-  },
   {
     category: 'data',
     title: 'Datasets ouverts (CHIRPS, ERA5, SODEXAM)',
@@ -260,12 +259,5 @@ export const COMPANION_RESOURCES: readonly CompanionResource[] = [
     description:
       'La liste publique des coquilles et précisions signalées par les lecteurs depuis la sortie. Mise à jour mensuelle.',
     href: '/livre/companion#errata',
-  },
-  {
-    category: 'community',
-    title: 'Forum lecteurs (Discourse self-hosted)',
-    description:
-      'Communauté francophone d’étudiants, dirigeants et enseignants autour du livre. Modération OpenLab.',
-    href: 'https://forum.openlabconsulting.com/c/livre-ia',
   },
 ];

@@ -6,6 +6,7 @@ import {
   type ApproachStep,
   type ExpertiseProduct,
 } from './data/expertises';
+import { isWithdrawnProduct } from './data/products';
 
 /**
  * Helper Server-only : interroge Payload `expertises` et retombe sur le
@@ -131,13 +132,18 @@ function toApproach(raw: RawPayloadApproachStep[] | undefined): ApproachStep[] {
 function toProduits(
   raw: RawPayloadExpertiseProduct[] | undefined,
 ): ExpertiseProduct[] {
-  return (raw ?? [])
-    .map((p): ExpertiseProduct | null =>
-      typeof p.slug === 'string' && typeof p.name === 'string'
-        ? { slug: p.slug, name: p.name }
-        : null,
-    )
-    .filter((p): p is ExpertiseProduct => p !== null);
+  return (
+    (raw ?? [])
+      .map((p): ExpertiseProduct | null =>
+        typeof p.slug === 'string' && typeof p.name === 'string'
+          ? { slug: p.slug, name: p.name }
+          : null,
+      )
+      // Produit retiré du site : pas de lien vers une page qui n'existe plus.
+      .filter(
+        (p): p is ExpertiseProduct => p !== null && !isWithdrawnProduct(p.slug),
+      )
+  );
 }
 
 function toExpertise(raw: RawPayloadExpertise): Expertise | null {

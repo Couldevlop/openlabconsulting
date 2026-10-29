@@ -5,6 +5,7 @@ import {
   type SectorSlug,
   type SectorCrossLink,
 } from './data/sectors';
+import { isWithdrawnProduct } from './data/products';
 
 /**
  * Helper Server-only : interroge Payload `sectors` et retombe sur le
@@ -110,13 +111,18 @@ function toStringList(raw: RawPayloadValueRow[] | undefined): string[] {
 function toCrossLinks(
   raw: RawPayloadCrossLink[] | undefined,
 ): SectorCrossLink[] {
-  return (raw ?? [])
-    .map((c): SectorCrossLink | null =>
-      typeof c.slug === 'string' && typeof c.title === 'string'
-        ? { slug: c.slug, title: c.title }
-        : null,
-    )
-    .filter((c): c is SectorCrossLink => c !== null);
+  return (
+    (raw ?? [])
+      .map((c): SectorCrossLink | null =>
+        typeof c.slug === 'string' && typeof c.title === 'string'
+          ? { slug: c.slug, title: c.title }
+          : null,
+      )
+      // Produit retiré du site : pas de lien vers une page qui n'existe plus.
+      .filter(
+        (c): c is SectorCrossLink => c !== null && !isWithdrawnProduct(c.slug),
+      )
+  );
 }
 
 function toSector(raw: RawPayloadSector): Sector | null {

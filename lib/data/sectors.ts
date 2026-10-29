@@ -64,10 +64,7 @@ export const SECTORS: readonly Sector[] = [
       'RGPD pour les échanges avec l’Union européenne',
       'Normes ANSSI françaises pour les coopérations bilatérales',
     ],
-    produitsLies: [
-      { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'MaturIA' },
-    ],
+    produitsLies: [{ slug: 'maturia', title: 'MaturIA' }],
     expertisesLies: [
       { slug: 'data-gouvernance', title: 'Data & gouvernance' },
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
@@ -94,10 +91,7 @@ export const SECTORS: readonly Sector[] = [
       'Directives FATF / GAFI sur la finance internationale',
       'Loi ivoirienne 2013-450 sur les données personnelles',
     ],
-    produitsLies: [
-      { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'MaturIA' },
-    ],
+    produitsLies: [{ slug: 'maturia', title: 'MaturIA' }],
     expertisesLies: [
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
@@ -184,10 +178,7 @@ export const SECTORS: readonly Sector[] = [
       'BCEAO pour les services financiers Mobile Money',
       'Loi ivoirienne 2013-450 sur les données personnelles',
     ],
-    produitsLies: [
-      { slug: 'aegis', title: 'AEGIS' },
-      { slug: 'maturia', title: 'MaturIA' },
-    ],
+    produitsLies: [{ slug: 'maturia', title: 'MaturIA' }],
     expertisesLies: [
       { slug: 'agents-automatisation', title: 'Agents & automatisation' },
       { slug: 'cybersecurite-ia', title: 'Cybersécurité augmentée' },

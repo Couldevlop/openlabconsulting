@@ -26,7 +26,7 @@ const SUGGESTIONS: readonly Suggestion[] = [
     href: '/solutions',
     badge: 'Produits',
     title: 'Découvrir l’écosystème OpenLab',
-    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City.',
+    body: 'NexusRH CI, NexusERP, SYGESCOM, AgroSense, QualitOS, Smart City, SentinelBTP, MaturIA.',
   },
   {
     href: '/livre',

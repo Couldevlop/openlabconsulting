@@ -326,8 +326,9 @@ export const FOOTER_FALLBACK: FooterContent = {
         { label: 'SYGESCOM', href: '/solutions/sygescom' },
         { label: 'AgroSense CI', href: '/solutions/agrosense' },
         { label: 'QualitOS', href: '/solutions/qualitos' },
-        { label: 'Fraud Shield', href: '/solutions/fraud-shield' },
         { label: 'Smart City', href: '/solutions/smart-city' },
+        { label: 'SentinelBTP', href: '/solutions/sentinelbtp' },
+        { label: 'Openlab MaturIA', href: '/solutions/maturia' },
       ],
     },
     {
@@ -390,7 +391,7 @@ export const ABOUT_FALLBACK: AboutContent = {
     },
     {
       title: 'R&D Produits',
-      body: '{ProductsWord} logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP.',
+      body: '{ProductsWord} logiciels propriétaires conçus et opérés à Abidjan, déployés sur K3s. NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Smart City, SentinelBTP, MaturIA.',
     },
     {
       title: 'Édition académique',

@@ -14,7 +14,7 @@ export default function SolutionsHubOgImage(): Response {
     eyebrow: 'Solutions OpenLab',
     title: 'Huit logiciels propriétaires',
     subtitle:
-      'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Fraud Shield, Smart City, SentinelBTP',
+      'NexusRH, NexusERP, SYGESCOM, AgroSense, QualitOS, Smart City, SentinelBTP, MaturIA',
     footerLeft: 'Écosystème produit · K3s Hetzner',
   });
 }

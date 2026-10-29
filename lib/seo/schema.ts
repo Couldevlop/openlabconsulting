@@ -176,8 +176,15 @@ export function serviceSchema(expertise: Expertise): Thing {
   };
 }
 
-/** Product / SoftwareApplication schema pour /solutions/<slug>. */
-export function softwareApplicationSchema(product: Product): Thing {
+/**
+ * Product / SoftwareApplication schema pour /solutions/<slug>.
+ * `officialSite` : site dédié du produit (ex. nexusrh.openlabconsulting.com),
+ * déclaré en `sameAs` pour relier les deux entités côté moteurs.
+ */
+export function softwareApplicationSchema(
+  product: Product,
+  officialSite?: string,
+): Thing {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -186,6 +193,7 @@ export function softwareApplicationSchema(product: Product): Thing {
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Linux (K3s Hetzner)',
     url: absoluteUrl(`/solutions/${product.slug}`),
+    ...(officialSite ? { sameAs: [officialSite] } : {}),
     provider: { '@id': absoluteUrl('/#organization') },
     offers: {
       '@type': 'Offer',

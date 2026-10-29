@@ -54,8 +54,8 @@ describe('POST /api/demo', () => {
         name: 'Jean Kouassi',
         email: 'jean@example.ci',
         organization: 'Banque Atlantique',
-        productSlug: 'fraud-shield',
-        productName: 'Fraud Shield',
+        productSlug: 'sygescom',
+        productName: 'SYGESCOM v2.0',
       }),
     );
     expect(res.status).toBe(202);

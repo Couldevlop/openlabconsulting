@@ -70,7 +70,7 @@ export const COMMAND_INDEX: readonly CommandEntry[] = [
     keywords: ['security', 'cyber', 'prompt injection', 'owasp'],
   },
 
-  // --- Solutions (8 produits) ---
+  // --- Solutions (produits publiés ; AEGIS et Fraud Shield retirés) ---
   {
     title: 'Solutions — vue d’ensemble',
     href: '/solutions',
@@ -96,20 +96,6 @@ export const COMMAND_INDEX: readonly CommandEntry[] = [
       'orion',
     ],
     badge: 'MAT',
-  },
-  {
-    title: 'AEGIS',
-    href: '/solutions/aegis',
-    section: 'Solutions',
-    keywords: [
-      'cyberdefense',
-      'rancongiciel',
-      'ransomware',
-      'ebpf',
-      'souverainete',
-      'detection',
-    ],
-    badge: 'CYB',
   },
   {
     title: 'AgroSense CI',

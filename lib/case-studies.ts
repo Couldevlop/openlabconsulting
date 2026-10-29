@@ -3,8 +3,9 @@
  *
  * Source de vérité : la collection Payload `caseStudies`. Quand la DB
  * est indisponible (build statique, dev sans docker, premier déploiement)
- * ou que la collection est vide, on retombe sur les 4 cas fondateurs
- * hard-codés ci-dessous.
+ * ou que la collection est vide, on retombe sur les 3 cas fondateurs
+ * hard-codés ci-dessous (le cas Fraud Shield est retiré avec le produit,
+ * cf. `WITHDRAWN_PRODUCT_SLUGS`).
  *
  * Ce fichier est volontairement **client-safe** : aucun import Payload
  * ou Node-only ici. Le fetch dynamique vit dans `lib/case-studies-server.ts`
@@ -51,7 +52,7 @@ export interface CaseStudy {
 
 /**
  * Fallback hard-codé — utilisé tant que la collection Payload n'a pas
- * été peuplée par l'admin. 4 cas représentatifs de l'écosystème.
+ * été peuplée par l'admin. 3 cas représentatifs de l'écosystème.
  */
 export const FALLBACK_CASE_STUDIES: readonly CaseStudy[] = [
   {
@@ -104,22 +105,5 @@ export const FALLBACK_CASE_STUDIES: readonly CaseStudy[] = [
     imageUrl: null,
     imageAlt: null,
     href: '/solutions/agrosense',
-  },
-  {
-    id: 'fraud-shield-bank',
-    sector: 'Banque · Assurance',
-    client: 'Établissement UEMOA',
-    headline: 'Fraude documentaire rendue visible.',
-    punchline: 'La fraude se cache. L’IA la rend visible.',
-    body: 'Détection multi-modale (vision pixel, cohérence texte, métadonnées EXIF). Score d’authenticité expliqué avec overlay visuel — pas de boîte noire pour l’auditeur.',
-    results: [
-      { value: '× 3', label: 'cas détectés / contrôleur' },
-      { value: '< 2 s', label: 'temps d’analyse / document' },
-      { value: '99 %', label: 'signature dupliquée — confiance' },
-    ],
-    productSlug: 'fraud-shield',
-    imageUrl: null,
-    imageAlt: null,
-    href: '/solutions/fraud-shield',
   },
 ] as const;

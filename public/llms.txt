@@ -21,14 +21,14 @@ OpenLab Consulting SARL est un cabinet basé à Abidjan (Cocody, Riviera Faya La
 
 ## Produits propriétaires (8)
 
-- NexusRH CI — SIRH conforme CNPS, ITS, FDFP, Mobile Money — https://openlabconsulting.com/solutions/nexusrh
+- NexusRH CI — SIRH conforme CNPS, ITS, FDFP, Mobile Money — https://openlabconsulting.com/solutions/nexusrh (site officiel : https://nexusrh.openlabconsulting.com)
 - NexusERP — ERP SYSCOHADA multi-devises FCFA/EUR/USD — https://openlabconsulting.com/solutions/nexuserp
 - SYGESCOM v2.0 — Gestion réseaux stations hydrocarbures — https://openlabconsulting.com/solutions/sygescom
 - AgroSense CI — IoT agriculture précision cacao/anacarde — https://openlabconsulting.com/solutions/agrosense
 - QualitOS — QMS multi-méthodes (PDCA, 5S, DMAIC, ISO) — https://openlabconsulting.com/solutions/qualitos
-- OpenLab Fraud Shield — Détection fraude documentaire par IA — https://openlabconsulting.com/solutions/fraud-shield
 - OpenLab Smart City — IA sécurité urbaine — https://openlabconsulting.com/solutions/smart-city
 - SentinelBTP — Surveillance structurelle par IA (SHM) pour le BTP : anticiper les effondrements de bâtiments — https://openlabconsulting.com/solutions/sentinelbtp
+- MaturIA — Diagnostic de maturité IA par secteur — https://openlabconsulting.com/solutions/maturia
 
 ## Secteurs cibles
 
